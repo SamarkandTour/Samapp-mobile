@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Samapp</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="download_en">Download an Update</string>
+    <string name="title_activity_main_page">Home</string>
+    <string name="title_activity_main_map">MainMap</string>
+    <string name="title_activity_main_menu">MainMenu</string>
+    <string name="mainMap">MainMap</string>
+    <string name="title_activity_splash">Splash</string>
+    <string name="title_activity_hotels">HotelsActivity</string>
+    <string name="title_activity_about_city">AboutCityActivity</string>
+    <string name="title_activity_attractions">AttractionsActivity</string>
+    <string name="title_activity_food_and_drink">FoodAndDrinkActivity</string>
+    <string name="title_activity_shopping">ShoppingActivity</string>
+    <string name="en_hotels">Hotels</string>
+    <string name="uz_hotels">Mehmonxonalar</string>
+    <string name="ru_hotels">GOst</string>
+    <string name="en_attractions">Attractions</string>
+    <string name="uz_attractions">Ziyoratgohlar</string>
+    <string name="ru_attractions">ATT</string>
+    <string name="en_foodanddrink">Food and Drink</string>
+    <string name="uz_foodanddrink">Oziq-Ovqat</string>
+    <string name="en_shopping">Shopping</string>
+    <string name="uz_shopping">Savdo</string>
+    <string name="title_activity_hotel">HotelActivity</string>
+    <string name="title_activity_about_app">AboutAppActivity</string>
+    <string name="title_activity_my_schedule">MyScheduleActivity</string>
+    <string name="title_activity_itinerary_wizard">ItineraryWizardActivity</string>
+    <string name="title_activity_trains_time_table">TrainsTimeTableActivity</string>
+    <string name="title_activity_tashkent_samarkand">TashkentSamarkandActivity</string>
+
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:gravity="bottom">
+<com.mapbox.mapboxsdk.views.MapView
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+
+    android:id="@+id/mapview" />
+
+<SlidingDrawer
+    android:layout_width="fill_parent"
+    android:layout_height="100dp"
+    android:content="@+id/contentLayout"
+    android:layout_marginTop="-100dp"
+    android:padding="0dp"
+    android:orientation="vertical"
+    android:rotation="0"
+    android:handle="@+id/slideButton"
+    android:id="@+id/slidingDrawer"
+    android:layout_gravity="center_horizontal">
+
+
+
+    <ImageView
+        android:id="@+id/slideButton"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/menu_up_arrow"
+        />
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#AA000000"
+        >
+
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/horizontalScrollView" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/menuScrollLinear">
+
+
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+</SlidingDrawer>
+
+</LinearLayout>

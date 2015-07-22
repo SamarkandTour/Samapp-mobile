@@ -1,0 +1,16 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="uz.samtuit.sammap.samapp.Splash"
+    android:padding="0dp">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView2"
+        android:src="@drawable/logo"
+        android:padding="0dp"
+        android:scaleType="centerCrop"
+
+        />
+</RelativeLayout>
