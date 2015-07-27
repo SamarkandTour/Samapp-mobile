@@ -12,15 +12,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-class MyListAdapter extends ArrayAdapter<Hotels> {
+class ShopsListAdapter extends ArrayAdapter<Shops> {
 
     Context context;
-    Hotels[] data = null;
-    String reviews;
-    int rating;
+    Shops[] data = null;
     private int layoutResourceId;
 
-    public MyListAdapter(Context context,int layoutResourceId, Hotels[] data) {
+    public ShopsListAdapter(Context context,int layoutResourceId, Shops[] data) {
         // TODO Auto-generated constructor stub
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -37,10 +35,9 @@ class MyListAdapter extends ArrayAdapter<Hotels> {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             convertView = inflater.inflate(layoutResourceId, parent, false);
         }
-        Hotels hotel = data[position];
+        Shops shop = data[position];
         TextView name = (TextView) convertView.findViewById(R.id.title);
         TextView revs = (TextView) convertView.findViewById(R.id.reviewsCount);
-        String Act = "drawable/star2",mainImg = "drawable/rasm";
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
         ImageView mainImage = (ImageView)convertView.findViewById(R.id.image);
         ImageView star1 = (ImageView)convertView.findViewById(R.id.star1);
@@ -48,29 +45,25 @@ class MyListAdapter extends ArrayAdapter<Hotels> {
         ImageView star3 = (ImageView)convertView.findViewById(R.id.star3);
         ImageView star4 = (ImageView)convertView.findViewById(R.id.star4);
         ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
-        int ActImageResource = context.getResources().getIdentifier(Act, null, context.getPackageName());
-        int mainImgResource = context.getResources().getIdentifier(mainImg, null, context.getPackageName());
-        Drawable imageAct = context.getResources().getDrawable(ActImageResource);
-        Drawable imageMain = context.getResources().getDrawable(mainImgResource);
-        mainImage.setImageDrawable(imageMain);
-        if(hotel.Rating>4)
-            star5.setImageDrawable(imageAct);
-        if(hotel.Rating>3)
-            star4.setImageDrawable(imageAct);
-        if(hotel.Rating>2)
-            star3.setImageDrawable(imageAct);
-        if(hotel.Rating>1)
-            star2.setImageDrawable(imageAct);
-        if(hotel.Rating>0)
-            star1.setImageDrawable(imageAct);
+        mainImage.setImageResource(R.drawable.rasm);
+        if(shop.Rating>4)
+            star5.setImageResource(R.drawable.star_yellow_icon);
+        if(shop.Rating>3)
+            star4.setImageResource(R.drawable.star_yellow_icon);
+        if(shop.Rating>2)
+            star3.setImageResource(R.drawable.star_yellow_icon);
+        if(shop.Rating>1)
+            star2.setImageResource(R.drawable.star_yellow_icon);
+        if(shop.Rating>0)
+            star1.setImageResource(R.drawable.star_yellow_icon);
 
-        name.setText(hotel.Name);
+        name.setText(shop.Name);
         StringBuilder sb = new StringBuilder();
         sb.append("");
-        sb.append(hotel.Reviews);
+        sb.append(shop.Reviews);
         revs.setText(sb.toString());
         revs.setTag("revs");
-        name.setTag(hotel.Name);
+        name.setTag(shop.Name);
         name.setTypeface(tf);
         return convertView;
     }

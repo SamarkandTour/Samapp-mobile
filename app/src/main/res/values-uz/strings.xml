@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Samapp</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="download">Скачать</string>
+    <string name="title_activity_main_page">Главная</string>
+    <string name="title_activity_main_map">Карта</string>
+    <string name="title_activity_main_menu">Меню</string>
+    <string name="mainMap">Карта</string>
+    <string name="title_activity_splash">Сплеш</string>
+    <string name="title_activity_hotels">Отели</string>
+    <string name="title_activity_about_city">О городе</string>
+    <string name="title_activity_attractions">Достопримечательности</string>
+    <string name="title_activity_food_and_drink">Еда</string>
+    <string name="title_activity_shopping">Шоппинг</string>
+    <string name="hotels">Отели</string>
+    <string name="attractions">Достопримечательности</string>
+    <string name="foodanddrink">Еда и напитки</string>
+    <string name="shopping">Шоппинг</string>
+    <string name="title_activity_hotel">HotelActivity</string>
+    <string name="title_activity_about_app">AboutAppActivity</string>
+    <string name="title_activity_my_schedule">MyScheduleActivity</string>
+    <string name="title_activity_itinerary_wizard">ItineraryWizardActivity</string>
+    <string name="title_activity_trains_time_table">TrainsTimeTableActivity</string>
+    <string name="title_activity_tashkent_samarkand">TashkentSamarkandActivity</string>
+
+</resources>

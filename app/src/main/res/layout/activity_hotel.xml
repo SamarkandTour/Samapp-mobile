@@ -2,15 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:padding="0dp"
     tools:context="uz.samtuit.sammap.samapp.HotelActivity"
+    android:background="@drawable/milky_back"
     android:id="@+id/relative">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:weightSum="10">
 
         <LinearLayout
@@ -27,17 +25,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
+                android:gravity="right"
                 android:padding="0dp"
                 android:layout_gravity="center_horizontal">
 
                 <ImageButton
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:id="@+id/hotelOpenInMap"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:id="@+id/hotelLocation"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/map_icon"
+                    android:src="@android:drawable/ic_menu_mylocation"
                     android:scaleType="centerCrop"
-                    android:layout_gravity="right"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
                     />
             </LinearLayout>
 
@@ -47,7 +47,11 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Large Text"
                 android:padding="5dp"
-                android:background="#33ffffff"
+                android:layout_marginRight="1dp"
+                android:textColor="@color/black"
+                android:shadowColor="@color/white"
+                android:shadowRadius="2"
+                android:background="@drawable/titleborder"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:id="@+id/HotelTitle" />
@@ -55,56 +59,71 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#33ffffff"
-                android:paddingTop="5dp"
-                android:layout_marginTop="100dp"
-                android:weightSum="1">
+                android:layout_height="37dp"
+                android:background="@drawable/titleborder"
+                android:layout_marginRight="1dp"
+                android:padding="5dp"
+                android:gravity="right"
+                android:weightSum="1"
+                android:layout_marginTop="100dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.9"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/star_black_icon"
+                        android:layout_marginRight="1dp"
+                        android:id="@+id/star1" />
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/star_black_icon"
-                    android:layout_marginRight="5dp"
-                    android:id="@+id/star1" />
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/star_black_icon"
+                        android:layout_marginRight="1dp"
+                        android:id="@+id/star2" />
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/star_black_icon"
-                    android:layout_marginRight="5dp"
-                    android:id="@+id/star2" />
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/star_black_icon"
+                        android:layout_marginRight="1dp"
+                        android:id="@+id/star3" />
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/star_black_icon"
-                    android:layout_marginRight="5dp"
-                    android:id="@+id/star3" />
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/star_black_icon"
+                        android:layout_marginRight="1dp"
+                        android:id="@+id/star4" />
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/star_black_icon"
-                    android:layout_marginRight="5dp"
-                    android:id="@+id/star4" />
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/star_black_icon"
+                        android:layout_marginRight="1dp"
+                        android:id="@+id/star5" />
+                </LinearLayout>
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/star_black_icon"
-                    android:layout_marginRight="5dp"
-                    android:id="@+id/star5" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:gravity="right">
+                    <ImageButton
+                        android:layout_width="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="22dp"
+                        android:id="@+id/saveButton"
+                        android:src="@android:drawable/ic_menu_add"
+                        android:scaleType="centerCrop"
+                        android:background="@android:color/transparent"/>
+                </LinearLayout>
 
-                <ImageButton
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:id="@+id/saveButton"
-                    android:src="@drawable/save_icon"
-                    android:scaleType="centerCrop"
-                    android:layout_marginLeft="50dp"
-                    android:background="@android:color/transparent"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -112,34 +131,37 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_weight="1">
+            android:layout_height="42dp"
+            android:gravity="right"
+            android:background="@drawable/milky_back"
+            android:paddingRight="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Large Text"
-                android:layout_marginLeft="20dp"
+                android:textColor="@color/black"
+                android:shadowColor="@color/black"
+                android:layout_marginLeft="59dp"
                 android:layout_gravity="center"
-                android:layout_marginRight="50dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:id="@+id/hotelTitleSmall" />
 
             <ImageButton
-                android:layout_width="30dp"
+                android:layout_width="22dp"
                 android:layout_height="match_parent"
                 android:id="@+id/callBtn"
-                android:src="@drawable/call_icon"
+                android:src="@android:drawable/ic_menu_call"
                 android:scaleType="centerInside"
                 android:background="@android:color/transparent"/>
 
             <ImageButton
-                android:layout_width="30dp"
+                android:layout_width="22dp"
                 android:layout_height="match_parent"
                 android:id="@+id/link"
                 android:layout_marginLeft="10dp"
-                android:src="@drawable/link_icon"
+                android:src="@android:drawable/ic_menu_share"
                 android:scaleType="centerInside"
                 android:background="@android:color/transparent"/>
         </LinearLayout>
@@ -149,32 +171,40 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
+            android:textSize="12sp"
+            android:background="@drawable/back_milky"
+            android:padding="5dp"
             android:layout_weight="4"
+            android:textColor="#555"
             android:id="@+id/hotelAbout" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_weight="1" >
+            android:layout_height="24dp"
+            android:gravity="right"
+            android:paddingRight="5dp"
+            android:background="@drawable/milky_back">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Address"
-                android:layout_marginLeft="20dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="50dp"
-                android:gravity="center"
+                android:text="@string/address"
+                android:textSize="16sp"
+                android:shadowDy="1"
+                android:shadowColor="#777"
+                android:textColor="@color/black"
+                android:layout_marginLeft="32dp"
+                android:layout_gravity="start"
+                android:gravity="center_vertical"
                 android:id="@+id/address" />
 
-            <ImageButton
-                android:layout_width="30dp"
+             <ImageButton
+                android:layout_width="28dp"
                 android:layout_height="match_parent"
                 android:id="@+id/imageButton8"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/address_icon"
+                android:src="@drawable/point_icon"
                 android:scaleType="centerInside"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -184,7 +214,11 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
-            android:layout_weight="2"
+            android:textColor="#555"
+            android:background="@drawable/back_milky"
+            android:padding="5dp"
+            android:textSize="12sp"
+            android:layout_weight="4"
             android:id="@+id/hotelAddressTextBox" />
 
     </LinearLayout>

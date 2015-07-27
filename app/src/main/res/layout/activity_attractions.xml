@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/en_attractions"
+            android:text="@string/attractions"
             android:layout_weight="7"
             android:textSize="35sp"
             android:textAlignment="center"

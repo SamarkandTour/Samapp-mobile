@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -36,8 +37,8 @@
             android:label="@string/title_activity_main_menu" >
         </activity>
         <activity
-            android:name=".Splash"
-            android:label="@string/title_activity_splash" >
+            android:name=".StarterActivity"
+            android:label="@string/title_activity_starter" >
         </activity>
         <activity
             android:name=".HotelsActivity"
@@ -82,6 +83,14 @@
         <activity
             android:name=".TashkentSamarkandActivity"
             android:label="@string/title_activity_tashkent_samarkand" >
+        </activity>
+        <activity
+            android:name=".tabActivity"
+            android:label="@string/title_activity_tab" >
+        </activity>
+        <activity
+            android:name=".Splash"
+            android:label="@string/title_activity_splash" >
         </activity>
     </application>
 

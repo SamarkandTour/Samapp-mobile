@@ -1,9 +1,13 @@
 package uz.samtuit.sammap.samapp;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,11 +15,18 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SlidingDrawer;
 
 import com.mapbox.mapboxsdk.api.ILatLng;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.overlay.Icon;
+import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
 import com.mapbox.mapboxsdk.views.MapView;
@@ -26,16 +37,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import javax.security.auth.login.LoginException;
+
 
 public class MainMap extends ActionBarActivity {
-    LinearLayout linLay,vertical;
-    HorizontalScrollView hscv;
-    Button newBtn;
+    private LinearLayout linLay,vertical;
+    private HorizontalScrollView hscv;
+    private Button newBtn;
     private ArrayList<MenuItems> Items = new ArrayList<MenuItems>();
-    Button btn;
-    boolean updateAvailable = true;
-    int height;
-    MapView mapView;
+    private ImageView btn;
+    private SlidingDrawer slidingDrawer;
+    private boolean updateAvailable = true;
+    private int height;
+    private MapView mapView;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,20 +61,65 @@ public class MainMap extends ActionBarActivity {
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        //Action when Update is Available
-        if(updateAvailable)
-        {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent splash = new Intent(MainMap.this, Splash.class);
-                    startActivity(splash);
+        //MapView Settings
+        mapView = (MapView)findViewById(R.id.mapview);
 
-                }
-            }, 0);
-            Log.e("Error","None of time");
+        TileLayer mbTileLayer = new MBTilesLayer(this, "Sample.mbtiles");
+        mapView.setTileSource(mbTileLayer);
+        mapView.setMinZoomLevel(mapView.getTileProvider().getMinimumZoomLevel());
+        mapView.setMaxZoomLevel(mapView.getTileProvider().getMaximumZoomLevel());
+        mapView.setCenter(mapView.getTileProvider().getCenterCoordinate());
+        mapView.setCenter(new ILatLng() {
+            @Override
+            public double getLatitude() {
+                return 39.65487;
+            }
+
+            @Override
+            public double getLongitude() {
+                return 66.97562;
+            }
+
+            @Override
+            public double getAltitude() {
+                return 0;
+            }
+        });
+        mapView.setUserLocationEnabled(true);
+        mapView.setZoom(17);
+        mapView.setMapRotationEnabled(true);
+        //end
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null)
+        {
+            double lat,longt;
+            lat = extras.getDouble("lat");
+            longt = extras.getDouble("long");
+            Log.e("ERRORRRR", lat + " - " + longt);
+
+            LatLng loc = new LatLng(lat,longt);
+            Log.e("RERERER", loc.getLatitude()+"AFS"+loc.getLongitude());
+            mapView.getController().goTo(loc,null);
+            Marker m = new Marker(extras.getString("name"),"Best Hotel",new LatLng(lat,longt));
+            mapView.addMarker(m);
+        }else
+        {
+            //Action when Update is Available
+            if(updateAvailable)
+            {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent splash = new Intent(MainMap.this, Splash.class);
+                        startActivity(splash);
+
+                    }
+                }, 0);
+                Log.e("Error","None of time");
+            }
+            //End
         }
-        //End
+
 
         //generate Menu items
         MenuItems item = new MenuItems(0,"About City","drawable/about_city");
@@ -80,6 +142,36 @@ public class MainMap extends ActionBarActivity {
         Items.add(item);
         item = new MenuItems(9,"About This App","drawable/about_app");
         Items.add(item);
+        btn = (ImageView)findViewById(R.id.slideButton);
+        slidingDrawer = (SlidingDrawer)findViewById(R.id.slidingDrawer);
+        slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+            @Override
+            public void onDrawerOpened() {
+                btn.setBackgroundResource(R.drawable.menu_down_arrow);
+            }
+        });
+        slidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
+            @Override
+            public void onDrawerClosed() {
+                btn.setBackgroundResource(R.drawable.menu_up_arrow);
+            }
+        });
+
+        Animation fadeIn = AnimationUtils.loadAnimation(MainMap.this,R.anim.fade_in);
+        btn.startAnimation(fadeIn);
+        fadeIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Animation fadeOut = AnimationUtils.loadAnimation(MainMap.this, R.anim.fade_out);
+                btn.startAnimation(fadeOut);
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
 
         linLay = (LinearLayout)findViewById(R.id.menuScrollLinear);
         linLay.post(new Runnable() {
@@ -111,32 +203,36 @@ public class MainMap extends ActionBarActivity {
                 }
             }
         });
-        //MapView Settings
-        mapView = (MapView)findViewById(R.id.mapview);
 
-        TileLayer mbTileLayer = new MBTilesLayer(this, "Sample.mbtiles");
-        mapView.setTileSource(mbTileLayer);
-        mapView.setMinZoomLevel(mapView.getTileProvider().getMinimumZoomLevel());
-        mapView.setMaxZoomLevel(mapView.getTileProvider().getMaximumZoomLevel());
-        mapView.setCenter(mapView.getTileProvider().getCenterCoordinate());
-        mapView.setCenter(new ILatLng() {
+
+
+        //Location Settings
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
             @Override
-            public double getLatitude() {
-                return 39.65487;
+            public void onLocationChanged(Location location) {
+                Marker m = new Marker(mapView,"Here", "Your Current Location",new LatLng(location.getLatitude(),location.getLongitude()));
+                m.setIcon(new Icon(MainMap.this, Icon.Size.LARGE, "land-use", "00FF00"));
+                mapView.addMarker(m);
             }
 
             @Override
-            public double getLongitude() {
-                return 66.97562;
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
             }
 
             @Override
-            public double getAltitude() {
-                return 0;
+            public void onProviderEnabled(String provider) {
+
             }
-        });
-        mapView.setUserLocationEnabled(true);
-        mapView.setZoom(17);
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        //end
+
     }
 
     public static String readAsset(AssetManager mgr, String path) {
@@ -208,6 +304,7 @@ public class MainMap extends ActionBarActivity {
         }
         return intent;
     }
+
     public void HotelsRun() {
         Intent hotels = new Intent(MainMap.this,HotelsActivity.class);
         startActivity(hotels);
