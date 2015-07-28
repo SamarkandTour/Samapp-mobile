@@ -1,0 +1,32 @@
+{
+  "Hotel": [
+    {"Name":"Registon Plaza",
+    "Location":"12.2332, 23.34434",
+    "Address":"Samarkand ...",
+    "Type":"",
+    "Price": 500,
+    "Wi-Fi": true,
+    "Open":"24 hour",
+    "Tel":"+998916561786",
+    "URL":"www.rp.uz",
+    "Description":"This hotel...",
+    "Rating": 4,
+    "Photo":""
+    },
+  
+    {"Name":"Malika",
+    "Location":"12.2332, 23.34434",
+    "Address":"Samarkand ...",
+    "Type":"",
+    "Price": 500,
+    "Wi-Fi": true,
+    "Open":"24 hour",
+    "Tel":"+998916561786",
+    "URL":"www.rp.uz",
+    "Description":"This hotel...",
+    "Rating":4,
+    "Photo":""
+    }
+  ]
+  
+}
