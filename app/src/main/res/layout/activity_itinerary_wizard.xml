@@ -1,26 +1,63 @@
 
-    <TabHost
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@android:id/tabhost"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true">
-
+        android:orientation="vertical"
+        >
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="77dp"
+            android:orientation="horizontal"
+            android:weightSum="6"
+            android:background="@drawable/back_milky">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="5"
+                android:weightSum="3">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Suggested Itinerary"
+                    android:textColor="@color/black"
+                    android:layout_gravity="bottom"
+                    android:textSize="24sp"
+                    android:gravity="bottom"
+                    android:layout_weight="1.5"/>
+
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="21dp"
+                        android:id="@+id/horizontalScrollView2"
+                        android:layout_weight="1.5">
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tabButtonsLayout"
+                            >
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="21dp" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:drawable/ic_menu_mapmode"
+                >
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></TabWidget>
-
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
+            android:layout_gravity="center_horizontal"></FrameLayout>
+    </LinearLayout>

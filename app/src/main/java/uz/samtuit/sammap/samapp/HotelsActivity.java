@@ -41,9 +41,10 @@ public class HotelsActivity extends Activity {
             JSONObject obj = new JSONObject(hotel);
 
             jhotel = obj.getJSONArray("Hotel");
-            item = new Hotels[hotel.length()];
+            item = new Hotels[jhotel.length()];
+            Log.e("HOTELS COUNT",jhotel.length()+"S");
             // looping through All Contacts
-            for (int i = 0; i < hotel.length(); i++) {
+            for (int i = 0; i < jhotel.length() ; i++) {
                 item[i] = new Hotels();
                 JSONObject c = jhotel.getJSONObject(i);
                 item[i].Name = c.getString("Name");

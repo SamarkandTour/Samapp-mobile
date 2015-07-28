@@ -70,6 +70,7 @@ public class HotelActivity extends ActionBarActivity {
 
         titleSmall.setText(extras.getString("name"));
         title.setText(extras.getString("name"));
+        Log.e("SDAS",extras.getString("name"));
         int Rating = extras.getInt("rating");
         if(Rating>4)
                 star5.setImageResource(R.drawable.star_yellow_icon);

@@ -1,7 +1,7 @@
 {
   "Hotel": [
     {"Name":"Registon Plaza",
-      "Location":"12.2332, 23.34434",
+      "Location":"39.6501284, 66.9627523",
       "Address":"Samarkand ...",
       "Type":"",
       "Price": 500,
@@ -15,7 +15,7 @@
     },
 
     {"Name":"Malika",
-      "Location":"12.2332, 23.34434",
+      "Location":"39.2501284, 66.527523",
       "Address":"Samarkand ...",
       "Type":"",
       "Price": 500,
