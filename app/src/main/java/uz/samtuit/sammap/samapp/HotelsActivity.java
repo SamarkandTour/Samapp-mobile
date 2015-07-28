@@ -15,9 +15,16 @@ import android.widget.TextView;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+
 
 public class HotelsActivity extends Activity {
-    final Hotels[] item = new Hotels[6];
+    private static Hotels[] item;
     ListView list;
     TextView tv;
     ArrayAdapter<String> adapter;
@@ -25,6 +32,46 @@ public class HotelsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotels);
+        //Json
+        JSONArray jhotel = null;
+        String hotel = loadJSONFromAsset();
+        String name = null;
+
+        try {
+            JSONObject obj = new JSONObject(hotel);
+
+            jhotel = obj.getJSONArray("Hotel");
+            item = new Hotels[hotel.length()];
+            // looping through All Contacts
+            for (int i = 0; i < hotel.length(); i++) {
+                JSONObject c = jhotel.getJSONObject(i);
+                item[i].Name = c.getString("Name");
+                String Location = c.getString("Location");
+                item[i].Latitude = Integer.parseInt(Location.split(", ")[0]);
+                item[i].Longitude = Integer.parseInt(Location.split(", ")[1]);
+                item[i].Address = c.getString("Address");
+                item[i].Telephone = c.getString("")
+                name = c.getString("Name");
+                String loc = c.getString("Location");
+                String addr = c.getString("Address");
+                String type = c.getString("Type");
+                String price = c.getString("Price");
+                String wi_fi = c.getString("Wi-Fi");
+                String open = c.getString("Open");
+                String tel = c.getString("Tel");
+                String url = c.getString("URL");
+                String description = c.getString("Description");
+                String rating = c.getString("Rating");
+                String photo = c.getString("Photo");
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //
+
+
         item[0] = new Hotels("emirxan",123,3,"+998981234567","St.sadasd",39.66386,66.97060);
         item[1] = new Hotels("grand Samarkand",5,4,"+998981234567","St.sadasd",39.651977,66.9665084);
         item[2] = new Hotels("emirxan",123,3,"+998981234567","St.sadasd",39.651977,66.9665084);
@@ -55,25 +102,28 @@ public class HotelsActivity extends Activity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_hotels, menu);
-        return true;
-    }
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button_back, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+            InputStream is = getAssets().open("Hotel.json");
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
         }
+        return json;
 
-        return super.onOptionsItemSelected(item);
     }
 }
