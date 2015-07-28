@@ -28,6 +28,41 @@ public class HotelsActivity extends Activity {
         item[3] = new Hotels("grand Samarkand",5,4);
         item[4] = new Hotels("emirxan",123,3);
         item[5] = new Hotels("grand Samarkand",5,4);
+        
+        //Json Parser
+        JSONArray jhotel = null;
+        String hotel = loadJSONFromAsset();
+        String name = null;
+
+        try {
+            JSONObject obj = new JSONObject(hotel);
+
+            jhotel = obj.getJSONArray("Hotel");
+            // looping through All Contacts
+            for (int i = 0; i < hotel.length(); i++) {
+                JSONObject c = jhotel.getJSONObject(i);
+
+                name = c.getString("Name");
+                String loc = c.getString("Location");
+                String addr = c.getString("Address");
+                String type = c.getString("Type");
+                String price = c.getString("Price");
+                String wi_fi = c.getString("Wi-Fi");
+                String open = c.getString("Open");
+                String tel = c.getString("Tel");
+                String url = c.getString("URL");
+                String description = c.getString("Description");
+                String rating = c.getString("Rating");
+                String photo = c.getString("Photo");
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ///
+        
+        
         list = (ListView)findViewById(R.id.hotelsListView);
         tv=(TextView)findViewById(R.id.hotelsTitle);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Baskerville.ttf");
@@ -45,6 +80,31 @@ public class HotelsActivity extends Activity {
 
 
     }
+     public String loadJSONFromAsset() {
+        String json = null;
+        try {
+
+            InputStream is = getAssets().open("Hotel.json");
+
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
