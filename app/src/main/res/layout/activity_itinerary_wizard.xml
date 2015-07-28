@@ -9,45 +9,42 @@
             android:layout_width="fill_parent"
             android:layout_height="77dp"
             android:orientation="horizontal"
-            android:weightSum="6"
             android:background="@drawable/back_milky">
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="302dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_weight="5"
                 android:weightSum="3">
                 <TextView
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="52dp"
                     android:text="Suggested Itinerary"
                     android:textColor="@color/black"
                     android:layout_gravity="bottom"
-                    android:textSize="24sp"
+                    android:paddingLeft="10dp"
+                    android:textSize="30sp"
                     android:gravity="bottom"
-                    android:layout_weight="1.5"/>
+                    android:id="@+id/suggestedItineraryTitle"
+                    />
 
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="21dp"
-                        android:id="@+id/horizontalScrollView2"
-                        android:layout_weight="1.5">
+                        android:id="@+id/horizontalScrollView2">
                         <LinearLayout
                             android:orientation="horizontal"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/tabButtonsLayout"
                             >
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="21dp" />
                         </LinearLayout>
                     </HorizontalScrollView>
 
             </LinearLayout>
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="52dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:drawable/ic_menu_mapmode"
