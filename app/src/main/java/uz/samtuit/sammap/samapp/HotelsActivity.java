@@ -44,40 +44,27 @@ public class HotelsActivity extends Activity {
             item = new Hotels[hotel.length()];
             // looping through All Contacts
             for (int i = 0; i < hotel.length(); i++) {
+                item[i] = new Hotels();
                 JSONObject c = jhotel.getJSONObject(i);
                 item[i].Name = c.getString("Name");
                 String Location = c.getString("Location");
-                item[i].Latitude = Integer.parseInt(Location.split(", ")[0]);
-                item[i].Longitude = Integer.parseInt(Location.split(", ")[1]);
+                item[i].Latitude = Double.parseDouble(Location.split(", ")[0]);
+                item[i].Longitude = Double.parseDouble(Location.split(", ")[1]);
                 item[i].Address = c.getString("Address");
-                item[i].Telephone = c.getString("")
-                name = c.getString("Name");
-                String loc = c.getString("Location");
-                String addr = c.getString("Address");
-                String type = c.getString("Type");
-                String price = c.getString("Price");
-                String wi_fi = c.getString("Wi-Fi");
-                String open = c.getString("Open");
-                String tel = c.getString("Tel");
-                String url = c.getString("URL");
-                String description = c.getString("Description");
-                String rating = c.getString("Rating");
-                String photo = c.getString("Photo");
-
+                item[i].Telephone = c.getString("Tel");
+                item[i].WiFi = c.getBoolean("Wi-Fi");
+                item[i].Rating = c.getInt("Rating");
+                item[i].URL = c.getString("URL");
+                item[i].Description = c.getString("Description");
+                item[i].Open = c.getString("Open");
+                item[i].Type = c.getString("Type");
+                item[i].Photo = c.getString("Photo");
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
         //
-
-
-        item[0] = new Hotels("emirxan",123,3,"+998981234567","St.sadasd",39.66386,66.97060);
-        item[1] = new Hotels("grand Samarkand",5,4,"+998981234567","St.sadasd",39.651977,66.9665084);
-        item[2] = new Hotels("emirxan",123,3,"+998981234567","St.sadasd",39.651977,66.9665084);
-        item[3] = new Hotels("grand Samarkand",5,4,"+998981234567","St.sadasd",39.651977,66.9665084);
-        item[4] = new Hotels("emirxan",123,3,"+998981234567","St.sadasd",39.651977,66.9665084);
-        item[5] = new Hotels("grand Samarkand",5,4,"+998981234567","St.sadasd",39.651977,66.9665084);
         list = (ListView)findViewById(R.id.hotelsListView);
         tv=(TextView)findViewById(R.id.hotelsTitle);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Baskerville.ttf");
@@ -94,6 +81,10 @@ public class HotelsActivity extends Activity {
                 intent.putExtra("rating",item[position].Rating);
                 intent.putExtra("lat",item[position].Latitude);
                 intent.putExtra("long",item[position].Longitude);
+                intent.putExtra("desc",item[position].Description);
+                intent.putExtra("photo",item[position].Photo);
+                intent.putExtra("wifi",item[position].WiFi);
+                intent.putExtra("price",item[position].Price);
                 startActivity(intent);
             }
         });

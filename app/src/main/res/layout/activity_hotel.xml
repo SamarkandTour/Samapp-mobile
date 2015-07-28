@@ -176,7 +176,7 @@
             android:padding="5dp"
             android:layout_weight="4"
             android:textColor="#555"
-            android:id="@+id/hotelAbout" />
+            android:id="@+id/hotelDesc" />
 
         <LinearLayout
             android:orientation="horizontal"
