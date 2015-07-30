@@ -68,7 +68,7 @@ public class MainMap extends ActionBarActivity {
         mapView.setTileSource(mbTileLayer);
         mapView.setMinZoomLevel(mapView.getTileProvider().getMinimumZoomLevel());
         mapView.setMaxZoomLevel(mapView.getTileProvider().getMaximumZoomLevel());
-        mapView.setCenter(mapView.getTileProvider().getCenterCoordinate());
+
         mapView.setCenter(new ILatLng() {
             @Override
             public double getLatitude() {
