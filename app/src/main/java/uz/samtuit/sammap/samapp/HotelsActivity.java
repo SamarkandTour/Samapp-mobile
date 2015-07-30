@@ -13,6 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cocoahero.android.geojson.Feature;
+import com.cocoahero.android.geojson.GeoJSON;
+import com.cocoahero.android.geojson.GeoJSONObject;
+import com.cocoahero.android.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import org.json.JSONArray;
@@ -38,22 +42,25 @@ public class HotelsActivity extends Activity {
         String name = null;
 
         try {
-            JSONObject obj = new JSONObject(hotel);
 
+            GeoJSONObject ob = GeoJSON.parse(hotel);
+            JSONObject obj = ob.toJSON();
             jhotel = obj.getJSONArray("features");
+
             item = new Hotels[jhotel.length()];
             Log.e("HOTELS COUNT",jhotel.length()+" S");
             // looping through All Contacts
             for (int i = 0; i < jhotel.length() ; i++) {
                 item[i] = new Hotels();
                 JSONObject j = jhotel.getJSONObject(i);
-                JSONObject c = j.getJSONObject("properties");
-                Log.e("COUNT", c.length()+" s");
+                Feature feature = new Feature(j);
+                JSONObject g = feature.getGeometry().toJSON();
+                JSONObject c = feature.getProperties();
+                Log.e("COUNT", c.length() + " s");
                 item[i].Name = c.getString("Name");
-                Log.e("NAME", c.getInt("Rating")+ " S");
-//                String Location = c.getString("Location");
-//                item[i].Latitude = Double.parseDouble(Location.split(", ")[0]);
-//                item[i].Longitude = Double.parseDouble(Location.split(", ")[1]);
+                Log.e("NAME", c.getInt("Rating") + " S");
+                item[i].Latitude = g.getJSONArray("coordinates").getDouble(1);
+                item[i].Longitude = g.getJSONArray("coordinates").getDouble(0);
                 item[i].Address = c.getString("Address");
                 item[i].Telephone = c.getString("Tel");
                 item[i].WiFi = c.getBoolean("Wi-Fi");
@@ -64,7 +71,6 @@ public class HotelsActivity extends Activity {
                 item[i].Type = c.getString("Type");
                 item[i].Photo = c.getString("Photo");
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
