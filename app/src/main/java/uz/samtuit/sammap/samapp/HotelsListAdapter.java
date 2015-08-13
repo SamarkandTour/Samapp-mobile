@@ -44,7 +44,6 @@ class HotelsListAdapter extends ArrayAdapter<Hotels> {
         ImageView star3 = (ImageView)convertView.findViewById(R.id.star3);
         ImageView star4 = (ImageView)convertView.findViewById(R.id.star4);
         ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
-        Log.e("SDAASDASD",hotel.Name);
         mainImage.setImageResource(R.drawable.rasm);
         if(hotel.Rating>4)
             star5.setImageResource(R.drawable.star_yellow_icon);

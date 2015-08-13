@@ -51,7 +51,7 @@ public class HotelActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:"+extras.getString("telephone")));
+                intent.setData(Uri.parse("tel:" + extras.getString("telephone")));
                 startActivity(intent);
             }
         });
@@ -60,14 +60,18 @@ public class HotelActivity extends ActionBarActivity {
         locate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HotelActivity.this,MainMap.class);
-                intent.putExtra("lat",extras.getDouble("lat"));
-                intent.putExtra("long",extras.getDouble("long"));
-                intent.putExtra("name",extras.getString("name"));
+                Intent intent = new Intent(HotelActivity.this, MainMap.class);
+                intent.putExtra("lat", extras.getDouble("lat"));
+                intent.putExtra("long", extras.getDouble("long"));
+                intent.putExtra("name", extras.getString("name"));
+                Log.e(extras.getDouble("lat")+" lat",extras.getDouble("long")+" long");
                 startActivity(intent);
             }
         });
-
+        byte[] decodedString = Base64.decode(extras.getString("photo"), Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        Drawable dr = new BitmapDrawable(decodedByte);
+        imageLayout.setBackgroundDrawable(dr);
         titleSmall.setText(extras.getString("name"));
         title.setText(extras.getString("name"));
         Log.e("SDAS",extras.getString("name"));

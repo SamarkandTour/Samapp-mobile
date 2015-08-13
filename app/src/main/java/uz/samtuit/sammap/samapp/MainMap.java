@@ -26,11 +26,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
 
+import com.cocoahero.android.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.overlay.Marker;
+import com.mapbox.mapboxsdk.overlay.PathOverlay;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
+import com.mapbox.mapboxsdk.util.DataLoadingUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 
 import java.io.BufferedReader;
@@ -102,11 +105,8 @@ public class MainMap extends ActionBarActivity {
             double lat,longt;
             lat = extras.getDouble("lat");
             longt = extras.getDouble("long");
-            Log.e("ERRORRRR", lat + " - " + longt);
-
             LatLng loc = new LatLng(lat,longt);
-            Log.e("RERERER", loc.getLatitude()+"AFS"+loc.getLongitude());
-            mapView.getController().goTo(loc,null);
+            mapView.getController().goTo(loc, null);
             Marker m = new Marker(extras.getString("name"),"Best Hotel",new LatLng(lat,longt));
             mapView.addMarker(m);
         }else
@@ -422,4 +422,27 @@ public class MainMap extends ActionBarActivity {
         startActivity(hotels);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Load GeoJSON
+        try {
+            FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, "Hotel_20150728.geojson");
+            ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
+
+            for (Object obj : uiObjects) {
+                if (obj instanceof Marker) {
+                    ((Marker) obj).setIcon(new Icon(MainMap.this,Icon.Size.SMALL, "city", "#00ff00"));
+                            mapView.addMarker((Marker) obj);
+                } else if (obj instanceof PathOverlay) {
+                    mapView.getOverlays().add((PathOverlay) obj);
+                }
+            }
+            if (uiObjects.size() > 0) {
+                mapView.invalidate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
