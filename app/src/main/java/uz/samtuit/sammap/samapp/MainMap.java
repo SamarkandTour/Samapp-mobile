@@ -2,6 +2,7 @@ package uz.samtuit.sammap.samapp;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
@@ -11,7 +12,9 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -26,7 +29,6 @@ import android.widget.SlidingDrawer;
 import com.cocoahero.android.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.overlay.PathOverlay;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
@@ -39,8 +41,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
-import javax.security.auth.login.LoginException;
 
 
 public class MainMap extends ActionBarActivity {
@@ -55,6 +55,7 @@ public class MainMap extends ActionBarActivity {
     private MapView mapView;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private Double longitude, latitude;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -67,10 +68,11 @@ public class MainMap extends ActionBarActivity {
         //MapView Settings
         mapView = (MapView)findViewById(R.id.mapview);
 
-        TileLayer mbTileLayer = new MBTilesLayer(this, "Sample.mbtiles");
+        TileLayer mbTileLayer = new MBTilesLayer(this, "samarkand_20150727.mbtiles");
         mapView.setTileSource(mbTileLayer);
         mapView.setMinZoomLevel(mapView.getTileProvider().getMinimumZoomLevel());
         mapView.setMaxZoomLevel(mapView.getTileProvider().getMaximumZoomLevel());
+        mapView.setCenter(mapView.getTileProvider().getCenterCoordinate());
 
         mapView.setCenter(new ILatLng() {
             @Override
@@ -88,10 +90,15 @@ public class MainMap extends ActionBarActivity {
                 return 0;
             }
         });
+
+        checkGpsSetting();
         mapView.setUserLocationEnabled(true);
-        mapView.setZoom(17);
+        mapView.setZoom(18);
         mapView.setMapRotationEnabled(true);
         //end
+
+        //startLocationService();
+
         Bundle extras = getIntent().getExtras();
         if(extras!=null)
         {
@@ -205,8 +212,8 @@ public class MainMap extends ActionBarActivity {
         });
 
 
-
         //Location Settings
+        /*
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -231,7 +238,112 @@ public class MainMap extends ActionBarActivity {
 
             }
         };
+        */
         //end
+
+    }
+
+    /**
+     * Check current GPS setting
+     * if GPS is OFF, let it turn ON
+     *
+     * @return
+     *  false: Need to turn on GPS
+     *  ture: Already GPS On
+     *
+     */
+    private boolean checkGpsSetting() {
+        int gpsStatus = 0;
+
+        try {
+            gpsStatus = Settings.Secure.getInt(getContentResolver(), Settings.Secure.LOCATION_MODE);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("GPS", "checkGpsSetting():LOCATION_MODE:" + gpsStatus);
+
+        if (gpsStatus == 0) { // if LOCATION_MODE_OFF
+            AlertDialog.Builder gsDialog = new AlertDialog.Builder(this);
+            gsDialog.setTitle("Location Service Setting");
+            gsDialog.setMessage("To find your correct position, you should turn on GPS.\nDo you want to turn on the GPS?");
+            gsDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Go to the GPS setting
+                    Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    startActivity(intent);
+                }
+            })
+                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            return;
+                        }
+                    }).create().show();
+            return false;
+
+        } else {
+            return true; // Already GPS ON
+        }
+    }
+
+    /**
+     * Start Location Service
+     */
+    private void startLocationService() {
+
+        LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        GPSListener gpsListener = new GPSListener();
+        long minTime = 10000; // 10s
+        float minDistance = 0;
+
+        manager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                minTime,
+                minDistance,
+                gpsListener);
+
+        // Even though position is not confirmed, Find the recentest current position.
+        try {
+            Location lastLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (lastLocation != null) {
+                latitude = lastLocation.getLatitude();
+                longitude = lastLocation.getLongitude();
+
+                String msg = "Latitude : "+ latitude + "\nLongitude:"+ longitude;
+                Log.i("GPS", "startLocationService():lastLocation:" + msg);
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+
+        String msg = "LocationService Started!!!";
+        Log.d("GPS", "startLocationService():" + msg);
+    }
+
+    /**
+     * GPS Location Listener
+     */
+    private class GPSListener implements LocationListener {
+
+        public void onLocationChanged(Location location) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+
+            String msg = "Latitude : "+ latitude + "\nLongitude:"+ longitude;
+            Log.d("GPS", "GPSListener():onLocationChanged():" + msg);
+
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
 
     }
 
