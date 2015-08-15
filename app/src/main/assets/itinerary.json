@@ -1,0 +1,48 @@
+{"sug_itinerary": [
+    {
+        "day_one": [
+            {
+                "name": "Train Station",
+                "isLast": false,
+                "tWithCar": 10,
+                "tWithByc": 15,
+                "tWalk": 20,
+                "long": 2,
+                "rating": 4,
+                "photo": ""
+            },
+            {
+                "name": "Guri Emir",
+                "isLast": true,
+                "tWithCar": 0,
+                "tWithByc": 0,
+                "tWalk": 0,
+                "long": 0,
+                "rating": 3,
+                "photo": ""
+            }
+        ],
+        "second_day": [
+            {
+                "name": "Train Station",
+                "isLast": false,
+                "tWithCar": 10,
+                "tWithByc": 15,
+                "tWalk": 20,
+                "long": 2,
+                "rating": 4,
+                "photo": ""
+            },
+            {
+                "name": "Guri Emir",
+                "isLast": true,
+                "tWithCar": 0,
+                "tWithByc": 0,
+                "tWalk": 0,
+                "long": 0,
+                "rating": 3,
+                "photo": ""
+            }
+        ]
+    }
+] }

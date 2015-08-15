@@ -31,15 +31,13 @@ public class HotelsActivity extends Activity {
     private static Hotels[] item;
     ListView list;
     TextView tv;
-    ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotels);
         //Json
         JSONArray jhotel = null;
-        String hotel = loadJSONFromAsset();
-        String name = null;
+        String hotel = loadJSONFromAsset("Hotel_20150728.geojson");
 
         try {
 
@@ -103,11 +101,11 @@ public class HotelsActivity extends Activity {
 
     }
 
-    public String loadJSONFromAsset() {
+    public String loadJSONFromAsset(String fileName) {
         String json = null;
         try {
 
-            InputStream is = getAssets().open("Hotel_20150728.geojson");
+            InputStream is = getAssets().open(fileName);
 
             int size = is.available();
 
@@ -125,6 +123,5 @@ public class HotelsActivity extends Activity {
             return null;
         }
         return json;
-
     }
 }

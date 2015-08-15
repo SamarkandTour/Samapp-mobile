@@ -72,7 +72,7 @@
             android:label="@string/title_activity_my_schedule" >
         </activity>
         <activity
-            android:name=".ItineraryWizardActivity"
+            android:name=".SuggestedItinerary"
             android:label="@string/title_activity_itinerary_wizard" >
         </activity>
         <activity

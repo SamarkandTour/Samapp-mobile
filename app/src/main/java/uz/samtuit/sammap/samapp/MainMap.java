@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,6 +26,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
+import android.widget.TextView;
 
 import com.cocoahero.android.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.api.ILatLng;
@@ -56,7 +58,7 @@ public class MainMap extends ActionBarActivity {
     private MapView mapView;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private Double longitude, latitude;
+    private TextView searchText;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -66,10 +68,15 @@ public class MainMap extends ActionBarActivity {
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        //search text typeface
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
+        searchText = (TextView)findViewById(R.id.search_text);
+        searchText.setTypeface(tf);
+
         //MapView Settings
         mapView = (MapView)findViewById(R.id.mapview);
 
-        TileLayer mbTileLayer = new MBTilesLayer(this, "samarkand_20150727.mbtiles");
+        TileLayer mbTileLayer = new MBTilesLayer(this, "Sample.mbtiles");
         mapView.setTileSource(mbTileLayer);
         mapView.setMinZoomLevel(mapView.getTileProvider().getMinimumZoomLevel());
         mapView.setMaxZoomLevel(mapView.getTileProvider().getMaximumZoomLevel());
@@ -97,9 +104,6 @@ public class MainMap extends ActionBarActivity {
         mapView.setZoom(18);
         mapView.setMapRotationEnabled(true);
         //end
-
-        //startLocationService();
-
         Bundle extras = getIntent().getExtras();
         if(extras!=null)
         {
@@ -110,6 +114,8 @@ public class MainMap extends ActionBarActivity {
             mapView.getController().goTo(loc, null);
             Marker m = new Marker(extras.getString("name"),"Best Hotel",new LatLng(lat,longt));
             mapView.addMarker(m);
+            mapView.getController().animateTo(loc);
+            mapView.selectMarker(m);
         }else
         {
             //Action when Update is Available
@@ -211,6 +217,7 @@ public class MainMap extends ActionBarActivity {
                 }
             }
         });
+
 
 
         //Location Settings
@@ -405,8 +412,8 @@ public class MainMap extends ActionBarActivity {
             case "My Schedule":
                 intent = new Intent(MainMap.this, MyScheduleActivity.class);
                 break;
-            case "Itinerary Wizard":
-                intent = new Intent(MainMap.this, ItineraryWizardActivity.class);
+            case "Suggested Itinerary":
+                intent = new Intent(MainMap.this, SuggestedItinerary.class);
                 break;
             case "Train Timetable":
                 intent = new Intent(MainMap.this, TrainsTimeTableActivity.class);
@@ -433,7 +440,6 @@ public class MainMap extends ActionBarActivity {
 
             for (Object obj : uiObjects) {
                 if (obj instanceof Marker) {
-                    ((Marker) obj).setIcon(new Icon(MainMap.this,Icon.Size.SMALL, "city", "#00ff00"));
                             mapView.addMarker((Marker) obj);
                 } else if (obj instanceof PathOverlay) {
                     mapView.getOverlays().add((PathOverlay) obj);
