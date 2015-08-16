@@ -279,7 +279,7 @@ public class MainMap extends ActionBarActivity {
     public void Search(View view)
     {
         EditText searchText = (EditText)findViewById(R.id.search_text);
-        if(searchText.isEnabled())
+        if(searchText.getVisibility()==View.VISIBLE)
         {
             //search
             searchText.setVisibility(View.INVISIBLE);
