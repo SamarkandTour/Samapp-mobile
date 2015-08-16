@@ -282,6 +282,7 @@ public class MainMap extends ActionBarActivity {
     public void CompassClick(View view)
     {
         mapView.setMapOrientation(0);
+        compass.setRotation(0);
     }
 
     //Search
