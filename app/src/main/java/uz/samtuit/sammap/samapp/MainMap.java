@@ -6,7 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,11 +21,13 @@ import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -59,6 +65,7 @@ public class MainMap extends ActionBarActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private TextView searchText;
+    private Drawable hotel_marker;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -67,6 +74,8 @@ public class MainMap extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        hotel_marker  = getResources().getDrawable(R.drawable.hotel_marker);
 
         //search text typeface
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
@@ -112,7 +121,13 @@ public class MainMap extends ActionBarActivity {
             longt = extras.getDouble("long");
             LatLng loc = new LatLng(lat,longt);
             mapView.getController().goTo(loc, null);
-            Marker m = new Marker(extras.getString("name"),"Best Hotel",new LatLng(lat,longt));
+            Marker m = new Marker(mapView,extras.getString("name"),"Best Hotel",new LatLng(lat,longt));
+//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hotel_marker);
+//            Bitmap newImage = Bitmap.createBitmap(bitmap, 0, 0, 38, 38);
+//            Drawable d = new BitmapDrawable(getApplicationContext().getResources(),newImage);
+//            m.setImage(d);
+            m.setIcon(new Icon(getResources().getDrawable(R.drawable.hotel_marker)));
+            //m.setMarker(getResources().getDrawable(R.drawable.hotel_marker));
             mapView.addMarker(m);
             mapView.getController().animateTo(loc);
             mapView.selectMarker(m);
@@ -161,13 +176,13 @@ public class MainMap extends ActionBarActivity {
         slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
             @Override
             public void onDrawerOpened() {
-                btn.setBackgroundResource(R.drawable.menu_down_arrow);
+                btn.setRotation(180);
             }
         });
         slidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
             @Override
             public void onDrawerClosed() {
-                btn.setBackgroundResource(R.drawable.menu_up_arrow);
+                btn.setRotation(0);
             }
         });
 
@@ -260,6 +275,20 @@ public class MainMap extends ActionBarActivity {
      *  ture: Already GPS On
      *
      */
+
+    public void Search(View view)
+    {
+        EditText searchText = (EditText)findViewById(R.id.search_text);
+        if(searchText.isEnabled())
+        {
+            //search
+            searchText.setVisibility(View.INVISIBLE);
+        }
+        else {
+            searchText.setVisibility(View.VISIBLE);
+        }
+    }
+
     private boolean checkGpsSetting() {
         int gpsStatus = 0;
 
@@ -313,18 +342,6 @@ public class MainMap extends ActionBarActivity {
                 gpsListener);
 
         // Even though position is not confirmed, Find the recentest current position.
-        try {
-            Location lastLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (lastLocation != null) {
-                latitude = lastLocation.getLatitude();
-                longitude = lastLocation.getLongitude();
-
-                String msg = "Latitude : "+ latitude + "\nLongitude:"+ longitude;
-                Log.i("GPS", "startLocationService():lastLocation:" + msg);
-            }
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
 
         String msg = "LocationService Started!!!";
         Log.d("GPS", "startLocationService():" + msg);
@@ -336,11 +353,6 @@ public class MainMap extends ActionBarActivity {
     private class GPSListener implements LocationListener {
 
         public void onLocationChanged(Location location) {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-
-            String msg = "Latitude : "+ latitude + "\nLongitude:"+ longitude;
-            Log.d("GPS", "GPSListener():onLocationChanged():" + msg);
 
         }
 
@@ -440,7 +452,9 @@ public class MainMap extends ActionBarActivity {
 
             for (Object obj : uiObjects) {
                 if (obj instanceof Marker) {
-                            mapView.addMarker((Marker) obj);
+                    Marker m = (Marker)obj;
+                    m.setIcon(new Icon(getResources().getDrawable(R.drawable.hotel_marker)));
+                    mapView.addMarker(m);
                 } else if (obj instanceof PathOverlay) {
                     mapView.getOverlays().add((PathOverlay) obj);
                 }
