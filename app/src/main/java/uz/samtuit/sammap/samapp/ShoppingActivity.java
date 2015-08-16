@@ -3,6 +3,7 @@ package uz.samtuit.sammap.samapp;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,11 +12,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cocoahero.android.geojson.Feature;
+import com.cocoahero.android.geojson.GeoJSON;
+import com.cocoahero.android.geojson.GeoJSONObject;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class ShoppingActivity extends ActionBarActivity {
-    final Shops[] item = new Shops[6];
+    private static Shops[] item;
     ListView list;
     TextView tv;
     ArrayAdapter<String> adapter;
@@ -23,12 +34,44 @@ public class ShoppingActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
-        item[0] = new Shops("emirxan",123,3,"+998981234567","St.sadasd",new LatLng(36,66));
-        item[1] = new Shops("grand Samarkand",5,4,"+998981234567","St.sadasd",new LatLng(36,66));
-        item[2] = new Shops("emirxan",123,3,"+998981234567","St.sadasd",new LatLng(36,66));
-        item[3] = new Shops("grand Samarkand",5,4,"+998981234567","St.sadasd",new LatLng(36,66));
-        item[4] = new Shops("emirxan",123,3,"+998981234567","St.sadasd",new LatLng(36,66));
-        item[5] = new Shops("grand Samarkand",5,4,"+998981234567","St.sadasd",new LatLng(36,66));
+        //Json
+        JSONArray jhotel = null;
+        String hotel = loadJSONFromAsset("foodanddrinks_0_001.geojson");
+
+        try {
+
+            GeoJSONObject ob = GeoJSON.parse(hotel);
+            JSONObject obj = ob.toJSON();
+            jhotel = obj.getJSONArray("features");
+
+            item = new Shops[jhotel.length()];
+            Log.e("HOTELS COUNT", jhotel.length() + " S");
+            // looping through All Contacts
+            for (int i = 0; i < jhotel.length() ; i++) {
+                item[i] = new Shops();
+                JSONObject j = jhotel.getJSONObject(i);
+                Feature feature = new Feature(j);
+                JSONObject g = feature.getGeometry().toJSON();
+                JSONObject c = feature.getProperties();
+                Log.e("COUNT", c.length() + " s");
+                item[i].Name = c.getString("Name");
+                Log.e("NAME", c.getInt("Rating") + " S");
+                item[i].Latitude = g.getJSONArray("coordinates").getDouble(1);
+                item[i].Longitude = g.getJSONArray("coordinates").getDouble(0);
+                item[i].Address = c.getString("Address");
+                item[i].Telephone = c.getString("Tel");
+                item[i].WiFi = c.getBoolean("Wi-Fi");
+                item[i].Rating = c.getInt("Rating");
+                item[i].URL = c.getString("URL");
+                item[i].Description = c.getString("description");
+                item[i].Open = c.getString("Open");
+                item[i].Type = c.getString("Type");
+                item[i].Photo = c.getString("Photo");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //
         list = (ListView)findViewById(R.id.shoppingListView);
         tv=(TextView)findViewById(R.id.shoppingTitle);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Baskerville.ttf");
@@ -43,25 +86,27 @@ public class ShoppingActivity extends ActionBarActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_shopping, menu);
-        return true;
-    }
+    public String loadJSONFromAsset(String fileName) {
+        String json = null;
+        try {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button_back, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+            InputStream is = getAssets().open(fileName);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
         }
-
-        return super.onOptionsItemSelected(item);
+        return json;
     }
 }

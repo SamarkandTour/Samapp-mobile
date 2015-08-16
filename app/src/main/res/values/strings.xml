@@ -32,6 +32,7 @@
     <string name="address">Address</string>
     <string name="title_activity_tab">tabActivity</string>
     <string name="title_activity_starter">StarterActivity</string>
+    <string name="title_activity_favourite_places">FavouritePlaces</string>
 
 
 </resources>

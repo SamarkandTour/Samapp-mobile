@@ -1,25 +1,22 @@
 package uz.samtuit.sammap.samapp;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,7 +25,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
@@ -44,28 +40,21 @@ import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
 import com.mapbox.mapboxsdk.util.DataLoadingUtils;
 import com.mapbox.mapboxsdk.views.MapView;
+import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
 public class MainMap extends ActionBarActivity {
-    private LinearLayout linLay,vertical;
-    private HorizontalScrollView hscv;
+    private LinearLayout linLay;
     private Button newBtn;
     private ArrayList<MenuItems> Items = new ArrayList<MenuItems>();
-    private ImageView btn;
+    private ImageView btn,compass;
     private SlidingDrawer slidingDrawer;
     private boolean updateAvailable = true;
     private int height;
     private MapView mapView;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
-    private TextView searchText;
-    private Drawable hotel_marker;
+    private EditText searchText;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -75,15 +64,30 @@ public class MainMap extends ActionBarActivity {
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        hotel_marker  = getResources().getDrawable(R.drawable.hotel_marker);
-
         //search text typeface
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-        searchText = (TextView)findViewById(R.id.search_text);
+        searchText = (EditText)findViewById(R.id.search_text);
         searchText.setTypeface(tf);
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         //MapView Settings
         mapView = (MapView)findViewById(R.id.mapview);
+        compass = (ImageView)findViewById(R.id.compass);
 
         TileLayer mbTileLayer = new MBTilesLayer(this, "Sample.mbtiles");
         mapView.setTileSource(mbTileLayer);
@@ -108,10 +112,17 @@ public class MainMap extends ActionBarActivity {
             }
         });
 
-        checkGpsSetting();
+
+//        checkGpsSetting();
         mapView.setUserLocationEnabled(true);
         mapView.setZoom(18);
         mapView.setMapRotationEnabled(true);
+        mapView.setOnMapOrientationChangeListener(new OnMapOrientationChangeListener() {
+            @Override
+            public void onMapOrientationChange(float v) {
+                compass.setRotation(mapView.getMapOrientation());
+            }
+        });
         //end
         Bundle extras = getIntent().getExtras();
         if(extras!=null)
@@ -120,17 +131,8 @@ public class MainMap extends ActionBarActivity {
             lat = extras.getDouble("lat");
             longt = extras.getDouble("long");
             LatLng loc = new LatLng(lat,longt);
-            mapView.getController().goTo(loc, null);
-            Marker m = new Marker(mapView,extras.getString("name"),"Best Hotel",new LatLng(lat,longt));
-//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hotel_marker);
-//            Bitmap newImage = Bitmap.createBitmap(bitmap, 0, 0, 38, 38);
-//            Drawable d = new BitmapDrawable(getApplicationContext().getResources(),newImage);
-//            m.setImage(d);
-            m.setIcon(new Icon(getResources().getDrawable(R.drawable.hotel_marker)));
-            //m.setMarker(getResources().getDrawable(R.drawable.hotel_marker));
-            mapView.addMarker(m);
+//            mapView.getController().goTo(loc, null);
             mapView.getController().animateTo(loc);
-            mapView.selectMarker(m);
         }else
         {
             //Action when Update is Available
@@ -276,6 +278,13 @@ public class MainMap extends ActionBarActivity {
      *
      */
 
+    //compass click
+    public void CompassClick(View view)
+    {
+        mapView.setMapOrientation(0);
+    }
+
+    //Search
     public void Search(View view)
     {
         EditText searchText = (EditText)findViewById(R.id.search_text);
@@ -327,25 +336,25 @@ public class MainMap extends ActionBarActivity {
     /**
      * Start Location Service
      */
-    private void startLocationService() {
-
-        LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-        GPSListener gpsListener = new GPSListener();
-        long minTime = 10000; // 10s
-        float minDistance = 0;
-
-        manager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                minTime,
-                minDistance,
-                gpsListener);
-
-        // Even though position is not confirmed, Find the recentest current position.
-
-        String msg = "LocationService Started!!!";
-        Log.d("GPS", "startLocationService():" + msg);
-    }
+//    private void startLocationService() {
+//
+//        LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+//
+//        GPSListener gpsListener = new GPSListener();
+//        long minTime = 10000; // 10s
+//        float minDistance = 0;
+//
+//        manager.requestLocationUpdates(
+//                LocationManager.GPS_PROVIDER,
+//                minTime,
+//                minDistance,
+//                gpsListener);
+//
+//        // Even though position is not confirmed, Find the recentest current position.
+//
+//        String msg = "LocationService Started!!!";
+//        Log.d("GPS", "startLocationService():" + msg);
+//    }
 
     /**
      * GPS Location Listener
@@ -365,37 +374,6 @@ public class MainMap extends ActionBarActivity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
 
-    }
-
-    public static String readAsset(AssetManager mgr, String path) {
-        String contents = "";
-        InputStream is = null;
-        BufferedReader reader = null;
-        try {
-            is = mgr.open(path);
-            reader = new BufferedReader(new InputStreamReader(is));
-            contents = reader.readLine();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                contents += '\n' + line;
-            }
-        } catch (final Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException ignored) {
-                }
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException ignored) {
-                }
-            }
-        }
-        return contents;
     }
 
     private Intent GetIntent(String name)
@@ -437,33 +415,38 @@ public class MainMap extends ActionBarActivity {
         return intent;
     }
 
-    public void HotelsRun() {
-        Intent hotels = new Intent(MainMap.this,HotelsActivity.class);
-        startActivity(hotels);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         // Load GeoJSON
-        try {
-            FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, "Hotel_20150728.geojson");
-            ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
+        String[] files = {"hotels_0_001.geojson", "foodanddrinks_0_001.geojson", "attractions_0_001.geojson","shops_0_001.geojson"};
+        Drawable[] drawables = {
+            getResources().getDrawable(R.drawable.hotel_marker),
+            getResources().getDrawable(R.drawable.food_marker),
+            getResources().getDrawable(R.drawable.attraction_marker),
+            getResources().getDrawable(R.drawable.shop_marker)
+        };
+        for(int i = 0; i < files.length; i++)
+        {
+            try {
+                FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, files[i]);
+                ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
 
-            for (Object obj : uiObjects) {
-                if (obj instanceof Marker) {
-                    Marker m = (Marker)obj;
-                    m.setIcon(new Icon(getResources().getDrawable(R.drawable.hotel_marker)));
-                    mapView.addMarker(m);
-                } else if (obj instanceof PathOverlay) {
-                    mapView.getOverlays().add((PathOverlay) obj);
+                for (Object obj : uiObjects) {
+                    if (obj instanceof Marker) {
+                        Marker m = (Marker)obj;
+                        m.setIcon(new Icon(drawables[i]));
+                        mapView.addMarker(m);
+                    } else if (obj instanceof PathOverlay) {
+                        mapView.getOverlays().add((PathOverlay) obj);
+                    }
                 }
+                if (uiObjects.size() > 0) {
+                    mapView.invalidate();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            if (uiObjects.size() > 0) {
-                mapView.invalidate();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

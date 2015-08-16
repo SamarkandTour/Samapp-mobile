@@ -3,30 +3,71 @@ package uz.samtuit.sammap.samapp;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.cocoahero.android.geojson.Feature;
+import com.cocoahero.android.geojson.GeoJSON;
+import com.cocoahero.android.geojson.GeoJSONObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class FoodAndDrinkActivity extends Activity {
-    final Foods[] item = new Foods[6];
+    private static Foods[] item;
     ListView list;
     TextView tv;
-    ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_and_drink);
-        item[0] = new Foods("emirxan",123,3,"+998981234567","St.sadasd",new LatLng(36,66));
-        item[1] = new Foods("grand Samarkand",5,4,"+998981234567","St.sadasd",new LatLng(36,66));
-        item[2] = new Foods("emirxan",123,3,"+998981234567","St.sadasd",new LatLng(36,66));
-        item[3] = new Foods("grand Samarkand",5,4,"+998981234567","St.sadasd",new LatLng(36,66));
-        item[4] = new Foods("emirxan",123,3,"+998981234567","St.sadasd",new LatLng(36,66));
-        item[5] = new Foods("grand Samarkand",5,4,"+998981234567","St.sadasd",new LatLng(36,66));
+        //Json
+        JSONArray jhotel = null;
+        String hotel = loadJSONFromAsset("foodanddrinks_0_001.geojson");
+
+        try {
+
+            GeoJSONObject ob = GeoJSON.parse(hotel);
+            JSONObject obj = ob.toJSON();
+            jhotel = obj.getJSONArray("features");
+
+            item = new Foods[jhotel.length()];
+            Log.e("HOTELS COUNT", jhotel.length() + " S");
+            // looping through All Contacts
+            for (int i = 0; i < jhotel.length() ; i++) {
+                item[i] = new Foods();
+                JSONObject j = jhotel.getJSONObject(i);
+                Feature feature = new Feature(j);
+                JSONObject g = feature.getGeometry().toJSON();
+                JSONObject c = feature.getProperties();
+                Log.e("COUNT", c.length() + " s");
+                item[i].Name = c.getString("Name");
+                Log.e("NAME", c.getInt("Rating") + " S");
+                item[i].Latitude = g.getJSONArray("coordinates").getDouble(1);
+                item[i].Longitude = g.getJSONArray("coordinates").getDouble(0);
+                item[i].Address = c.getString("Address");
+                item[i].Telephone = c.getString("Tel");
+                item[i].WiFi = c.getBoolean("Wi-Fi");
+                item[i].Rating = c.getInt("Rating");
+                item[i].URL = c.getString("URL");
+                item[i].Description = c.getString("description");
+                item[i].Open = c.getString("Open");
+                item[i].Type = c.getString("Type");
+                item[i].Photo = c.getString("Photo");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //
+
         list = (ListView)findViewById(R.id.foodAndDrinkListView);
         tv=(TextView)findViewById(R.id.foodAndDrinkTitle);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Baskerville.ttf");
@@ -40,5 +81,28 @@ public class FoodAndDrinkActivity extends Activity {
             }
         });
 
+    }
+    public String loadJSONFromAsset(String fileName) {
+        String json = null;
+        try {
+
+            InputStream is = getAssets().open(fileName);
+
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 }

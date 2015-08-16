@@ -92,6 +92,10 @@
             android:name=".Splash"
             android:label="@string/title_activity_splash" >
         </activity>
+        <activity
+            android:name=".FavouritePlaces"
+            android:label="@string/title_activity_favourite_places" >
+        </activity>
     </application>
 
 </manifest>

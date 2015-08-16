@@ -1,24 +1,27 @@
 package uz.samtuit.sammap.samapp;
 
-import com.mapbox.mapboxsdk.geometry.LatLng;
-
-/**
- * Created by Bakhrom on 25.07.2015.
- */
 public class Attractions {
-    public String Name;
-    public int Reviews;
-    public int Rating;
-    public String Telephone;
-    public String Address;
-    public LatLng Location;
-    public Attractions(String Name, int Reviews, int Rating, String Telephone, String Address, LatLng location)
+    public String Name,Telephone,Address,Open,URL,Description,Photo,Type;
+    public int Reviews,Price,Rating;
+    public Boolean WiFi;
+    public double Latitude,Longitude;
+    public Attractions(String Name, int Reviews, int Rating, String Telephone, String Address, double Latitude,double Longitude,Boolean WiFi, int Price, String Open, String URL, String Description, String Photo, String Type)
     {
         this.Name = Name;
         this.Reviews = Reviews;
         this.Rating = Rating;
         this.Telephone = Telephone;
         this.Address = Address;
-        this.Location = Location;
+        this.Latitude = Latitude;
+        this.Longitude = Longitude;
+        this.Open = Open;
+        this.URL = URL;
+        this.Description = Description;
+        this.Photo = Photo;
+        this.Price = Price;
+        this.WiFi = WiFi;
+        this.Type = Type;
     }
+    public Attractions(){}
 }
+

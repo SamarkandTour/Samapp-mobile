@@ -5,19 +5,14 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cocoahero.android.geojson.Feature;
 import com.cocoahero.android.geojson.GeoJSON;
 import com.cocoahero.android.geojson.GeoJSONObject;
-import com.cocoahero.android.geojson.Point;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +32,7 @@ public class HotelsActivity extends Activity {
         setContentView(R.layout.activity_hotels);
         //Json
         JSONArray jhotel = null;
-        String hotel = loadJSONFromAsset("Hotel_20150728.geojson");
+        String hotel = loadJSONFromAsset("hotels_0_001.geojson");
 
         try {
 
@@ -64,7 +59,7 @@ public class HotelsActivity extends Activity {
                 item[i].WiFi = c.getBoolean("Wi-Fi");
                 item[i].Rating = c.getInt("Rating");
                 item[i].URL = c.getString("URL");
-                item[i].Description = c.getString("Desc");
+                item[i].Description = c.getString("description");
                 item[i].Open = c.getString("Open");
                 item[i].Type = c.getString("Type");
                 item[i].Photo = c.getString("Photo");

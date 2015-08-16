@@ -23,8 +23,5 @@ public class Hotels {
         this.WiFi = WiFi;
         this.Type = Type;
     }
-    public Hotels()
-    {
-
-    }
+    public Hotels(){}
 }
