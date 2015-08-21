@@ -188,22 +188,6 @@ public class MainMap extends ActionBarActivity {
             }
         });
 
-        Animation fadeIn = AnimationUtils.loadAnimation(MainMap.this,R.anim.fade_in);
-        btn.startAnimation(fadeIn);
-        fadeIn.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Animation fadeOut = AnimationUtils.loadAnimation(MainMap.this, R.anim.fade_out);
-                btn.startAnimation(fadeOut);
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
         linLay = (LinearLayout)findViewById(R.id.menuScrollLinear);
         linLay.post(new Runnable() {
             @Override

@@ -43,6 +43,10 @@
         <activity
             android:name=".HotelsActivity"
             android:label="@string/title_activity_hotels" >
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"
+                />
         </activity>
         <activity
             android:name=".AboutCityActivity"

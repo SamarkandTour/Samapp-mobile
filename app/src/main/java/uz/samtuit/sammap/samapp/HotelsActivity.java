@@ -1,15 +1,27 @@
 package uz.samtuit.sammap.samapp;
 
+import android.annotation.TargetApi;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.cocoahero.android.geojson.Feature;
@@ -24,14 +36,50 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+
 public class HotelsActivity extends ActionBarActivity {
     private static Hotels[] item;
     ListView list;
+    private EditText search_text;
+    private MenuItem mActionSearch;
+    private boolean isSearchOpen = false;
     TextView tv;
+    private android.support.v7.widget.Toolbar toolbar;
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotels);
+        //Window window = this.getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.ColorPrimaryDark));
+        }
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.setStatusBarColor(getResources().getColor(R.color.ColorPrimaryDark));
+        toolbar = (android.support.v7.widget.Toolbar)findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
+        SpannableString s = new SpannableString(getResources().getString(R.string.hotels));
+        s.setSpan(new CustomTypefaceSpan("",tf), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+// Update the action bar title with the TypefaceSpan instance
+        toolbar.setLogo(getResources().getDrawable(R.drawable.hotel_marker));
+        getSupportActionBar().setTitle(s);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
+        toolbar.setTitle(s);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+            }
+        });
+
         //Json
         JSONArray jhotel = null;
         String hotel = loadJSONFromAsset("hotels_0_001.geojson");
@@ -82,9 +130,7 @@ public class HotelsActivity extends ActionBarActivity {
 
         //
         list = (ListView)findViewById(R.id.hotelsListView);
-        tv=(TextView)findViewById(R.id.hotelsTitle);
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Baskerville.ttf");
-        tv.setTypeface(tf);
+
         HotelsListAdapter adapter = new HotelsListAdapter(this,R.layout.list_item, item);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -107,6 +153,14 @@ public class HotelsActivity extends ActionBarActivity {
 
 
 
+    }
+
+    private void runFadeInAnimation() {
+        Animation a = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        a.reset();
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.hotelsMain);
+        rl.clearAnimation();
+        rl.startAnimation(a);
     }
 
     public String loadJSONFromAsset(String fileName) {
@@ -134,9 +188,23 @@ public class HotelsActivity extends ActionBarActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        mActionSearch = menu.findItem(R.id.action_search);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_hotels, menu);
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        searchView.setSearchableInfo(
+//                searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
@@ -151,8 +219,16 @@ public class HotelsActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id == R.id.action_search)
+        {
+
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
