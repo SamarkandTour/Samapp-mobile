@@ -3,44 +3,27 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:padding="0dp"
     tools:context="uz.samtuit.sammap.samapp.HotelsActivity"
-    android:background="#070"
+    android:background="@color/foodanddrink_primary"
     >
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-
-        android:layout_alignParentEnd="true"
-        android:weightSum="8"
         >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/foodanddrink"
-            android:layout_weight="7"
-            android:textSize="35sp"
-            android:background="@drawable/title_back"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="-10dp"
-            android:layout_marginLeft="-10dp"
-            android:layout_marginBottom="5dp"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:id="@+id/foodAndDrinkTitle" />
+        <include
+            layout="@layout/tool_bar"
+            android:id="@+id/tool_bar"
+            />
 
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/foodAndDrinkListView"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_weight="1"/>
+            android:listSelector="@drawable/list_selector"
+            android:paddingTop="2dp"
+            android:divider="#fff" />
     </LinearLayout>
 
 </RelativeLayout>

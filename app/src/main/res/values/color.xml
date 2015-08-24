@@ -2,4 +2,13 @@
     <resources>
         <color name="ColorPrimary">#00aa00</color>
         <color name="ColorPrimaryDark">#007700</color>
+        <color name="WindowBackground">#fff</color>
+        <color name="attraction_primary">#e3c94f</color>
+        <color name="shop_primary">#93f222</color>
+        <color name="hotel_primary">#007fff</color>
+        <color name="foodanddrink_primary">#d85656</color>
+        <color name="attraction_tool">#ffe457</color>
+        <color name="shop_tool">#9dff21</color>
+        <color name="hotel_tool">#00bcff</color>
+        <color name="foodanddrink_tool">#ff6565</color>
     </resources>

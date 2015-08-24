@@ -13,5 +13,5 @@
         android:layout_width="wrap_content" />
     <stroke
         android:width="1dp"
-        android:color="@android:color/white" />
+        android:color="#fff" />
 </shape>

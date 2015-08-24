@@ -11,13 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 class HotelsListAdapter extends ArrayAdapter<Hotels> {
 
     Context context;
-    Hotels[] data = null;
+    ArrayList<Hotels> data = null;
     private int layoutResourceId;
 
-    public HotelsListAdapter(Context context, int layoutResourceId, Hotels[] data) {
+    public HotelsListAdapter(Context context, int layoutResourceId, ArrayList<Hotels> data) {
         // TODO Auto-generated constructor stub
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -34,7 +36,7 @@ class HotelsListAdapter extends ArrayAdapter<Hotels> {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             convertView = inflater.inflate(layoutResourceId, parent, false);
         }
-        Hotels hotel = data[position];
+        Hotels hotel = data.get(position);
         TextView name = (TextView) convertView.findViewById(R.id.title);
         TextView revs = (TextView) convertView.findViewById(R.id.reviewsCount);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
@@ -46,15 +48,15 @@ class HotelsListAdapter extends ArrayAdapter<Hotels> {
         ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
         mainImage.setImageResource(R.drawable.rasm);
         if(hotel.Rating>4)
-            star5.setImageResource(R.drawable.star_yellow_icon);
+            star5.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(hotel.Rating>3)
-            star4.setImageResource(R.drawable.star_yellow_icon);
+            star4.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(hotel.Rating>2)
-            star3.setImageResource(R.drawable.star_yellow_icon);
+            star3.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(hotel.Rating>1)
-            star2.setImageResource(R.drawable.star_yellow_icon);
+            star2.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(hotel.Rating>0)
-            star1.setImageResource(R.drawable.star_yellow_icon);
+            star1.setImageResource(R.drawable.ic_star_rate_white_18dp);
         name.setText(hotel.Name);
         StringBuilder sb = new StringBuilder();
         sb.append("");

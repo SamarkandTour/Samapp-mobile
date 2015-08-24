@@ -45,8 +45,7 @@
             android:label="@string/title_activity_hotels" >
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable"
-                />
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name=".AboutCityActivity"
@@ -63,6 +62,10 @@
         <activity
             android:name=".ShoppingActivity"
             android:label="@string/title_activity_shopping" >
+        </activity>
+        <activity
+            android:name=".ShopActivity"
+            android:label="@string/title_activity_shop" >
         </activity>
         <activity
             android:name=".HotelActivity"
@@ -99,6 +102,14 @@
         <activity
             android:name=".FavouritePlaces"
             android:label="@string/title_activity_favourite_places" >
+        </activity>
+        <activity
+            android:name=".AttractionActivity"
+            android:label="@string/title_activity_attraction" >
+        </activity>
+        <activity
+            android:name=".FoodActivity"
+            android:label="@string/title_activity_food" >
         </activity>
     </application>
 

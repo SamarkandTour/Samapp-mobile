@@ -28,12 +28,15 @@
     <string name="no">No</string>
     <string name="skip">Skip</string>
     <string name="update_alert">New update available! Would you like to update?</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">Rev</string>
     <string name="address">Address</string>
     <string name="title_activity_tab">tabActivity</string>
     <string name="title_activity_starter">StarterActivity</string>
     <string name="title_activity_favourite_places">FavouritePlaces</string>
     <string name="search_hint">Search</string>
+    <string name="title_activity_attraction">AttractionActivity</string>
+    <string name="title_activity_food">FoodActivity</string>
+    <string name="title_activity_shop">FoodActivity</string>
 
 
 </resources>

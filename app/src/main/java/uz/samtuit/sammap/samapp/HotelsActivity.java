@@ -7,16 +7,23 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -34,51 +41,45 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HotelsActivity extends ActionBarActivity {
-    private static Hotels[] item;
+    private static ArrayList<Hotels> items;
     ListView list;
     private EditText search_text;
     private MenuItem mActionSearch;
+    private HotelsListAdapter adapter;
     private boolean isSearchOpen = false;
-    TextView tv;
-    private android.support.v7.widget.Toolbar toolbar;
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    Hotels item;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotels);
-        //Window window = this.getWindow();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.ColorPrimaryDark));
-        }
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        window.setStatusBarColor(getResources().getColor(R.color.ColorPrimaryDark));
-        toolbar = (android.support.v7.widget.Toolbar)findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-        SpannableString s = new SpannableString(getResources().getString(R.string.hotels));
-        s.setSpan(new CustomTypefaceSpan("",tf), 0, s.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-// Update the action bar title with the TypefaceSpan instance
-        toolbar.setLogo(getResources().getDrawable(R.drawable.hotel_marker));
-        getSupportActionBar().setTitle(s);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
-        toolbar.setTitle(s);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener()
-        {
+        //ActionBar TOOLBAR
+        Toolbar toolbar = (Toolbar)findViewById(R.id.tool_bar);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.hotel_tool));
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
                 overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
             }
         });
+
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/segoeui.ttf");
+        SpannableString s = new SpannableString(getResources().getString(R.string.hotels));
+        s.setSpan(new CustomTypefaceSpan("", tf), 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getSupportActionBar().setTitle(s);
+        toolbar.setTitle(s);
+
+        //end Action Bar
 
         //Json
         JSONArray jhotel = null;
@@ -90,77 +91,57 @@ public class HotelsActivity extends ActionBarActivity {
             JSONObject obj = ob.toJSON();
             jhotel = obj.getJSONArray("features");
 
-            item = new Hotels[jhotel.length()];
-            Log.e("HOTELS COUNT",jhotel.length()+" S");
+            items = new ArrayList<Hotels>();
             // looping through All Contacts
             for (int i = 0; i < jhotel.length() ; i++) {
-                item[i] = new Hotels();
+                Hotels item = new Hotels();
                 JSONObject j = jhotel.getJSONObject(i);
                 Feature feature = new Feature(j);
                 JSONObject g = feature.getGeometry().toJSON();
                 JSONObject c = feature.getProperties();
-                Log.e("COUNT", c.length() + " s");
-                item[i].Name = c.getString("Name");
-                Log.e("NAME", c.getInt("Rating") + " S");
-                item[i].Latitude = g.getJSONArray("coordinates").getDouble(1);
-                item[i].Longitude = g.getJSONArray("coordinates").getDouble(0);
-                item[i].Address = c.getString("Address");
-                item[i].Telephone = c.getString("Tel");
-                item[i].WiFi = c.getBoolean("Wi-Fi");
-                item[i].Rating = c.getInt("Rating");
-                item[i].URL = c.getString("URL");
-                item[i].Description = c.getString("description");
-                item[i].Open = c.getString("Open");
-                item[i].Type = c.getString("Type");
-                item[i].Photo = c.getString("Photo");
+                Log.e("JSON", c.toString());
+                item.Name = c.getString("Name");
+                item.Latitude = g.getJSONArray("coordinates").getDouble(1);
+                item.Longitude = g.getJSONArray("coordinates").getDouble(0);
+                item.Address = c.getString("Address");
+                item.Telephone = c.getString("Tel");
+                item.WiFi = c.getBoolean("Wi-Fi");
+                item.Rating = c.getInt("Rating");
+                item.URL = c.getString("URL");
+                item.Description = c.getString("description");
+                item.Open = c.getString("Open");
+                item.Type = c.getString("Type");
+                item.Photo = c.getString("Photo");
+                items.add(item);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-//        int d = item.length/2;
-//        while(d>0)
-//        {
-//            for(int i = 0; i < item.length - d - 1; i++)
-//            {
-//                int j = i;
-//                while(j>=0 && item[j].Name > item[j+d].Name)
-//            }
-//        }
-
         //
-        list = (ListView)findViewById(R.id.hotelsListView);
 
-        HotelsListAdapter adapter = new HotelsListAdapter(this,R.layout.list_item, item);
+        list = (ListView)findViewById(R.id.hotelsListView);
+        adapter = new HotelsListAdapter(this,R.layout.list_item, items);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(HotelsActivity.this, HotelActivity.class);
-                intent.putExtra("name",item[position].Name);
-                intent.putExtra("telephone",item[position].Telephone);
-                intent.putExtra("address",item[position].Address);
-                intent.putExtra("rating",item[position].Rating);
-                intent.putExtra("lat",item[position].Latitude);
-                intent.putExtra("long",item[position].Longitude);
-                intent.putExtra("desc",item[position].Description);
-                intent.putExtra("photo",item[position].Photo);
-                intent.putExtra("wifi",item[position].WiFi);
-                intent.putExtra("price",item[position].Price);
+                intent.putExtra("name",items.get(position).Name);
+                intent.putExtra("telephone", items.get(position).Telephone);
+                intent.putExtra("address",items.get(position).Address);
+                intent.putExtra("rating",items.get(position).Rating);
+                intent.putExtra("lat",items.get(position).Latitude);
+                intent.putExtra("long",items.get(position).Longitude);
+                intent.putExtra("desc",items.get(position).Description);
+                intent.putExtra("photo",items.get(position).Photo);
+                intent.putExtra("wifi",items.get(position).WiFi);
+                intent.putExtra("price",items.get(position).Price);
                 startActivity(intent);
             }
         });
 
 
 
-    }
-
-    private void runFadeInAnimation() {
-        Animation a = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-        a.reset();
-        RelativeLayout rl = (RelativeLayout) findViewById(R.id.hotelsMain);
-        rl.clearAnimation();
-        rl.startAnimation(a);
     }
 
     public String loadJSONFromAsset(String fileName) {
@@ -188,6 +169,17 @@ public class HotelsActivity extends ActionBarActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if(isSearchOpen)
+        {
+            handleMenuSearch();
+            return;
+        }
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+    }
+
+    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         mActionSearch = menu.findItem(R.id.action_search);
         return super.onPrepareOptionsMenu(menu);
@@ -198,14 +190,89 @@ public class HotelsActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_hotels, menu);
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-//        searchView.setSearchableInfo(
-//                searchManager.getSearchableInfo(getComponentName()));
 
         return true;
+    }
+
+    protected void handleMenuSearch(){
+        ActionBar action = getSupportActionBar(); //get the actionbar
+
+        if(isSearchOpen){ //test if the search is open
+
+            action.setDisplayShowCustomEnabled(false); //disable a custom view inside the actionbar
+            action.setDisplayShowTitleEnabled(true); //show the title in the action bar
+
+            //hides the keyboard
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
+            list.setAdapter(adapter);
+            //add the search icon in the action bar
+            mActionSearch.setIcon(getResources().getDrawable(R.drawable.ic_search_white_24dp));
+
+            isSearchOpen = false;
+        } else { //open the search entry
+
+            action.setDisplayShowCustomEnabled(true); //enable it to display a
+            // custom view in the action bar.
+            action.setCustomView(R.layout.search_bar);//add the custom view
+            action.setDisplayShowTitleEnabled(false); //hide the title
+            action.setDisplayUseLogoEnabled(false);
+
+            search_text = (EditText)action.getCustomView().findViewById(R.id.edtSearch); //the text editor
+            search_text.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    doSearch(search_text.getText().toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
+            //this is a listener to do a search when the user clicks on search button
+            search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        doSearch(search_text.getText().toString());
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            search_text.requestFocus();
+
+            //open the keyboard focused in the edtSearch
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(search_text, InputMethodManager.SHOW_IMPLICIT);
+
+            //add the close icon
+            mActionSearch.setIcon(getResources().getDrawable(R.drawable.ic_search_black_24dp));
+
+            isSearchOpen = true;
+        }
+    }
+
+    private void doSearch(String sequence)
+    {
+        ArrayList<Hotels> found_items = new ArrayList<Hotels>();
+        for(int i = 0; i < items.size(); i++)
+        {
+            if(items.get(i).Name.toLowerCase().contains(sequence.toLowerCase()))
+            {
+                found_items.add(items.get(i));
+            }
+        }
+        HotelsListAdapter adapter = new HotelsListAdapter(this, R.layout.list_item, found_items);
+        list.setAdapter(adapter);
     }
 
     @Override
@@ -216,19 +283,14 @@ public class HotelsActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        if(id == R.id.action_search)
+        switch (id)
         {
-
+            case R.id.action_settings:
+                return true;
+            case R.id.action_search:
+                handleMenuSearch();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }

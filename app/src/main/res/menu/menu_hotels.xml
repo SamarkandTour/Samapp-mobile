@@ -6,7 +6,7 @@
         android:id="@+id/action_sort"
         android:orderInCategory="300"
         android:title="Sort"
-        android:icon="@drawable/ic_sort_white"
+        android:icon="@drawable/ic_sort_white_24dp"
         app:showAsAction="ifRoom">
 
     </item>
@@ -14,7 +14,7 @@
         android:id="@+id/action_search"
         android:orderInCategory="200"
         android:title="Search"
-        android:icon="@drawable/ic_search_white"
+        android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="collapseActionView|ifRoom"
         ></item>
 </menu>

@@ -12,13 +12,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 class ShopsListAdapter extends ArrayAdapter<Shops> {
 
     Context context;
-    Shops[] data = null;
+    ArrayList<Shops> data = null;
     private int layoutResourceId;
 
-    public ShopsListAdapter(Context context,int layoutResourceId, Shops[] data) {
+    public ShopsListAdapter(Context context,int layoutResourceId, ArrayList<Shops> data) {
         // TODO Auto-generated constructor stub
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -35,7 +37,7 @@ class ShopsListAdapter extends ArrayAdapter<Shops> {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             convertView = inflater.inflate(layoutResourceId, parent, false);
         }
-        Shops shop = data[position];
+        Shops shop = data.get(position);
         TextView name = (TextView) convertView.findViewById(R.id.title);
         TextView revs = (TextView) convertView.findViewById(R.id.reviewsCount);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
@@ -47,15 +49,15 @@ class ShopsListAdapter extends ArrayAdapter<Shops> {
         ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
         mainImage.setImageResource(R.drawable.rasm);
         if(shop.Rating>4)
-            star5.setImageResource(R.drawable.star_yellow_icon);
+            star5.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(shop.Rating>3)
-            star4.setImageResource(R.drawable.star_yellow_icon);
+            star4.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(shop.Rating>2)
-            star3.setImageResource(R.drawable.star_yellow_icon);
+            star3.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(shop.Rating>1)
-            star2.setImageResource(R.drawable.star_yellow_icon);
+            star2.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(shop.Rating>0)
-            star1.setImageResource(R.drawable.star_yellow_icon);
+            star1.setImageResource(R.drawable.ic_star_rate_white_18dp);
 
         name.setText(shop.Name);
         StringBuilder sb = new StringBuilder();
