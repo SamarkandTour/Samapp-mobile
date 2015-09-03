@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <gradient
-        android:startColor="#0a0"
-        android:centerColor="#0b0"
-        android:endColor="#0a0"
+        android:startColor="#3fff"
+        android:centerColor="#4fff"
+        android:endColor="#3fff"
         android:angle="270"
         android:layout_height="match_parent"
         android:layout_width="wrap_content" />

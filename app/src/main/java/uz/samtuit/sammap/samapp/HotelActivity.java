@@ -61,7 +61,7 @@ public class HotelActivity extends ActionBarActivity {
         imageView = (ImageView)findViewById(R.id.hotel_image);
         address = (TextView)findViewById(R.id.hotel_address);
         address.setText(extras.getString("address"));
-        link = (ImageButton)findViewById(R.id.link_btn);
+        link = (ImageButton)findViewById(R.id.hotel_link_btn);
         link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

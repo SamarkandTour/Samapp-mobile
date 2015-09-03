@@ -7,29 +7,33 @@
     tools:context="uz.samtuit.sammap.samapp.HotelsActivity"
     android:background="@color/hotel_primary"
     >
-    <include
-        layout="@layout/tool_bar"
-        android:id="@+id/tool_bar"
-        />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:weightSum="8"
         >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <include
+                layout="@layout/tool_bar"
+                android:id="@+id/tool_bar"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:background="@drawable/shadow"
+                android:layout_height="4dp"/>
+        </LinearLayout>
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/hotelsListView"
             android:listSelector="@drawable/list_selector"
-            android:divider="#fff"
             android:paddingTop="2dp"
-            android:layout_weight="0.85"/>
+            android:divider="#fff" />
     </LinearLayout>
-
 </RelativeLayout>

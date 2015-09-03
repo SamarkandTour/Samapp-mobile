@@ -90,7 +90,7 @@
                                 android:layout_height="50dp"
                                 android:layout_gravity="right"
                                 android:src="@drawable/ic_link_white_24dp"
-                                android:id="@+id/link_btn" />
+                                android:id="@+id/hotel_link_btn" />
                         </FrameLayout>
                     </LinearLayout>
                 </LinearLayout>

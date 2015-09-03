@@ -81,7 +81,6 @@ public class FoodAndDrinkActivity extends ActionBarActivity {
             jhotel = obj.getJSONArray("features");
 
             items = new ArrayList<Foods>();
-            Log.e("HOTELS COUNT", jhotel.length() + " S");
             // looping through All Contacts
             for (int i = 0; i < jhotel.length() ; i++) {
                 item = new Foods();

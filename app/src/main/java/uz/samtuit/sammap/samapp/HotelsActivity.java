@@ -1,7 +1,5 @@
 package uz.samtuit.sammap.samapp;
 
-import android.annotation.TargetApi;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -19,16 +17,11 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.cocoahero.android.geojson.Feature;
@@ -42,7 +35,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class HotelsActivity extends ActionBarActivity {
@@ -52,6 +44,7 @@ public class HotelsActivity extends ActionBarActivity {
     private MenuItem mActionSearch;
     private HotelsListAdapter adapter;
     private boolean isSearchOpen = false;
+    android.support.v7.widget.Toolbar toolbar;
     Hotels item;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +52,7 @@ public class HotelsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_hotels);
 
         //ActionBar TOOLBAR
-        Toolbar toolbar = (Toolbar)findViewById(R.id.tool_bar);
+        toolbar = (Toolbar)findViewById(R.id.tool_bar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.hotel_tool));
         setSupportActionBar(toolbar);
 
