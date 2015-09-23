@@ -48,6 +48,30 @@
           39.65004601602631
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Name": "Bakhrom palace",
+        "Address": "Samarkand",
+        "Type": "",
+        "Price": "500",
+        "Wi-Fi": true,
+        "Open": "24",
+        "title": "Afrasiab palace",
+        "Tel": "+998916561786",
+        "URL": "www.rp.uz",
+        "description": "This hotel...",
+        "Rating": 4,
+        "Photo": "iVBORw0KGgoAAAANSUhEUgAAAGQAAABDEAIAAAC1uevOAAAACXBIWXMAAABIAAAASABGyWs+AAAABmJLR0T///////8JWPfcAAAEi0lEQVR42u2dW0gVQRjHpxtFJF2oh4oICYrUx0MZBUY3KKKEUCNIRDJ9iKIyFCJEKLQiulBERUkZYZic7DyoFCWFJ1IxpSJfIrDsopHiBUIIgv49TCx7mD27e3bPzv/l/7Dumd355jff9823O6vYXVJ55nE91UxzTlSMP82mHayq4DDoAG7ix0XQ6Oydnfs0+6srYBXsrZ75rIKQMRQ6PPzXlz4cfbutbMb18va5BIJgOYAUfNXbKW9S+2bfnN4w0J3mLVhBzWC081jwUsPHbzXcqe5cFi5ujeSnVJ9s7aShCZYtvX+hse31pbGr+Z0FMwfOny+5sgSoMXH22/27bQHhbMLeW/RgdcuskUhm1ZqXwOv2p/CT7lUEiB7LVhCElxr6nhbKCAEvNwKibrjEt+APCFgIguMidyhvEGBB3Q6I9En+9PfCziWhRVvP7XuxUg6CMlgIiHWNTanvculF9IHMMlgIavBAyJ+6CsM5z1pGJh3afvgFYBr+kL4z47ccEOG3olsi06KlVx81TO1JO7Dk0kS0iF5B6xwLGKEuhZwJoMAbyV4KSMn6n/cKbdy1KWv01dE5xyZ/ra1Ze6+kKdyc17PciBoDXGDBwmBHd3Yf+ZyNupSMkREaWc3AMp4jo/blYPPH1t4nvzrq+/q9KlK4AbTfJkli7scUrJPptYu6FiI3Qv70s//UntO5SM+NuZQ6WDJSYwX7JxWXfSu8/OPGWXgvPA7SuawajBqbUihEeg7UsPozombEyJhpyRjJ+ZY/i6hUD1aFKIcCNSACyIz+afRN1rz1cwEisrQgYcRc0JU6lvzgGUk9MPovYf/rpRDgOPB+7q+zthJOdQbeCBjJoRCBL9m9lJ8BDWzlHR0DOsBIDoIIlBwG3bypsN9VOSACI6TqKJkiPWfOoRtwDr/oB4yAVDCCINXjUCgHxIHBxsVNK/wWBPUMT171yJXNFKjXe7USDBJqyQu6K5spUN/iY2bd3r6Xry445FTtNqwyQ0peOwuWCjltEuqxOPupDIX0bb6zG5N3fvAj2wOPxZlNiAMbCvnYWIsci8YNxlRMmi32evoDHaZZfH3kqpAIutI7QYB4h0kcCpmZMXknTFT9Ku/qsFrFGltk5ZcWVT77oX6+bpNNBDXzUB/s+ECJDyxNH+lYNY0bBnVqwFTakY/Yua5TdvBbO7HtGfszCMLMoFTdNPYEs3q+uFhaU1cZonql19rvppR3JNc9qJwvJtreb1iwGdpb27Yuc4d8hKqPqo++ypmCBqW6ocIPM4AaPFsJxEuqmcpZBVXdPsJqYVBlSa9eB3KqHaslSvVrJWYtlkj72OmvevvC2AG3C2j75ldFws/tV1acasd4z3LLKvUbHDfeT3z2dKodpyypAq7snv7VsdCon1XuPDVZRkcgbaRSnVWWG6jJVm6gag0WnTbVlVBoloKZrRdip2+x24l9vtlVYp9v9cxE3o/b9lH/rfoRq781Td75rqPOG0lUalTcYs8NEdz+ReWryVQqwaISLGqgsz2CRSVYXOUF/v8VUjkltAOL33X2g/4B5wJm5mz7tscAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTEtMDktMDJUMjM6Mjk6MjEtMDQ6MDBxBsFaAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDExLTAyLTI4VDE5OjEzOjUyLTA1OjAwwUwJ9QAAAFJ0RVh0c3ZnOmJhc2UtdXJpAGZpbGU6Ly8vaG9tZS9hai9Db2RlL3RtLW1hc3Rlci9leGFtcGxlcy9nZW9ncmFwaHktY2xhc3MvZmxhZ3MvQUJXLnN2Z44JxCkAAAAASUVORK5CYII="
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.96832180023193,
+          39.65266461899149
+        ]
+      }
     }
   ]
 }

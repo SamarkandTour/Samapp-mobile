@@ -35,6 +35,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class HotelsActivity extends ActionBarActivity {
@@ -92,7 +94,6 @@ public class HotelsActivity extends ActionBarActivity {
                 Feature feature = new Feature(j);
                 JSONObject g = feature.getGeometry().toJSON();
                 JSONObject c = feature.getProperties();
-                Log.e("JSON", c.toString());
                 item.Name = c.getString("Name");
                 item.Latitude = g.getJSONArray("coordinates").getDouble(1);
                 item.Longitude = g.getJSONArray("coordinates").getDouble(0);
@@ -278,12 +279,22 @@ public class HotelsActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         switch (id)
         {
-            case R.id.action_settings:
-                return true;
+            case R.id.action_sort:
+                Collections.sort(items, new CustomComparator());
+                adapter = new HotelsListAdapter(this, R.layout.list_item, items);
+                list.setAdapter(adapter);
+                break;
             case R.id.action_search:
                 handleMenuSearch();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public class CustomComparator implements Comparator<Hotels> {
+        @Override
+        public int compare(Hotels o1, Hotels o2) {
+            return o1.Name.compareTo(o2.Name);
+        }
     }
 }

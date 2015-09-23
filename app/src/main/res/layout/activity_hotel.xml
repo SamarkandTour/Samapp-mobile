@@ -105,6 +105,11 @@
                 android:paddingLeft="10dp"
                 android:id="@+id/hotel_title_small"
                 android:textSize="20sp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@drawable/shadow"
+                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,6 +128,11 @@
                 android:gravity="center_vertical"
                 android:textSize="20dp"
                 android:padding="10dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@drawable/shadow"
                 />
             <TextView
                 android:layout_width="match_parent"

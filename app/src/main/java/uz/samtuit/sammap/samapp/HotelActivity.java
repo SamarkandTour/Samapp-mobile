@@ -156,4 +156,5 @@ public class HotelActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

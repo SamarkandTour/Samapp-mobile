@@ -69,31 +69,31 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:id="@+id/itItem_star1"
-                android:src="@drawable/star_black_icon"
+                android:src="@drawable/ic_star_black_18dp"
                 />
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:id="@+id/itItem_star2"
-                android:src="@drawable/star_black_icon"
+                android:src="@drawable/ic_star_black_18dp"
                 />
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:id="@+id/itItem_star3"
-                android:src="@drawable/star_black_icon"
+                android:src="@drawable/ic_star_black_18dp"
                 />
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:id="@+id/itItem_star4"
-                android:src="@drawable/star_black_icon"
+                android:src="@drawable/ic_star_black_18dp"
                 />
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:id="@+id/itItem_star5"
-                android:src="@drawable/star_black_icon"
+                android:src="@drawable/ic_star_black_18dp"
                 />
         </LinearLayout>
     </LinearLayout>
