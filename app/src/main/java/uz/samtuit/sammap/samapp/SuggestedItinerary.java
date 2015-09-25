@@ -45,7 +45,6 @@ public class SuggestedItinerary extends Activity {
     ListView lv;
     Point[] dat;
     ArrayList<Point[]> data;
-    ArrayList<SugItineraryAdapter> adapters;
     SugItineraryAdapter adapter;
 
 
@@ -81,8 +80,8 @@ public class SuggestedItinerary extends Activity {
             btn.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.e("ASD",Integer.parseInt(((Button)view).getText().toString().split(" ")[1])-1+" ");
-                    changeAdapter(Integer.parseInt(((Button)view).getText().toString().split(" ")[1])-1);
+                    Log.e("ASD", Integer.parseInt(((Button) view).getText().toString().split(" ")[1]) - 1 + " ");
+                    changeAdapter(Integer.parseInt(((Button) view).getText().toString().split(" ")[1]) - 1);
                     //lv.setAdapter(adapters.get(Integer.parseInt(((Button)view).getText().toString().split(" ")[1])-1));
                 }
             });
@@ -99,7 +98,8 @@ public class SuggestedItinerary extends Activity {
 
     private void changeAdapter(int i)
     {
-        lv.setAdapter(adapters.get(i));
+        adapter = new SugItineraryAdapter(this,R.layout.itinerary_list_item,data.get(i));
+        lv.setAdapter(adapter);
     }
     private void genData()
     {
@@ -110,17 +110,11 @@ public class SuggestedItinerary extends Activity {
         dat[2]= new Point("Rukhabad","39.66166, 66.97904","ADAS");
         dat[3]= new Point("Afrasiab Hotel","39.66607, 66.97932","ADAS");
         data.add(dat);
-        dat = new Point[4];
+        dat = new Point[3];
         dat[2]= new Point("Siyob Bazar","39.65219, 66.94716","ADAS");
         dat[1]= new Point("Afrasiab","39.65552, 66.95680","ADAS");
         dat[0]= new Point("Shakhizinda","39.66166, 66.97904","ADAS");
         data.add(dat);
-        adapters = new ArrayList<SugItineraryAdapter>();
-        for(int i = 0; i < data.size(); i++)
-        {
-            adapter = new SugItineraryAdapter(this,R.layout.itinerary_list_item, data.get(0));
-            adapters.add(adapter);
-        }
     }
 
     public String loadJSONFromAsset(String fileName) {
