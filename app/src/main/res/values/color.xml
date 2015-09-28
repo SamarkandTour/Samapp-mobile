@@ -5,6 +5,7 @@
         <color name="WindowBackground">#fff</color>
         <color name="attraction_primary">#2196F3</color>
         <color name="attraction_tool">#1976D2</color>
+        <color name="selector">#fff</color>
         <color name="shop_primary">#8BC34A</color>
         <color name="shop_tool">#689F38</color>
         <color name="hotel_primary">#3F51B5</color>

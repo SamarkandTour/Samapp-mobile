@@ -1,67 +1,27 @@
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ColorPrimary"
+        android:id="@+id/si_toolbar" />
+    <uz.samtuit.sammap.samapp.SlidingTabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fadeScrollbars="true"
+        android:fadingEdge="horizontal"
+        android:elevation="4dp"
+        android:background="@color/ColorPrimary"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="77dp"
-            android:orientation="horizontal"
-            android:background="@drawable/back_milky">
-            <LinearLayout
-                android:layout_width="302dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="5"
-                android:weightSum="3">
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="52dp"
-                    android:text="Suggested Itinerary"
-                    android:textColor="@color/black"
-                    android:layout_gravity="bottom"
-                    android:paddingLeft="10dp"
-                    android:textSize="30sp"
-                    android:gravity="bottom"
-                    android:id="@+id/suggestedItineraryTitle"
-                    />
-
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="21dp"
-                        android:id="@+id/horizontalScrollView2">
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tabButtonsLayout"
-                            >
-                        </LinearLayout>
-                    </HorizontalScrollView>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="52dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                >
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal">
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/listView"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-        </FrameLayout>
-    </LinearLayout>
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_weight="1">
+    </android.support.v4.view.ViewPager>
+</LinearLayout>
