@@ -50,9 +50,17 @@ public class SuggestedItinerary extends ActionBarActivity {
             Titles[i] = "Day "+(i+1);
         toolbar = (Toolbar)findViewById(R.id.si_toolbar);
         toolbar.setTitle("Suggested Itinerary");
+        setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.ColorPrimary));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+            }
+        });
+
         vpadapter = new ViewPagerAdapter(getSupportFragmentManager(),Titles,daysCount);
 
         pager = (ViewPager)findViewById(R.id.pager);
@@ -69,9 +77,15 @@ public class SuggestedItinerary extends ActionBarActivity {
         });
         tabs.setViewPager(pager);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-
-
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+    }
+
+
 
 }
 

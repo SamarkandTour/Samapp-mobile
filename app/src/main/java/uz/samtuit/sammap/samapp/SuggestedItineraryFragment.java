@@ -61,7 +61,7 @@ public class SuggestedItineraryFragment extends Fragment implements AbsListView.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_suggesteditinerary, container, false);
+        View view = inflater.inflate(R.layout.fragment_sugesteditinerary, container, false);
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);

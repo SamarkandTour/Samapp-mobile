@@ -62,10 +62,12 @@ public class HotelActivity extends ActionBarActivity {
         address = (TextView)findViewById(R.id.hotel_address);
         address.setText(extras.getString("address"));
         link = (ImageButton)findViewById(R.id.hotel_link_btn);
+
         link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String url = extras.getString("url");
+                Log.e("URL ", url);
                 if (!url.startsWith("https://") && !url.startsWith("http://")){
                     url = "http://" + url;
                 }
