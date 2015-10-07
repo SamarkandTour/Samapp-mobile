@@ -15,8 +15,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import uz.samtuit.sammap.samapp.dummy.DummyContent;
-
 public class SuggestedItineraryFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     private static final String SI_DAY = "Day";
