@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="uz.samtuit.sammap.samapp" >
+    package="uz.samtuit.sammap.main" >
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.NoActionBar" >
         <activity
-            android:name=".MainMap"
+            android:name="uz.samtuit.samapp.main.MainMap"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,90 +25,90 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainPage"
+            android:name="uz.samtuit.samapp.main.MainPage"
             android:label="@string/title_activity_main_page" >
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="uz.samtuit.samapp.main.MainActivity"
             android:label="@string/title_activity_main_map" >
         </activity>
         <activity
-            android:name=".MainMenu"
+            android:name="uz.samtuit.samapp.main.MainMenu"
             android:label="@string/title_activity_main_menu" >
         </activity>
         <activity
-            android:name=".StarterActivity"
+            android:name="uz.samtuit.samapp.main.StarterActivity"
             android:label="@string/title_activity_starter" >
         </activity>
         <activity
-            android:name=".HotelsActivity"
+            android:name="uz.samtuit.samapp.main.HotelsActivity"
             android:label="@string/title_activity_hotels" >
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".AboutCityActivity"
+            android:name="uz.samtuit.samapp.main.AboutCityActivity"
             android:label="@string/title_activity_about_city" >
         </activity>
         <activity
-            android:name=".AttractionsActivity"
+            android:name="uz.samtuit.samapp.main.AttractionsActivity"
             android:label="@string/title_activity_attractions" >
         </activity>
         <activity
-            android:name=".FoodAndDrinkActivity"
+            android:name="uz.samtuit.samapp.main.FoodAndDrinkActivity"
             android:label="@string/title_activity_food_and_drink" >
         </activity>
         <activity
-            android:name=".ShoppingActivity"
+            android:name="uz.samtuit.samapp.main.ShoppingActivity"
             android:label="@string/title_activity_shopping" >
         </activity>
         <activity
-            android:name=".ShopActivity"
+            android:name="uz.samtuit.samapp.main.ShopActivity"
             android:label="@string/title_activity_shop" >
         </activity>
         <activity
-            android:name=".HotelActivity"
+            android:name="uz.samtuit.samapp.main.HotelActivity"
             android:label="@string/title_activity_hotel" >
         </activity>
         <activity
-            android:name=".AboutAppActivity"
+            android:name="uz.samtuit.samapp.main.AboutAppActivity"
             android:label="@string/title_activity_about_app" >
         </activity>
         <activity
-            android:name=".MyScheduleActivity"
+            android:name="uz.samtuit.samapp.main.MyScheduleActivity"
             android:label="@string/title_activity_my_schedule" >
         </activity>
         <activity
-            android:name=".SuggestedItinerary"
+            android:name="uz.samtuit.samapp.main.SuggestedItinerary"
             android:label="@string/title_activity_itinerary_wizard" >
         </activity>
         <activity
-            android:name=".TrainsTimeTableActivity"
+            android:name="uz.samtuit.samapp.main.TrainsTimeTableActivity"
             android:label="@string/title_activity_trains_time_table" >
         </activity>
         <activity
-            android:name=".TashkentSamarkandActivity"
+            android:name="uz.samtuit.samapp.main.TashkentSamarkandActivity"
             android:label="@string/title_activity_tashkent_samarkand" >
         </activity>
         <activity
-            android:name=".tabActivity"
+            android:name="uz.samtuit.samapp.main.tabActivity"
             android:label="@string/title_activity_tab" >
         </activity>
         <activity
-            android:name=".Splash"
+            android:name="uz.samtuit.samapp.main.Splash"
             android:label="@string/title_activity_splash" >
         </activity>
         <activity
-            android:name=".FavouritePlaces"
+            android:name="uz.samtuit.samapp.main.FavouritePlaces"
             android:label="@string/title_activity_favourite_places" >
         </activity>
         <activity
-            android:name=".AttractionActivity"
+            android:name="uz.samtuit.samapp.main.AttractionActivity"
             android:label="@string/title_activity_attraction" >
         </activity>
         <activity
-            android:name=".FoodActivity"
+            android:name="uz.samtuit.samapp.main.FoodActivity"
             android:label="@string/title_activity_food" >
         </activity>
     </application>

@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:background="#fff"
-    tools:context="uz.samtuit.sammap.samapp.ItineraryWizardAlert">
+    tools:context="uz.samtuit.sammap.main.ItineraryWizardAlert">
 
     <TextView
         android:layout_width="match_parent"

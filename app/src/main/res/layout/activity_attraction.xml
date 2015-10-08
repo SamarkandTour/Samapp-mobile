@@ -3,7 +3,7 @@
     android:layout_height="match_parent" android:padding="0dp"
     android:background="@color/attraction_primary"
     android:orientation="vertical"
-    tools:context="uz.samtuit.sammap.samapp.ShopActivity">
+    tools:context="uz.samtuit.samapp.main.ShopActivity">
 
     <ScrollView
         android:layout_width="match_parent"
