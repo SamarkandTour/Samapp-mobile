@@ -72,7 +72,7 @@ public class FoodAndDrinkActivity extends ActionBarActivity {
 
         //Json
         JSONArray jhotel = null;
-        String hotel = loadJSONFromAsset("foodanddrinks_0_001.geojson");
+        String hotel = loadJSONFromAsset("data/en/foodanddrinks_0_001.geojson");
 
         try {
 

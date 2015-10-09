@@ -1,6 +1,5 @@
 <resources>
     <string name="title_activity_itinerary_wizard_alert">ItineraryWizardAlert</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_samarkand_arrive_alert">SamarkandArriveAlert</string>

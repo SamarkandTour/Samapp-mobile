@@ -53,6 +53,9 @@ public class HotelsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotels);
 
+        //Include Global Variables
+        GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+
         //ActionBar TOOLBAR
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.hotel_tool));
@@ -78,7 +81,7 @@ public class HotelsActivity extends ActionBarActivity {
 
         //Json
         JSONArray jhotel = null;
-        String hotel = loadJSONFromAsset("hotels_0_001.geojson");
+        String hotel = loadJSONFromAsset("data/"+globalVariables.getApplicationLanguage()+"/hotels_0_001.geojson");
 
         try {
 

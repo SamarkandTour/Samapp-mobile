@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -37,7 +38,13 @@ import com.mapbox.mapboxsdk.util.DataLoadingUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import uz.samtuit.sammap.main.R;
 
@@ -58,8 +65,30 @@ public class MainMap extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        final GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+        try
+        {
+            JSONObject jsonObj = new JSONObject(loadJSONFromAsset());
+            globalVariables.setApplicationLanguage(jsonObj.getString("app_lang"));
+            globalVariables.setApplicationVersion(jsonObj.getString("app_ver"));
+            globalVariables.setApplicationName(jsonObj.getString("app_name"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Locale locale = new Locale(globalVariables.getApplicationLanguage());
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+        Log.d("APP NAME:", globalVariables.getApplicationName());
+        Log.d("APP LANG:", globalVariables.getApplicationLanguage());
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
+        //initialize app_global data
+
+
 
         //search text typeface
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
@@ -154,11 +183,11 @@ public class MainMap extends ActionBarActivity {
         Items.add(item);
         item = new MenuItems(1,"Attractions","drawable/ic_attraction");
         Items.add(item);
-        item = new MenuItems(2,"Food & Drink","drawable/ic_foodanddrink");
+        item = new MenuItems(2,"Food & Drink","drawable/food_and1");
         Items.add(item);
-        item = new MenuItems(3,"Hotels","drawable/ic_hotel");
+        item = new MenuItems(3,"Hotels","drawable/hotel_new");
         Items.add(item);
-        item = new MenuItems(4,"Shopping","drawable/ic_shop");
+        item = new MenuItems(4,"Shopping","drawable/shop1");
         Items.add(item);
         item = new MenuItems(5,"Suggested Itinerary","drawable/itinerary");
         Items.add(item);
@@ -395,7 +424,7 @@ public class MainMap extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         // Load GeoJSON
-        String[] files = {"hotels_0_001.geojson", "foodanddrinks_0_001.geojson", "attractions_0_001.geojson","shops_0_001.geojson"};
+        String[] files = {"data/en/hotels_0_001.geojson", "data/en/foodanddrinks_0_001.geojson", "data/en/attractions_0_001.geojson", "data/en/shops_0_001.geojson"};
         Drawable[] drawables = {
             getResources().getDrawable(R.drawable.hotel_marker),
             getResources().getDrawable(R.drawable.food_marker),
@@ -424,5 +453,20 @@ public class MainMap extends ActionBarActivity {
                 e.printStackTrace();
             }
         }
+    }
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("app_properties.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 }
