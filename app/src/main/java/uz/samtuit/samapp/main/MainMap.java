@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -59,6 +61,7 @@ public class MainMap extends ActionBarActivity {
     private int height;
     private MapView mapView;
     private EditText searchText;
+    private Boolean AP_FIRSTLAUNCH;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -66,22 +69,53 @@ public class MainMap extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         final GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
-        try
+        SQLiteDatabase APP_DB = openOrCreateDatabase("Samapp_data",MODE_PRIVATE,null);
+        ConfigurePropertiesDB configurePropertiesDB = new ConfigurePropertiesDB(APP_DB);
+        configurePropertiesDB.RepairDB();
+        Cursor APP_PROPERTIES = APP_DB.rawQuery("Select `app_first_launch` from app_properties",null);
+        APP_PROPERTIES.moveToFirst();
+        AP_FIRSTLAUNCH = Boolean.parseBoolean(APP_PROPERTIES.getString(0));
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null)
         {
-            JSONObject jsonObj = new JSONObject(loadJSONFromAsset());
-            globalVariables.setApplicationLanguage(jsonObj.getString("app_lang"));
-            globalVariables.setApplicationVersion(jsonObj.getString("app_ver"));
-            globalVariables.setApplicationName(jsonObj.getString("app_name"));
-        } catch (JSONException e) {
-            e.printStackTrace();
+            double lat,longt;
+            lat = extras.getDouble("lat");
+            longt = extras.getDouble("long");
+            LatLng loc = new LatLng(lat,longt);
+//            mapView.getController().goTo(loc, null);
+            mapView.getController().animateTo(loc);
+        }else
+        {
+            if(AP_FIRSTLAUNCH)
+            {
+                Intent first_launch_intent = new Intent(MainMap.this, FirstLaunch.class);
+                startActivity(first_launch_intent);
+            }
+            //Action when Update is Available
+            if(updateAvailable)
+            {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent splash = new Intent(MainMap.this, Splash.class);
+                        startActivity(splash);
+
+                    }
+                }, 0);
+                Log.e("Error","None of time");
+            }
+            //End
         }
+        APP_PROPERTIES = APP_DB.rawQuery("Select * from app_properties",null);
+        APP_PROPERTIES.moveToFirst();
+        globalVariables.setApplicationLanguage(APP_PROPERTIES.getString(2));
+        globalVariables.setApplicationVersion(APP_PROPERTIES.getString(1));
+        globalVariables.setApplicationName(APP_PROPERTIES.getString(0));
         Locale locale = new Locale(globalVariables.getApplicationLanguage());
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
-        Log.d("APP NAME:", globalVariables.getApplicationName());
-        Log.d("APP LANG:", globalVariables.getApplicationLanguage());
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -94,22 +128,6 @@ public class MainMap extends ActionBarActivity {
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
         searchText = (EditText)findViewById(R.id.search_text);
         searchText.setTypeface(tf);
-        searchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
 
         //MapView Settings
         mapView = (MapView)findViewById(R.id.mapview);
@@ -150,32 +168,7 @@ public class MainMap extends ActionBarActivity {
             }
         });
         //end
-        Bundle extras = getIntent().getExtras();
-        if(extras!=null)
-        {
-            double lat,longt;
-            lat = extras.getDouble("lat");
-            longt = extras.getDouble("long");
-            LatLng loc = new LatLng(lat,longt);
-//            mapView.getController().goTo(loc, null);
-            mapView.getController().animateTo(loc);
-        }else
-        {
-            //Action when Update is Available
-            if(updateAvailable)
-            {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent splash = new Intent(MainMap.this, Splash.class);
-                        startActivity(splash);
 
-                    }
-                }, 0);
-                Log.e("Error","None of time");
-            }
-            //End
-        }
 
 
         //generate Menu items
@@ -213,11 +206,10 @@ public class MainMap extends ActionBarActivity {
             @Override
             public void run() {
                 Log.e("TEST", "SIZE: " + linLay.getHeight());
-                height = linLay.getHeight();
                 for (int i = 0; i < Items.size(); i++) {
                     final int index = i;
                     newBtn = new Button(MainMap.this);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(height - 20, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(linLay.getHeight() - 20, LinearLayout.LayoutParams.MATCH_PARENT);
                     params.setMargins(5, 10, 5, 10);
                     newBtn.setLayoutParams(params);
                     newBtn.setText(" ");

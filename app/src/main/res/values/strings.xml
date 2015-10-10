@@ -37,6 +37,7 @@
     <string name="title_activity_attraction">AttractionActivity</string>
     <string name="title_activity_food">FoodActivity</string>
     <string name="title_activity_shop">FoodActivity</string>
+    <string name="title_activity_first_launch">FirstLaunch</string>
 
 
 </resources>

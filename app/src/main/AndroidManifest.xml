@@ -21,7 +21,8 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="uz.samtuit.samapp.main"/>
+                <action android:name="uz.samtuit.samapp.main" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -111,6 +112,10 @@
         <activity
             android:name="uz.samtuit.samapp.main.FoodActivity"
             android:label="@string/title_activity_food" >
+        </activity>
+        <activity
+            android:name="uz.samtuit.samapp.main.FirstLaunch"
+            android:label="@string/title_activity_first_launch" >
         </activity>
     </application>
 
