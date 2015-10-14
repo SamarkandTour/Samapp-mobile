@@ -49,23 +49,23 @@ class HotelsListAdapter extends ArrayAdapter<TourFeature> {
         ImageView star4 = (ImageView)convertView.findViewById(R.id.star4);
         ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
         mainImage.setImageResource(R.drawable.rasm);
-        if(hotel.rating>4)
+        if(hotel.getRating()>4)
             star5.setImageResource(R.drawable.ic_star_rate_white_18dp);
-        if(hotel.rating>3)
+        if(hotel.getRating()>3)
             star4.setImageResource(R.drawable.ic_star_rate_white_18dp);
-        if(hotel.rating>2)
+        if(hotel.getRating()>2)
             star3.setImageResource(R.drawable.ic_star_rate_white_18dp);
-        if(hotel.rating>1)
+        if(hotel.getRating()>1)
             star2.setImageResource(R.drawable.ic_star_rate_white_18dp);
-        if(hotel.rating>0)
+        if(hotel.getRating()>0)
             star1.setImageResource(R.drawable.ic_star_rate_white_18dp);
-        name.setText(hotel.name);
+        name.setText(hotel.getString("name"));
         StringBuilder sb = new StringBuilder();
         sb.append("");
         //sb.append(hotel.Reviews);
         revs.setText(sb.toString());
         revs.setTag("revs");
-        name.setTag(hotel.name);
+        name.setTag(hotel.getString("name"));
         name.setTypeface(tf);
         return convertView;
     }

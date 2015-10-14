@@ -1,15 +1,49 @@
 package uz.samtuit.samapp.util;
 
-import android.graphics.Bitmap;
+import java.util.HashMap;
 
 /**
  * Data type of GeoJSON feature for Tour Information
  */
 public class TourFeature {
-    public Bitmap photo;
-    public String name, description, type, price, wifi, open, address, tel, url;
-    public int rating;
-    public double longitude, latitude;
+    //private Bitmap photo;
+    private String photo;
+    private HashMap<String, String> stringHashMap; //name, description, type, price, wifi, open, address, tel, url
+    private int rating;
+    private double longitude;
+    private double latitude;
 
-    public TourFeature(){}
+    public TourFeature(){
+        stringHashMap = new HashMap<String, String>();
+    }
+
+    public void setStringHashMap(String strKey, String strVal) {
+        stringHashMap.put(strKey, strVal);
+    }
+
+    public String getString(String strKey) {
+        return stringHashMap.get(strKey);
+    }
+
+    public void setRating(int intVal) {
+        rating = intVal;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setPhoto(String bitmapVal) {
+        photo = bitmapVal;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setLongitude(double doubleVal) { longitude = doubleVal; }
+    public double getLongitude() { return longitude; }
+
+    public void setLatitude(double doubleVal) { latitude = doubleVal; }
+    public double getLatitude() { return latitude; }
 }

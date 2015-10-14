@@ -74,7 +74,7 @@ public class ShoppingActivity extends ActionBarActivity {
 
         //Json
         JSONArray jshop = null;
-        String shop = loadJSONFromAsset("data/en/shops_0_001.geojson");
+        String shop = loadJSONFromAsset("data/en/en_shopping.geojson");
 
         try {
 
