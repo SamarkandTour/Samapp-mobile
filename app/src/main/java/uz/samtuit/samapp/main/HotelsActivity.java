@@ -22,32 +22,24 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.cocoahero.android.geojson.Feature;
-import com.cocoahero.android.geojson.GeoJSON;
-import com.cocoahero.android.geojson.GeoJSONObject;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.sammap.main.R;
 
 
 public class HotelsActivity extends ActionBarActivity {
-    private static ArrayList<Hotels> items;
+    private static ArrayList<TourFeature> items;
     ListView list;
     private EditText search_text;
     private MenuItem mActionSearch;
     private HotelsListAdapter adapter;
     private boolean isSearchOpen = false;
     android.support.v7.widget.Toolbar toolbar;
-    Hotels item;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,45 +68,10 @@ public class HotelsActivity extends ActionBarActivity {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getSupportActionBar().setTitle(s);
         toolbar.setTitle(s);
-
         //end Action Bar
 
-        //Json
-        JSONArray jhotel = null;
-        String hotel = loadJSONFromAsset("data/"+globalVariables.getApplicationLanguage()+"/hotels_0_001.geojson");
-
-        try {
-
-            GeoJSONObject ob = GeoJSON.parse(hotel);
-            JSONObject obj = ob.toJSON();
-            jhotel = obj.getJSONArray("features");
-
-            items = new ArrayList<Hotels>();
-            // looping through All Contacts
-            for (int i = 0; i < jhotel.length() ; i++) {
-                Hotels item = new Hotels();
-                JSONObject j = jhotel.getJSONObject(i);
-                Feature feature = new Feature(j);
-                JSONObject g = feature.getGeometry().toJSON();
-                JSONObject c = feature.getProperties();
-                item.Name = c.getString("Name");
-                item.Latitude = g.getJSONArray("coordinates").getDouble(1);
-                item.Longitude = g.getJSONArray("coordinates").getDouble(0);
-                item.Address = c.getString("Address");
-                item.Telephone = c.getString("Tel");
-                item.WiFi = c.getBoolean("Wi-Fi");
-                item.Rating = c.getInt("Rating");
-                item.URL = c.getString("URL");
-                item.Description = c.getString("description");
-                item.Open = c.getString("Open");
-                item.Type = c.getString("Type");
-                item.Photo = c.getString("Photo");
-                items.add(item);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        //
+        TourFeatureList tourFeatureList = new TourFeatureList();
+        items = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/en/en_hotel.geojson");
 
         list = (ListView)findViewById(R.id.hotelsListView);
         adapter = new HotelsListAdapter(this,R.layout.list_item, items);
@@ -123,46 +80,24 @@ public class HotelsActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(HotelsActivity.this, HotelActivity.class);
-                intent.putExtra("name",items.get(position).Name);
-                intent.putExtra("telephone", items.get(position).Telephone);
-                intent.putExtra("address",items.get(position).Address);
-                intent.putExtra("rating",items.get(position).Rating);
-                intent.putExtra("lat",items.get(position).Latitude);
-                intent.putExtra("long",items.get(position).Longitude);
-                intent.putExtra("desc",items.get(position).Description);
-                intent.putExtra("photo",items.get(position).Photo);
-                intent.putExtra("wifi",items.get(position).WiFi);
-                intent.putExtra("price",items.get(position).Price);
+
+                intent.putExtra("photo",items.get(position).getPhoto());
+                intent.putExtra("rating",items.get(position).getRating());
+                intent.putExtra("name",items.get(position).getString("name"));
+                intent.putExtra("desc",items.get(position).getString("desc"));
+                intent.putExtra("type",items.get(position).getString("type"));
+                intent.putExtra("price",items.get(position).getString("price"));
+                intent.putExtra("wifi",items.get(position).getString("wifi"));
+                intent.putExtra("open",items.get(position).getString("open"));
+                intent.putExtra("addr",items.get(position).getString("addr"));
+                intent.putExtra("tel", items.get(position).getString("tel"));
+                intent.putExtra("url",items.get(position).getString("url"));
+                intent.putExtra("long",items.get(position).getLongitude());
+                intent.putExtra("lat",items.get(position).getLatitude());
+
                 startActivity(intent);
             }
         });
-
-
-
-    }
-
-    public String loadJSONFromAsset(String fileName) {
-        String json = null;
-        try {
-
-            InputStream is = getAssets().open(fileName);
-
-            int size = is.available();
-
-            byte[] buffer = new byte[size];
-
-            is.read(buffer);
-
-            is.close();
-
-            json = new String(buffer, "UTF-8");
-
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
     }
 
     @Override
@@ -260,10 +195,10 @@ public class HotelsActivity extends ActionBarActivity {
 
     private void doSearch(String sequence)
     {
-        ArrayList<Hotels> found_items = new ArrayList<Hotels>();
+        ArrayList<TourFeature> found_items = new ArrayList<TourFeature>();
         for(int i = 0; i < items.size(); i++)
         {
-            if(items.get(i).Name.toLowerCase().contains(sequence.toLowerCase()))
+            if(items.get(i).getString("name").toLowerCase().contains(sequence.toLowerCase()))
             {
                 found_items.add(items.get(i));
             }
@@ -294,10 +229,10 @@ public class HotelsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class CustomComparator implements Comparator<Hotels> {
+    public class CustomComparator implements Comparator<TourFeature> {
         @Override
-        public int compare(Hotels o1, Hotels o2) {
-            return o1.Name.compareTo(o2.Name);
+        public int compare(TourFeature o1, TourFeature o2) {
+            return o1.getString("name").compareTo(o2.getString("name"));
         }
     }
 }

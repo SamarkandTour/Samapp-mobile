@@ -17,8 +17,6 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -39,9 +37,6 @@ import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
 import com.mapbox.mapboxsdk.util.DataLoadingUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -416,7 +411,7 @@ public class MainMap extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         // Load GeoJSON
-        String[] files = {"data/en/hotels_0_001.geojson", "data/en/foodanddrinks_0_001.geojson", "data/en/attractions_0_001.geojson", "data/en/shops_0_001.geojson"};
+        String[] files = {"data/en/en_hotel.geojson", "data/en/en_foodndrink.geojson", "data/en/en_attraction.geojson", "data/en/en_shopping.geojson"};
         Drawable[] drawables = {
             getResources().getDrawable(R.drawable.hotel_marker),
             getResources().getDrawable(R.drawable.food_marker),

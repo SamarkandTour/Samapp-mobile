@@ -12,15 +12,16 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.sammap.main.R;
 
-class HotelsListAdapter extends ArrayAdapter<Hotels> {
+class HotelsListAdapter extends ArrayAdapter<TourFeature> {
 
     Context context;
-    ArrayList<Hotels> data = null;
+    ArrayList<TourFeature> data = null;
     private int layoutResourceId;
 
-    public HotelsListAdapter(Context context, int layoutResourceId, ArrayList<Hotels> data) {
+    public HotelsListAdapter(Context context, int layoutResourceId, ArrayList<TourFeature> data) {
         // TODO Auto-generated constructor stub
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -37,7 +38,7 @@ class HotelsListAdapter extends ArrayAdapter<Hotels> {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             convertView = inflater.inflate(layoutResourceId, parent, false);
         }
-        Hotels hotel = data.get(position);
+        TourFeature hotel = data.get(position);
         TextView name = (TextView) convertView.findViewById(R.id.title);
         TextView revs = (TextView) convertView.findViewById(R.id.reviewsCount);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
@@ -48,23 +49,23 @@ class HotelsListAdapter extends ArrayAdapter<Hotels> {
         ImageView star4 = (ImageView)convertView.findViewById(R.id.star4);
         ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
         mainImage.setImageResource(R.drawable.rasm);
-        if(hotel.Rating>4)
+        if(hotel.getRating()>4)
             star5.setImageResource(R.drawable.ic_star_rate_white_18dp);
-        if(hotel.Rating>3)
+        if(hotel.getRating()>3)
             star4.setImageResource(R.drawable.ic_star_rate_white_18dp);
-        if(hotel.Rating>2)
+        if(hotel.getRating()>2)
             star3.setImageResource(R.drawable.ic_star_rate_white_18dp);
-        if(hotel.Rating>1)
+        if(hotel.getRating()>1)
             star2.setImageResource(R.drawable.ic_star_rate_white_18dp);
-        if(hotel.Rating>0)
+        if(hotel.getRating()>0)
             star1.setImageResource(R.drawable.ic_star_rate_white_18dp);
-        name.setText(hotel.Name);
+        name.setText(hotel.getString("name"));
         StringBuilder sb = new StringBuilder();
         sb.append("");
-        sb.append(hotel.Reviews);
+        //sb.append(hotel.Reviews);
         revs.setText(sb.toString());
         revs.setTag("revs");
-        name.setTag(hotel.Name);
+        name.setTag(hotel.getString("name"));
         name.setTypeface(tf);
         return convertView;
     }

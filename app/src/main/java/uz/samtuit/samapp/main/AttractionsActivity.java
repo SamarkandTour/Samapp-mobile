@@ -73,7 +73,7 @@ public class AttractionsActivity extends ActionBarActivity {
 
         //Json
         JSONArray jattraction = null;
-        String attraction = loadJSONFromAsset("data/en/attractions_0_001.geojson");
+        String attraction = loadJSONFromAsset("data/en/en_attraction.geojson");
 
         try {
 
