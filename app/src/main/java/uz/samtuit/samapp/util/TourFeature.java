@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class TourFeature {
     //private Bitmap photo;
     private String photo;
-    private HashMap<String, String> stringHashMap; //name, description, type, price, wifi, open, address, tel, url
+    private HashMap<String, String> stringHashMap; //name, desc, type, price, wifi, open, addr, tel, url
     private int rating;
     private double longitude;
     private double latitude;
@@ -33,8 +33,8 @@ public class TourFeature {
         return rating;
     }
 
-    public void setPhoto(String bitmapVal) {
-        photo = bitmapVal;
+    public void setPhoto(String strVal) {
+        photo = strVal;
     }
 
     public String getPhoto() {

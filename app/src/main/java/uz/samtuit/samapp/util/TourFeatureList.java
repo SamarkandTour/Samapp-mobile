@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by MBP on 2015. 10. 14..
+ * Create Tour Features List from GeoJSON file
  */
 public class TourFeatureList {
     private ArrayList<TourFeature> tourFeatureList;
@@ -47,10 +47,10 @@ public class TourFeatureList {
                     tourFeature.setStringHashMap("name", v.getProperties().getString("name"));
                 }
 
-                if (v.getProperties().isNull("description")) {
-                    tourFeature.setStringHashMap("description", null);
+                if (v.getProperties().isNull("desc")) {
+                    tourFeature.setStringHashMap("desc", null);
                 } else {
-                    tourFeature.setStringHashMap("description", v.getProperties().getString("description"));
+                    tourFeature.setStringHashMap("desc", v.getProperties().getString("desc"));
                 }
 
                 if (v.getProperties().isNull("type")) {
@@ -77,10 +77,10 @@ public class TourFeatureList {
                     tourFeature.setStringHashMap("open", v.getProperties().getString("open"));
                 }
 
-                if (v.getProperties().isNull("address")) {
-                    tourFeature.setStringHashMap("address", null);
+                if (v.getProperties().isNull("addr")) {
+                    tourFeature.setStringHashMap("addr", null);
                 } else {
-                    tourFeature.setStringHashMap("address", v.getProperties().getString("address"));
+                    tourFeature.setStringHashMap("addr", v.getProperties().getString("addr"));
                 }
 
                 if (v.getProperties().isNull("url")) {
@@ -96,7 +96,7 @@ public class TourFeatureList {
             }
 
         } catch (IOException e) {
-            // File not found, Try redownload
+            // File not found, Try re-download
             e.printStackTrace();
         } catch (JSONException e) {
             // JSON Format is malformed

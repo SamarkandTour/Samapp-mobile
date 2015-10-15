@@ -28,7 +28,7 @@ public class HotelActivity extends ActionBarActivity {
 
     private MenuItem mActionNavigate;
     private TextView address,titleSmall,description;
-    private double lat, longt;
+    private double latitude, longitude;
     private String name;
     private ImageView imageView;
     private ImageButton call,link;
@@ -61,7 +61,7 @@ public class HotelActivity extends ActionBarActivity {
 
         imageView = (ImageView)findViewById(R.id.hotel_image);
         address = (TextView)findViewById(R.id.hotel_address);
-        address.setText(extras.getString("address"));
+        address.setText(extras.getString("addr"));
         link = (ImageButton)findViewById(R.id.hotel_link_btn);
 
         link.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +84,8 @@ public class HotelActivity extends ActionBarActivity {
         ImageView star3 = (ImageView)findViewById(R.id.star3);
         ImageView star4 = (ImageView)findViewById(R.id.star4);
         ImageView star5 = (ImageView)findViewById(R.id.star5);
-        lat = extras.getDouble("lat");
-        longt = extras.getDouble("long");
+        latitude = extras.getDouble("lat");
+        longitude = extras.getDouble("long");
         name = extras.getString("name");
 
         call = (ImageButton)findViewById(R.id.call_button);
@@ -94,7 +94,7 @@ public class HotelActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + extras.getString("telephone")));
+                intent.setData(Uri.parse("tel:" + extras.getString("tel")));
                 startActivity(intent);
             }
         });
@@ -135,8 +135,8 @@ public class HotelActivity extends ActionBarActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(HotelActivity.this, MainMap.class);
-                intent.putExtra("lat", lat);
-                intent.putExtra("long", longt);
+                intent.putExtra("lat", latitude);
+                intent.putExtra("long", longitude);
                 intent.putExtra("name", name);
                 startActivity(intent);
                 return false;

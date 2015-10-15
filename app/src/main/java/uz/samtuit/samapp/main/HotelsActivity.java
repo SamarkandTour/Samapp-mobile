@@ -84,13 +84,13 @@ public class HotelsActivity extends ActionBarActivity {
                 intent.putExtra("photo",items.get(position).getPhoto());
                 intent.putExtra("rating",items.get(position).getRating());
                 intent.putExtra("name",items.get(position).getString("name"));
-                intent.putExtra("desc",items.get(position).getString("description"));
+                intent.putExtra("desc",items.get(position).getString("desc"));
                 intent.putExtra("type",items.get(position).getString("type"));
                 intent.putExtra("price",items.get(position).getString("price"));
                 intent.putExtra("wifi",items.get(position).getString("wifi"));
                 intent.putExtra("open",items.get(position).getString("open"));
-                intent.putExtra("address",items.get(position).getString("address"));
-                intent.putExtra("telephone", items.get(position).getString("tel"));
+                intent.putExtra("addr",items.get(position).getString("addr"));
+                intent.putExtra("tel", items.get(position).getString("tel"));
                 intent.putExtra("url",items.get(position).getString("url"));
                 intent.putExtra("long",items.get(position).getLongitude());
                 intent.putExtra("lat",items.get(position).getLatitude());
