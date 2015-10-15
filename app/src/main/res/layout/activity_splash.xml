@@ -8,8 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/imageView2"
-        android:src="@drawable/samarkand"
-        android:padding="0dp"
+        android:src="@drawable/splash"
         android:scaleType="centerCrop"
 
         />

@@ -38,7 +38,7 @@ public class FirstLaunch extends AppCompatActivity {
                 SQLiteDatabase APP_DB = openOrCreateDatabase("Samapp_data",MODE_PRIVATE,null);
                 ConfigurePropertiesDB configurePropertiesDB = new ConfigurePropertiesDB(APP_DB);
                 configurePropertiesDB.RepairDB();
-                APP_DB.execSQL("UPDATE app_properties SET `app_lang`='"+view.getTag().toString()+"', `first_launch`='false' WHERE `app_name`='Samapp';");
+                APP_DB.execSQL("UPDATE app_properties SET `app_lang`='"+view.getTag().toString()+"', `app_first_launch`='false' WHERE `app_name`='Samapp';");
                 APP_DB.close();
                 finish();
                 overridePendingTransition(R.anim.slide_content, R.anim.slide_in);

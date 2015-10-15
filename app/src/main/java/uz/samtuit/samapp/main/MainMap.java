@@ -82,9 +82,9 @@ public class MainMap extends ActionBarActivity {
             lat = extras.getDouble("lat");
             longt = extras.getDouble("long");
             LatLng loc = new LatLng(lat,longt);
-//            mapView.getController().goTo(loc, null);
-            mapView.getController().animateTo(loc);
-        }else
+            Log.e(loc.toString(), "ASDASD");
+        }
+        else
         {
             if(AP_FIRSTLAUNCH)
             {
@@ -191,13 +191,13 @@ public class MainMap extends ActionBarActivity {
         slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
             @Override
             public void onDrawerOpened() {
-                btn.setRotation(180);
+                btn.setImageResource(R.drawable.menu_pick_down);
             }
         });
         slidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
             @Override
             public void onDrawerClosed() {
-                btn.setRotation(0);
+                btn.setImageResource(R.drawable.menu_pick_up);
             }
         });
 
@@ -385,7 +385,7 @@ public class MainMap extends ActionBarActivity {
                 intent = new Intent(MainMap.this, AttractionsActivity.class);
                 break;
             case "About This App":
-                intent = new Intent(MainMap.this, AboutCityActivity.class);
+                intent = new Intent(MainMap.this, AboutAppActivity.class);
                 break;
             case "Shopping":
                 intent = new Intent(MainMap.this, ShoppingActivity.class);

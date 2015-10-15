@@ -4,9 +4,141 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@color/ColorPrimary"
     tools:context="uz.samtuit.samapp.main.AboutAppActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/scrollView2"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:scrollbars="none"
+        android:layout_alignParentRight="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_gravity="center"
+                android:tag="ForLogo"
+                android:src="@drawable/about_icon"
+                android:background="@android:color/transparent"
+                android:layout_height="100dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="SamTOUR"
+                android:textColor="@color/black"
+                android:typeface="monospace"
+                android:textSize="24sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:text="Ver. 1.0.0"/>
+            <TextView
+                android:layout_marginTop="15dp"
+                android:text="Check us on:"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+            <LinearLayout
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@color/white"
+                    android:tag="Facebook Avatar"
+                    android:layout_marginRight="10dp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="5dp"
+                    android:clickable="true"
+                    android:onClick="CheckUsOnSocial"
+                    android:textSize="18sp"
+                    android:gravity="center|left"
+                    android:text="Facebook"
+                    android:tag="facebook"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@color/white"
+                    android:tag="Instagram Avatar"
+                    android:layout_marginRight="10dp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:gravity="center|left"
+                    android:clickable="true"
+                    android:onClick="CheckUsOnSocial"
+                    android:text="Instagram"
+                    android:tag="instagram"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@color/white"
+                    android:tag="Twitter Avatar"
+                    android:layout_marginRight="10dp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:clickable="true"
+                    android:onClick="CheckUsOnSocial"
+                    android:gravity="center|left"
+                    android:text="Twitter"
+                    android:tag="twitter"
+                    />
+            </LinearLayout>z
+        </LinearLayout>
+    </ScrollView>
+    <TextView
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-20dp"
+
+        android:text="(c) 2015 SamarkandTour.org"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/scrollView2" />
 </RelativeLayout>
