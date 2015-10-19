@@ -1,6 +1,7 @@
 package uz.samtuit.samapp.main;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -11,6 +12,8 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
+
 
 import com.cocoahero.android.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.api.ILatLng;
@@ -43,6 +47,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.sammap.main.R;
 
 
@@ -52,11 +58,15 @@ public class MainMap extends ActionBarActivity {
     private ArrayList<MenuItems> Items = new ArrayList<MenuItems>();
     private ImageView btn,compass;
     private SlidingDrawer slidingDrawer;
-    private boolean updateAvailable = true;
+    private boolean updateAvailable = false;
     private int height;
     private MapView mapView;
     private EditText searchText;
     private Boolean AP_FIRSTLAUNCH;
+    private static ArrayList<TourFeature> Hotels;
+    private static ArrayList<TourFeature> Shops;
+    private static ArrayList<TourFeature> Attractions;
+    private static ArrayList<TourFeature> Foods;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -64,55 +74,59 @@ public class MainMap extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         final GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
-        SQLiteDatabase APP_DB = openOrCreateDatabase("Samapp_data",MODE_PRIVATE,null);
+        SQLiteDatabase APP_DB = openOrCreateDatabase("SamTour_data", MODE_PRIVATE, null);
         ConfigurePropertiesDB configurePropertiesDB = new ConfigurePropertiesDB(APP_DB);
         configurePropertiesDB.RepairDB();
-        Cursor APP_PROPERTIES = APP_DB.rawQuery("Select `app_first_launch` from app_properties",null);
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        final boolean isWifiConn = networkInfo.isConnected();
+        networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        boolean isMobileConn = networkInfo.isConnected();
+        Cursor APP_PROPERTIES = APP_DB.rawQuery("Select `app_first_launch` from app_properties", null);
         APP_PROPERTIES.moveToFirst();
         AP_FIRSTLAUNCH = Boolean.parseBoolean(APP_PROPERTIES.getString(0));
-        Bundle extras = getIntent().getExtras();
-        if(extras!=null)
+        Log.e("FL",AP_FIRSTLAUNCH+"");
+        if(AP_FIRSTLAUNCH)
         {
-            double lat,longt;
-            lat = extras.getDouble("lat");
-            longt = extras.getDouble("long");
-            LatLng loc = new LatLng(lat,longt);
-            Log.e(loc.toString(), "ASDASD");
-        }
-        else
-        {
-            if(AP_FIRSTLAUNCH)
-            {
-                Intent first_launch_intent = new Intent(MainMap.this, FirstLaunch.class);
-                startActivity(first_launch_intent);
-            }
-            //Action when Update is Available
-            if(updateAvailable)
-            {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent splash = new Intent(MainMap.this, Splash.class);
-                        startActivity(splash);
-
-                    }
-                }, 0);
-                Log.e("Error","None of time");
-            }
-            //End
+            Intent first_launch_intent = new Intent(MainMap.this, FirstLaunch.class);
+            startActivity(first_launch_intent);
         }
         APP_PROPERTIES = APP_DB.rawQuery("Select * from app_properties",null);
         APP_PROPERTIES.moveToFirst();
         globalVariables.setApplicationLanguage(APP_PROPERTIES.getString(2));
         globalVariables.setApplicationVersion(APP_PROPERTIES.getString(1));
         globalVariables.setApplicationName(APP_PROPERTIES.getString(0));
+        Log.e("LANG",globalVariables.getApplicationLanguage());
+        TourFeatureList tourFeatureList = new TourFeatureList();
+        String ChoosenLang = globalVariables.getApplicationLanguage();
+        Hotels = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/hotels.geojson");
+        globalVariables.setFeatures("hotel", Hotels);
+        Log.e("SIZE", Hotels.size() + "");
+        tourFeatureList = new TourFeatureList();
+        Foods = tourFeatureList.getTourFeatureList(getApplicationContext(),"data/" + ChoosenLang + "/foodndrinks.geojson");
+        globalVariables.setFeatures("foodndrink", Foods);
+        Log.e("SIZE", Foods.size() + "");
+        tourFeatureList = new TourFeatureList();
+        Attractions = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/attractions.geojson");
+        globalVariables.setFeatures("attraction", Attractions);
+        Log.e("SIZE", Attractions.size() + "");
+        tourFeatureList = new TourFeatureList();
+        Shops = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/shoppings.geojson");
+        Log.e("SIZE", Shops.size() + "");
+        globalVariables.setFeatures("shopping", Shops);
+
+        Bundle extras = getIntent().getExtras();
         Locale locale = new Locale(globalVariables.getApplicationLanguage());
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
+
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        getBaseContext().setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        mapView = (MapView)findViewById(R.id.mapview);
 
 
         //initialize app_global data
@@ -125,15 +139,11 @@ public class MainMap extends ActionBarActivity {
         searchText.setTypeface(tf);
 
         //MapView Settings
-        mapView = (MapView)findViewById(R.id.mapview);
+
         compass = (ImageView)findViewById(R.id.compass);
 
-        TileLayer mbTileLayer = new MBTilesLayer(this, "Sample.mbtiles");
+        TileLayer mbTileLayer = new MBTilesLayer(this, "samarkand.mbtiles");
         mapView.setTileSource(mbTileLayer);
-        mapView.setMinZoomLevel(mapView.getTileProvider().getMinimumZoomLevel());
-        mapView.setMaxZoomLevel(mapView.getTileProvider().getMaximumZoomLevel());
-        mapView.setCenter(mapView.getTileProvider().getCenterCoordinate());
-
         mapView.setCenter(new ILatLng() {
             @Override
             public double getLatitude() {
@@ -162,24 +172,25 @@ public class MainMap extends ActionBarActivity {
                 compass.setRotation(mapView.getMapOrientation());
             }
         });
+
         //end
 
 
 
         //generate Menu items
-        MenuItems item = new MenuItems(0,"About City","drawable/about_city");
+        MenuItems item = new MenuItems(0,"About City","drawable/ic_s_about_city_h","about_city");
         Items.add(item);
-        item = new MenuItems(1,"Attractions","drawable/ic_attraction");
+        item = new MenuItems(1,"Attractions","drawable/ic_s_attractions_h","attraction");
         Items.add(item);
-        item = new MenuItems(2,"Food & Drink","drawable/food_and1");
+        item = new MenuItems(2,"Food & Drink","drawable/ic_s_food_and_drink_h","foodndrink");
         Items.add(item);
-        item = new MenuItems(3,"Hotels","drawable/hotel_new");
+        item = new MenuItems(3,"Hotels","drawable/ic_s_hotel_h","hotel");
         Items.add(item);
-        item = new MenuItems(4,"Shopping","drawable/shop1");
+        item = new MenuItems(4,"Shopping","drawable/ic_s_shop_h","shopping");
         Items.add(item);
-        item = new MenuItems(5,"Suggested Itinerary","drawable/itinerary");
+        item = new MenuItems(5,"Suggested Itinerary","drawable/my_schedule_h","my_schedule");
         Items.add(item);
-        item = new MenuItems(6,"About This App","drawable/about_app");
+        item = new MenuItems(6,"About This App","drawable/ic_s_about_h","about_app");
         Items.add(item);
         btn = (ImageView)findViewById(R.id.slideButton);
         slidingDrawer = (SlidingDrawer)findViewById(R.id.slidingDrawer);
@@ -200,7 +211,6 @@ public class MainMap extends ActionBarActivity {
         linLay.post(new Runnable() {
             @Override
             public void run() {
-                Log.e("TEST", "SIZE: " + linLay.getHeight());
                 for (int i = 0; i < Items.size(); i++) {
                     final int index = i;
                     newBtn = new Button(MainMap.this);
@@ -209,8 +219,6 @@ public class MainMap extends ActionBarActivity {
                     newBtn.setLayoutParams(params);
                     newBtn.setText(" ");
                     String path = Items.get(index).imageSrc;
-
-
                     int mainImgResource = getResources().getIdentifier(path, null, getPackageName());
                     newBtn.setBackground(getResources().getDrawable(mainImgResource));
                     newBtn.setOnClickListener(new View.OnClickListener() {
@@ -218,6 +226,7 @@ public class MainMap extends ActionBarActivity {
                         public void onClick(View v) {
                             Intent intent = new Intent();
                             intent = GetIntent(Items.get(index).Title);
+                            intent.putExtra("action",Items.get(index).tag);
                             startActivity(intent);
                         }
                     });
@@ -225,6 +234,48 @@ public class MainMap extends ActionBarActivity {
                 }
             }
         });
+        if(extras!=null)
+        {
+            double lat,longt;
+            lat = extras.getDouble("lat");
+            longt = extras.getDouble("long");
+
+            LatLng loc = new LatLng(lat,longt);
+            mapView.getController().animateTo(loc);
+        }
+        else
+        {
+            String lang  = globalVariables.getApplicationLanguage();
+            String[] files = {"data/"+lang+"/hotels.geojson", "data/"+lang+"/foodndrinks.geojson", "data/"+lang+"/attractions.geojson", "data/"+lang+"/shoppings.geojson"};
+            Drawable[] drawables = {
+                    getResources().getDrawable(R.drawable.hotel_marker),
+                    getResources().getDrawable(R.drawable.food_marker),
+                    getResources().getDrawable(R.drawable.attraction_marker),
+                    getResources().getDrawable(R.drawable.shop_marker)
+            };
+            for(int i = 0; i < files.length; i++)
+            {
+                try {
+                    FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, files[i]);
+                    ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
+
+                    for (Object obj : uiObjects) {
+                        if (obj instanceof Marker) {
+                            Marker m = (Marker)obj;
+                            m.setIcon(new Icon(drawables[i]));
+                            mapView.addMarker(m);
+                        } else if (obj instanceof PathOverlay) {
+                            mapView.getOverlays().add((PathOverlay) obj);
+                        }
+                    }
+                    if (uiObjects.size() > 0) {
+                        mapView.invalidate();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
 
 
@@ -374,19 +425,19 @@ public class MainMap extends ActionBarActivity {
         switch (name)
         {
             case "Hotels":
-                intent = new Intent(MainMap.this, HotelsActivity.class);
+                intent = new Intent(MainMap.this, ItemsListActivity.class);
                 break;
             case "Attractions":
-                intent = new Intent(MainMap.this, AttractionsActivity.class);
+                intent = new Intent(MainMap.this, ItemsListActivity.class);
                 break;
             case "About This App":
                 intent = new Intent(MainMap.this, AboutAppActivity.class);
                 break;
             case "Shopping":
-                intent = new Intent(MainMap.this, ShoppingActivity.class);
+                intent = new Intent(MainMap.this, ItemsListActivity.class);
                 break;
             case "Food & Drink":
-                intent = new Intent(MainMap.this, FoodAndDrinkActivity.class);
+                intent = new Intent(MainMap.this, ItemsListActivity.class);
                 break;
             case "About City":
                 intent = new Intent(MainMap.this, AboutCityActivity.class);
@@ -411,35 +462,37 @@ public class MainMap extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         // Load GeoJSON
-        String[] files = {"data/en/en_hotel.geojson", "data/en/en_foodndrink.geojson", "data/en/en_attraction.geojson", "data/en/en_shopping.geojson"};
-        Drawable[] drawables = {
-            getResources().getDrawable(R.drawable.hotel_marker),
-            getResources().getDrawable(R.drawable.food_marker),
-            getResources().getDrawable(R.drawable.attraction_marker),
-            getResources().getDrawable(R.drawable.shop_marker)
-        };
-        for(int i = 0; i < files.length; i++)
-        {
-            try {
-                FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, files[i]);
-                ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
-
-                for (Object obj : uiObjects) {
-                    if (obj instanceof Marker) {
-                        Marker m = (Marker)obj;
-                        m.setIcon(new Icon(drawables[i]));
-                        mapView.addMarker(m);
-                    } else if (obj instanceof PathOverlay) {
-                        mapView.getOverlays().add((PathOverlay) obj);
-                    }
-                }
-                if (uiObjects.size() > 0) {
-                    mapView.invalidate();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        GlobalsClass globals = (GlobalsClass)getApplicationContext();
+//        String lang  = globals.getApplicationLanguage();
+//        String[] files = {"data/"+lang+"/hotels.geojson", "data/"+lang+"/foodndrinks.geojson", "data/"+lang+"/attractions.geojson", "data/"+lang+"/shoppings.geojson"};
+//        Drawable[] drawables = {
+//            getResources().getDrawable(R.drawable.hotel_marker),
+//            getResources().getDrawable(R.drawable.food_marker),
+//            getResources().getDrawable(R.drawable.attraction_marker),
+//            getResources().getDrawable(R.drawable.shop_marker)
+//        };
+//        for(int i = 0; i < files.length; i++)
+//        {
+//            try {
+//                FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, files[i]);
+//                ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
+//
+//                for (Object obj : uiObjects) {
+//                    if (obj instanceof Marker) {
+//                        Marker m = (Marker)obj;
+//                        m.setIcon(new Icon(drawables[i]));
+//                        mapView.addMarker(m);
+//                    } else if (obj instanceof PathOverlay) {
+//                        mapView.getOverlays().add((PathOverlay) obj);
+//                    }
+//                }
+//                if (uiObjects.size() > 0) {
+//                    mapView.invalidate();
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
     public String loadJSONFromAsset() {
         String json = null;

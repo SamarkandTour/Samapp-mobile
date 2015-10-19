@@ -7,10 +7,12 @@ public class MenuItems {
     public int id;
     public String Title;
     public String imageSrc;
-    public MenuItems(int id, String Title, String imageSrc)
+    public String tag;
+    public MenuItems(int id, String Title, String imageSrc, String tag)
     {
         this.id = id;
         this.Title =Title;
         this.imageSrc = imageSrc;
+        this.tag = tag;
     }
 }
