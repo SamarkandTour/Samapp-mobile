@@ -29,5 +29,6 @@
     <string name="reviews">Отзв</string>
     <string name="update_alert">Доступно новое обновление. Хотите обновить?</string>
     <string name="address">Адресс</string>
-
+    <string name="title_dialog_gps_setting">Location Service Notice</string>
+    <string name="dialog_gps_setting">To guide you to the destination from your current position, please turn on the GPS.\nDo you want to turn on?</string>
 </resources>

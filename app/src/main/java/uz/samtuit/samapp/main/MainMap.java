@@ -1,7 +1,6 @@
 package uz.samtuit.samapp.main;
 
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -10,16 +9,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,9 +28,11 @@ import android.widget.SlidingDrawer;
 import com.cocoahero.android.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
 import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.overlay.PathOverlay;
+import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
 import com.mapbox.mapboxsdk.util.DataLoadingUtils;
@@ -43,6 +44,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import uz.samtuit.samapp.util.CustomDialog;
+import uz.samtuit.samapp.util.GPSSettingDialog;
 import uz.samtuit.sammap.main.R;
 
 
@@ -55,14 +58,21 @@ public class MainMap extends ActionBarActivity {
     private boolean updateAvailable = true;
     private int height;
     private MapView mapView;
+    private GpsLocationProvider mGpsLocProvider;
+    private UserLocationOverlay myLocationOverlay;
     private EditText searchText;
     private Boolean AP_FIRSTLAUNCH;
+    private static boolean isPressedMyPosBtn = true;
+    private Animation anim;
+    private ImageView mAnimMyPosImage;
+    private CustomDialog mGPSSettingDialog;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+
         final GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
         SQLiteDatabase APP_DB = openOrCreateDatabase("Samapp_data",MODE_PRIVATE,null);
         ConfigurePropertiesDB configurePropertiesDB = new ConfigurePropertiesDB(APP_DB);
@@ -71,6 +81,7 @@ public class MainMap extends ActionBarActivity {
         APP_PROPERTIES.moveToFirst();
         AP_FIRSTLAUNCH = Boolean.parseBoolean(APP_PROPERTIES.getString(0));
         Bundle extras = getIntent().getExtras();
+
         if(extras!=null)
         {
             double lat,longt;
@@ -101,6 +112,7 @@ public class MainMap extends ActionBarActivity {
             }
             //End
         }
+
         APP_PROPERTIES = APP_DB.rawQuery("Select * from app_properties",null);
         APP_PROPERTIES.moveToFirst();
         globalVariables.setApplicationLanguage(APP_PROPERTIES.getString(2));
@@ -151,9 +163,6 @@ public class MainMap extends ActionBarActivity {
             }
         });
 
-
-//        checkGpsSetting();
-        mapView.setUserLocationEnabled(true);
         mapView.setZoom(18);
         mapView.setMapRotationEnabled(true);
         mapView.setOnMapOrientationChangeListener(new OnMapOrientationChangeListener() {
@@ -162,9 +171,33 @@ public class MainMap extends ActionBarActivity {
                 compass.setRotation(mapView.getMapOrientation());
             }
         });
+
+        mGpsLocProvider = new GpsLocationProvider(this){
+            @Override
+            public void onLocationChanged(Location location) {
+                super.onLocationChanged(location);
+
+                if (isPressedMyPosBtn) {
+                    myLocationOverlay.goToMyPosition(true);
+                    mAnimMyPosImage.clearAnimation(); //Stop icon animation
+                    isPressedMyPosBtn = false;
+                }
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) { // When turn off GPS
+                super.onProviderDisabled(provider);
+                mAnimMyPosImage.clearAnimation();
+            }
+        };
+
+        // Too often updates will consume too much battery
+        mGpsLocProvider.setLocationUpdateMinTime(5000); //5s
+        mGpsLocProvider.setLocationUpdateMinDistance(5); //5m
+
+        myLocationOverlay = new UserLocationOverlay(mGpsLocProvider, mapView);
+        mAnimMyPosImage = (ImageView)findViewById(R.id.myPositon);
         //end
-
-
 
         //generate Menu items
         MenuItems item = new MenuItems(0,"About City","drawable/about_city");
@@ -225,49 +258,61 @@ public class MainMap extends ActionBarActivity {
                 }
             }
         });
-
-
-
-        //Location Settings
-        /*
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                Marker m = new Marker(mapView,"Here", "Your Current Location",new LatLng(location.getLatitude(),location.getLongitude()));
-                m.setIcon(new Icon(MainMap.this, Icon.Size.LARGE, "land-use", "00FF00"));
-                mapView.addMarker(m);
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-        */
-        //end
-
     }
 
-    /**
-     * Check current GPS setting
-     * if GPS is OFF, let it turn ON
-     *
-     * @return
-     *  false: Need to turn on GPS
-     *  ture: Already GPS On
-     *
-     */
+    private int checkGPSStatus() {
+        int gpsStatus = 0;
+
+        try {
+            // LOCATION_MODE_HIGH_ACCURACY=3, LOCATION_MODE_BATTERY_SAVING=2, LOCATION_MODE_SENSORS_ONLY=1 or LOCATION_MODE_OFF=0.
+            gpsStatus = Settings.Secure.getInt(this.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            Log.d("GPS", "isGPSEnabled():LOCATION_MODE:" + gpsStatus);
+
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return gpsStatus;
+    }
+
+    //myPosition button click
+    public void myPositionClick(View view)
+    {
+        if(checkGPSStatus() == 0) { // If GPS is OFF
+            mGPSSettingDialog = new CustomDialog(this,
+                    R.string.title_dialog_gps_setting,
+                    R.string.dialog_gps_setting,
+                    yesClickListener,
+                    noClickListener);
+            mGPSSettingDialog.show();
+        } else {
+            myLocationOverlay.goToMyPosition(true);
+            isPressedMyPosBtn = true;
+        }
+    }
+
+    private View.OnClickListener yesClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mGPSSettingDialog.dismiss();
+
+            // Go to the GPS setting
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            startActivity(intent);
+
+            myLocationOverlay.goToMyPosition(true);
+            isPressedMyPosBtn = true;
+        }
+    };
+
+    private View.OnClickListener noClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mGPSSettingDialog.dismiss();
+        }
+    };
 
     //compass click
     public void CompassClick(View view)
@@ -280,6 +325,7 @@ public class MainMap extends ActionBarActivity {
     public void Search(View view)
     {
         EditText searchText = (EditText)findViewById(R.id.search_text);
+
         if(searchText.getVisibility()==View.VISIBLE)
         {
             //search
@@ -290,87 +336,10 @@ public class MainMap extends ActionBarActivity {
         }
     }
 
-    private boolean checkGpsSetting() {
-        int gpsStatus = 0;
-
-        try {
-            gpsStatus = Settings.Secure.getInt(getContentResolver(), Settings.Secure.LOCATION_MODE);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Log.d("GPS", "checkGpsSetting():LOCATION_MODE:" + gpsStatus);
-
-        if (gpsStatus == 0) { // if LOCATION_MODE_OFF
-            AlertDialog.Builder gsDialog = new AlertDialog.Builder(this);
-            gsDialog.setTitle("Location Service Setting");
-            gsDialog.setMessage("To find your correct position, you should turn on GPS.\nDo you want to turn on the GPS?");
-            gsDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // Go to the GPS setting
-                    Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    intent.addCategory(Intent.CATEGORY_DEFAULT);
-                    startActivity(intent);
-                }
-            })
-                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            return;
-                        }
-                    }).create().show();
-            return false;
-
-        } else {
-            return true; // Already GPS ON
-        }
-    }
-
-    /**
-     * Start Location Service
-     */
-//    private void startLocationService() {
-//
-//        LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-//
-//        GPSListener gpsListener = new GPSListener();
-//        long minTime = 10000; // 10s
-//        float minDistance = 0;
-//
-//        manager.requestLocationUpdates(
-//                LocationManager.GPS_PROVIDER,
-//                minTime,
-//                minDistance,
-//                gpsListener);
-//
-//        // Even though position is not confirmed, Find the recentest current position.
-//
-//        String msg = "LocationService Started!!!";
-//        Log.d("GPS", "startLocationService():" + msg);
-//    }
-
-    /**
-     * GPS Location Listener
-     */
-    private class GPSListener implements LocationListener {
-
-        public void onLocationChanged(Location location) {
-
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-    }
-
     private Intent GetIntent(String name)
     {
         Intent intent = null;
+
         switch (name)
         {
             case "Hotels":
@@ -410,6 +379,7 @@ public class MainMap extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         // Load GeoJSON
         String[] files = {"data/en/en_hotel.geojson", "data/en/en_foodndrink.geojson", "data/en/en_attraction.geojson", "data/en/en_shopping.geojson"};
         Drawable[] drawables = {
@@ -418,6 +388,7 @@ public class MainMap extends ActionBarActivity {
             getResources().getDrawable(R.drawable.attraction_marker),
             getResources().getDrawable(R.drawable.shop_marker)
         };
+
         for(int i = 0; i < files.length; i++)
         {
             try {
@@ -440,9 +411,31 @@ public class MainMap extends ActionBarActivity {
                 e.printStackTrace();
             }
         }
+
+        if(GPSSettingDialog.checkGPSStatus(this) != 0) { // If GPS is ON
+            myLocationOverlay.enableMyLocation();
+            myLocationOverlay.setDrawAccuracyEnabled(true);
+            mapView.getOverlays().add(myLocationOverlay);
+
+            if(isPressedMyPosBtn) {
+                //Show icon animation until first GPS signal is enough to recognize the my location
+                anim = AnimationUtils.loadAnimation(this, R.anim.scale);
+                mAnimMyPosImage.startAnimation(anim);
+            }
+        } else {
+            mAnimMyPosImage.clearAnimation();
+        }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        myLocationOverlay.disableMyLocation(); // Don't forget to prevent battery leak.
+    }
+
     public String loadJSONFromAsset() {
         String json = null;
+
         try {
             InputStream is = getAssets().open("app_properties.json");
             int size = is.available();
@@ -454,6 +447,7 @@ public class MainMap extends ActionBarActivity {
             ex.printStackTrace();
             return null;
         }
+
         return json;
     }
 }

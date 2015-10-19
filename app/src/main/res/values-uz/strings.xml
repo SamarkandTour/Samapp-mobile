@@ -23,5 +23,8 @@
     <string name="title_activity_itinerary_wizard">ItineraryWizardActivity</string>
     <string name="title_activity_trains_time_table">TrainsTimeTableActivity</string>
     <string name="title_activity_tashkent_samarkand">TashkentSamarkandActivity</string>
-
+    <string name="title_dialog_gps_setting">Location Service Notice</string>
+    <string name="dialog_gps_setting">To guide you to the destination from your current position, please turn on the GPS.\nDo you want to turn on?</string>
+    <string name="yes">Yes</string>
+    <string name="No">No</string>
 </resources>

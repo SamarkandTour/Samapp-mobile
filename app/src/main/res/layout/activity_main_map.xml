@@ -24,6 +24,15 @@ android:gravity="bottom">
             android:onClick="CompassClick"
             android:src="@drawable/compass"
             android:id="@+id/compass" />
+
+        <ImageView
+            android:layout_margin="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="myPositionClick"
+            android:src="@drawable/myposition"
+            android:id="@+id/myPositon" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"

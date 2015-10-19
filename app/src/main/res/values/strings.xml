@@ -38,6 +38,6 @@
     <string name="title_activity_food">FoodActivity</string>
     <string name="title_activity_shop">FoodActivity</string>
     <string name="title_activity_first_launch">FirstLaunch</string>
-
-
+    <string name="title_dialog_gps_setting">Location Service Notice</string>
+    <string name="dialog_gps_setting">To guide you to the destination from your current position, please turn on the GPS.\nDo you want to turn on?</string>
 </resources>
