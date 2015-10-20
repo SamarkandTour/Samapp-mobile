@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 
 import com.cocoahero.android.geojson.Feature;
 import com.cocoahero.android.geojson.FeatureCollection;
@@ -29,6 +30,7 @@ public class TourFeatureList {
         try {
             FeatureCollection featureCollection = DataLoadingUtils.loadGeoJSONFromAssets(context, fileName);
             List<Feature> featuresList = featureCollection.getFeatures();
+            Log.e("SIZE",featuresList.size()+"");
 
             for (Feature v:featuresList) {
                 TourFeature tourFeature = new TourFeature();

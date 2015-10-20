@@ -15,14 +15,15 @@ android:gravity="bottom">
         android:layout_width="match_parent"
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
-        android:background="#33000000"
+        android:background="@android:color/transparent"
         android:layout_height="60dp">
         <ImageView
-            android:layout_margin="10dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:onClick="CompassClick"
-            android:src="@drawable/compass"
+            android:src="@drawable/ic_s_compass"
             android:id="@+id/compass" />
 
         <ImageView
@@ -43,21 +44,23 @@ android:gravity="bottom">
             android:lines="1"
             android:id="@+id/search_text"
             android:layout_marginRight="60dp" />
-        <ImageButton
-            android:layout_width="60dp"
+        <ImageView
+            android:layout_width="50dp"
             android:layout_height="60dp"
             android:layout_marginLeft="-60dp"
             android:onClick="Search"
-            android:src="@drawable/search_icon_green"
+            android:src="@drawable/ic_s_search"
+            android:scaleType="centerInside"
             android:background="@android:color/transparent"/>
 
     </LinearLayout>
 <SlidingDrawer
     android:layout_width="fill_parent"
-    android:layout_height="120dp"
+    android:layout_height="96dp"
     android:content="@+id/contentLayout"
     android:padding="0dp"
     android:orientation="vertical"
+    android:layout_marginBottom="-2dp"
     android:rotation="0"
     android:handle="@+id/slideButton"
     android:id="@+id/slidingDrawer"
@@ -66,10 +69,11 @@ android:gravity="bottom">
     <ImageView
         android:id="@+id/slideButton"
         android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="-5dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/up_arrow_green"
+        android:src="@drawable/menu_pick_up"
         />
     <LinearLayout
         android:id="@+id/contentLayout"
@@ -83,7 +87,9 @@ android:gravity="bottom">
         <HorizontalScrollView
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:background="#55000000"
+            android:background="#fff"
+            android:scrollbars="none"
+            android:layout_marginTop="-2dp"
             android:id="@+id/horizontalScrollView" >
 
             <LinearLayout
