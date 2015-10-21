@@ -329,6 +329,8 @@ public void onMapOrientationChange(float v) {
             mGPSSettingDialog = new CustomDialog(this,
                     R.string.title_dialog_gps_setting,
                     R.string.dialog_gps_setting,
+                    R.string.yes,
+                    R.string.no,
                     yesClickListener,
                     noClickListener);
             mGPSSettingDialog.show();

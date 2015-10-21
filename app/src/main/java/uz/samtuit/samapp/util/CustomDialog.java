@@ -110,7 +110,7 @@ public class CustomDialog extends Dialog {
         }else if(left!=null && right==null) {
             mLeftButton.setOnClickListener(left);
         }else {
-            // Need not listener
+            // Not need listener
         }
     }
 
