@@ -46,10 +46,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.samapp.util.TourFeatureList;
-import uz.samtuit.samapp.util.CustomDialog;
-import uz.samtuit.samapp.util.GPSSettingDialog;
 import uz.samtuit.sammap.main.R;
 
 
@@ -458,7 +457,7 @@ public void onMapOrientationChange(float v) {
 //            }
 //        }
 
-        if(GPSSettingDialog.checkGPSStatus(this) != 0) { // If GPS is ON
+        if(checkGPSStatus() != 0) { // If GPS is ON
             myLocationOverlay.enableMyLocation();
             myLocationOverlay.setDrawAccuracyEnabled(true);
             mapView.getOverlays().add(myLocationOverlay);
