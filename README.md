@@ -2,7 +2,10 @@
 
 Welcome to the "Samapp" project!
 
-The Samapp is the Samarkand offline Map Mobile Application.
+The Samapp is the "Samarkand offline Map based Mobile APPlication" for tourist.
+
+This is the cooperation Project of Universities in Samarkand.
+We're targeting to provide unknown, hidden, unique all tour information and suggested itineraries based on map through both web and mobile. We're creating a mobile application which you can utilize during a visit to Samarkand. Furthermore, because it's designed for offline usage, even though you don't have any Internet connection on your way, you can utilize all information and it will guide you safely to the destination by GPS.
 
 This project is sponsored by the NRF(National Research Foundation, http://www.nrf.re.kr).
 

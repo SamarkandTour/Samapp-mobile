@@ -1,5 +1,7 @@
 package uz.samtuit.samapp.util;
 
+import android.graphics.PointF;
+
 /**
  * Created by MBP on 2015. 10. 16..
  */
@@ -26,5 +28,26 @@ public class CalcDistanceBtwLocation {
         if(rslt == 0) result = Math.round(ret) +" m";
 
         return result;
+    }
+
+    /*
+    Projection mProjection = new Projection();
+    PointF currentPos = mProjection.toMapPixels(currentLatLngPos);
+    PointF targetPos = mProjection.toMapPixels(targetLatLngPos);
+    getAngle(currnetPos, targetPos);
+    */
+
+    public double getAngle(PointF start, PointF end) {
+        double dy = end.y-start.y;
+        double dx = end.x-start.x;
+        double angle = Math.atan(dy/dx) * (180.0/Math.PI);
+
+        if(dx < 0.0) {
+            angle += 180.0;
+        } else {
+            if(dy<0.0) angle += 360.0;
+        }
+
+        return angle;
     }
 }
