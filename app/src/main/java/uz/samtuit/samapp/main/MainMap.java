@@ -158,23 +158,23 @@ public class MainMap extends ActionBarActivity {
             }
 
             @Override
-            public double getLongitude() {
-                return 66.97562;
-            }
+    public double getLongitude() {
+        return 66.97562;
+    }
 
-            @Override
-            public double getAltitude() {
-                return 0;
-            }
-        });
+    @Override
+    public double getAltitude() {
+        return 0;
+    }
+});
 
         mapView.setZoom(18);
         mapView.setMapRotationEnabled(true);
         mapView.setOnMapOrientationChangeListener(new OnMapOrientationChangeListener() {
-            @Override
-            public void onMapOrientationChange(float v) {
-                compass.setRotation(mapView.getMapOrientation());
-            }
+@Override
+public void onMapOrientationChange(float v) {
+        compass.setRotation(mapView.getMapOrientation());
+        }
         });
 
         mGpsLocProvider = new GpsLocationProvider(this){
