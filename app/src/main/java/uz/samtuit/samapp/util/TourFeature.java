@@ -10,6 +10,7 @@ public class TourFeature {
     private String photo;
     private HashMap<String, String> stringHashMap; //name, desc, type, price, wifi, open, addr, tel, url
     private int rating;
+    private int spend;
     private double longitude;
     private double latitude;
 
@@ -17,12 +18,12 @@ public class TourFeature {
         stringHashMap = new HashMap<String, String>();
     }
 
-    public void setStringHashMap(String strKey, String strVal) {
-        stringHashMap.put(strKey, strVal);
+    public void setPhoto(String strVal) {
+        photo = strVal;
     }
 
-    public String getString(String strKey) {
-        return stringHashMap.get(strKey);
+    public String getPhoto() {
+        return photo;
     }
 
     public void setRating(int intVal) {
@@ -33,12 +34,20 @@ public class TourFeature {
         return rating;
     }
 
-    public void setPhoto(String strVal) {
-        photo = strVal;
+    public void setSpen(int intVal) {
+        spend = intVal;
     }
 
-    public String getPhoto() {
-        return photo;
+    public int getSpend() {
+        return spend;
+    }
+
+    public void setStringHashMap(String strKey, String strVal) {
+        stringHashMap.put(strKey, strVal);
+    }
+
+    public String getString(String strKey) {
+        return stringHashMap.get(strKey);
     }
 
     public void setLongitude(double doubleVal) { longitude = doubleVal; }

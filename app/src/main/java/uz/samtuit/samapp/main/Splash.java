@@ -28,6 +28,7 @@ public class Splash extends ActionBarActivity {
     private static ArrayList<TourFeature> Shops;
     private static ArrayList<TourFeature> Attractions;
     private static ArrayList<TourFeature> Foods;
+    private static ArrayList<TourFeature> Itinerary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,10 @@ public class Splash extends ActionBarActivity {
         Shops = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/shoppings.geojson");
         Log.e("SIZE", Shops.size() + "");
         globals.setFeatures("shopping", Shops);
+
+        TourFeatureList itineraryList = new TourFeatureList();
+        Itinerary = itineraryList.getItinerary(getApplicationContext(), "data/" + ChoosenLang + "/itinerary_mixed_1day.geojson");
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

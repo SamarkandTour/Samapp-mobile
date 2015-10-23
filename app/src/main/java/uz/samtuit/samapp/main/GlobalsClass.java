@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import uz.samtuit.samapp.util.TourFeature;
 
 /**
- * Created by Bakhrom Rakhmonov on 09.10.2015.
+ * Globally shared valuables
  */
 public class GlobalsClass extends Application {
     private String AP_NAME;
@@ -24,21 +24,32 @@ public class GlobalsClass extends Application {
     }
     public ArrayList<TourFeature> getTourFeatures(String FeatureType)
     {
-        ArrayList<TourFeature> T = null;
+        ArrayList<TourFeature> tourFeatures = null;
         switch(FeatureType)
         {
+            case "hotel":
+                Log.e("GET","HOT");
+                tourFeatures = Hotels;
+                break;
+
             case "foodndrink":
                 Log.e("GET","FOOD");
-                return FoodAndDrinks;
-            case "shopping":
-                Log.e("GET","SHOP");
-                return Shops;
+                tourFeatures = FoodAndDrinks;
+                break;
+
             case "attraction":
                 Log.e("GET","ATTR");
-               return Attractions;
+                tourFeatures = Attractions;
+                break;
+
+            case "shopping":
+                Log.e("GET","SHOP");
+                tourFeatures = Shops;
+                break;
         }
-        Log.e("GET","HOT");
-        return Hotels;
+
+        return tourFeatures;
+
     }
 
     public String getApplicationLanguage(){

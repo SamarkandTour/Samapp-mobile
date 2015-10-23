@@ -11,7 +11,6 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,12 +28,11 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import uz.samtuit.samapp.util.TourFeature;
-import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.sammap.main.R;
 
 
 public class ItemsListActivity extends ActionBarActivity {
-    private static ArrayList<TourFeature> items;
+    private ArrayList<TourFeature> items;
     ListView list;
     private EditText search_text;
     private MenuItem mActionSearch;
