@@ -1,17 +1,11 @@
 package uz.samtuit.samapp.main;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -44,11 +38,8 @@ import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import uz.samtuit.samapp.util.CustomDialog;
-import uz.samtuit.samapp.util.TourFeature;
-import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.sammap.main.R;
 
 
@@ -65,10 +56,10 @@ public class MainMap extends ActionBarActivity {
     private UserLocationOverlay myLocationOverlay;
     private EditText searchText;
     private Boolean AP_FIRSTLAUNCH;
-    private static ArrayList<TourFeature> Hotels;
-    private static ArrayList<TourFeature> Shops;
-    private static ArrayList<TourFeature> Attractions;
-    private static ArrayList<TourFeature> Foods;
+//    private static ArrayList<TourFeature> Hotels;
+//    private static ArrayList<TourFeature> Shops;
+//    private static ArrayList<TourFeature> Attractions;
+//    private static ArrayList<TourFeature> Foods;
     private static boolean isPressedMyPosBtn = true;
     private Animation anim;
     private ImageView mAnimMyPosImage;
@@ -79,65 +70,61 @@ public class MainMap extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+
         final GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
-        SQLiteDatabase APP_DB = openOrCreateDatabase("SamTour_data", MODE_PRIVATE, null);
-        ConfigurePropertiesDB configurePropertiesDB = new ConfigurePropertiesDB(APP_DB);
-        configurePropertiesDB.RepairDB();
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        final boolean isWifiConn = networkInfo.isConnected();
-        networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        boolean isMobileConn = networkInfo.isConnected();
-        Cursor APP_PROPERTIES = APP_DB.rawQuery("Select `app_first_launch` from app_properties", null);
-        APP_PROPERTIES.moveToFirst();
-        AP_FIRSTLAUNCH = Boolean.parseBoolean(APP_PROPERTIES.getString(0));
-        Log.e("FL",AP_FIRSTLAUNCH+"");
-        if(AP_FIRSTLAUNCH)
-        {
-            Intent first_launch_intent = new Intent(MainMap.this, FirstLaunch.class);
-            startActivity(first_launch_intent);
-        }
-        APP_PROPERTIES = APP_DB.rawQuery("Select * from app_properties",null);
-        APP_PROPERTIES.moveToFirst();
-        globalVariables.setApplicationLanguage(APP_PROPERTIES.getString(2));
-        globalVariables.setApplicationVersion(APP_PROPERTIES.getString(1));
-        globalVariables.setApplicationName(APP_PROPERTIES.getString(0));
-        Log.e("LANG",globalVariables.getApplicationLanguage());
-        TourFeatureList tourFeatureList = new TourFeatureList();
-        String ChoosenLang = globalVariables.getApplicationLanguage();
-        Hotels = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/hotels.geojson");
-        globalVariables.setFeatures("hotel", Hotels);
-        Log.e("SIZE", Hotels.size() + "");
-        tourFeatureList = new TourFeatureList();
-        Foods = tourFeatureList.getTourFeatureList(getApplicationContext(),"data/" + ChoosenLang + "/foodndrinks.geojson");
-        globalVariables.setFeatures("foodndrink", Foods);
-        Log.e("SIZE", Foods.size() + "");
-        tourFeatureList = new TourFeatureList();
-        Attractions = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/attractions.geojson");
-        globalVariables.setFeatures("attraction", Attractions);
-        Log.e("SIZE", Attractions.size() + "");
-        tourFeatureList = new TourFeatureList();
-        Shops = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/shoppings.geojson");
-        Log.e("SIZE", Shops.size() + "");
-        globalVariables.setFeatures("shopping", Shops);
+//        SQLiteDatabase APP_DB = openOrCreateDatabase("SamTour_data", MODE_PRIVATE, null);
+//        ConfigurePropertiesDB configurePropertiesDB = new ConfigurePropertiesDB(APP_DB);
+//        configurePropertiesDB.RepairDB();
+//        ConnectivityManager connMgr = (ConnectivityManager)
+//                getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+//        final boolean isWifiConn = networkInfo.isConnected();
+//        networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+//        boolean isMobileConn = networkInfo.isConnected();
+//        Cursor APP_PROPERTIES = APP_DB.rawQuery("Select `app_first_launch` from app_properties", null);
+//        APP_PROPERTIES.moveToFirst();
+//        AP_FIRSTLAUNCH = Boolean.parseBoolean(APP_PROPERTIES.getString(0));
+//        Log.e("FL",AP_FIRSTLAUNCH+"");
+//        if(AP_FIRSTLAUNCH)
+//        {
+//            Intent first_launch_intent = new Intent(MainMap.this, FirstLaunch.class);
+//            startActivity(first_launch_intent);
+//        }
+//        APP_PROPERTIES = APP_DB.rawQuery("Select * from app_properties",null);
+//        APP_PROPERTIES.moveToFirst();
+//        globalVariables.setApplicationLanguage(APP_PROPERTIES.getString(2));
+//        globalVariables.setApplicationVersion(APP_PROPERTIES.getString(1));
+//        globalVariables.setApplicationName(APP_PROPERTIES.getString(0));
+//        Log.e("LANG",globalVariables.getApplicationLanguage());
+//        TourFeatureList tourFeatureList = new TourFeatureList();
+//        String ChoosenLang = globalVariables.getApplicationLanguage();
+//        Hotels = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/hotels.geojson");
+//        globalVariables.setFeatures("hotel", Hotels);
+//        Log.e("SIZE", Hotels.size() + "");
+//        tourFeatureList = new TourFeatureList();
+//        Foods = tourFeatureList.getTourFeatureList(getApplicationContext(),"data/" + ChoosenLang + "/foodndrinks.geojson");
+//        globalVariables.setFeatures("foodndrink", Foods);
+//        Log.e("SIZE", Foods.size() + "");
+//        tourFeatureList = new TourFeatureList();
+//        Attractions = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/attractions.geojson");
+//        globalVariables.setFeatures("attraction", Attractions);
+//        Log.e("SIZE", Attractions.size() + "");
+//        tourFeatureList = new TourFeatureList();
+//        Shops = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/shoppings.geojson");
+//        Log.e("SIZE", Shops.size() + "");
+//        globalVariables.setFeatures("shopping", Shops);
 
         Bundle extras = getIntent().getExtras();
-        Locale locale = new Locale(globalVariables.getApplicationLanguage());
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+//        Locale locale = new Locale(globalVariables.getApplicationLanguage());
+//        Locale.setDefault(locale);
+//        Configuration config = new Configuration();
+//        config.locale = locale;
+//
+//        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
         getBaseContext().setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mapView = (MapView)findViewById(R.id.mapview);
-
-
-        //initialize app_global data
-
-
 
         //search text typeface
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
@@ -145,7 +132,6 @@ public class MainMap extends ActionBarActivity {
         searchText.setTypeface(tf);
 
         //MapView Settings
-
         compass = (ImageView)findViewById(R.id.compass);
 
         TileLayer mbTileLayer = new MBTilesLayer(this, "samarkand.mbtiles");
@@ -157,23 +143,23 @@ public class MainMap extends ActionBarActivity {
             }
 
             @Override
-    public double getLongitude() {
+            public double getLongitude() {
         return 66.97562;
     }
 
-    @Override
-    public double getAltitude() {
+            @Override
+            public double getAltitude() {
         return 0;
     }
-});
+        });
 
         mapView.setZoom(18);
         mapView.setMapRotationEnabled(true);
         mapView.setOnMapOrientationChangeListener(new OnMapOrientationChangeListener() {
-@Override
-public void onMapOrientationChange(float v) {
-        compass.setRotation(mapView.getMapOrientation());
-        }
+            @Override
+            public void onMapOrientationChange(float v) {
+                    compass.setRotation(mapView.getMapOrientation());
+            }
         });
 
         mGpsLocProvider = new GpsLocationProvider(this){
@@ -201,7 +187,6 @@ public void onMapOrientationChange(float v) {
 
         myLocationOverlay = new UserLocationOverlay(mGpsLocProvider, mapView);
         mAnimMyPosImage = (ImageView)findViewById(R.id.myPositon);
-        //end
 
         //generate Menu items
         MenuItems item = new MenuItems(0,"About City","drawable/ic_s_about_city_h","about_city");
