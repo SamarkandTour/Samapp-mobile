@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import uz.samtuit.samapp.main.GlobalsClass.FeatureType;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.sammap.main.R;
 
@@ -60,7 +61,7 @@ public class ItemsListActivity extends ActionBarActivity {
 
     //Configure Common data
         Bundle extras = getIntent().getExtras();
-        String S_ACTIVITY_NAME = extras.getString("action");
+        FeatureType S_ACTIVITY_NAME = FeatureType.valueOf(extras.getString("action"));
 
         PRIMARY_COLOR = getPrimaryColorId(S_ACTIVITY_NAME);
         TOOLBAR_COLOR = getToolbarColorId(S_ACTIVITY_NAME);
@@ -86,6 +87,7 @@ public class ItemsListActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(s);
         toolbar.setTitle(s);
     //end Action Bar
+
         adapter = new ItemsListAdapter(this,R.layout.list_item, items);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -220,54 +222,67 @@ public class ItemsListActivity extends ActionBarActivity {
         list.setAdapter(adapter);
     }
 
-    private int getPrimaryColorId(String name)
+    private int getPrimaryColorId(FeatureType type)
     {
-        int id = R.color.hotel_primary;
-        switch (name)
+        int id = 0;
+
+        switch (type)
         {
-            case "shopping":
-                id = R.color.shop_primary;
+            case HOTEL:
+                id = R.color.hotel_primary;
                 break;
-            case "attraction":
+            case FOODNDRINK:
+                id = R.color.foodanddrink_primary;
+                break;
+            case ATTRACTION:
                 id = R.color.attraction_primary;
                 break;
-            case "foodndrink":
-                id = R.color.foodanddrink_primary;
+            case SHOPPING:
+                id = R.color.shop_primary;
                 break;
         }
         return id;
     }
 
-    private int getToolbarColorId(String name)
+    private int getToolbarColorId(FeatureType type)
     {
-        int id = R.color.hotel_tool;
-        switch (name)
+        int id = 0;
+
+        switch (type)
         {
-            case "shopping":
-                id = R.color.shop_tool;
+            case HOTEL:
+                id = R.color.hotel_tool;
                 break;
-            case "attraction":
+            case FOODNDRINK:
+                id = R.color.foodanddrink_tool;
+                break;
+            case ATTRACTION:
                 id = R.color.attraction_tool;
                 break;
-            case "foodndrink":
-                id = R.color.foodanddrink_tool;
+            case SHOPPING:
+                id = R.color.shop_tool;
                 break;
         }
         return id;
     }
-    private int getTitle(String name)
+
+    private int getTitle(FeatureType type)
     {
-        int id = R.string.hotels;
-        switch (name)
+        int id = 0;
+
+        switch (type)
         {
-            case "shopping":
-                id = R.string.shopping;
+            case HOTEL:
+                id = R.string.hotels;
                 break;
-            case "attraction":
+            case FOODNDRINK:
+                id = R.string.foodanddrinks;
+                break;
+            case ATTRACTION:
                 id = R.string.attractions;
                 break;
-            case "foodndrink":
-                id = R.string.foodanddrink;
+            case SHOPPING:
+                id = R.string.shopping;
                 break;
         }
         return id;

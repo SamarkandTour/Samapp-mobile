@@ -22,17 +22,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
 
-import com.cocoahero.android.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
-import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.Marker;
-import com.mapbox.mapboxsdk.overlay.PathOverlay;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
-import com.mapbox.mapboxsdk.util.DataLoadingUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 
@@ -68,7 +64,6 @@ public class MainMap extends ActionBarActivity {
 
         final GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
 
-        Bundle extras = getIntent().getExtras();
         Locale locale = new Locale(globalVariables.getApplicationLanguage());
         Locale.setDefault(locale);
         Configuration config = new Configuration();
@@ -142,20 +137,20 @@ public class MainMap extends ActionBarActivity {
         myLocationOverlay = new UserLocationOverlay(mGpsLocProvider, mapView);
         mAnimMyPosImage = (ImageView)findViewById(R.id.myPositon);
 
-        //generate Menu items
-        MenuItems item = new MenuItems(0,"About City","drawable/ic_s_about_city_h","about_city");
+        //generate bottom Menu items
+        MenuItems item = new MenuItems(5,"About City","drawable/ic_s_about_city_h", MenuItems.MainMenu.ITINERARYWIZARD);
         Items.add(item);
-        item = new MenuItems(1,"Attractions","drawable/ic_s_attractions_h","attraction");
+        item = new MenuItems(6,"Suggested Itinerary","drawable/my_schedule_h", MenuItems.MainMenu.ITINERARY);
         Items.add(item);
-        item = new MenuItems(2,"Food & Drink","drawable/ic_s_food_and_drink_h","foodndrink");
+        item = new MenuItems(1,"Hotels","drawable/ic_s_hotel_h", MenuItems.MainMenu.HOTEL);
         Items.add(item);
-        item = new MenuItems(3,"Hotels","drawable/ic_s_hotel_h","hotel");
+        item = new MenuItems(2,"Food & Drink","drawable/ic_s_food_and_drink_h", MenuItems.MainMenu.FOODNDRINK);
         Items.add(item);
-        item = new MenuItems(4,"Shopping","drawable/ic_s_shop_h","shopping");
+        item = new MenuItems(3,"Attractions","drawable/ic_s_attractions_h", MenuItems.MainMenu.ATTRACTION);
         Items.add(item);
-        item = new MenuItems(5,"Suggested Itinerary","drawable/my_schedule_h","my_schedule");
+        item = new MenuItems(4,"Shopping","drawable/ic_s_shop_h", MenuItems.MainMenu.SHOPPING);
         Items.add(item);
-        item = new MenuItems(6,"About This App","drawable/ic_s_about_h","about_app");
+        item = new MenuItems(7,"About This App","drawable/ic_s_about_h", MenuItems.MainMenu.SETTING);
         Items.add(item);
         btn = (ImageView)findViewById(R.id.slideButton);
         slidingDrawer = (SlidingDrawer)findViewById(R.id.slidingDrawer);
@@ -190,8 +185,8 @@ public class MainMap extends ActionBarActivity {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent();
-                            intent = GetIntent(Items.get(index).Title);
-                            intent.putExtra("action",Items.get(index).tag);
+                            intent = GetIntent(Items.get(index).mainMenu);
+                            intent.putExtra("action", Items.get(index).mainMenu.toString());
                             startActivity(intent);
                         }
                     });
@@ -200,47 +195,63 @@ public class MainMap extends ActionBarActivity {
             }
         });
 
+        Drawable[] markerDrawables = {
+                getResources().getDrawable(R.drawable.hotel_marker),
+                getResources().getDrawable(R.drawable.food_marker),
+                getResources().getDrawable(R.drawable.attraction_marker),
+                getResources().getDrawable(R.drawable.shop_marker)
+        };
+
+        Bundle extras = getIntent().getExtras();
         if(extras!=null)
         {
-            double lat,longt;
-            lat = extras.getDouble("lat");
-            longt = extras.getDouble("long");
+            switch (extras.getString("type")){
+                case "itinerary":
+                    globalVariables.getItineraryFeatures();
+                    break;
 
-            LatLng loc = new LatLng(lat,longt);
-            mapView.getController().animateTo(loc);
+                case "feature":
+                    String name = extras.getString("name");
+
+                    double lat = 0 ,longt = 0;
+                    lat = extras.getDouble("lat");
+                    longt = extras.getDouble("long");
+                    LatLng loc = new LatLng(lat,longt);
+
+                    int featureType = extras.getInt("featureType");
+
+                    Marker m = new Marker(name, "", loc);
+                    m.setImage(markerDrawables[featureType]);
+
+                    mapView.addMarker(m);
+                    mapView.getController().animateTo(loc);
+                    break;
+            }
         }
         else
         {
-            String lang  = globalVariables.getApplicationLanguage();
-            String[] files = {"data/"+lang+"/hotels.geojson", "data/"+lang+"/foodndrinks.geojson", "data/"+lang+"/attractions.geojson", "data/"+lang+"/shoppings.geojson"};
-            Drawable[] drawables = {
-                    getResources().getDrawable(R.drawable.hotel_marker),
-                    getResources().getDrawable(R.drawable.food_marker),
-                    getResources().getDrawable(R.drawable.attraction_marker),
-                    getResources().getDrawable(R.drawable.shop_marker)
-            };
-            for(int i = 0; i < files.length; i++)
-            {
+
+/*
                 try {
-                    FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, files[i]);
+                    FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, "");
                     ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
 
                     for (Object obj : uiObjects) {
                         if (obj instanceof Marker) {
                             Marker m = (Marker)obj;
-                            m.setIcon(new Icon(drawables[i]));
+                            m.setIcon(new Icon(markerDrawables[i]));
                             mapView.addMarker(m);
                         } else if (obj instanceof PathOverlay) {
                             mapView.getOverlays().add((PathOverlay) obj);
                         }
                     }
                     if (uiObjects.size() > 0) {
-                        mapView.invalidate();
+                        //mapView.invalidate();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
+*/
         }
     }
 
@@ -321,41 +332,35 @@ public class MainMap extends ActionBarActivity {
         }
     }
 
-    private Intent GetIntent(String name)
+    private Intent GetIntent(MenuItems.MainMenu mainMenu)
     {
         Intent intent = null;
-        switch (name)
+        switch (mainMenu)
         {
-            case "Hotels":
-                intent = new Intent(MainMap.this, ItemsListActivity.class);
-                break;
-            case "Attractions":
-                intent = new Intent(MainMap.this, ItemsListActivity.class);
-                break;
-            case "About This App":
-                intent = new Intent(MainMap.this, AboutAppActivity.class);
-                break;
-            case "Shopping":
-                intent = new Intent(MainMap.this, ItemsListActivity.class);
-                break;
-            case "Food & Drink":
-                intent = new Intent(MainMap.this, ItemsListActivity.class);
-                break;
-            case "About City":
+            case ITINERARYWIZARD:
                 intent = new Intent(MainMap.this, AboutCityActivity.class);
                 break;
-            case "My Schedule":
-                intent = new Intent(MainMap.this, MyScheduleActivity.class);
-                break;
-            case "Suggested Itinerary":
+            case ITINERARY:
                 intent = new Intent(MainMap.this, SuggestedItinerary.class);
                 break;
-            case "Train Timetable":
-                intent = new Intent(MainMap.this, TrainsTimeTableActivity.class);
+            case HOTEL:
+            case FOODNDRINK:
+            case ATTRACTION:
+            case SHOPPING:
+                intent = new Intent(MainMap.this, ItemsListActivity.class);
                 break;
-            case "Tashkent -> Samarkand":
-                intent = new Intent(MainMap.this, TashkentSamarkandActivity.class);
+            case SETTING:
+                intent = new Intent(MainMap.this, AboutAppActivity.class);
                 break;
+//            case "My Schedule":
+//                intent = new Intent(MainMap.this, MyScheduleActivity.class);
+//                break;
+//            case "Train Timetable":
+//                intent = new Intent(MainMap.this, TrainsTimeTableActivity.class);
+//                break;
+//            case "Tashkent -> Samarkand":
+//                intent = new Intent(MainMap.this, TashkentSamarkandActivity.class);
+//                break;
         }
         return intent;
     }
@@ -409,12 +414,15 @@ public class MainMap extends ActionBarActivity {
         } else {
             mAnimMyPosImage.clearAnimation();
         }
+
+        mapView.invalidate();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         myLocationOverlay.disableMyLocation(); // Don't forget to prevent battery leak.
+        mAnimMyPosImage.clearAnimation();
     }
 
     public String loadJSONFromAsset() {

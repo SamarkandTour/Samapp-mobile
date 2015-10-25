@@ -1,18 +1,34 @@
 package uz.samtuit.samapp.main;
 
 /**
- * Created by sammap on 7/10/15.
+ * Data structure of MenuItems
  */
 public class MenuItems {
     public int id;
-    public String Title;
+    public String title;
     public String imageSrc;
-    public String tag;
-    public MenuItems(int id, String Title, String imageSrc, String tag)
+    public MainMenu mainMenu;
+
+    public enum MainMenu {
+        ITINERARYWIZARD(5),
+        ITINERARY(6),
+        HOTEL(1),
+        FOODNDRINK(2),
+        ATTRACTION(3),
+        SHOPPING(4),
+        SETTING(7);
+
+        private int num;
+        MainMenu(int arg){
+            this.num = arg;
+        }
+    };
+
+    public MenuItems(int id, String title, String imageSrc, MainMenu mainMenu)
     {
         this.id = id;
-        this.Title =Title;
+        this.title =title;
         this.imageSrc = imageSrc;
-        this.tag = tag;
+        this.mainMenu = mainMenu;
     }
 }

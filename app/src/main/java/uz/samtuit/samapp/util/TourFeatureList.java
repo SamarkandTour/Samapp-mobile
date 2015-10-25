@@ -12,6 +12,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import uz.samtuit.samapp.main.GlobalsClass;
@@ -22,11 +23,11 @@ import uz.samtuit.sammap.main.R;
  */
 public class TourFeatureList {
     private ArrayList<TourFeature> tourFeatureList;
-    private ArrayList<TourFeature> itineraryList;
+    private LinkedList<TourFeature> itineraryList;
 
     public TourFeatureList() {
         tourFeatureList = new ArrayList<TourFeature>();
-        itineraryList = new ArrayList<TourFeature>();
+        itineraryList = new LinkedList<TourFeature>();
     }
 
     public ArrayList<TourFeature> getTourFeatureList(Context context, String fileName) {
@@ -129,16 +130,18 @@ public class TourFeatureList {
 
         GlobalsClass globalVariables = (GlobalsClass)context.getApplicationContext();
 
-        tourFeatures = globalVariables.getTourFeatures("attraction");
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.ATTRACTION);
         for (TourFeature v:tourFeatures) {
-            if (v.getString("name") == name) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "attraction");
                 return v;
             }
         }
 
-        tourFeatures = globalVariables.getTourFeatures("shopping");
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.SHOPPING);
         for (TourFeature v:tourFeatures) {
-            if (v.getString("name") == name) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "shopping");
                 return v;
             }
         }
@@ -147,7 +150,7 @@ public class TourFeatureList {
 
     }
 
-    public ArrayList<TourFeature> getItinerary(Context context, String fileName) {
+    public LinkedList<TourFeature> getItineraryFeatureList(Context context, String fileName) {
         try {
             FeatureCollection featureCollection = DataLoadingUtils.loadGeoJSONFromAssets(context, fileName);
             List<Feature> featuresList = featureCollection.getFeatures();

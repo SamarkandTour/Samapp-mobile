@@ -25,12 +25,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="uz.samtuit.samapp.main.Splash"
+            android:name="uz.samtuit.samapp.main.Logo"
             android:label="@string/title_activity_main_map" >
-        </activity>
-        <activity
-            android:name="uz.samtuit.samapp.main.MainPage"
-            android:label="@string/title_activity_main_page" >
         </activity>
         <activity
             android:name="uz.samtuit.samapp.main.MainActivity"

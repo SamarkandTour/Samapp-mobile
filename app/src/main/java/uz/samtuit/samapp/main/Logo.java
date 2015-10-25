@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.TourFeature;
@@ -29,7 +30,7 @@ public class Logo extends ActionBarActivity {
     private static ArrayList<TourFeature> Shops;
     private static ArrayList<TourFeature> Attractions;
     private static ArrayList<TourFeature> Foods;
-    private static ArrayList<TourFeature> Itinerary;
+    private static LinkedList<TourFeature> Itinerary;
     private CustomDialog mUpdateAvalDialog;
 
     @Override
@@ -73,23 +74,25 @@ public class Logo extends ActionBarActivity {
         TourFeatureList tourFeatureList = new TourFeatureList();
         String ChoosenLang = globals.getApplicationLanguage();
         Hotels = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/hotels.geojson");
-        globals.setFeatures("hotel", Hotels);
+        globals.setFeatures(GlobalsClass.FeatureType.HOTEL, Hotels);
         Log.e("SIZE", Hotels.size() + "");
         tourFeatureList = new TourFeatureList();
         Foods = tourFeatureList.getTourFeatureList(getApplicationContext(),"data/" + ChoosenLang + "/foodndrinks.geojson");
-        globals.setFeatures("foodndrink", Foods);
+        globals.setFeatures(GlobalsClass.FeatureType.FOODNDRINK, Foods);
         Log.e("SIZE", Foods.size() + "");
         tourFeatureList = new TourFeatureList();
         Attractions = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/attractions.geojson");
-        globals.setFeatures("attraction", Attractions);
+        globals.setFeatures(GlobalsClass.FeatureType.ATTRACTION, Attractions);
         Log.e("SIZE", Attractions.size() + "");
         tourFeatureList = new TourFeatureList();
         Shops = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/shoppings.geojson");
         Log.e("SIZE", Shops.size() + "");
-        globals.setFeatures("shopping", Shops);
-
+        globals.setFeatures(GlobalsClass.FeatureType.SHOPPING, Shops);
         TourFeatureList itineraryList = new TourFeatureList();
-        Itinerary = itineraryList.getItinerary(getApplicationContext(), "data/" + ChoosenLang + "/itinerary_mixed_1day.geojson");
+
+        Itinerary = itineraryList.getItineraryFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/itinerary_mixed_1day.geojson");
+        Log.e("SIZE", Itinerary.size() + "");
+        globals.setItineraryFeatures(Itinerary);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -97,8 +100,8 @@ public class Logo extends ActionBarActivity {
             public void run() {
                 if (updateAvailable && isWifiConn) {
                     mUpdateAvalDialog = new CustomDialog(Logo.this,
-                            R.string.title_dialog_gps_setting,
-                            R.string.dialog_gps_setting,
+                            R.string.title_dialog_update_available,
+                            R.string.dialog_update_available,
                             R.string.yes,
                             R.string.no,
                             yesClickListener,
@@ -120,6 +123,9 @@ public class Logo extends ActionBarActivity {
             // Start to download at Background
 
             Intent mainMap = new Intent(Logo.this, MainMap.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("Type", "itinerary");
+            mainMap.putExtras(bundle);
             startActivity(mainMap);
         }
     };

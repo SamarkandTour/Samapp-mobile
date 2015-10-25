@@ -75,8 +75,8 @@ public class SuggestedItineraryFragment extends Fragment implements AbsListView.
         data = new ArrayList<Point[]>();
         dat = new Point[4];
         dat[0]= new Point("Registan","39.65219, 66.94716","ADAS");
-        dat[1]= new Point("Guri Emir","39.65552, 66.95680","ADAS");
-        dat[2]= new Point("Rukhabad","39.66166, 66.97904","ADAS");
+        dat[1]= new Point("Guri Emir","39.64853428524564, 66.96916937828064","ADAS");
+        dat[2]= new Point("Rukhabad","39.65081839030569, 66.96821451187134","ADAS");
         dat[3]= new Point("Afrasiab Hotel","39.66607, 66.97932","ADAS");
         data.add(dat);
         dat = new Point[3];
