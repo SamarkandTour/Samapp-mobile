@@ -34,6 +34,7 @@ public class ListItemActivity extends ActionBarActivity {
     private RelativeLayout relLayout;
     private ImageView imageView;
     private ImageButton call,link;
+    private String featureType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class ListItemActivity extends ActionBarActivity {
         latitude = extras.getDouble("lat");
         longitude = extras.getDouble("long");
         name = extras.getString("name");
+        featureType = extras.getString("featureType");
 
         call = (ImageButton)findViewById(R.id.call_button);
 
@@ -141,10 +143,12 @@ public class ListItemActivity extends ActionBarActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(ListItemActivity.this, MainMap.class);
+                intent.putExtra("type", "feature");
                 intent.putExtra("lat", latitude);
                 intent.putExtra("long", longitude);
-                Log.e(latitude+"",longitude+"");
+                Log.e(latitude + "", longitude + "");
                 intent.putExtra("name", name);
+                intent.putExtra("featureType",featureType);
                 startActivity(intent);
                 return false;
             }

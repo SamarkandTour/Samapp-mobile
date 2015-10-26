@@ -3,7 +3,6 @@ package uz.samtuit.samapp.main;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -25,6 +24,7 @@ import android.widget.SlidingDrawer;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
+import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
@@ -35,10 +35,13 @@ import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import uz.samtuit.samapp.util.CustomDialog;
+import uz.samtuit.samapp.util.GlobalsClass;
+import uz.samtuit.samapp.util.MenuItems;
 import uz.samtuit.sammap.main.R;
+
+import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 
 
 public class MainMap extends ActionBarActivity {
@@ -55,6 +58,7 @@ public class MainMap extends ActionBarActivity {
     private Animation anim;
     private ImageView mAnimMyPosImage;
     private CustomDialog mGPSSettingDialog;
+    private ArrayList<Drawable> markerDrawables;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -64,11 +68,11 @@ public class MainMap extends ActionBarActivity {
 
         final GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
 
-        Locale locale = new Locale(globalVariables.getApplicationLanguage());
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+//        Locale locale = new Locale(globalVariables.getApplicationLanguage());
+//        Locale.setDefault(locale);
+//        Configuration config = new Configuration();
+//        config.locale = locale;
+//        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
         getBaseContext().setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main_map);
@@ -195,19 +199,32 @@ public class MainMap extends ActionBarActivity {
             }
         });
 
-        Drawable[] markerDrawables = {
-                getResources().getDrawable(R.drawable.hotel_marker),
-                getResources().getDrawable(R.drawable.food_marker),
-                getResources().getDrawable(R.drawable.attraction_marker),
-                getResources().getDrawable(R.drawable.shop_marker)
-        };
+        markerDrawables = new ArrayList<Drawable>();
+        markerDrawables.add(FeatureType.HOTEL.ordinal(), getResources().getDrawable(R.drawable.hotel_marker));
+        markerDrawables.add(FeatureType.FOODNDRINK.ordinal(), getResources().getDrawable(R.drawable.food_marker));
+        markerDrawables.add(FeatureType.ATTRACTION.ordinal(), getResources().getDrawable(R.drawable.attraction_marker));
+        markerDrawables.add(FeatureType.SHOPPING.ordinal(), getResources().getDrawable(R.drawable.shop_marker));
 
         Bundle extras = getIntent().getExtras();
-        if(extras!=null)
-        {
+        if (extras!=null) {
             switch (extras.getString("type")){
                 case "itinerary":
-                    globalVariables.getItineraryFeatures();
+//                    try {
+//                        FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, "");
+//                        ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
+//
+//                        for (Object obj : uiObjects) {
+//                            if (obj instanceof Marker) {
+//                                Marker m = (Marker)obj;
+//                                m.setIcon(new Icon(markerDrawables[i]));
+//                                mapView.addMarker(m);
+//                            } else if (obj instanceof PathOverlay) {
+//                                mapView.getOverlays().add((PathOverlay) obj);
+//                            }
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
                     break;
 
                 case "feature":
@@ -218,40 +235,14 @@ public class MainMap extends ActionBarActivity {
                     longt = extras.getDouble("long");
                     LatLng loc = new LatLng(lat,longt);
 
-                    int featureType = extras.getInt("featureType");
-
+                    FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
                     Marker m = new Marker(name, "", loc);
-                    m.setImage(markerDrawables[featureType]);
+                    m.setIcon(new Icon(markerDrawables.get(featureType.ordinal())));
 
                     mapView.addMarker(m);
                     mapView.getController().animateTo(loc);
                     break;
             }
-        }
-        else
-        {
-
-/*
-                try {
-                    FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, "");
-                    ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
-
-                    for (Object obj : uiObjects) {
-                        if (obj instanceof Marker) {
-                            Marker m = (Marker)obj;
-                            m.setIcon(new Icon(markerDrawables[i]));
-                            mapView.addMarker(m);
-                        } else if (obj instanceof PathOverlay) {
-                            mapView.getOverlays().add((PathOverlay) obj);
-                        }
-                    }
-                    if (uiObjects.size() > 0) {
-                        //mapView.invalidate();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-*/
         }
     }
 
@@ -352,15 +343,6 @@ public class MainMap extends ActionBarActivity {
             case SETTING:
                 intent = new Intent(MainMap.this, AboutAppActivity.class);
                 break;
-//            case "My Schedule":
-//                intent = new Intent(MainMap.this, MyScheduleActivity.class);
-//                break;
-//            case "Train Timetable":
-//                intent = new Intent(MainMap.this, TrainsTimeTableActivity.class);
-//                break;
-//            case "Tashkent -> Samarkand":
-//                intent = new Intent(MainMap.this, TashkentSamarkandActivity.class);
-//                break;
         }
         return intent;
     }
@@ -368,38 +350,6 @@ public class MainMap extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Load GeoJSON
-//        GlobalsClass globals = (GlobalsClass)getApplicationContext();
-//        String lang  = globals.getApplicationLanguage();
-//        String[] files = {"data/"+lang+"/hotels.geojson", "data/"+lang+"/foodndrinks.geojson", "data/"+lang+"/attractions.geojson", "data/"+lang+"/shoppings.geojson"};
-//        Drawable[] drawables = {
-//            getResources().getDrawable(R.drawable.hotel_marker),
-//            getResources().getDrawable(R.drawable.food_marker),
-//            getResources().getDrawable(R.drawable.attraction_marker),
-//            getResources().getDrawable(R.drawable.shop_marker)
-//        };
-//        for(int i = 0; i < files.length; i++)
-//        {
-//            try {
-//                FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, files[i]);
-//                ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
-//
-//                for (Object obj : uiObjects) {
-//                    if (obj instanceof Marker) {
-//                        Marker m = (Marker)obj;
-//                        m.setIcon(new Icon(drawables[i]));
-//                        mapView.addMarker(m);
-//                    } else if (obj instanceof PathOverlay) {
-//                        mapView.getOverlays().add((PathOverlay) obj);
-//                    }
-//                }
-//                if (uiObjects.size() > 0) {
-//                    mapView.invalidate();
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
 
         if(checkGPSStatus() != 0) { // If GPS is ON
             myLocationOverlay.enableMyLocation();

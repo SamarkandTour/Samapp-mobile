@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import uz.samtuit.samapp.main.GlobalsClass;
 import uz.samtuit.sammap.main.R;
 
 /**
@@ -177,5 +176,10 @@ public class TourFeatureList {
         }
 
         return itineraryList;
+    }
+
+    public boolean ItineraryGeoJSONToFile(Context context, LinkedList<TourFeature> itineraryList) {
+
+        return true;
     }
 }

@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import uz.samtuit.samapp.main.GlobalsClass.FeatureType;
+import uz.samtuit.samapp.util.GlobalsClass;
+import uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.sammap.main.R;
 
@@ -43,6 +44,7 @@ public class ItemsListActivity extends ActionBarActivity {
     private int PRIMARY_COLOR;
     private int TOOLBAR_COLOR;
     private String TITLE;
+    FeatureType S_ACTIVITY_NAME;
     android.support.v7.widget.Toolbar toolbar;
 
     @Override
@@ -61,7 +63,7 @@ public class ItemsListActivity extends ActionBarActivity {
 
     //Configure Common data
         Bundle extras = getIntent().getExtras();
-        FeatureType S_ACTIVITY_NAME = FeatureType.valueOf(extras.getString("action"));
+        S_ACTIVITY_NAME = FeatureType.valueOf(extras.getString("action"));
 
         PRIMARY_COLOR = getPrimaryColorId(S_ACTIVITY_NAME);
         TOOLBAR_COLOR = getToolbarColorId(S_ACTIVITY_NAME);
@@ -94,6 +96,7 @@ public class ItemsListActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ItemsListActivity.this, ListItemActivity.class);
+                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
                 intent.putExtra("photo",items.get(position).getPhoto());
                 intent.putExtra("rating",items.get(position).getRating());
                 intent.putExtra("name",items.get(position).getString("name"));

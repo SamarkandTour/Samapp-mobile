@@ -1,4 +1,4 @@
-package uz.samtuit.samapp.main;
+package uz.samtuit.samapp.util;
 
 /**
  * Data structure of MenuItems
@@ -10,13 +10,13 @@ public class MenuItems {
     public MainMenu mainMenu;
 
     public enum MainMenu {
-        ITINERARYWIZARD(5),
-        ITINERARY(6),
-        HOTEL(1),
-        FOODNDRINK(2),
-        ATTRACTION(3),
-        SHOPPING(4),
-        SETTING(7);
+        HOTEL(0),
+        FOODNDRINK(1),
+        ATTRACTION(2),
+        SHOPPING(3),
+        ITINERARYWIZARD(4),
+        ITINERARY(5),
+        SETTING(6);
 
         private int num;
         MainMenu(int arg){

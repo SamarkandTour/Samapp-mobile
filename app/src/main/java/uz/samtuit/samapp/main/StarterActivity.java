@@ -16,7 +16,7 @@ public class StarterActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Intent splash = new Intent(StarterActivity.this, Logo.class);
+                Intent splash = new Intent(StarterActivity.this, LogoActivity.class);
                 startActivityForResult(splash, 0);
                 Intent mainMap = new Intent(StarterActivity.this, MainMap.class);
                 startActivity(mainMap);

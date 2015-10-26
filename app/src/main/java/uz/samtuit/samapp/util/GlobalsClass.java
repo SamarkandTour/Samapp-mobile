@@ -1,12 +1,10 @@
-package uz.samtuit.samapp.main;
+package uz.samtuit.samapp.util;
 
 import android.app.Application;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-
-import uz.samtuit.samapp.util.TourFeature;
 
 /**
  * Globally shared valuables
@@ -22,11 +20,10 @@ public class GlobalsClass extends Application {
     private String AP_VER;
 
     public enum FeatureType {
-        NONE(0),
-        HOTEL(1),
-        FOODNDRINK(2),
-        ATTRACTION(3),
-        SHOPPING(4);
+        HOTEL(0),
+        FOODNDRINK(1),
+        ATTRACTION(2),
+        SHOPPING(3);
 
         private int num;
         FeatureType(int arg){

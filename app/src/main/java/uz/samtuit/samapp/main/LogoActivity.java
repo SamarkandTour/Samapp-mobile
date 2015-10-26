@@ -1,11 +1,8 @@
 package uz.samtuit.samapp.main;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -14,16 +11,19 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.mapbox.mapboxsdk.util.NetworkUtils;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import uz.samtuit.samapp.util.CustomDialog;
+import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.sammap.main.R;
 
 
-public class Logo extends ActionBarActivity {
+public class LogoActivity extends ActionBarActivity {
     boolean updateAvailable = true;
     boolean AP_FIRSTLAUNCH = false;
     private static ArrayList<TourFeature> Hotels;
@@ -41,13 +41,6 @@ public class Logo extends ActionBarActivity {
 
         setContentView(R.layout.activity_logo);
 
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        final boolean isWifiConn = networkInfo.isConnected();
-        networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        boolean isMobileConn = networkInfo.isConnected();
-
         SQLiteDatabase APP_DB = openOrCreateDatabase("SamTour_data",MODE_PRIVATE,null);
         ConfigurePropertiesDB configurePropertiesDB = new ConfigurePropertiesDB(APP_DB);
         configurePropertiesDB.RepairDB();
@@ -58,7 +51,7 @@ public class Logo extends ActionBarActivity {
 
         if(AP_FIRSTLAUNCH)
         {
-            Intent first_launch_intent = new Intent(Logo.this, FirstLaunch.class);
+            Intent first_launch_intent = new Intent(LogoActivity.this, FirstLaunch.class);
             startActivity(first_launch_intent);
         }
 
@@ -98,8 +91,8 @@ public class Logo extends ActionBarActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (updateAvailable && isWifiConn) {
-                    mUpdateAvalDialog = new CustomDialog(Logo.this,
+                if (updateAvailable && NetworkUtils.isNetworkAvailable(LogoActivity.this)) {
+                    mUpdateAvalDialog = new CustomDialog(LogoActivity.this,
                             R.string.title_dialog_update_available,
                             R.string.dialog_update_available,
                             R.string.yes,
@@ -108,7 +101,7 @@ public class Logo extends ActionBarActivity {
                             noClickListener);
                     mUpdateAvalDialog.show();
                 } else {
-                    Intent mainMap = new Intent(Logo.this, MainMap.class);
+                    Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
                     startActivity(mainMap);
                 }
             }
@@ -122,7 +115,7 @@ public class Logo extends ActionBarActivity {
 
             // Start to download at Background
 
-            Intent mainMap = new Intent(Logo.this, MainMap.class);
+            Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
             Bundle bundle = new Bundle();
             bundle.putString("Type", "itinerary");
             mainMap.putExtras(bundle);
@@ -135,7 +128,7 @@ public class Logo extends ActionBarActivity {
         public void onClick(View v) {
             mUpdateAvalDialog.dismiss();
 
-            Intent mainMap = new Intent(Logo.this, MainMap.class);
+            Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
             startActivity(mainMap);
         }
     };

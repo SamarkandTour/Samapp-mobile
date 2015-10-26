@@ -5,7 +5,7 @@
     <string name="title_activity_main_page">Главная</string>
     <string name="title_activity_main_map">Карта</string>
     <string name="title_activity_main_menu">Меню</string>
-    <string name="mainMap">Карта</string>
+    <string name="title_logo">Logo</string>
     <string name="title_activity_splash">Сплеш</string>
     <string name="title_activity_hotels">Отели</string>
     <string name="title_activity_about_city">О городе</string>
