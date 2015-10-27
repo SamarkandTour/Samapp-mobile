@@ -28,8 +28,8 @@ public class SuggestedItinerary extends ActionBarActivity {
     ViewPager pager;
     ViewPagerAdapter vpadapter;
     ListView lv;
-    Point[] dat;
-    ArrayList<Point[]> data;
+    NewPoint[] dat;
+    ArrayList<NewPoint[]> data;
     SugItineraryAdapter adapter;
     SlidingTabLayout tabs;
 

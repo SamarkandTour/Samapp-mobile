@@ -1,16 +1,27 @@
 package uz.samtuit.samapp.util;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.cocoahero.android.geojson.Feature;
 import com.cocoahero.android.geojson.FeatureCollection;
+import com.cocoahero.android.geojson.GeoJSON;
+import com.cocoahero.android.geojson.Point;
 import com.mapbox.mapboxsdk.util.DataLoadingUtils;
+import com.mapbox.mapboxsdk.util.constants.UtilConstants;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -100,8 +111,9 @@ public class TourFeatureList {
                     tourFeature.setStringHashMap("review", v.getProperties().getString("review"));
                 }
 
-                tourFeature.setLongitude(v.getGeometry().toJSON().getJSONArray("coordinates").getDouble(0));
-                tourFeature.setLatitude(v.getGeometry().toJSON().getJSONArray("coordinates").getDouble(1));
+                Point point = (Point) v.getGeometry();
+                tourFeature.setLongitude(point.getPosition().getLongitude());
+                tourFeature.setLatitude(point.getPosition().getLatitude());
 
                 tourFeatureList.add(tourFeature);
             }
@@ -178,8 +190,70 @@ public class TourFeatureList {
         return itineraryList;
     }
 
-    public boolean ItineraryGeoJSONToFile(Context context, LinkedList<TourFeature> itineraryList) {
+    private static boolean fileWrite(Context context, String fileName, String content) {
+        File file = new File(context.getExternalFilesDir(null), fileName);
+
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(content.getBytes());
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return  true;
+    }
+
+    public static boolean ItineraryWriteToGeoJSONFile(Context context, LinkedList<TourFeature> itineraryList, String fileName) {
+        FeatureCollection featureCollection = new FeatureCollection();
+        for (TourFeature v : itineraryList) {
+            Feature feature = new Feature();
+
+            try {
+                Point coordinates = new Point(v.getLatitude(), v.getLongitude()); // Caution! the order of coordinates
+                feature.setGeometry(coordinates);
+
+                JSONObject properties = new JSONObject();
+                properties.put("photo", v.getPhoto());
+                properties.put("rating", v.getRating());
+                properties.put("name", v.getString("name"));
+                properties.put("comment", "");
+                feature.setProperties(properties);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            featureCollection.addFeature(feature);
+        }
+
+        try {
+            String ItineraryGeoJSON = featureCollection.toJSON().toString();
+            fileWrite(context, fileName, ItineraryGeoJSON);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return true;
+    }
+
+    public static FeatureCollection loadGeoJSONFromExternalFilesDir(final Context context, final String fileName)  throws IOException, JSONException {
+        if (TextUtils.isEmpty(fileName)) {
+            throw new NullPointerException("No GeoJSON File Name passed in.");
+        }
+
+        if (UtilConstants.DEBUGMODE) {
+            Log.d(DataLoadingUtils.class.getCanonicalName(), "Mapbox SDK loading GeoJSON URL: " + fileName);
+        }
+
+        FileInputStream fis = new FileInputStream(context.getExternalFilesDir(null).getAbsolutePath() + "/" + fileName);
+        BufferedReader rd = new BufferedReader(new InputStreamReader(fis, Charset.forName("UTF-8")));
+        String jsonText = DataLoadingUtils.readAll(rd);
+
+        FeatureCollection parsed = (FeatureCollection) GeoJSON.parse(jsonText);
+        if (UtilConstants.DEBUGMODE) {
+            Log.d(DataLoadingUtils.class.getCanonicalName(), "Parsed GeoJSON with " + parsed.getFeatures().size() + " features.");
+        }
+
+        return parsed;
     }
 }

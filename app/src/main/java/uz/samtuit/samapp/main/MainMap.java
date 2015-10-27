@@ -1,12 +1,10 @@
 package uz.samtuit.samapp.main;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
@@ -21,14 +19,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
 
+import com.cocoahero.android.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
 import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.Marker;
+import com.mapbox.mapboxsdk.overlay.PathOverlay;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
+import com.mapbox.mapboxsdk.util.DataLoadingUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.MenuItems;
+import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.sammap.main.R;
 
 import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
@@ -60,7 +62,6 @@ public class MainMap extends ActionBarActivity {
     private CustomDialog mGPSSettingDialog;
     private ArrayList<Drawable> markerDrawables;
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -205,26 +206,28 @@ public class MainMap extends ActionBarActivity {
         markerDrawables.add(FeatureType.ATTRACTION.ordinal(), getResources().getDrawable(R.drawable.attraction_marker));
         markerDrawables.add(FeatureType.SHOPPING.ordinal(), getResources().getDrawable(R.drawable.shop_marker));
 
+        try {
+            FeatureCollection features = TourFeatureList.loadGeoJSONFromExternalFilesDir(this, globalVariables.getApplicationLanguage() + "_MyItinerary.geojson");
+            ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
+
+            for (Object obj : uiObjects) {
+                if (obj instanceof Marker) {
+                    Marker m = (Marker)obj;
+                    //m.setIcon(new Icon(markerDrawables[i]));
+                    mapView.addMarker(m);
+                } else if (obj instanceof PathOverlay) {
+                    mapView.getOverlays().add((PathOverlay) obj);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         Bundle extras = getIntent().getExtras();
         if (extras!=null) {
             switch (extras.getString("type")){
                 case "itinerary":
-//                    try {
-//                        FeatureCollection features = DataLoadingUtils.loadGeoJSONFromAssets(MainMap.this, "");
-//                        ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
-//
-//                        for (Object obj : uiObjects) {
-//                            if (obj instanceof Marker) {
-//                                Marker m = (Marker)obj;
-//                                m.setIcon(new Icon(markerDrawables[i]));
-//                                mapView.addMarker(m);
-//                            } else if (obj instanceof PathOverlay) {
-//                                mapView.getOverlays().add((PathOverlay) obj);
-//                            }
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
                     break;
 
                 case "feature":

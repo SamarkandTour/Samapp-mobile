@@ -86,6 +86,7 @@ public class LogoActivity extends ActionBarActivity {
         Itinerary = itineraryList.getItineraryFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/itinerary_mixed_1day.geojson");
         Log.e("SIZE", Itinerary.size() + "");
         globals.setItineraryFeatures(Itinerary);
+        TourFeatureList.ItineraryWriteToGeoJSONFile(this, Itinerary, ChoosenLang + "_MyItinerary.geojson");
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

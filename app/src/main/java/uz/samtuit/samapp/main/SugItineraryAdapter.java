@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 import uz.samtuit.sammap.main.R;
 
-public class SugItineraryAdapter extends ArrayAdapter<Point> {
-    Point[] data = null;
+public class SugItineraryAdapter extends ArrayAdapter<NewPoint> {
+    NewPoint[] data = null;
     Context context;
     int layoutResId;
-    public SugItineraryAdapter(Context context, int layoutResId, Point[] data)
+    public SugItineraryAdapter(Context context, int layoutResId, NewPoint[] data)
     {
         super(context,layoutResId,data);
         this.context = context;
@@ -36,7 +36,7 @@ public class SugItineraryAdapter extends ArrayAdapter<Point> {
         TextView SI_BUS = (TextView)convertView.findViewById(R.id.si_bus);
         TextView SI_DISTANCE = (TextView)convertView.findViewById(R.id.it_distance);
         ImageView SI_IMAGE = (ImageView)convertView.findViewById(R.id.si_image);
-        Point item = data[position];
+        NewPoint item = data[position];
         double f_lat = Double.parseDouble(data[position].location.split(",")[0]), f_long = Double.parseDouble(data[position].location.split(",")[1]),l_lat,l_long;
         if(position<=0)
         {
