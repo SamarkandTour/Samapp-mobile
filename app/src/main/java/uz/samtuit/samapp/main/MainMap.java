@@ -246,7 +246,7 @@ public class MainMap extends ActionBarActivity {
     //myPosition button click
     public void myPositionClick(View view)
     {
-        if(SystemSetting.checkGPSStatus(this.getContentResolver()) == 0) { // If GPS is OFF
+        if(SystemSetting.checkGPSStatus(this) == 0) { // If GPS is OFF
             mGPSSettingDialog = new CustomDialog(this,
                     R.string.title_dialog_gps_setting,
                     R.string.dialog_gps_setting,
@@ -358,7 +358,7 @@ public class MainMap extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        if(SystemSetting.checkGPSStatus(this.getContentResolver()) != 0) { // If GPS is ON
+        if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON
             myLocationOverlay.enableMyLocation();
             myLocationOverlay.setDrawAccuracyEnabled(true);
             mapView.getOverlays().add(myLocationOverlay);
