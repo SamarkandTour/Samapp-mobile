@@ -81,7 +81,7 @@
             android:label="@string/title_activity_favourite_places" >
         </activity>
         <activity
-            android:name="uz.samtuit.samapp.main.FirstLaunch"
+            android:name="uz.samtuit.samapp.main.LanguageSettingActivity"
             android:label="@string/title_activity_first_launch" >
         </activity>
     </application>

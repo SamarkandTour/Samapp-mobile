@@ -3,6 +3,8 @@ package uz.samtuit.samapp.util;
 import android.app.Application;
 import android.util.Log;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -111,5 +113,21 @@ public class GlobalsClass extends Application {
 
     public void  setItineraryFeatures(LinkedList FeaturesLinkedList) {
         this.Itinerary = FeaturesLinkedList;
+    }
+
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("app_properties.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 }
