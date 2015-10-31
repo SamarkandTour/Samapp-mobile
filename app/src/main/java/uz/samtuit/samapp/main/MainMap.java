@@ -1,11 +1,16 @@
 package uz.samtuit.samapp.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
@@ -19,12 +24,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.cocoahero.android.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
 import com.mapbox.mapboxsdk.overlay.Icon;
+import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.overlay.PathOverlay;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
@@ -47,6 +55,8 @@ import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 
 
 public class MainMap extends ActionBarActivity {
+    static private boolean isNavigationEnabled;
+
     private GlobalsClass globalVariables;
     private LinearLayout linLay;
     private Button newBtn;
@@ -65,6 +75,7 @@ public class MainMap extends ActionBarActivity {
     private NavigationView mNavigationView;
     private FrameLayout mainLayout;
     private SensorManager mSensorManager;
+    private Location mDestinationLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +99,8 @@ public class MainMap extends ActionBarActivity {
         setMapView(); //Set MapView configuration
 
         setUserLocationOverlay(); //Set User Location Overlay
+
+        setNavigationOverlay(); // Set Navigation Overlay
 
         drawBottomMenuIcons(); //Generate bottom Menu items
 
@@ -197,6 +210,8 @@ public class MainMap extends ActionBarActivity {
     }
 
     private void drawItinerary() {
+        ArrayList<Marker> markers = new ArrayList<Marker>();
+
         try {
             FeatureCollection features = TourFeatureList.loadGeoJSONFromExternalFilesDir(this, globalVariables.getApplicationLanguage() + "_MyItinerary.geojson");
             ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
@@ -205,6 +220,7 @@ public class MainMap extends ActionBarActivity {
                 if (obj instanceof Marker) {
                     Marker m = (Marker)obj;
                     //m.setIcon(new Icon(markerDrawables[i])); // Set Icons with order numbers
+                    markers.add(m);
                     mapView.addMarker(m);
                 } else if (obj instanceof PathOverlay) {
                     mapView.getOverlays().add((PathOverlay) obj);
@@ -213,6 +229,21 @@ public class MainMap extends ActionBarActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        mapView.addItemizedOverlay(new ItemizedIconOverlay(this, markers, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
+            @Override
+            public boolean onItemSingleTapUp(int i, Marker marker) {
+                return true;
+            }
+
+            @Override
+            public boolean onItemLongPress(int i, Marker marker) {
+                Toast.makeText(MainMap.this, "Target Selected: " + marker.getPosition().getLongitude() + "," + marker.getPosition().getLatitude(), Toast.LENGTH_SHORT).show();
+                mDestinationLoc.setLongitude(marker.getPosition().getLongitude());
+                mDestinationLoc.setLatitude(marker.getPosition().getLatitude());
+                return true;
+            }
+        }));
     }
 
     private void setUserLocationOverlay() {
@@ -221,10 +252,16 @@ public class MainMap extends ActionBarActivity {
             public void onLocationChanged(Location location) {
                 super.onLocationChanged(location);
 
+                //Show icon animation until my location is recognized by first GPS signal
                 if (isPressedMyPosBtn) {
                     myLocationOverlay.goToMyPosition(true);
                     mAnimMyPosImage.clearAnimation(); //Stop icon animation
                     isPressedMyPosBtn = false;
+                }
+
+                if (isNavigationEnabled && (mDestinationLoc.getLongitude() != 0 && mDestinationLoc.getLatitude() != 0)) {
+                    mNavigationView.setDistance(location.distanceTo(mDestinationLoc));
+                    mNavigationView.setBearing(location.bearingTo(mDestinationLoc));
                 }
             }
 
@@ -241,6 +278,14 @@ public class MainMap extends ActionBarActivity {
 
         myLocationOverlay = new UserLocationOverlay(mGpsLocProvider, mapView);
         mAnimMyPosImage = (ImageView)findViewById(R.id.myPositon);
+    }
+
+    private void setNavigationOverlay() {
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mNavigationView = new NavigationView(this);
+        mainLayout.addView(mNavigationView);
+        mNavigationView.setVisibility(View.INVISIBLE);
+        mDestinationLoc = new Location(LocationManager.GPS_PROVIDER);
     }
 
     //myPosition button click
@@ -288,6 +333,21 @@ public class MainMap extends ActionBarActivity {
     {
         mapView.setMapOrientation(0);
         compass.setRotation(0);
+    }
+
+    public void onNaviToggleClick(View view) {
+        isNavigationEnabled = !isNavigationEnabled;
+
+        ToggleButton toggleButton = (ToggleButton)findViewById(R.id.naviToggleBtn);
+        toggleButton.setChecked(isNavigationEnabled);
+
+        if(isNavigationEnabled) {
+            mNavigationView.setVisibility(View.VISIBLE);
+            mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
+        } else {
+            mNavigationView.setVisibility(View.INVISIBLE);
+            mSensorManager.unregisterListener(mListener);
+        }
     }
 
     //Search
@@ -354,6 +414,17 @@ public class MainMap extends ActionBarActivity {
         }
     }
 
+    private final SensorEventListener mListener = new SensorEventListener() {
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+
+        public void onSensorChanged(SensorEvent event) {
+            if (isNavigationEnabled && (mDestinationLoc.getLongitude() != 0 && mDestinationLoc.getLatitude() != 0)) {
+                mNavigationView.setAzimuth(event.values[0]);
+                mNavigationView.invalidate();
+            }
+        }
+    };
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -364,7 +435,7 @@ public class MainMap extends ActionBarActivity {
             mapView.getOverlays().add(myLocationOverlay);
 
             if(isPressedMyPosBtn) {
-                //Show icon animation until first GPS signal is enough to recognize the my location
+                //Show icon animation until my location is recognized by first GPS signal
                 anim = AnimationUtils.loadAnimation(this, R.anim.scale);
                 mAnimMyPosImage.startAnimation(anim);
             }
@@ -373,6 +444,10 @@ public class MainMap extends ActionBarActivity {
         }
 
         mapView.invalidate();
+
+        if(isNavigationEnabled) {
+            mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
@@ -380,5 +455,9 @@ public class MainMap extends ActionBarActivity {
         super.onPause();
         myLocationOverlay.disableMyLocation(); // Don't forget to prevent battery leak.
         mAnimMyPosImage.clearAnimation();
+
+        if(isNavigationEnabled) {
+            mSensorManager.unregisterListener(mListener);
+        }
     }
 }

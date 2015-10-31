@@ -1,6 +1,5 @@
 package uz.samtuit.samapp.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.LocationManager;
 import android.os.Build;
@@ -10,7 +9,7 @@ import android.util.Log;
 /**
  * Utility for System settings
  */
-public class SystemSetting extends Activity {
+public class SystemSetting {
     public static int checkGPSStatus(Context context) {
         int gpsStatus = 0;
         boolean isGpsEnabled = false;

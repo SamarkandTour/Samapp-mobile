@@ -43,7 +43,7 @@ public class LogoActivity extends ActionBarActivity {
                 Intent first_launch_intent = new Intent(LogoActivity.this, LanguageSettingActivity.class);
                 startActivityForResult(first_launch_intent, 0);
             }
-        }, 3000);
+        }, 2000);
     }
 
     @Override

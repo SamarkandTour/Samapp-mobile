@@ -2,6 +2,8 @@ package uz.samtuit.samapp.main;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
@@ -14,6 +16,7 @@ public class NavigationView extends View {
     private Drawable mCompass;
     private float mAzimuth = 0;
     private int mDistance = 0;
+    private float mBearing = 0;
     private int PADDING = 2;
 
     public NavigationView(Context ctx) {
@@ -25,8 +28,10 @@ public class NavigationView extends View {
     protected void onDraw(Canvas canvas) {
         canvas.save();
 
-        canvas.rotate(360 - mAzimuth, PADDING + mCompass.getMinimumWidth()
+        canvas.rotate(-mAzimuth + mBearing, PADDING + mCompass.getMinimumWidth() // Because the degree of Azimuth is counter-clockwise, should be with minus(-)
                 / 2, PADDING + mCompass.getMinimumHeight() / 2);
+        canvas.drawText(Integer.toString(mDistance)+"m", PADDING + mCompass.getMinimumWidth()
+                / 2, mCompass.getMinimumHeight(),new Paint(Color.BLACK));
         mCompass.setBounds(PADDING, PADDING, PADDING
                 + mCompass.getMinimumWidth(), PADDING
                 + mCompass.getMinimumHeight());
@@ -41,7 +46,11 @@ public class NavigationView extends View {
         mAzimuth = aAzimuth;
     }
 
-    public void setDistance(int distance){
-        mDistance = distance;
+    public void setDistance(float distance){
+        mDistance = (int)distance;
+    }
+
+    public void setBearing(float bearing) {
+        mBearing = bearing;
     }
 }
