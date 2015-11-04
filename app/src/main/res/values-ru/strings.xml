@@ -27,12 +27,14 @@
     <string name="reviews">Отзв</string>
     <string name="update_alert">Доступно новое обновление. Хотите обновить?</string>
     <string name="address">Адресс</string>
-    <string name="title_dialog_gps_setting">Location Service Notice</string>
+    <string name="title_dialog_gps_setting">Location Based Service Notice</string>
     <string name="dialog_gps_setting">To guide you to the destination from your current position, please turn on the GPS.\nDo you want to turn on?</string>
     <string name="Err_wrong_geojson_file">Error! Malformed JSON in the geojson file. Go to the setting, Try re-download</string>
     <string name="Err_file_not_found">Error! File not found. Go to the setting, Try re-download</string>
     <string name="Err_wrong_itinerary_file">Error! wrong feature name in the itinerary file</string>
     <string name="title_dialog_update_available">Update available</string>
     <string name="dialog_update_available">Now recent information is available!\nDo you want to update?</string>
-    <string name="Toast_select_destination">"Please select the destination to guide you"</string>
+    <string name="toast_select_destination">"Please select the destination by long press on the marker"</string>
+    <string name="select_your_language">"Please select your language"</string>
+    <string name="toast_navi_finding">"Start to find a distance and a direction"</string>
 </resources>

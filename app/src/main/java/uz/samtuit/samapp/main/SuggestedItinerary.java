@@ -1,19 +1,16 @@
 package uz.samtuit.samapp.main;
 
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
-
-
-import java.util.ArrayList;
 
 import uz.samtuit.sammap.main.R;
 
@@ -28,8 +25,6 @@ public class SuggestedItinerary extends ActionBarActivity {
     ViewPager pager;
     ViewPagerAdapter vpadapter;
     ListView lv;
-    NewPoint[] dat;
-    ArrayList<NewPoint[]> data;
     SugItineraryAdapter adapter;
     SlidingTabLayout tabs;
 
@@ -78,8 +73,6 @@ public class SuggestedItinerary extends ActionBarActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
     }
-
-
 
 }
 

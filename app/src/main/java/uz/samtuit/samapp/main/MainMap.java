@@ -67,7 +67,7 @@ public class MainMap extends ActionBarActivity {
     private GpsLocationProvider mGpsLocProvider;
     private UserLocationOverlay myLocationOverlay;
     private EditText searchText;
-    private Animation anim;
+    private Animation animGPS;
     private ImageView mAnimMyPosImage;
     private CustomDialog mGPSSettingDialog;
     private ArrayList<Drawable> markerDrawables;
@@ -241,7 +241,10 @@ public class MainMap extends ActionBarActivity {
             public boolean onItemLongPress(int i, Marker marker) {
                 // Indicate the marker as destination
 
-                Toast.makeText(MainMap.this, "Target Selected: " + marker.getPosition().getLongitude() + "," + marker.getPosition().getLatitude(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainMap.this, R.string.toast_navi_finding, Toast.LENGTH_SHORT).show();
+                animGPS = AnimationUtils.loadAnimation(MainMap.this, R.anim.scale);
+                mAnimMyPosImage.startAnimation(animGPS);
+
                 mDestinationLoc.setLongitude(marker.getPosition().getLongitude());
                 mDestinationLoc.setLatitude(marker.getPosition().getLatitude());
 
@@ -260,7 +263,7 @@ public class MainMap extends ActionBarActivity {
                 super.onLocationChanged(location);
 
                 //Show icon animation until my location is recognized by first GPS signal
-                if (isSearchMyLocEnabled) {
+                if (isSearchMyLocEnabled || isNavigationEnabled) {
                     myLocationOverlay.goToMyPosition(true);
                     mAnimMyPosImage.clearAnimation(); //Stop icon animation
                     isSearchMyLocEnabled = false;
@@ -323,8 +326,8 @@ public class MainMap extends ActionBarActivity {
         } else {
             //Show icon animation until my location is recognized by first GPS signal
             myLocationOverlay.goToMyPosition(true);
-            anim = AnimationUtils.loadAnimation(this, R.anim.scale);
-            mAnimMyPosImage.startAnimation(anim);
+            animGPS = AnimationUtils.loadAnimation(this, R.anim.scale);
+            mAnimMyPosImage.startAnimation(animGPS);
         }
     }
 
@@ -366,7 +369,7 @@ public class MainMap extends ActionBarActivity {
             mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
 
             if (mDestinationLoc.getLongitude() == 0 && mDestinationLoc.getLatitude() == 0) {
-                Toast.makeText(MainMap.this, R.string.Toast_select_destination, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainMap.this, R.string.toast_select_destination, Toast.LENGTH_SHORT).show();
             }
         } else {
             mNavigationView.setVisibility(View.INVISIBLE);
@@ -460,8 +463,8 @@ public class MainMap extends ActionBarActivity {
 
             if(isSearchMyLocEnabled) {
                 //Show icon animation until my location is recognized by first GPS signal
-                anim = AnimationUtils.loadAnimation(this, R.anim.scale);
-                mAnimMyPosImage.startAnimation(anim);
+                animGPS = AnimationUtils.loadAnimation(this, R.anim.scale);
+                mAnimMyPosImage.startAnimation(animGPS);
             }
         } else {
             mAnimMyPosImage.clearAnimation();
