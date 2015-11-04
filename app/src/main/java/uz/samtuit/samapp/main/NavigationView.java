@@ -14,9 +14,10 @@ import uz.samtuit.sammap.main.R;
  */
 public class NavigationView extends View {
     private Drawable mCompass;
-    private float mAzimuth = 0;
-    private int mDistance = 0;
-    private float mBearing = 0;
+    private float mAzimuth;
+    private float mDistance;
+    private float mBearing;
+    private float mAntipodal;
     private int PADDING = 2;
 
     public NavigationView(Context ctx) {
@@ -28,9 +29,11 @@ public class NavigationView extends View {
     protected void onDraw(Canvas canvas) {
         canvas.save();
 
-        canvas.rotate(-mAzimuth + mBearing, PADDING + mCompass.getMinimumWidth() // Because the degree of Azimuth is counter-clockwise, should be with minus(-)
+        // Because the degree of Azimuth is counter-clockwise, should be with minus(-)
+        // Because the value of bearing is given as True north, Compensate difference of both Magnetic north and True north
+        canvas.rotate(-(mAzimuth+mAntipodal) + mBearing, PADDING + mCompass.getMinimumWidth()
                 / 2, PADDING + mCompass.getMinimumHeight() / 2);
-        canvas.drawText(Integer.toString(mDistance)+"m", PADDING + mCompass.getMinimumWidth()
+        canvas.drawText(getDistanceString(), PADDING + mCompass.getMinimumWidth()
                 / 2, mCompass.getMinimumHeight(),new Paint(Color.BLACK));
         mCompass.setBounds(PADDING, PADDING, PADDING
                 + mCompass.getMinimumWidth(), PADDING
@@ -46,11 +49,30 @@ public class NavigationView extends View {
         mAzimuth = aAzimuth;
     }
 
-    public void setDistance(float distance){
-        mDistance = (int)distance;
+    public void setDeclination(float Declination) {
+        mAntipodal = Declination;
     }
 
     public void setBearing(float bearing) {
         mBearing = bearing;
+    }
+
+    private String getDistanceString() {
+        if(mDistance > 1000) {
+            return Float.toString(mDistance / 10000) + " km"; // Calculate to the second decimal place
+        } else {
+            return Integer.toString((int) mDistance) + " m";
+        }
+    }
+
+    public void setDistance(float distance){
+        mDistance = distance;
+    }
+
+    public boolean hasDistance(){
+        if (mDistance == 0) {
+            return false;
+        }
+        return true;
     }
 }

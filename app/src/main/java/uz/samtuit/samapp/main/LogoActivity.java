@@ -33,8 +33,6 @@ public class LogoActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logo);
 
-
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -43,7 +41,7 @@ public class LogoActivity extends ActionBarActivity {
                 Intent first_launch_intent = new Intent(LogoActivity.this, LanguageSettingActivity.class);
                 startActivityForResult(first_launch_intent, 0);
             }
-        }, 2000);
+        }, 1000);
     }
 
     @Override
@@ -91,6 +89,7 @@ public class LogoActivity extends ActionBarActivity {
         } else {
             Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
             startActivity(mainMap);
+            finish();
         }
     }
 
@@ -103,6 +102,7 @@ public class LogoActivity extends ActionBarActivity {
 
         Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
         startActivity(mainMap);
+        finish();
         }
     };
 
@@ -113,6 +113,7 @@ public class LogoActivity extends ActionBarActivity {
 
         Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
         startActivity(mainMap);
+        finish();
         }
     };
 

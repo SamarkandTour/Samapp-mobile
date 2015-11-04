@@ -17,8 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.NoActionBar" >
         <activity
-            android:name="uz.samtuit.samapp.main.LogoActivity"
-            android:label="@string/title_logo" >
+            android:name="uz.samtuit.samapp.main.LogoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -53,10 +52,6 @@
             android:label="@string/title_activity_about_app" >
         </activity>
         <activity
-            android:name="uz.samtuit.samapp.main.MyScheduleActivity"
-            android:label="@string/title_activity_my_schedule" >
-        </activity>
-        <activity
             android:name="uz.samtuit.samapp.main.SuggestedItinerary"
             android:label="@string/title_activity_itinerary_wizard" >
         </activity>
@@ -71,14 +66,6 @@
         <activity
             android:name="uz.samtuit.samapp.main.tabActivity"
             android:label="@string/title_activity_tab" >
-        </activity>
-        <activity
-            android:name="uz.samtuit.samapp.main.StarterActivity"
-            android:label="@string/title_activity_splash" >
-        </activity>
-        <activity
-            android:name="uz.samtuit.samapp.main.FavouritePlaces"
-            android:label="@string/title_activity_favourite_places" >
         </activity>
         <activity
             android:name="uz.samtuit.samapp.main.LanguageSettingActivity"

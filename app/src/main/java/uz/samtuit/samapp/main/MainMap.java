@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -55,8 +56,6 @@ import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 
 
 public class MainMap extends ActionBarActivity {
-    static private boolean isNavigationEnabled;
-
     private GlobalsClass globalVariables;
     private LinearLayout linLay;
     private Button newBtn;
@@ -64,10 +63,10 @@ public class MainMap extends ActionBarActivity {
     private ImageView btn,compass;
     private SlidingDrawer slidingDrawer;
     private MapView mapView;
+    private boolean isSearchMyLocEnabled;
     private GpsLocationProvider mGpsLocProvider;
     private UserLocationOverlay myLocationOverlay;
     private EditText searchText;
-    private static boolean isPressedMyPosBtn = true;
     private Animation anim;
     private ImageView mAnimMyPosImage;
     private CustomDialog mGPSSettingDialog;
@@ -76,6 +75,8 @@ public class MainMap extends ActionBarActivity {
     private FrameLayout mainLayout;
     private SensorManager mSensorManager;
     private Location mDestinationLoc;
+    private boolean isNavigationEnabled;
+    private GeomagneticField geoField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,9 +239,15 @@ public class MainMap extends ActionBarActivity {
 
             @Override
             public boolean onItemLongPress(int i, Marker marker) {
+                // Indicate the marker as destination
+
                 Toast.makeText(MainMap.this, "Target Selected: " + marker.getPosition().getLongitude() + "," + marker.getPosition().getLatitude(), Toast.LENGTH_SHORT).show();
                 mDestinationLoc.setLongitude(marker.getPosition().getLongitude());
                 mDestinationLoc.setLatitude(marker.getPosition().getLatitude());
+
+                // When selected other destination, init a distance
+                mNavigationView.setDistance(0);
+                mNavigationView.invalidate();
                 return true;
             }
         }));
@@ -253,13 +260,23 @@ public class MainMap extends ActionBarActivity {
                 super.onLocationChanged(location);
 
                 //Show icon animation until my location is recognized by first GPS signal
-                if (isPressedMyPosBtn) {
+                if (isSearchMyLocEnabled) {
                     myLocationOverlay.goToMyPosition(true);
                     mAnimMyPosImage.clearAnimation(); //Stop icon animation
-                    isPressedMyPosBtn = false;
+                    isSearchMyLocEnabled = false;
                 }
 
+                // Check the value of mDestinationLoc
+                // Because the distanceTo function has default WGS84 major axis, always some value will be returned
                 if (isNavigationEnabled && (mDestinationLoc.getLongitude() != 0 && mDestinationLoc.getLatitude() != 0)) {
+                    // declination: the difference between true north and magnetic north
+                    geoField = new GeomagneticField(
+                            Double.valueOf(location.getLatitude()).floatValue(),
+                            Double.valueOf(location.getLongitude()).floatValue(),
+                            Double.valueOf(location.getAltitude()).floatValue(),
+                            System.currentTimeMillis()
+                    );
+                    mNavigationView.setDeclination(geoField.getDeclination());
                     mNavigationView.setDistance(location.distanceTo(mDestinationLoc));
                     mNavigationView.setBearing(location.bearingTo(mDestinationLoc));
                 }
@@ -269,6 +286,7 @@ public class MainMap extends ActionBarActivity {
             public void onProviderDisabled(String provider) { // When turn off GPS
                 super.onProviderDisabled(provider);
                 mAnimMyPosImage.clearAnimation();
+                mSensorManager.unregisterListener(mListener); // Without GPS, sensor value is meaningless
             }
         };
 
@@ -288,9 +306,11 @@ public class MainMap extends ActionBarActivity {
         mDestinationLoc = new Location(LocationManager.GPS_PROVIDER);
     }
 
-    //myPosition button click
-    public void myPositionClick(View view)
+    //myLocation button click
+    public void myLocationClick(View view)
     {
+        isSearchMyLocEnabled = true;
+
         if(SystemSetting.checkGPSStatus(this) == 0) { // If GPS is OFF
             mGPSSettingDialog = new CustomDialog(this,
                     R.string.title_dialog_gps_setting,
@@ -301,11 +321,14 @@ public class MainMap extends ActionBarActivity {
                     noClickListener);
             mGPSSettingDialog.show();
         } else {
+            //Show icon animation until my location is recognized by first GPS signal
             myLocationOverlay.goToMyPosition(true);
-            isPressedMyPosBtn = true;
+            anim = AnimationUtils.loadAnimation(this, R.anim.scale);
+            mAnimMyPosImage.startAnimation(anim);
         }
     }
 
+    // GPS Setting Dialog
     private View.OnClickListener yesClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -315,9 +338,6 @@ public class MainMap extends ActionBarActivity {
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             startActivity(intent);
-
-            myLocationOverlay.goToMyPosition(true);
-            isPressedMyPosBtn = true;
         }
     };
 
@@ -344,6 +364,10 @@ public class MainMap extends ActionBarActivity {
         if(isNavigationEnabled) {
             mNavigationView.setVisibility(View.VISIBLE);
             mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
+
+            if (mDestinationLoc.getLongitude() == 0 && mDestinationLoc.getLatitude() == 0) {
+                Toast.makeText(MainMap.this, R.string.Toast_select_destination, Toast.LENGTH_SHORT).show();
+            }
         } else {
             mNavigationView.setVisibility(View.INVISIBLE);
             mSensorManager.unregisterListener(mListener);
@@ -418,7 +442,7 @@ public class MainMap extends ActionBarActivity {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
         public void onSensorChanged(SensorEvent event) {
-            if (isNavigationEnabled && (mDestinationLoc.getLongitude() != 0 && mDestinationLoc.getLatitude() != 0)) {
+            if (isNavigationEnabled && mNavigationView.hasDistance()) { // Start navigation when the value of distance is
                 mNavigationView.setAzimuth(event.values[0]);
                 mNavigationView.invalidate();
             }
@@ -429,12 +453,12 @@ public class MainMap extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON
+        if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON, Always indicate my location on the map
             myLocationOverlay.enableMyLocation();
             myLocationOverlay.setDrawAccuracyEnabled(true);
             mapView.getOverlays().add(myLocationOverlay);
 
-            if(isPressedMyPosBtn) {
+            if(isSearchMyLocEnabled) {
                 //Show icon animation until my location is recognized by first GPS signal
                 anim = AnimationUtils.loadAnimation(this, R.anim.scale);
                 mAnimMyPosImage.startAnimation(anim);
