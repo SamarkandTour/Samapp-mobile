@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
