@@ -45,7 +45,7 @@ public class ListItemActivity extends ActionBarActivity {
         //ActionBar setting
         Toolbar toolbar = (Toolbar)findViewById(R.id.hotel_tool_bar);
         relLayout = (RelativeLayout)findViewById(R.id.itemRelLayout);
-        toolbar.setBackgroundColor(getResources().getColor(extras.getInt("toolbarColorId")));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.list_item_tool));
         setSupportActionBar(toolbar);
         relLayout.setBackground(getResources().getDrawable(extras.getInt("primaryColorId")));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -63,7 +63,6 @@ public class ListItemActivity extends ActionBarActivity {
             }
         });
         //end ActionBar Setting
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
 
         imageView = (ImageView)findViewById(R.id.hotel_image);
         address = (TextView)findViewById(R.id.hotel_address);
@@ -74,7 +73,6 @@ public class ListItemActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 String url = extras.getString("url");
-                Log.e("URL ", url);
                 if (!url.startsWith("https://") && !url.startsWith("http://")){
                     url = "http://" + url;
                 }
@@ -111,8 +109,9 @@ public class ListItemActivity extends ActionBarActivity {
         Drawable dr = new BitmapDrawable(decodedByte);
         imageView.setImageDrawable(dr);
         titleSmall.setText(extras.getString("name"));
+        description.setText(extras.getString("desc"));
         int Rating = extras.getInt("rating");
-        Log.e("Rating",Rating+"");
+        extras.clear();
         if(Rating>4)
             star5.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(Rating>3)
@@ -123,9 +122,6 @@ public class ListItemActivity extends ActionBarActivity {
             star2.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(Rating>0)
             star1.setImageResource(R.drawable.ic_star_rate_white_18dp);
-
-        description.setText(extras.getString("desc"));
-        extras.clear();
     }
 
     @Override
@@ -146,7 +142,6 @@ public class ListItemActivity extends ActionBarActivity {
                 intent.putExtra("type", "feature");
                 intent.putExtra("lat", latitude);
                 intent.putExtra("long", longitude);
-                Log.e(latitude + "", longitude + "");
                 intent.putExtra("name", name);
                 intent.putExtra("featureType",featureType);
                 startActivity(intent);

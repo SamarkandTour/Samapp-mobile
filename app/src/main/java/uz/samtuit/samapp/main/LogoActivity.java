@@ -47,7 +47,7 @@ public class LogoActivity extends ActionBarActivity {
         Cursor APP_PROPERTIES = APP_DB.rawQuery("Select `app_first_launch` from app_properties", null);
         APP_PROPERTIES.moveToFirst();
         AP_FIRSTLAUNCH = Boolean.parseBoolean(APP_PROPERTIES.getString(0));
-        Log.e("FL",AP_FIRSTLAUNCH+"");
+        //Log.e("FL",AP_FIRSTLAUNCH+"");
 
         if(AP_FIRSTLAUNCH)
         {
@@ -107,6 +107,26 @@ public class LogoActivity extends ActionBarActivity {
                 }
             }
         }, 3000);
+    }
+
+    public static String readableFileSize(long size) {
+        if(size<=0) return "0";
+        final String[] units = new String[] {"B","KB","MB","GB","TB"};
+        int digitGroups = (int)(Math.log10(size)/Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups))+" "+units[digitGroups];
+    }
+
+    public boolean isExternalWritable(){
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state))
+        return true;
+        return false;
+    }
+    public boolean isExternalReadable(){
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state)||Environment.MEDIA_MOUNTED_READ_ONLY.equals(state))
+            return true;
+        return false;
     }
 
     private View.OnClickListener yesClickListener = new View.OnClickListener() {

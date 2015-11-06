@@ -10,6 +10,7 @@
         <color name="shop_tool">#689F38</color>
         <color name="hotel_primary">#3F51B5</color>
         <color name="hotel_tool">#303F9F</color>
+        <color name="list_item_tool">#33ffffff</color>
         <color name="foodanddrink_primary">#FF5722</color>
         <color name="foodanddrink_tool">#E64A19</color>
     </resources>
