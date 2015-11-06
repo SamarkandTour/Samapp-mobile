@@ -1,29 +1,39 @@
 package uz.samtuit.samapp.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.hardware.GeomagneticField;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.cocoahero.android.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
 import com.mapbox.mapboxsdk.overlay.Icon;
+import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.overlay.PathOverlay;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
@@ -33,13 +43,12 @@ import com.mapbox.mapboxsdk.util.DataLoadingUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.MenuItems;
+import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.sammap.main.R;
 
@@ -47,50 +56,67 @@ import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 
 
 public class MainMap extends ActionBarActivity {
+    private GlobalsClass globalVariables;
     private LinearLayout linLay;
     private Button newBtn;
     private ArrayList<MenuItems> Items = new ArrayList<MenuItems>();
     private ImageView btn,compass;
     private SlidingDrawer slidingDrawer;
     private MapView mapView;
+    private boolean isSearchMyLocEnabled;
     private GpsLocationProvider mGpsLocProvider;
     private UserLocationOverlay myLocationOverlay;
     private EditText searchText;
-    private static boolean isPressedMyPosBtn = true;
     private Animation anim;
     private ImageView mAnimMyPosImage;
     private CustomDialog mGPSSettingDialog;
     private ArrayList<Drawable> markerDrawables;
+    private NavigationView mNavigationView;
+    private FrameLayout mainLayout;
+    private SensorManager mSensorManager;
+    private Location mDestinationLoc;
+    private boolean isNavigationEnabled;
+    private GeomagneticField geoField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        final GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
-
-//        Locale locale = new Locale(globalVariables.getApplicationLanguage());
-//        Locale.setDefault(locale);
-//        Configuration config = new Configuration();
-//        config.locale = locale;
-//        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        globalVariables = (GlobalsClass)getApplicationContext();
 
         getBaseContext().setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mapView = (MapView)findViewById(R.id.mapview);
+        mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
 
         //search text typeface
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
         searchText = (EditText)findViewById(R.id.search_text);
         searchText.setTypeface(tf);
 
-        //MapView Settings
+        setMapView(); //Set MapView configuration
+
+        setUserLocationOverlay(); //Set User Location Overlay
+
+        setNavigationOverlay(); // Set Navigation Overlay
+
+        drawBottomMenuIcons(); //Generate bottom Menu items
+
+        setMarkerIcons();
+        drawItinerary();
+
+        handleExtraRequest();
+    }
+
+    private void setMapView() {
         compass = (ImageView)findViewById(R.id.compass);
 
         TileLayer mbTileLayer = new MBTilesLayer(this, "samarkand.mbtiles");
         mapView.setTileSource(mbTileLayer);
-        mapView.setCenter(new ILatLng() {
+        mapView.setCenter(new ILatLng() { // Registon
             @Override
             public double getLatitude() {
                 return 39.65487;
@@ -98,13 +124,13 @@ public class MainMap extends ActionBarActivity {
 
             @Override
             public double getLongitude() {
-        return 66.97562;
-    }
+                return 66.97562;
+            }
 
             @Override
             public double getAltitude() {
-        return 0;
-    }
+                return 0;
+            }
         });
 
         mapView.setZoom(18);
@@ -112,37 +138,12 @@ public class MainMap extends ActionBarActivity {
         mapView.setOnMapOrientationChangeListener(new OnMapOrientationChangeListener() {
             @Override
             public void onMapOrientationChange(float v) {
-                    compass.setRotation(mapView.getMapOrientation());
+                compass.setRotation(mapView.getMapOrientation());
             }
         });
+    }
 
-        mGpsLocProvider = new GpsLocationProvider(this){
-            @Override
-            public void onLocationChanged(Location location) {
-                super.onLocationChanged(location);
-
-                if (isPressedMyPosBtn) {
-                    myLocationOverlay.goToMyPosition(true);
-                    mAnimMyPosImage.clearAnimation(); //Stop icon animation
-                    isPressedMyPosBtn = false;
-                }
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) { // When turn off GPS
-                super.onProviderDisabled(provider);
-                mAnimMyPosImage.clearAnimation();
-            }
-        };
-
-        // Too often updates will consume too much battery
-        mGpsLocProvider.setLocationUpdateMinTime(5000); //5s
-        mGpsLocProvider.setLocationUpdateMinDistance(5); //5m
-
-        myLocationOverlay = new UserLocationOverlay(mGpsLocProvider, mapView);
-        mAnimMyPosImage = (ImageView)findViewById(R.id.myPositon);
-
-        //generate bottom Menu items
+    private void drawBottomMenuIcons() {
         MenuItems item = new MenuItems(5,"About City","drawable/ic_s_about_city_h", MenuItems.MainMenu.ITINERARYWIZARD);
         Items.add(item);
         item = new MenuItems(6,"Suggested Itinerary","drawable/my_schedule_h", MenuItems.MainMenu.ITINERARY);
@@ -199,12 +200,18 @@ public class MainMap extends ActionBarActivity {
                 }
             }
         });
+    }
 
+    private void setMarkerIcons() {
         markerDrawables = new ArrayList<Drawable>();
         markerDrawables.add(FeatureType.HOTEL.ordinal(), getResources().getDrawable(R.drawable.hotel_marker));
         markerDrawables.add(FeatureType.FOODNDRINK.ordinal(), getResources().getDrawable(R.drawable.food_marker));
         markerDrawables.add(FeatureType.ATTRACTION.ordinal(), getResources().getDrawable(R.drawable.attraction_marker));
         markerDrawables.add(FeatureType.SHOPPING.ordinal(), getResources().getDrawable(R.drawable.shop_marker));
+    }
+
+    private void drawItinerary() {
+        ArrayList<Marker> markers = new ArrayList<Marker>();
 
         try {
             FeatureCollection features = TourFeatureList.loadGeoJSONFromExternalFilesDir(this, globalVariables.getApplicationLanguage() + "_MyItinerary.geojson");
@@ -213,7 +220,8 @@ public class MainMap extends ActionBarActivity {
             for (Object obj : uiObjects) {
                 if (obj instanceof Marker) {
                     Marker m = (Marker)obj;
-                    //m.setIcon(new Icon(markerDrawables[i]));
+                    //m.setIcon(new Icon(markerDrawables[i])); // Set Icons with order numbers
+                    markers.add(m);
                     mapView.addMarker(m);
                 } else if (obj instanceof PathOverlay) {
                     mapView.getOverlays().add((PathOverlay) obj);
@@ -223,52 +231,87 @@ public class MainMap extends ActionBarActivity {
             e.printStackTrace();
         }
 
-
-        Bundle extras = getIntent().getExtras();
-        if (extras!=null) {
-            switch (extras.getString("type")){
-                case "itinerary":
-                    break;
-
-                case "feature":
-                    String name = extras.getString("name");
-
-                    double lat = 0 ,longt = 0;
-                    lat = extras.getDouble("lat");
-                    longt = extras.getDouble("long");
-                    LatLng loc = new LatLng(lat,longt);
-
-                    FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
-                    Marker m = new Marker(name, "", loc);
-                    m.setIcon(new Icon(markerDrawables.get(featureType.ordinal())));
-
-                    mapView.addMarker(m);
-                    mapView.getController().animateTo(loc);
-                    break;
+        mapView.addItemizedOverlay(new ItemizedIconOverlay(this, markers, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
+            @Override
+            public boolean onItemSingleTapUp(int i, Marker marker) {
+                return true;
             }
-        }
+
+            @Override
+            public boolean onItemLongPress(int i, Marker marker) {
+                // Indicate the marker as destination
+
+                Toast.makeText(MainMap.this, "Target Selected: " + marker.getPosition().getLongitude() + "," + marker.getPosition().getLatitude(), Toast.LENGTH_SHORT).show();
+                mDestinationLoc.setLongitude(marker.getPosition().getLongitude());
+                mDestinationLoc.setLatitude(marker.getPosition().getLatitude());
+
+                // When selected other destination, init a distance
+                mNavigationView.setDistance(0);
+                mNavigationView.invalidate();
+                return true;
+            }
+        }));
     }
 
-    private int checkGPSStatus() {
-        int gpsStatus = 0;
+    private void setUserLocationOverlay() {
+        mGpsLocProvider = new GpsLocationProvider(this){
+            @Override
+            public void onLocationChanged(Location location) {
+                super.onLocationChanged(location);
 
-        try {
-            // LOCATION_MODE_HIGH_ACCURACY=3, LOCATION_MODE_BATTERY_SAVING=2, LOCATION_MODE_SENSORS_ONLY=1 or LOCATION_MODE_OFF=0.
-            gpsStatus = Settings.Secure.getInt(this.getContentResolver(), Settings.Secure.LOCATION_MODE);
+                //Show icon animation until my location is recognized by first GPS signal
+                if (isSearchMyLocEnabled) {
+                    myLocationOverlay.goToMyPosition(true);
+                    mAnimMyPosImage.clearAnimation(); //Stop icon animation
+                    isSearchMyLocEnabled = false;
+                }
 
-            Log.d("GPS", "isGPSEnabled():LOCATION_MODE:" + gpsStatus);
+                // Check the value of mDestinationLoc
+                // Because the distanceTo function has default WGS84 major axis, always some value will be returned
+                if (isNavigationEnabled && (mDestinationLoc.getLongitude() != 0 && mDestinationLoc.getLatitude() != 0)) {
+                    // declination: the difference between true north and magnetic north
+                    geoField = new GeomagneticField(
+                            Double.valueOf(location.getLatitude()).floatValue(),
+                            Double.valueOf(location.getLongitude()).floatValue(),
+                            Double.valueOf(location.getAltitude()).floatValue(),
+                            System.currentTimeMillis()
+                    );
+                    mNavigationView.setDeclination(geoField.getDeclination());
+                    mNavigationView.setDistance(location.distanceTo(mDestinationLoc));
+                    mNavigationView.setBearing(location.bearingTo(mDestinationLoc));
+                }
+            }
 
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void onProviderDisabled(String provider) { // When turn off GPS
+                super.onProviderDisabled(provider);
+                mAnimMyPosImage.clearAnimation();
+                mSensorManager.unregisterListener(mListener); // Without GPS, sensor value is meaningless
+            }
+        };
 
-        return gpsStatus;
+        // Too often updates will consume too much battery
+        mGpsLocProvider.setLocationUpdateMinTime(5000); //5s
+        mGpsLocProvider.setLocationUpdateMinDistance(5); //5m
+
+        myLocationOverlay = new UserLocationOverlay(mGpsLocProvider, mapView);
+        mAnimMyPosImage = (ImageView)findViewById(R.id.myPositon);
     }
 
-    //myPosition button click
-    public void myPositionClick(View view)
+    private void setNavigationOverlay() {
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mNavigationView = new NavigationView(this);
+        mainLayout.addView(mNavigationView);
+        mNavigationView.setVisibility(View.INVISIBLE);
+        mDestinationLoc = new Location(LocationManager.GPS_PROVIDER);
+    }
+
+    //myLocation button click
+    public void myLocationClick(View view)
     {
-        if(checkGPSStatus() == 0) { // If GPS is OFF
+        isSearchMyLocEnabled = true;
+
+        if(SystemSetting.checkGPSStatus(this) == 0) { // If GPS is OFF
             mGPSSettingDialog = new CustomDialog(this,
                     R.string.title_dialog_gps_setting,
                     R.string.dialog_gps_setting,
@@ -278,11 +321,14 @@ public class MainMap extends ActionBarActivity {
                     noClickListener);
             mGPSSettingDialog.show();
         } else {
+            //Show icon animation until my location is recognized by first GPS signal
             myLocationOverlay.goToMyPosition(true);
-            isPressedMyPosBtn = true;
+            anim = AnimationUtils.loadAnimation(this, R.anim.scale);
+            mAnimMyPosImage.startAnimation(anim);
         }
     }
 
+    // GPS Setting Dialog
     private View.OnClickListener yesClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -292,9 +338,6 @@ public class MainMap extends ActionBarActivity {
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             startActivity(intent);
-
-            myLocationOverlay.goToMyPosition(true);
-            isPressedMyPosBtn = true;
         }
     };
 
@@ -310,6 +353,25 @@ public class MainMap extends ActionBarActivity {
     {
         mapView.setMapOrientation(0);
         compass.setRotation(0);
+    }
+
+    public void onNaviToggleClick(View view) {
+        isNavigationEnabled = !isNavigationEnabled;
+
+        ToggleButton toggleButton = (ToggleButton)findViewById(R.id.naviToggleBtn);
+        toggleButton.setChecked(isNavigationEnabled);
+
+        if(isNavigationEnabled) {
+            mNavigationView.setVisibility(View.VISIBLE);
+            mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
+
+            if (mDestinationLoc.getLongitude() == 0 && mDestinationLoc.getLatitude() == 0) {
+                Toast.makeText(MainMap.this, R.string.Toast_select_destination, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            mNavigationView.setVisibility(View.INVISIBLE);
+            mSensorManager.unregisterListener(mListener);
+        }
     }
 
     //Search
@@ -350,17 +412,54 @@ public class MainMap extends ActionBarActivity {
         return intent;
     }
 
+    private void handleExtraRequest() {
+        Bundle extras = getIntent().getExtras();
+        if (extras!=null) {
+            switch (extras.getString("type")){
+                case "itinerary":
+                    break;
+
+                case "feature":
+                    String name = extras.getString("name");
+
+                    double lat = 0 ,longt = 0;
+                    lat = extras.getDouble("lat");
+                    longt = extras.getDouble("long");
+                    LatLng loc = new LatLng(lat,longt);
+
+                    FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
+                    Marker m = new Marker(name, "", loc);
+                    m.setIcon(new Icon(markerDrawables.get(featureType.ordinal())));
+
+                    mapView.addMarker(m);
+                    mapView.getController().animateTo(loc);
+                    break;
+            }
+        }
+    }
+
+    private final SensorEventListener mListener = new SensorEventListener() {
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+
+        public void onSensorChanged(SensorEvent event) {
+            if (isNavigationEnabled && mNavigationView.hasDistance()) { // Start navigation when the value of distance is
+                mNavigationView.setAzimuth(event.values[0]);
+                mNavigationView.invalidate();
+            }
+        }
+    };
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        if(checkGPSStatus() != 0) { // If GPS is ON
+        if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON, Always indicate my location on the map
             myLocationOverlay.enableMyLocation();
             myLocationOverlay.setDrawAccuracyEnabled(true);
             mapView.getOverlays().add(myLocationOverlay);
 
-            if(isPressedMyPosBtn) {
-                //Show icon animation until first GPS signal is enough to recognize the my location
+            if(isSearchMyLocEnabled) {
+                //Show icon animation until my location is recognized by first GPS signal
                 anim = AnimationUtils.loadAnimation(this, R.anim.scale);
                 mAnimMyPosImage.startAnimation(anim);
             }
@@ -369,6 +468,10 @@ public class MainMap extends ActionBarActivity {
         }
 
         mapView.invalidate();
+
+        if(isNavigationEnabled) {
+            mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
@@ -376,21 +479,9 @@ public class MainMap extends ActionBarActivity {
         super.onPause();
         myLocationOverlay.disableMyLocation(); // Don't forget to prevent battery leak.
         mAnimMyPosImage.clearAnimation();
-    }
 
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open("app_properties.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
+        if(isNavigationEnabled) {
+            mSensorManager.unregisterListener(mListener);
         }
-        return json;
     }
 }

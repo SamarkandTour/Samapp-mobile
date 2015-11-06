@@ -120,12 +120,12 @@ public class TourFeatureList {
 
         } catch (IOException e) {
             // File not found, Try re-download
-            Toast.makeText(context, R.string.Err_file_not_found, Toast.LENGTH_LONG);
+            Toast.makeText(context, R.string.Err_file_not_found, Toast.LENGTH_LONG).show();
             e.printStackTrace();
             return null;
         } catch (JSONException e) {
             // JSON Format is malformed
-            Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG);
+            Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
             e.printStackTrace();
             return null;
         }
@@ -170,19 +170,19 @@ public class TourFeatureList {
             for (Feature v:featuresList) {
                 TourFeature itineraryElement = findFeature(context, v.getProperties().getString("name"));
                 if (itineraryElement == null) {
-                    Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG);
+                    Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
                     return null;
                 }
                 itineraryList.add(itineraryElement);
             }
         } catch (IOException e) {
             // File not found, Try re-download
-            Toast.makeText(context, R.string.Err_file_not_found, Toast.LENGTH_LONG);
+            Toast.makeText(context, R.string.Err_file_not_found, Toast.LENGTH_LONG).show();
             e.printStackTrace();
             return null;
         } catch (JSONException e) {
             // JSON Format is malformed
-            Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG);
+            Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
             e.printStackTrace();
             return null;
         }

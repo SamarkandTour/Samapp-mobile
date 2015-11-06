@@ -5,7 +5,6 @@
     <string name="title_activity_main_page">Home</string>
     <string name="title_activity_main_map">MainMap</string>
     <string name="title_activity_main_menu">MainMenu</string>
-    <string name="title_logo">Logo</string>
     <string name="title_activity_splash">Splash</string>
     <string name="title_activity_hotels">HotelsActivity</string>
     <string name="title_activity_about_city">AboutCityActivity</string>
@@ -44,4 +43,5 @@
     <string name="Err_wrong_itinerary_file">Error! wrong feature name in the itinerary file</string>
     <string name="title_dialog_update_available">Update available</string>
     <string name="dialog_update_available">Now recent information is available!\nDo you want to update?\nBut you are not connected to Wi-Fi, the cost of data usage would be high.</string>
+    <string name="Toast_select_destination">"Please select the destination to guide you"</string>
 </resources>

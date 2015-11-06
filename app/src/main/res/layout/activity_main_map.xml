@@ -4,7 +4,8 @@ xmlns:mapbox="http://schemas.android.com/apk/res-auto"
 android:orientation="vertical"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
-android:gravity="bottom">
+android:gravity="bottom"
+    android:id="@+id/mainLayout">
 
 <com.mapbox.mapboxsdk.views.MapView
     android:layout_height="fill_parent"
@@ -30,9 +31,17 @@ android:gravity="bottom">
             android:layout_margin="10dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:onClick="myPositionClick"
+            android:onClick="myLocationClick"
             android:src="@drawable/myposition"
             android:id="@+id/myPositon" />
+
+        <ToggleButton
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/naviToggleBtn"
+            android:onClick="onNaviToggleClick"
+            android:textOn="On"
+            android:textOff="Off" />
 
         <EditText
             android:layout_width="match_parent"
@@ -44,6 +53,7 @@ android:gravity="bottom">
             android:lines="1"
             android:id="@+id/search_text"
             android:layout_marginRight="60dp" />
+
         <ImageView
             android:layout_width="50dp"
             android:layout_height="60dp"

@@ -4,7 +4,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Boulevard"
+        "name": "Universitet xiyoboni"
       },
       "geometry": {
         "type": "Point",
@@ -17,7 +17,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Gur-e Amir Mausoleum"
+        "name": "Amir Temur maqbarasi"
       },
       "geometry": {
         "type": "Point",
@@ -30,7 +30,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Rukhabad Mausoleum"
+        "name": "Ruhobod maqbarasi"
       },
       "geometry": {
         "type": "Point",
@@ -43,7 +43,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Registan Square"
+        "name": "Registon ansambli"
       },
       "geometry": {
         "type": "Point",
@@ -56,7 +56,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Chorsu Art Gallery"
+        "name": "Chorsu galereyasi"
       },
       "geometry": {
         "type": "Point",
@@ -69,7 +69,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Craftsman's center"
+        "name": "Hunarmandlar markazi"
       },
       "geometry": {
         "type": "Point",
@@ -82,7 +82,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Bibi-Khanym Mosque"
+        "name": "Bibixonim maqbarasi"
       },
       "geometry": {
         "type": "Point",
@@ -95,7 +95,20 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Siyob Bazaar"
+        "name": "Bibixonim masjidi"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          66.98228001594543,
+          39.66040832965231
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Siyob bozori"
       },
       "geometry": {
         "type": "Point",
@@ -108,7 +121,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Hazrat-Khyzr Mosque"
+        "name": "Xazrati Xizr masjidi"
       },
       "geometry": {
         "type": "Point",
@@ -121,7 +134,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Afrasiyab Museum"
+        "name": "Afrosiyob davlat muzeyi"
       },
       "geometry": {
         "type": "Point",
@@ -134,7 +147,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "St. Daniel Mausoleum"
+        "name": "Xo'ja Doniyor"
       },
       "geometry": {
         "type": "Point",
@@ -147,7 +160,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Ulugh Beg Museum"
+        "name": "Ulugbek rasadxonasi muzeyi"
       },
       "geometry": {
         "type": "Point",
@@ -160,7 +173,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Ulugh Beg Observatory"
+        "name": "Ulugbek rasadxonasi"
       },
       "geometry": {
         "type": "Point",
@@ -173,7 +186,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Shah-i-Zinda Necropolis"
+        "name": "Shozi Zinda maqbarasi"
       },
       "geometry": {
         "type": "Point",
