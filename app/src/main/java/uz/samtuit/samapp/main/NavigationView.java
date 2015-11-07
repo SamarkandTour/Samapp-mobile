@@ -59,9 +59,9 @@ public class NavigationView extends View {
 
     private String getDistanceString() {
         if(mDistance > 1000) {
-            return Float.toString(mDistance / 10000) + " km"; // Calculate to the second decimal place
+            return Math.round(mDistance/1000 * 10.0) / 10.0 + " km"; // Round up to first decimal place
         } else {
-            return Integer.toString((int) mDistance) + " m";
+            return (int)mDistance + " m";
         }
     }
 

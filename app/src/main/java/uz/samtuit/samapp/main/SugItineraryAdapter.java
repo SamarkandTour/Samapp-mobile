@@ -7,20 +7,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+
+import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.sammap.main.R;
 
-public class SugItineraryAdapter extends ArrayAdapter<NewPoint> {
-    NewPoint[] data = null;
+public class SugItineraryAdapter extends ArrayAdapter<TourFeature> {
+    LinkedList<TourFeature> data = null;
     Context context;
     int layoutResId;
-    public SugItineraryAdapter(Context context, int layoutResId, NewPoint[] data)
+    int dataSize;
+
+    public SugItineraryAdapter(Context context, int layoutResId, LinkedList<TourFeature> data)
     {
-        super(context,layoutResId,data);
+        super(context,layoutResId, data);
+
         this.context = context;
         this.data = data;
         this.layoutResId = layoutResId;
+
+        dataSize = data.size();
     }
 
     @Override
@@ -33,35 +42,51 @@ public class SugItineraryAdapter extends ArrayAdapter<NewPoint> {
         TextView SI_NAME = (TextView)convertView.findViewById(R.id.si_name);
         TextView SI_WALK = (TextView)convertView.findViewById(R.id.si_walk);
         TextView SI_CAR = (TextView)convertView.findViewById(R.id.si_car);
-        TextView SI_BUS = (TextView)convertView.findViewById(R.id.si_bus);
         TextView SI_DISTANCE = (TextView)convertView.findViewById(R.id.it_distance);
         ImageView SI_IMAGE = (ImageView)convertView.findViewById(R.id.si_image);
-        NewPoint item = data[position];
-        double f_lat = Double.parseDouble(data[position].location.split(",")[0]), f_long = Double.parseDouble(data[position].location.split(",")[1]),l_lat,l_long;
-        if(position<=0)
-        {
-            l_lat = 0;
-            l_long = 0;
-        }
-        else
-        {
-            l_lat = Double.parseDouble(data[position - 1].location.split(",")[0]);
-            l_long = Float.parseFloat(data[position-1].location.split(",")[1]);
-        }
-        float distance[] = new float[3];
-        SI_NAME.setText(item.name);
 
+        SI_NAME.setText(data.get(position).getString("name"));
 
-        android.location.Location.distanceBetween(f_lat,f_long,l_lat,l_long,distance);
-        if(distance[0]<900)
-            SI_DISTANCE.setText((int)distance[0]+" m");
-        else
-            SI_DISTANCE.setText((int)((distance[0]+999)/1000)+" km");
-//      SI_DISTANCE.setText(distance(Float.parseFloat(data[position].location.split(",")[0]),Float.parseFloat(data[position].location.split(",")[0]),f_lat,f_long)+"");
-        SI_CAR.setText(getTimeToNext(distance[0], 5.555));
-        SI_BUS.setText(getTimeToNext(distance[0],2.554));
-        SI_WALK.setText(getTimeToNext(distance[0],0.5));
+        if (position != (dataSize - 1)) { // No need to calculate for last feature
+            double f_lat = data.get(position).getLatitude();
+            double f_long = data.get(position).getLongitude();
+            double l_lat = data.get(position + 1).getLatitude();
+            double l_long = data.get(position + 1).getLongitude();
+
+            float distance[] = new float[1];
+            android.location.Location.distanceBetween(f_lat, f_long, l_lat, l_long, distance);
+            if(distance[0] > 1000) {
+                SI_DISTANCE.setText(Math.round(distance[0]/1000 * 10.0) / 10.0 + " km"); // Round up to first decimal place
+            } else {
+                SI_DISTANCE.setText((int) distance[0] + " m");
+            }
+
+            SI_CAR.setText(getTimeToNext(distance[0], 5.555));
+            SI_WALK.setText(getTimeToNext(distance[0], 0.5));
+        } else { // And don't draw images regarding distance
+            convertView.findViewById(R.id.distanceLinearLayout).setVisibility(LinearLayout.GONE);
+        }
+
         return convertView;
+    }
+
+    @Override
+    public int getCount() {
+        return data.size();
+    }
+
+    // Add this method, not to recycle child view
+    @Override
+    public int getViewTypeCount() {
+
+        return getCount();
+    }
+
+    // Add this method, not to recycle child view
+    @Override
+    public int getItemViewType(int position) {
+
+        return position;
     }
 
     private String getTimeToNext(double dist, double vel)
