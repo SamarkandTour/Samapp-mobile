@@ -10,7 +10,7 @@ public class TourFeature {
     private String photo;
     private HashMap<String, String> stringHashMap; //name, desc, type, price, wifi, open, addr, tel, url
     private int rating;
-    private int spend;
+    private int day;
     private double longitude;
     private double latitude;
 
@@ -34,12 +34,12 @@ public class TourFeature {
         return rating;
     }
 
-    public void setSpen(int intVal) {
-        spend = intVal;
+    public void setDay(int intVal) {
+        day = intVal;
     }
 
-    public int getSpend() {
-        return spend;
+    public int getDay() {
+        return day;
     }
 
     public void setStringHashMap(String strKey, String strVal) {

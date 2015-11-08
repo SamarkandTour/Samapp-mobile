@@ -239,18 +239,30 @@ public class MainMap extends ActionBarActivity {
 
             @Override
             public boolean onItemLongPress(int i, Marker marker) {
-                // Indicate the marker as destination
+                if(SystemSetting.checkGPSStatus(MainMap.this) == 0) { // If GPS is OFF
+                    mGPSSettingDialog = new CustomDialog(MainMap.this,
+                            R.string.title_dialog_gps_setting,
+                            R.string.dialog_gps_setting,
+                            R.string.yes,
+                            R.string.no,
+                            yesClickListener,
+                            noClickListener);
+                    mGPSSettingDialog.show();
+                } else {
+                    // Indicate the marker as destination
 
-                Toast.makeText(MainMap.this, R.string.toast_navi_finding, Toast.LENGTH_SHORT).show();
-                animGPS = AnimationUtils.loadAnimation(MainMap.this, R.anim.scale);
-                mAnimMyPosImage.startAnimation(animGPS);
+                    Toast.makeText(MainMap.this, R.string.toast_navi_finding, Toast.LENGTH_SHORT).show();
 
-                mDestinationLoc.setLongitude(marker.getPosition().getLongitude());
-                mDestinationLoc.setLatitude(marker.getPosition().getLatitude());
+                    animGPS = AnimationUtils.loadAnimation(MainMap.this, R.anim.scale);
+                    mAnimMyPosImage.startAnimation(animGPS);
 
-                // When selected other destination, init a distance
-                mNavigationView.setDistance(0);
-                mNavigationView.invalidate();
+                    mDestinationLoc.setLongitude(marker.getPosition().getLongitude());
+                    mDestinationLoc.setLatitude(marker.getPosition().getLatitude());
+
+                    // When selected other destination, init a distance
+                    mNavigationView.setDistance(0);
+                    mNavigationView.invalidate();
+                }
                 return true;
             }
         }));

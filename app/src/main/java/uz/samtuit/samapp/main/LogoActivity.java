@@ -71,7 +71,7 @@ public class LogoActivity extends ActionBarActivity {
         globals.setFeatures(GlobalsClass.FeatureType.SHOPPING, Shops);
         TourFeatureList itineraryList = new TourFeatureList();
 
-        Itinerary = itineraryList.getItineraryFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/itinerary_mixed_1day.geojson");
+        Itinerary = itineraryList.getItineraryFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/itinerary_mixed_nightlife_onenhalf_day.geojson");
         Log.e("SIZE", Itinerary.size() + "");
         globals.setItineraryFeatures(Itinerary);
         TourFeatureList.ItineraryWriteToGeoJSONFile(this, Itinerary, ChoosenLang + "_MyItinerary.geojson");
