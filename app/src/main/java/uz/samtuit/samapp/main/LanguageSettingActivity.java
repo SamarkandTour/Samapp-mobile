@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -89,5 +90,10 @@ public class LanguageSettingActivity extends AppCompatActivity {
         Configuration config = new Configuration();
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, R.string.select_your_language, Toast.LENGTH_SHORT).show();
     }
 }

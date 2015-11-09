@@ -1,4 +1,4 @@
-package uz.samtuit.samapp.main;
+package uz.samtuit.samapp.util;
 
         import java.io.IOException;
         import java.io.StringReader;

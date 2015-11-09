@@ -7,10 +7,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
-
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
     int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
-
+    private final String SI_DAY = "Day";
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
     public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
@@ -26,22 +25,23 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment f;
         f = new SuggestedItineraryFragment();
+
         Bundle args = new Bundle();
-        args.putInt("Day", position);
-        Log.e("ELe"," ASSAEAS "+position);
+        args.putInt(SI_DAY, position);
+
+        Log.e("Suggested Itinerary", " ViewPager " + position);
         f.setArguments(args);
+
         return f;
     }
 
     // This method return the titles for the Tabs in the Tab Strip
-
     @Override
     public CharSequence getPageTitle(int position) {
         return Titles[position];
     }
 
     // This method return the Number of tabs for the tabs Strip
-
     @Override
     public int getCount() {
         return NumbOfTabs;

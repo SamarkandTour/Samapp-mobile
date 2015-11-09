@@ -173,6 +173,7 @@ public class TourFeatureList {
                     Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
                     return null;
                 }
+                itineraryElement.setDay(v.getProperties().getInt("day"));
                 itineraryList.add(itineraryElement);
             }
         } catch (IOException e) {
@@ -217,6 +218,7 @@ public class TourFeatureList {
                 properties.put("photo", v.getPhoto());
                 properties.put("rating", v.getRating());
                 properties.put("name", v.getString("name"));
+                properties.put("day", v.getDay());
                 properties.put("comment", "");
                 feature.setProperties(properties);
             } catch (JSONException e) {

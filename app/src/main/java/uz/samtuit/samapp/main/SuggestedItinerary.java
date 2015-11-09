@@ -1,42 +1,36 @@
 package uz.samtuit.samapp.main;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import uz.samtuit.samapp.util.GlobalsClass;
+import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.sammap.main.R;
 
 
 public class SuggestedItinerary extends ActionBarActivity {
+    public static ArrayList<LinkedList<TourFeature>> itineraryListArray;
 
-    Button btn;
-    LinearLayout ll;
-    FrameLayout fl;
-    TextView tv;
     Toolbar toolbar;
     ViewPager pager;
     ViewPagerAdapter vpadapter;
-    ListView lv;
-    SugItineraryAdapter adapter;
     SlidingTabLayout tabs;
+    private final static int maxDaysCount = 5;
+    private LinkedList<TourFeature> itineraryListFromGlobal;
+    private LinkedList<TourFeature> itineraryListDay;
 
-
-    private final static int daysCount = 2;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_itinerary_wizard);
-        CharSequence Titles[] = new CharSequence[daysCount];
-        for(int i = 0; i < daysCount; i++)
-            Titles[i] = "Day "+(i+1);
+
+        setContentView(R.layout.activity_itinerary);
         toolbar = (Toolbar)findViewById(R.id.si_toolbar);
         toolbar.setTitle("Suggested Itinerary");
         setSupportActionBar(toolbar);
@@ -50,7 +44,11 @@ public class SuggestedItinerary extends ActionBarActivity {
             }
         });
 
-        vpadapter = new ViewPagerAdapter(getSupportFragmentManager(),Titles,daysCount);
+        CharSequence Titles[] = new CharSequence[maxDaysCount];
+        for (int i = 0; i < maxDaysCount; i++) {
+            Titles[i] = "Day " + (i + 1);
+        }
+        vpadapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, maxDaysCount);
 
         pager = (ViewPager)findViewById(R.id.pager);
         pager.setAdapter(vpadapter);
@@ -65,7 +63,30 @@ public class SuggestedItinerary extends ActionBarActivity {
             }
         });
         tabs.setViewPager(pager);
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
+
+        InitItineraryListArray();
+    }
+
+    // Gather each feature in itineraryList by day
+    private void InitItineraryListArray() {
+        GlobalsClass globals = (GlobalsClass)this.getApplicationContext();
+        itineraryListFromGlobal = globals.getItineraryFeatures();
+        itineraryListArray = new ArrayList<LinkedList<TourFeature>>();
+
+        for (int i = 0; i < maxDaysCount; i++) {
+            itineraryListDay = new LinkedList<TourFeature>();
+            itineraryListArray.add(itineraryListDay);
+        }
+
+        for (TourFeature v : itineraryListFromGlobal) {
+            int index = v.getDay() - 1;
+
+            if (index != -1) {
+                itineraryListArray.get(index).add(v);
+            } else {
+                Toast.makeText(this, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override

@@ -10,13 +10,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please select language of the interface"
+        android:text="@string/select_your_language"
         android:id="@+id/textView2"
         android:layout_marginTop="150dp"
         android:textColor="@color/ColorPrimary"
         android:textSize="20sp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +34,10 @@
             android:layout_height="120dp"
             android:layout_margin="20dp"
             android:tag="en"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
         <ImageButton
             android:id="@+id/lang_uz"
             android:src="@drawable/ic_uzb_flag"
@@ -43,7 +47,8 @@
             android:layout_height="120dp"
             android:layout_margin="20dp"
             android:tag="uz"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:focusable="false" />
         <ImageButton
             android:id="@+id/lang_ru"
             android:src="@drawable/ic_rus_flag"

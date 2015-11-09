@@ -15,13 +15,13 @@ import java.util.LinkedList;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.sammap.main.R;
 
-public class SugItineraryAdapter extends ArrayAdapter<TourFeature> {
+public class SuggestedItineraryAdapter extends ArrayAdapter<TourFeature> {
     LinkedList<TourFeature> data = null;
     Context context;
     int layoutResId;
     int dataSize;
 
-    public SugItineraryAdapter(Context context, int layoutResId, LinkedList<TourFeature> data)
+    public SuggestedItineraryAdapter(Context context, int layoutResId, LinkedList<TourFeature> data)
     {
         super(context,layoutResId, data);
 
@@ -89,25 +89,29 @@ public class SugItineraryAdapter extends ArrayAdapter<TourFeature> {
         return position;
     }
 
-    private String getTimeToNext(double dist, double vel)
+    private String getTimeToNext(double dist, double speedFactor)
     {
         String s,sf[]={" min"," hr", " day"," week"," year"};
-        byte b=0;
-        int a = (int)(dist / vel)/60;
-        if(a>60){
-            a=(a+59)/60;
+        byte b = 0;
+        int a = (int)(dist / speedFactor) / 60;
+
+        if (a > 60) {
+            a = (a + 59) / 60;
             b++;
         }
-        if(a>24&&b>0)
-        {
-            a=(a+23)/24;
+
+        if (a > 24 && b > 0) {
+            a = (a + 23) / 24;
             b++;
         }
-        if(a>7&&b>1) {
+
+        if (a > 7 && b > 1) {
             a = (a + 6) / 7;
             b++;
         }
+
         s = a + sf[b];
+
         return s;
     }
 }
