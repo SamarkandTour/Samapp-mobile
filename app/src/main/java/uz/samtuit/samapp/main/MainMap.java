@@ -3,7 +3,13 @@ package uz.samtuit.samapp.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
@@ -15,6 +21,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -45,6 +52,7 @@ import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 
 import java.util.ArrayList;
 
+import uz.samtuit.samapp.util.BitmapWithText;
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.MenuItems;
@@ -210,17 +218,51 @@ public class MainMap extends ActionBarActivity {
         markerDrawables.add(FeatureType.SHOPPING.ordinal(), getResources().getDrawable(R.drawable.shop_marker));
     }
 
+    Drawable d = new Drawable() {
+
+       @Override
+       public void draw(Canvas canvas) {
+        Log.i("Test", "onDraw");
+        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.defpin);
+        Bitmap bitmap = drawable.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+
+        Paint textPaint = new Paint();
+        textPaint.setTextSize(8);
+        textPaint.setTypeface(Typeface.DEFAULT);
+        textPaint.setAntiAlias(true);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setColor(Color.BLACK);
+
+        canvas.drawText("1-1", 10, 10, textPaint);
+        canvas.drawBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), textPaint);
+
+       }
+
+       @Override
+       public int getOpacity() {
+        return 0;
+       }
+
+       @Override
+       public void setAlpha(int alpha) {}
+
+       @Override
+       public void setColorFilter(ColorFilter cf) {}
+    };
+
     private void drawItinerary() {
         ArrayList<Marker> markers = new ArrayList<Marker>();
 
         try {
             FeatureCollection features = TourFeatureList.loadGeoJSONFromExternalFilesDir(this, globalVariables.getApplicationLanguage() + "_MyItinerary.geojson");
             ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
+            int index = 0;
 
             for (Object obj : uiObjects) {
                 if (obj instanceof Marker) {
                     Marker m = (Marker)obj;
-                    //m.setIcon(new Icon(markerDrawables[i])); // Set Icons with order numbers
+                    BitmapWithText markerimg = new BitmapWithText(this, new Integer(++index).toString(), R.drawable.poi_bg);
+                    m.setMarker((Drawable)markerimg);
                     markers.add(m);
                     mapView.addMarker(m);
                 } else if (obj instanceof PathOverlay) {

@@ -20,7 +20,7 @@ import uz.samtuit.sammap.main.R;
 
 
 public class LogoActivity extends ActionBarActivity {
-    private boolean updateAvailable = true;
+    private boolean updateAvailable = false;
     private static ArrayList<TourFeature> Hotels;
     private static ArrayList<TourFeature> Shops;
     private static ArrayList<TourFeature> Attractions;
