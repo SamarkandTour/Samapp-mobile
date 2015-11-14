@@ -261,10 +261,11 @@ public class MainMap extends ActionBarActivity {
             for (Object obj : uiObjects) {
                 if (obj instanceof Marker) {
                     Marker m = (Marker)obj;
+                    m.setTitle(globalVariables.getItineraryFeatures().get(index).getString("name"));
                     BitmapWithText markerimg = new BitmapWithText(this, new Integer(++index).toString(), R.drawable.poi_bg);
                     m.setMarker((Drawable)markerimg);
-                    markers.add(m);
                     mapView.addMarker(m);
+                    markers.add(m); // Add for IconOverlay event
                 } else if (obj instanceof PathOverlay) {
                     mapView.getOverlays().add((PathOverlay) obj);
                 }
@@ -276,7 +277,7 @@ public class MainMap extends ActionBarActivity {
         mapView.addItemizedOverlay(new ItemizedIconOverlay(this, markers, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
             @Override
             public boolean onItemSingleTapUp(int i, Marker marker) {
-                return true;
+                return false;
             }
 
             @Override
