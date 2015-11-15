@@ -15,11 +15,11 @@
             android:layout_height="match_parent">
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp">
+                android:layout_height="310dp">
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/hotel_image" />
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -85,7 +85,8 @@
                                 android:background="@android:color/transparent"
                                 android:layout_marginRight="110dp"
                                 android:layout_gravity="right"
-                                android:id="@+id/wifi_button" />
+                                android:id="@+id/wifi_button"
+                                android:visibility="visible" />
                             <ImageButton
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
@@ -93,14 +94,16 @@
                                 android:background="@android:color/transparent"
                                 android:layout_marginRight="55dp"
                                 android:layout_gravity="right"
-                                android:id="@+id/call_button" />
+                                android:id="@+id/call_button"
+                                android:visibility="visible" />
                             <ImageButton
                                 android:background="@android:color/transparent"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="right"
                                 android:src="@drawable/ic_link_white_24dp"
-                                android:id="@+id/hotel_link_btn" />
+                                android:id="@+id/hotel_link_btn"
+                                android:visibility="visible" />
                         </FrameLayout>
                     </LinearLayout>
                 </LinearLayout>

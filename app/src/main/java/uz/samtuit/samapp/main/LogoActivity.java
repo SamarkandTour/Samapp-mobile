@@ -1,20 +1,14 @@
 package uz.samtuit.samapp.main;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -26,8 +20,7 @@ import uz.samtuit.sammap.main.R;
 
 
 public class LogoActivity extends ActionBarActivity {
-    boolean updateAvailable = true;
-    boolean AP_FIRSTLAUNCH = false;
+    private boolean updateAvailable = true;
     private static ArrayList<TourFeature> Hotels;
     private static ArrayList<TourFeature> Shops;
     private static ArrayList<TourFeature> Attractions;
@@ -37,37 +30,30 @@ public class LogoActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_logo);
 
-        SQLiteDatabase APP_DB = openOrCreateDatabase("SamTour_data",MODE_PRIVATE,null);
-        ConfigurePropertiesDB configurePropertiesDB = new ConfigurePropertiesDB(APP_DB);
-        configurePropertiesDB.RepairDB();
-        Cursor APP_PROPERTIES = APP_DB.rawQuery("Select `app_first_launch` from app_properties", null);
-        APP_PROPERTIES.moveToFirst();
-        AP_FIRSTLAUNCH = Boolean.parseBoolean(APP_PROPERTIES.getString(0));
-        //Log.e("FL",AP_FIRSTLAUNCH+"");
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Set language for UI
+                Intent first_launch_intent = new Intent(LogoActivity.this, LanguageSettingActivity.class);
+                startActivityForResult(first_launch_intent, 0);
+            }
+        }, 1000);
+    }
 
-        if(AP_FIRSTLAUNCH)
-        {
-            Intent first_launch_intent = new Intent(LogoActivity.this, FirstLaunch.class);
-            startActivity(first_launch_intent);
-        }
-
-        APP_PROPERTIES = APP_DB.rawQuery("Select * from app_properties",null);
-        APP_PROPERTIES.moveToFirst();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
         GlobalsClass globals = (GlobalsClass)getApplicationContext();
-        globals.setApplicationLanguage(APP_PROPERTIES.getString(2));
-        globals.setApplicationVersion(APP_PROPERTIES.getString(1));
-        globals.setApplicationName(APP_PROPERTIES.getString(0));
-        Log.e("LANG",globals.getApplicationLanguage());
 
+        // Since language selection has finished, Set features lists
         TourFeatureList tourFeatureList = new TourFeatureList();
         String ChoosenLang = globals.getApplicationLanguage();
+
         Hotels = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/hotels.geojson");
         globals.setFeatures(GlobalsClass.FeatureType.HOTEL, Hotels);
         Log.e("SIZE", Hotels.size() + "");
@@ -80,7 +66,7 @@ public class LogoActivity extends ActionBarActivity {
         globals.setFeatures(GlobalsClass.FeatureType.ATTRACTION, Attractions);
         Log.e("SIZE", Attractions.size() + "");
         tourFeatureList = new TourFeatureList();
-        Shops = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/shoppings.geojson");
+        Shops = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/shopping.geojson");
         Log.e("SIZE", Shops.size() + "");
         globals.setFeatures(GlobalsClass.FeatureType.SHOPPING, Shops);
         TourFeatureList itineraryList = new TourFeatureList();
@@ -90,69 +76,44 @@ public class LogoActivity extends ActionBarActivity {
         globals.setItineraryFeatures(Itinerary);
         TourFeatureList.ItineraryWriteToGeoJSONFile(this, Itinerary, ChoosenLang + "_MyItinerary.geojson");
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (updateAvailable && NetworkUtils.isNetworkAvailable(LogoActivity.this)) {
-                    mUpdateAvalDialog = new CustomDialog(LogoActivity.this,
-                            R.string.title_dialog_update_available,
-                            R.string.dialog_update_available,
-                            R.string.yes,
-                            R.string.no,
-                            yesClickListener,
-                            noClickListener);
-                    mUpdateAvalDialog.show();
-                } else {
-                    Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
-                    startActivity(mainMap);
-                }
-            }
-        }, 3000);
-    }
-
-    public static String readableFileSize(long size) {
-        if(size<=0) return "0";
-        final String[] units = new String[] {"B","KB","MB","GB","TB"};
-        int digitGroups = (int)(Math.log10(size)/Math.log10(1024));
-        return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups))+" "+units[digitGroups];
-    }
-
-    public boolean isExternalWritable(){
-        String state = Environment.getExternalStorageState();
-        if(Environment.MEDIA_MOUNTED.equals(state))
-        return true;
-        return false;
-    }
-    public boolean isExternalReadable(){
-        String state = Environment.getExternalStorageState();
-        if(Environment.MEDIA_MOUNTED.equals(state)||Environment.MEDIA_MOUNTED_READ_ONLY.equals(state))
-            return true;
-        return false;
+        // Check update available
+        if (updateAvailable && NetworkUtils.isNetworkAvailable(LogoActivity.this)) {
+            mUpdateAvalDialog = new CustomDialog(LogoActivity.this,
+                    R.string.title_dialog_update_available,
+                    R.string.dialog_update_available,
+                    R.string.yes,
+                    R.string.no,
+                    yesClickListener,
+                    noClickListener);
+            mUpdateAvalDialog.show();
+        } else {
+            Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
+            startActivity(mainMap);
+            finish();
+        }
     }
 
     private View.OnClickListener yesClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mUpdateAvalDialog.dismiss();
+        mUpdateAvalDialog.dismiss();
 
-            // Start to download at Background
+        // Start to download at Background
 
-            Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("Type", "itinerary");
-            mainMap.putExtras(bundle);
-            startActivity(mainMap);
+        Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
+        startActivity(mainMap);
+        finish();
         }
     };
 
     private View.OnClickListener noClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mUpdateAvalDialog.dismiss();
+        mUpdateAvalDialog.dismiss();
 
-            Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
-            startActivity(mainMap);
+        Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
+        startActivity(mainMap);
+        finish();
         }
     };
 
