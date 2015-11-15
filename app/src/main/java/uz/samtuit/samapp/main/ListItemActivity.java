@@ -63,11 +63,12 @@ public class ListItemActivity extends ActionBarActivity {
             }
         });
         //end ActionBar Setting
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/segoeui.ttf");
 
         imageView = (ImageView)findViewById(R.id.hotel_image);
         address = (TextView)findViewById(R.id.hotel_address);
         address.setText(extras.getString("addr"));
+        address.setTypeface(tf);
         link = (ImageButton)findViewById(R.id.hotel_link_btn);
 
         link.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +126,7 @@ public class ListItemActivity extends ActionBarActivity {
             star1.setImageResource(R.drawable.ic_star_rate_white_18dp);
 
         description.setText(extras.getString("desc"));
+        description.setTypeface(tf);
         extras.clear();
     }
 

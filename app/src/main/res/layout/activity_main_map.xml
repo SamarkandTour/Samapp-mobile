@@ -10,7 +10,6 @@ android:gravity="bottom"
 <com.mapbox.mapboxsdk.views.MapView
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
-    android:background="@drawable/hotel_new"
     android:id="@+id/mapview" />
     <LinearLayout
         android:layout_width="match_parent"
