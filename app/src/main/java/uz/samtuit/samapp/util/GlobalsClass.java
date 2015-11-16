@@ -12,6 +12,28 @@ import java.util.LinkedList;
  * Globally shared valuables
  */
 public class GlobalsClass extends Application {
+    // Don't change the order of the file, it's synced with FeatureType
+    static final public String[] GeoJSONFileName = {
+            "_hotels.geojson",
+            "_foodndrinks.geojson",
+            "_attractions.geojson",
+            "_shopping.geojson",
+            "_MyItinerary.geojson"
+    };
+
+    public enum FeatureType {
+        HOTEL(0),
+        FOODNDRINK(1),
+        ATTRACTION(2),
+        SHOPPING(3),
+        ITINERARY(4);
+
+        private int num;
+        FeatureType(int arg){
+            this.num = arg;
+        }
+    };
+
     private String AP_NAME;
     private String AP_LANG;
     private ArrayList<TourFeature> Hotels;
@@ -20,18 +42,6 @@ public class GlobalsClass extends Application {
     private ArrayList<TourFeature> Attractions;
     private LinkedList<TourFeature> Itinerary;
     private String AP_VER;
-
-    public enum FeatureType {
-        HOTEL(0),
-        FOODNDRINK(1),
-        ATTRACTION(2),
-        SHOPPING(3);
-
-        private int num;
-        FeatureType(int arg){
-            this.num = arg;
-        }
-    };
 
     public String getApplicationName() {
         return AP_NAME;

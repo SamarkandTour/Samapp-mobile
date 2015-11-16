@@ -53,15 +53,6 @@ android:gravity="bottom"
             android:id="@+id/search_text"
             android:layout_marginRight="60dp" />
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="-60dp"
-            android:onClick="Search"
-            android:src="@drawable/ic_s_search"
-            android:scaleType="centerInside"
-            android:background="@android:color/transparent"/>
-
     </LinearLayout>
 <SlidingDrawer
     android:layout_width="fill_parent"

@@ -16,9 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
@@ -42,7 +40,7 @@ public class TourFeatureList {
 
     public ArrayList<TourFeature> getTourFeatureList(Context context, String fileName) {
         try {
-            FeatureCollection featureCollection = DataLoadingUtils.loadGeoJSONFromAssets(context, fileName);
+            FeatureCollection featureCollection = loadGeoJSONFromExternalFilesDir(context, fileName);
             List<Feature> featuresList = featureCollection.getFeatures();
             Log.e("SIZE",featuresList.size()+"");
 
@@ -163,7 +161,7 @@ public class TourFeatureList {
 
     public LinkedList<TourFeature> getItineraryFeatureList(Context context, String fileName) {
         try {
-            FeatureCollection featureCollection = DataLoadingUtils.loadGeoJSONFromAssets(context, fileName);
+            FeatureCollection featureCollection = loadGeoJSONFromExternalFilesDir(context, fileName);
             List<Feature> featuresList = featureCollection.getFeatures();
             Log.e("SIZE", featuresList.size() + "");
 
@@ -191,20 +189,6 @@ public class TourFeatureList {
         return itineraryList;
     }
 
-    private static boolean fileWrite(Context context, String fileName, String content) {
-        File file = new File(context.getExternalFilesDir(null), fileName);
-
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(content.getBytes());
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return  true;
-    }
-
     public static boolean ItineraryWriteToGeoJSONFile(Context context, LinkedList<TourFeature> itineraryList, String fileName) {
         FeatureCollection featureCollection = new FeatureCollection();
         for (TourFeature v : itineraryList) {
@@ -229,9 +213,25 @@ public class TourFeatureList {
 
         try {
             String ItineraryGeoJSON = featureCollection.toJSON().toString();
-            fileWrite(context, fileName, ItineraryGeoJSON);
+            FileUtil.fileWrite(context, fileName, ItineraryGeoJSON);
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    // All downloaded GeoJSON files from server will be located in ExternalDir
+    // So working directory is ExternalDir, all files in the asset should be copied to ExternalDir at first launch
+    public static boolean CopyLocalGeoJSONFilesToExternalDir(Context context) {
+        try {
+            String[] filelist = context.getAssets().list("data"); // Files in the assets/data
+            if (!FileUtil.CopyFilesFromAssetToExternalDir(context, filelist)) {
+                return false;
+            }
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

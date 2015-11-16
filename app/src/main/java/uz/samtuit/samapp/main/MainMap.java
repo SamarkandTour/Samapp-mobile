@@ -3,13 +3,7 @@ package uz.samtuit.samapp.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
@@ -21,7 +15,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -94,7 +87,6 @@ public class MainMap extends ActionBarActivity {
 
         globalVariables = (GlobalsClass)getApplicationContext();
 
-        getBaseContext().setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mapView = (MapView)findViewById(R.id.mapview);
@@ -114,7 +106,7 @@ public class MainMap extends ActionBarActivity {
         drawBottomMenuIcons(); //Generate bottom Menu items
 
         setMarkerIcons();
-        drawItinerary();
+        drawFeatures(FeatureType.ITINERARY);
 
         handleExtraRequest();
     }
@@ -152,19 +144,19 @@ public class MainMap extends ActionBarActivity {
     }
 
     private void drawBottomMenuIcons() {
-        MenuItems item = new MenuItems(5,"About City","drawable/ic_s_about_city_h", MenuItems.MainMenu.ITINERARYWIZARD);
+        MenuItems item = new MenuItems(0,"Itinerary Wizard","drawable/ic_s_about_city_h", MenuItems.MainMenu.ITINERARYWIZARD);
         Items.add(item);
-        item = new MenuItems(6,"Suggested Itinerary","drawable/itnbtn_selector", MenuItems.MainMenu.ITINERARY);
+        item = new MenuItems(1,"Suggested Itinerary","drawable/itnbtn_selector", MenuItems.MainMenu.ITINERARY);
         Items.add(item);
-        item = new MenuItems(1,"Hotels","drawable/ic_s_hotel_h", MenuItems.MainMenu.HOTEL);
+        item = new MenuItems(2,"Hotels","drawable/ic_s_hotel_h", MenuItems.MainMenu.HOTEL);
         Items.add(item);
-        item = new MenuItems(2,"Food & Drink","drawable/ic_s_food_and_drink_h", MenuItems.MainMenu.FOODNDRINK);
+        item = new MenuItems(3,"Food & Drink","drawable/ic_s_food_and_drink_h", MenuItems.MainMenu.FOODNDRINK);
         Items.add(item);
-        item = new MenuItems(3,"Attractions","drawable/ic_s_attractions_h", MenuItems.MainMenu.ATTRACTION);
+        item = new MenuItems(4,"Attractions","drawable/ic_s_attractions_h", MenuItems.MainMenu.ATTRACTION);
         Items.add(item);
-        item = new MenuItems(4,"Shopping","drawable/ic_s_shop_h", MenuItems.MainMenu.SHOPPING);
+        item = new MenuItems(5,"Shopping","drawable/ic_s_shop_h", MenuItems.MainMenu.SHOPPING);
         Items.add(item);
-        item = new MenuItems(7,"About This App","drawable/setting", MenuItems.MainMenu.SETTING);
+        item = new MenuItems(6,"About This App","drawable/setting", MenuItems.MainMenu.SETTING);
         Items.add(item);
         btn = (ImageView)findViewById(R.id.slideButton);
         slidingDrawer = (SlidingDrawer)findViewById(R.id.slidingDrawer);
@@ -199,7 +191,7 @@ public class MainMap extends ActionBarActivity {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent();
-                            intent = GetIntent(Items.get(index).mainMenu);
+                            intent = GetActivityName(Items.get(index).mainMenu);
                             intent.putExtra("action", Items.get(index).mainMenu.toString());
                             startActivity(intent);
                         }
@@ -218,54 +210,24 @@ public class MainMap extends ActionBarActivity {
         markerDrawables.add(FeatureType.SHOPPING.ordinal(), getResources().getDrawable(R.drawable.shop_marker));
     }
 
-    Drawable d = new Drawable() {
-
-       @Override
-       public void draw(Canvas canvas) {
-        Log.i("Test", "onDraw");
-        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.defpin);
-        Bitmap bitmap = drawable.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
-
-        Paint textPaint = new Paint();
-        textPaint.setTextSize(8);
-        textPaint.setTypeface(Typeface.DEFAULT);
-        textPaint.setAntiAlias(true);
-        textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setColor(Color.BLACK);
-
-        canvas.drawText("1-1", 10, 10, textPaint);
-        canvas.drawBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), textPaint);
-
-       }
-
-       @Override
-       public int getOpacity() {
-        return 0;
-       }
-
-       @Override
-       public void setAlpha(int alpha) {}
-
-       @Override
-       public void setColorFilter(ColorFilter cf) {}
-    };
-
-    private void drawItinerary() {
+    private void drawFeatures(FeatureType featureType) {
         ArrayList<Marker> markers = new ArrayList<Marker>();
+        FeatureCollection features = null;
+        Marker m = null;
+        int index = 0;
+        String path = GlobalsClass.GeoJSONFileName[featureType.ordinal()];
 
         try {
-            FeatureCollection features = TourFeatureList.loadGeoJSONFromExternalFilesDir(this, globalVariables.getApplicationLanguage() + "_MyItinerary.geojson");
+            features = TourFeatureList.loadGeoJSONFromExternalFilesDir(this, globalVariables.getApplicationLanguage() + path);
             ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
-            int index = 0;
-
             for (Object obj : uiObjects) {
                 if (obj instanceof Marker) {
-                    Marker m = (Marker)obj;
+                    m = (Marker)obj;
                     m.setTitle(globalVariables.getItineraryFeatures().get(index).getString("name"));
                     BitmapWithText markerimg = new BitmapWithText(this, new Integer(++index).toString(), R.drawable.poi_bg);
-                    m.setMarker((Drawable)markerimg);
+                    m.setMarker((Drawable) markerimg);
                     mapView.addMarker(m);
-                    markers.add(m); // Add for IconOverlay event
+                    markers.add(m); // Add for IconOverlay event handling
                 } else if (obj instanceof PathOverlay) {
                     mapView.getOverlays().add((PathOverlay) obj);
                 }
@@ -446,16 +408,16 @@ public class MainMap extends ActionBarActivity {
         }
     }
 
-    private Intent GetIntent(MenuItems.MainMenu mainMenu)
+    private Intent GetActivityName(MenuItems.MainMenu mainMenu)
     {
         Intent intent = null;
         switch (mainMenu)
         {
             case ITINERARYWIZARD:
-                intent = new Intent(MainMap.this, AboutCityActivity.class);
+                intent = new Intent(MainMap.this, DaySelectWizardActivity.class);
                 break;
             case ITINERARY:
-                intent = new Intent(MainMap.this, SuggestedItinerary.class);
+                intent = new Intent(MainMap.this, SuggestedItineraryActivity.class);
                 break;
             case HOTEL:
             case FOODNDRINK:
@@ -474,7 +436,7 @@ public class MainMap extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
         if (extras!=null) {
             switch (extras.getString("type")){
-                case "itinerary":
+                case "features":
                     break;
 
                 case "feature":
