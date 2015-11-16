@@ -10,13 +10,14 @@ public class MenuItems {
     public MainMenu mainMenu;
 
     public enum MainMenu {
-        HOTEL(0),
-        FOODNDRINK(1),
-        ATTRACTION(2),
-        SHOPPING(3),
-        ITINERARYWIZARD(4),
-        ITINERARY(5),
-        SETTING(6);
+        ITINERARYWIZARD(0),
+        ITINERARY(1),
+        HOTEL(2),
+        FOODNDRINK(3),
+        ATTRACTION(4),
+        SHOPPING(5),
+        TRAINTIME(6),
+        SETTING(7);
 
         private int num;
         MainMenu(int arg){
@@ -27,7 +28,7 @@ public class MenuItems {
     public MenuItems(int id, String title, String imageSrc, MainMenu mainMenu)
     {
         this.id = id;
-        this.title =title;
+        this.title = title;
         this.imageSrc = imageSrc;
         this.mainMenu = mainMenu;
     }

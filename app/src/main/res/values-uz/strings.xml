@@ -2,29 +2,16 @@
     <string name="app_name">SamTour</string>
     <string name="action_settings">Settings</string>
     <string name="download">Yuklab olish</string>
-    <string name="title_activity_main_page">Bosh sahifa</string>
-    <string name="title_activity_main_map">Xarita</string>
-    <string name="title_activity_main_menu">Menyu</string>
-    <string name="title_activity_splash">Splash</string>
-    <string name="title_activity_hotels"><Mexmonxonalar></Mexmonxonalar></string>
-    <string name="title_activity_about_city">Shahar haqida</string>
-    <string name="title_activity_attractions">Ziyoratgohlar</string>
-    <string name="title_activity_food_and_drink">Ovqatlanish</string>
-    <string name="title_activity_shopping">Шоппинг</string>
     <string name="hotels">Mexmonxonalar</string>
     <string name="attractions">Ziyoratgohlar</string>
     <string name="foodanddrinks">Еда и напитки</string>
     <string name="shopping">Шоппинг</string>
-    <string name="title_activity_hotel">HotelActivity</string>
-    <string name="title_activity_about_app">AboutAppActivity</string>
-    <string name="title_activity_my_schedule">MyScheduleActivity</string>
-    <string name="title_activity_itinerary_wizard">ItineraryWizardActivity</string>
-    <string name="title_activity_trains_time_table">TrainsTimeTableActivity</string>
-    <string name="title_activity_tashkent_samarkand">TashkentSamarkandActivity</string>
+    <string name="title_itinerary_wizard">Itinerary Wizard</string>
     <string name="title_dialog_gps_setting">Location Based Service Notice</string>
     <string name="dialog_gps_setting">To guide you to the destination from your current position, please turn on the GPS.\nDo you want to turn on?</string>
     <string name="yes">Yes</string>
     <string name="No">No</string>
+    <string name="next">Next</string>
     <string name="Err_wrong_geojson_file">Error! Malformed JSON in the geojson file. Go to the setting, Try re-download</string>
     <string name="Err_file_not_found">Error! File not found. Go to the setting, Try re-download</string>
     <string name="Err_wrong_itinerary_file">Error! wrong feature name in the itinerary file</string>
@@ -33,4 +20,5 @@
     <string name="toast_select_destination">"Please select the destination by long press on the marker"</string>
     <string name="select_your_language">"Please select your language"</string>
     <string name="toast_navi_finding">"Start to find a distance and a direction"</string>
+    <string name="wizard_day_select">"How many days do you plan to stay in Samarkand?"</string>
 </resources>

@@ -61,7 +61,7 @@ public class SuggestedItineraryFragment extends Fragment implements AbsListView.
     }
 
     private void getData(int day) {
-        data = SuggestedItinerary.itineraryListArray.get(day);
+        data = SuggestedItineraryActivity.itineraryListArray.get(day);
     }
 
     @Override

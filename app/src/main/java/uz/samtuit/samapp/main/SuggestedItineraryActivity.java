@@ -15,7 +15,7 @@ import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.sammap.main.R;
 
 
-public class SuggestedItinerary extends ActionBarActivity {
+public class SuggestedItineraryActivity extends ActionBarActivity {
     public static ArrayList<LinkedList<TourFeature>> itineraryListArray;
 
     Toolbar toolbar;

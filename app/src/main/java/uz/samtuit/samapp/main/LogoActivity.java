@@ -27,6 +27,7 @@ public class LogoActivity extends ActionBarActivity {
     private static ArrayList<TourFeature> Foods;
     private static LinkedList<TourFeature> Itinerary;
     private CustomDialog mUpdateAvalDialog;
+    private String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,24 +55,31 @@ public class LogoActivity extends ActionBarActivity {
         TourFeatureList tourFeatureList = new TourFeatureList();
         String ChoosenLang = globals.getApplicationLanguage();
 
-        Hotels = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/hotels.geojson");
+        path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.HOTEL.ordinal()];
+        Hotels = tourFeatureList.getTourFeatureList(getApplicationContext(), ChoosenLang + path);
         globals.setFeatures(GlobalsClass.FeatureType.HOTEL, Hotels);
         Log.e("SIZE", Hotels.size() + "");
+
+        path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.FOODNDRINK.ordinal()];
         tourFeatureList = new TourFeatureList();
-        Foods = tourFeatureList.getTourFeatureList(getApplicationContext(),"data/" + ChoosenLang + "/foodndrinks.geojson");
+        Foods = tourFeatureList.getTourFeatureList(getApplicationContext(), ChoosenLang + path);
         globals.setFeatures(GlobalsClass.FeatureType.FOODNDRINK, Foods);
         Log.e("SIZE", Foods.size() + "");
+
+        path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.ATTRACTION.ordinal()];
         tourFeatureList = new TourFeatureList();
-        Attractions = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/attractions.geojson");
+        Attractions = tourFeatureList.getTourFeatureList(getApplicationContext(), ChoosenLang + path);
         globals.setFeatures(GlobalsClass.FeatureType.ATTRACTION, Attractions);
         Log.e("SIZE", Attractions.size() + "");
+
+        path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.SHOPPING.ordinal()];
         tourFeatureList = new TourFeatureList();
-        Shops = tourFeatureList.getTourFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/shopping.geojson");
+        Shops = tourFeatureList.getTourFeatureList(getApplicationContext(), ChoosenLang + path);
         Log.e("SIZE", Shops.size() + "");
         globals.setFeatures(GlobalsClass.FeatureType.SHOPPING, Shops);
         TourFeatureList itineraryList = new TourFeatureList();
 
-        Itinerary = itineraryList.getItineraryFeatureList(getApplicationContext(), "data/" + ChoosenLang + "/itinerary_mixed_nightlife_onenhalf_day.geojson");
+        Itinerary = itineraryList.getItineraryFeatureList(getApplicationContext(), ChoosenLang + "_itinerary_mixed_nightlife_onenhalf_day.geojson");
         Log.e("SIZE", Itinerary.size() + "");
         globals.setItineraryFeatures(Itinerary);
         TourFeatureList.ItineraryWriteToGeoJSONFile(this, Itinerary, ChoosenLang + "_MyItinerary.geojson");

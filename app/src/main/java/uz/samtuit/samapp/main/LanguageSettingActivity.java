@@ -14,6 +14,7 @@ import java.util.Locale;
 
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.SystemSetting;
+import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.sammap.main.R;
 
 public class LanguageSettingActivity extends AppCompatActivity {
@@ -43,6 +44,13 @@ public class LanguageSettingActivity extends AppCompatActivity {
             globals.setApplicationName(APP_PROPERTIES.getString(0));
             globals.setApplicationVersion(APP_PROPERTIES.getString(1));
 
+            // All downloaded GeoJSON files from server will be located in ExternalDir
+            // So working directory is ExternalDir, all files in the asset should be copied to ExternalDir at first launch
+            if (TourFeatureList.CopyLocalGeoJSONFilesToExternalDir(this)) {
+                Toast.makeText(this, R.string.Err_file_not_found, Toast.LENGTH_SHORT).show();
+            }
+
+            // IF the system locale is same as supported language, set as it
             String systemLocale = SystemSetting.checkSystemLocale();
             if (systemLocale.equals("en") || systemLocale.equals("uz") || systemLocale.equals("ru")) {
                 APP_DB.execSQL("UPDATE app_properties SET `app_lang`='" + systemLocale + "', `app_first_launch`='false' WHERE `app_name`='Samapp';");

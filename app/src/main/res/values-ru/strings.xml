@@ -2,28 +2,15 @@
     <string name="app_name">SamTour</string>
     <string name="action_settings">Settings</string>
     <string name="download">Скачать</string>
-    <string name="title_activity_main_page">Главная</string>
-    <string name="title_activity_main_map">Карта</string>
-    <string name="title_activity_main_menu">Меню</string>
-    <string name="title_activity_splash">Сплеш</string>
-    <string name="title_activity_hotels">Отели</string>
-    <string name="title_activity_about_city">О городе</string>
-    <string name="title_activity_attractions">Достопримечательности</string>
-    <string name="title_activity_food_and_drink">Еда</string>
-    <string name="title_activity_shopping">Шоппинг</string>
     <string name="hotels">Отели</string>
     <string name="attractions">Достопримечательности</string>
     <string name="foodanddrinks">Еда и напитки</string>
     <string name="shopping">Шоппинг</string>
-    <string name="title_activity_hotel">HotelActivity</string>
-    <string name="title_activity_about_app">AboutAppActivity</string>
-    <string name="title_activity_my_schedule">MyScheduleActivity</string>
-    <string name="title_activity_itinerary_wizard">ItineraryWizardActivity</string>
-    <string name="title_activity_trains_time_table">TrainsTimeTableActivity</string>
-    <string name="title_activity_tashkent_samarkand">TashkentSamarkandActivity</string>
+    <string name="title_itinerary_wizard">Itinerary Wizard</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="skip">Пропустить</string>
+    <string name="next">Next</string>
     <string name="reviews">Отзв</string>
     <string name="update_alert">Доступно новое обновление. Хотите обновить?</string>
     <string name="address">Адресс</string>
@@ -37,4 +24,5 @@
     <string name="toast_select_destination">"Please select the destination by long press on the marker"</string>
     <string name="select_your_language">"Please select your language"</string>
     <string name="toast_navi_finding">"Start to find a distance and a direction"</string>
+    <string name="wizard_day_select">"How many days do you plan to stay in Samarkand?"</string>
 </resources>
