@@ -26,7 +26,7 @@ public class BitmapWithText extends BitmapDrawable {
         this.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         this.setTargetDensity(metrics);
-        density = metrics.density;
+        density = metrics.density; //mdpi=1, hdpi=1.5, xhdpi=2, xxhdpi=2.5
         textPaint = new Paint();
     }
 

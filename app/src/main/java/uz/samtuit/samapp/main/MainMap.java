@@ -154,7 +154,7 @@ public class MainMap extends ActionBarActivity {
     private void drawBottomMenuIcons() {
         MenuItems item = new MenuItems(5,"About City","drawable/ic_s_about_city_h", MenuItems.MainMenu.ITINERARYWIZARD);
         Items.add(item);
-        item = new MenuItems(6,"Suggested Itinerary","drawable/my_schedule_h", MenuItems.MainMenu.ITINERARY);
+        item = new MenuItems(6,"Suggested Itinerary","drawable/itnbtn_selector", MenuItems.MainMenu.ITINERARY);
         Items.add(item);
         item = new MenuItems(1,"Hotels","drawable/ic_s_hotel_h", MenuItems.MainMenu.HOTEL);
         Items.add(item);
@@ -164,7 +164,7 @@ public class MainMap extends ActionBarActivity {
         Items.add(item);
         item = new MenuItems(4,"Shopping","drawable/ic_s_shop_h", MenuItems.MainMenu.SHOPPING);
         Items.add(item);
-        item = new MenuItems(7,"About This App","drawable/ic_s_about_h", MenuItems.MainMenu.SETTING);
+        item = new MenuItems(7,"About This App","drawable/setting", MenuItems.MainMenu.SETTING);
         Items.add(item);
         btn = (ImageView)findViewById(R.id.slideButton);
         slidingDrawer = (SlidingDrawer)findViewById(R.id.slidingDrawer);
