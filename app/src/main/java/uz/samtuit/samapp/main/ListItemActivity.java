@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import uz.samtuit.sammap.main.R;
 
 
@@ -34,7 +41,22 @@ public class ListItemActivity extends ActionBarActivity {
     private RelativeLayout relLayout;
     private ImageView imageView;
     private ImageButton call,link;
+    private Bitmap decodedImage;
+    private String encodedImage = null;
     private String featureType;
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +85,6 @@ public class ListItemActivity extends ActionBarActivity {
             }
         });
         //end ActionBar Setting
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
 
         imageView = (ImageView)findViewById(R.id.hotel_image);
         address = (TextView)findViewById(R.id.hotel_address);
@@ -74,9 +95,16 @@ public class ListItemActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 String url = extras.getString("url");
-                Log.e("URL ", url);
-                if (!url.startsWith("https://") && !url.startsWith("http://")){
-                    url = "http://" + url;
+                try {
+                    if (!url.startsWith("https://") && !url.startsWith("http://")){
+                        url = "http://" + url;
+                    }
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }catch (Exception ex)
+                {
+                    ex.printStackTrace();
                 }
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
@@ -106,10 +134,11 @@ public class ListItemActivity extends ActionBarActivity {
             }
         });
 
-        byte[] decodedString = Base64.decode(extras.getString("photo"), Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        Drawable dr = new BitmapDrawable(decodedByte);
-        imageView.setImageDrawable(dr);
+
+        LoadImageFromExternalStorage loadImageFromExternalStorage = new LoadImageFromExternalStorage();
+        loadImageFromExternalStorage.execute(extras.getString("name"));
+
+
         titleSmall.setText(extras.getString("name"));
         int Rating = extras.getInt("rating");
         Log.e("Rating",Rating+"");
@@ -131,7 +160,7 @@ public class ListItemActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_food, menu);
+        getMenuInflater().inflate(R.menu.menu_list_item, menu);
         return true;
     }
 
@@ -169,6 +198,38 @@ public class ListItemActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class LoadImageFromExternalStorage extends AsyncTask<String,String,Void>{
+
+        @Override
+        protected Void doInBackground(String... params) {
+            BufferedReader input = null;
+            File file = null;
+            try {
+                file = new File(getExternalFilesDir(null), params[0]); // Pass getFilesDir() and "MyFile" to read file
+                input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                String line;
+                StringBuffer buffer = new StringBuffer();
+                while ((line = input.readLine()) != null) {
+                    buffer.append(line);
+                }
+                publishProgress(buffer.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            encodedImage = values[0];
+            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Drawable dr = new BitmapDrawable(decodedByte);
+            imageView.setImageDrawable(dr);
+        }
     }
 
 }

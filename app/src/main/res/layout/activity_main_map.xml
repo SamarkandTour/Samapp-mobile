@@ -7,7 +7,7 @@ android:layout_height="fill_parent"
 android:gravity="bottom"
     android:id="@+id/mainLayout">
 
-<com.mapbox.mapboxsdk.views.MapView
+    <com.mapbox.mapboxsdk.views.MapView
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
     android:id="@+id/mapview" />
@@ -103,5 +103,13 @@ android:gravity="bottom"
         </HorizontalScrollView>
     </LinearLayout>
 </SlidingDrawer>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/waitProgressBar"
+        android:layout_gravity="center"
+        android:visibility="visible" />
 
 </FrameLayout>

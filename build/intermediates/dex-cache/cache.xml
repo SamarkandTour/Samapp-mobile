@@ -2,102 +2,102 @@
 <items version="2" >
 
     <item
-        jar="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/exploded-aar/com.mapbox.mapboxsdk/mapbox-android-sdk/0.7.4/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4bd64ebaab7edb0bccbb031dbdb7b1a7239d58f7">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/classes-c7249403c7039d3236c4b22994a4e266ccd86b1a.jar" />
-    </item>
-    <item
-        jar="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/classes-2b5a0a954a106e8627215fd68e7225d2d6838885.jar" />
-    </item>
-    <item
-        jar="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/classes-8464652be055051562e209060fa96a7c99a7dad2.jar" />
-    </item>
-    <item
-        jar="/Users/MBP/.gradle/caches/modules-2/files-2.1/com.vividsolutions/jts/1.13/3ccfb9b60f04d71add996a666ceb8902904fd805/jts-1.13.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="3ccfb9b60f04d71add996a666ceb8902904fd805">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/jts-1.13-1d8d909b0fd32804f618b964207f03ecea2603c4.jar" />
-    </item>
-    <item
-        jar="/Users/MBP/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-e302b8e2d43a5dac6ecdc5d85bd56be1f20856fd.jar" />
-    </item>
-    <item
-        jar="/Users/MBP/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.4.0/40340c0748190fe897baf7bffbc1b282734294e5/okhttp-2.4.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/okhttp-2.4.0-47b79f325dc20691cd0a62d258e472304a391443.jar" />
-    </item>
-    <item
-        jar="/Users/MBP/.gradle/caches/modules-2/files-2.1/com.jakewharton/disklrucache/2.0.2/93b399470e72c0bc8cb52379943b63c9aa586cd8/disklrucache-2.0.2.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="93b399470e72c0bc8cb52379943b63c9aa586cd8">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/disklrucache-2.0.2-17a1f2c0b26e29448ac4c39d03b400bae39163ef.jar" />
-    </item>
-    <item
-        jar="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/exploded-aar/com.balysv/material-ripple/1.0.2/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="c733e9d1b065d940a08f2fca0ff920dfc08d94cc">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/classes-961133e269613e12764dc677e8beb12666b2785d.jar" />
-    </item>
-    <item
-        jar="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jar="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\libs\internal_impl-22.2.0.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-de778640f49d998b0b183732283f5f5977600dfc.jar" />
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-184973aeb0773e126e72a08e47adf6ebef0f5d96.jar" />
     </item>
     <item
-        jar="/Users/MBP/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp-urlconnection/2.4.0/a0c195f14cefc7597e0bebf22c3e7b43920dcf4/okhttp-urlconnection-2.4.0.jar"
+        jar="C:\Users\Bakhrom Rakhmonov\.gradle\caches\modules-2\files-2.1\com.vividsolutions\jts\1.13\3ccfb9b60f04d71add996a666ceb8902904fd805\jts-1.13.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3ccfb9b60f04d71add996a666ceb8902904fd805">
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\jts-1.13-8d4b556267a73b23a8f20bbb8e3b52025d21cbab.jar" />
+    </item>
+    <item
+        jar="C:\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-5cd057de5e86ba20f0cd9f4cd4304521dbc24683.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakhrom Rakhmonov\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp-urlconnection\2.4.0\a0c195f14cefc7597e0bebf22c3e7b43920dcf4\okhttp-urlconnection-2.4.0.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="0a0c195f14cefc7597e0bebf22c3e7b43920dcf4">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-2.4.0-3190c9b2d2abbc9515725656a39f2e4e4b8c0415.jar" />
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\okhttp-urlconnection-2.4.0-08e681d26eb1c46430e097e150c3a748e47e92c9.jar" />
     </item>
     <item
-        jar="/Users/MBP/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.4.0/5b72bf48563ea8410e650de14aa33ff69a3e8c35/okio-1.4.0.jar"
+        jar="C:\Users\Bakhrom Rakhmonov\.gradle\caches\modules-2\files-2.1\com.jakewharton\disklrucache\2.0.2\93b399470e72c0bc8cb52379943b63c9aa586cd8\disklrucache-2.0.2.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/okio-1.4.0-1a8da610c72c602a89919b1805f693840ae153d7.jar" />
+        sha1="93b399470e72c0bc8cb52379943b63c9aa586cd8">
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\disklrucache-2.0.2-0006da7a8fc36e188b1b039cc0cca2f25c79c101.jar" />
     </item>
     <item
-        jar="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.2.0/jars/classes.jar"
+        jar="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.0\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/classes-56048dc259b1a7627fe92ca2e70958e832ca6070.jar" />
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\classes-3a718bfaafee79ee0089b1dbe458b71b2c469ae5.jar" />
     </item>
     <item
-        jar="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/22.2.0/jars/classes.jar"
+        jar="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\22.2.0\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="97f7e239e86ef994de894818fdd8a71d2e89d6aa">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/classes-bdfd9e123d9590fc347f13ca989a4d0b77dd7ae5.jar" />
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\classes-342868a1cdaa7d8e3091a72df220ebd9500ecbcb.jar" />
     </item>
     <item
-        jar="/Users/MBP/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jar="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\classes-7a935b8ccdfecb3b06bbbf28490b4edbb43d776d.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakhrom Rakhmonov\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="/Users/MBP/AndroidStudioProjects/Samapp-mobile/app/build/intermediates/pre-dexed/debug/library-2.4.0-ff85f81ed95c11ff5048f7ebe337bacc35668489.jar" />
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\library-2.4.0-56c85bbc3f91396854b73ed193d77af2dbe801f0.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\classes-21ebdc9af7bcf109d206bf3bfe8b975d779313f2.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\exploded-aar\com.balysv\material-ripple\1.0.2\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c733e9d1b065d940a08f2fca0ff920dfc08d94cc">
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\classes-214970f7c7706c3963e081833da06a68bc7cab46.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakhrom Rakhmonov\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.4.0\5b72bf48563ea8410e650de14aa33ff69a3e8c35\okio-1.4.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\okio-1.4.0-4a429c6c9028c36f74d311ebc33606967305cc42.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\exploded-aar\com.mapbox.mapboxsdk\mapbox-android-sdk\0.7.4\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4bd64ebaab7edb0bccbb031dbdb7b1a7239d58f7">
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\classes-46b5b7a06c1384b0a804ce16a9cbe70c29dffa47.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakhrom Rakhmonov\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp\2.4.0\40340c0748190fe897baf7bffbc1b282734294e5\okhttp-2.4.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="C:\Users\Bakhrom Rakhmonov\SamApp\Samapp-mobile\app\build\intermediates\pre-dexed\debug\okhttp-2.4.0-d068800b5132ea938f350d555851c57efd404f03.jar" />
     </item>
 
 </items>

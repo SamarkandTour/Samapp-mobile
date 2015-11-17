@@ -2,6 +2,7 @@ package uz.samtuit.samapp.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -11,6 +12,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +40,8 @@ public class ItemsListActivity extends ActionBarActivity {
     ListView list;
     private EditText search_text;
     private MenuItem mActionSearch;
+    private MenuItem mActionSort;
+    private MenuItem mActionShowOnMap;
     private ItemsListAdapter adapter;
     private boolean isSearchOpen = false;
     private RelativeLayout RelLayout;
@@ -54,6 +58,8 @@ public class ItemsListActivity extends ActionBarActivity {
 
     //Include Global Variables
         GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+        SharedPreferences sharedPreferences = getPreferences(0);
+        Log.e("AppLang",sharedPreferences.getString("AppLang","en"));
 
     //Configure views and variables
         RelLayout = (RelativeLayout)findViewById(R.id.hotelsMain);
@@ -97,7 +103,7 @@ public class ItemsListActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ItemsListActivity.this, ListItemActivity.class);
                 intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
-                intent.putExtra("photo",items.get(position).getPhoto());
+                //intent.putExtra("photo",items.get(position).getPhoto());
                 intent.putExtra("rating",items.get(position).getRating());
                 intent.putExtra("name",items.get(position).getString("name"));
                 intent.putExtra("desc",items.get(position).getString("desc"));
@@ -132,13 +138,15 @@ public class ItemsListActivity extends ActionBarActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         mActionSearch = menu.findItem(R.id.action_search);
+        mActionShowOnMap = menu.findItem(R.id.action_show_markers);
+        mActionSort = menu.findItem(R.id.action_sort);
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_hotels, menu);
+        getMenuInflater().inflate(R.menu.menu_tour_features, menu);
         // Associate searchable configuration with the SearchView
 
         return true;
@@ -151,6 +159,8 @@ public class ItemsListActivity extends ActionBarActivity {
 
             action.setDisplayShowCustomEnabled(false); //disable a custom view inside the actionbar
             action.setDisplayShowTitleEnabled(true); //show the title in the action bar
+            mActionShowOnMap.setVisible(true);
+            mActionSort.setVisible(true);
 
             //hides the keyboard
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -161,7 +171,8 @@ public class ItemsListActivity extends ActionBarActivity {
 
             isSearchOpen = false;
         } else { //open the search entry
-
+            mActionSort.setVisible(false);
+            mActionShowOnMap.setVisible(false);
             action.setDisplayShowCustomEnabled(true); //enable it to display a
             // custom view in the action bar.
             action.setCustomView(R.layout.search_bar);//add the custom view
@@ -301,6 +312,11 @@ public class ItemsListActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         switch (id)
         {
+            case R.id.action_show_markers:
+                Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
+                intent.putExtra("type", "features");
+                intent.putExtra("featureType",S_ACTIVITY_NAME.toString());
+                startActivity(intent);
             case R.id.action_sort:
                 Collections.sort(items, new CustomComparator());
                 adapter = new ItemsListAdapter(this, R.layout.list_item, items);

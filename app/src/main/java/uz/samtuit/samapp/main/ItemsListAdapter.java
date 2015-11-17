@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import uz.samtuit.samapp.util.TourFeature;
@@ -39,6 +41,7 @@ class ItemsListAdapter extends ArrayAdapter<TourFeature> {
             convertView = inflater.inflate(layoutResourceId, parent, false);
         }
         TourFeature hotel = data.get(position);
+
         TextView name = (TextView) convertView.findViewById(R.id.title);
         TextView revs = (TextView) convertView.findViewById(R.id.reviewsCount);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");

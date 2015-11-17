@@ -41,6 +41,7 @@ public class TourFeatureList {
     public ArrayList<TourFeature> getTourFeatureList(Context context, String fileName) {
         try {
             FeatureCollection featureCollection = loadGeoJSONFromExternalFilesDir(context, fileName);
+            CopyImageToStorage copyImage = new CopyImageToStorage();
             List<Feature> featuresList = featureCollection.getFeatures();
             Log.e("SIZE",featuresList.size()+"");
 
@@ -48,9 +49,10 @@ public class TourFeatureList {
                 TourFeature tourFeature = new TourFeature();
 
                 if (v.getProperties().isNull("photo")) {
-                    tourFeature.setPhoto(null);
+                    //tourFeature.setPhoto(null);
                 } else {
-                    tourFeature.setPhoto(v.getProperties().getString("photo"));
+                    copyImage.CopyToExternalFiles(context, v.getProperties().getString("name"),v.getProperties().getString("photo"));
+                    //tourFeature.setPhoto(v.getProperties().getString("photo"));
                 }
 
                 tourFeature.setRating(v.getProperties().getInt("rating"));

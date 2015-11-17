@@ -25,5 +25,6 @@
     <string name="toast_select_destination">"Please select the destination by long press on the marker"</string>
     <string name="select_your_language">"Please select your language"</string>
     <string name="toast_navi_finding">"Start to find a distance and a direction"</string>
-    <string name="wizard_day_select">"How many days do you plan to stay in Samarkand?"</string>
+    <string name="wizard_day_select">"How many days do you plan to stay in Samarkand?"</string>\
+    <string name="data_base_name">SamTour_data</string>
 </resources>

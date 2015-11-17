@@ -26,7 +26,8 @@ public class GlobalsClass extends Application {
         FOODNDRINK(1),
         ATTRACTION(2),
         SHOPPING(3),
-        ITINERARY(4);
+        ITINERARY(4),
+        PATHOVERLAY(5);
 
         private int num;
         FeatureType(int arg){
@@ -59,22 +60,22 @@ public class GlobalsClass extends Application {
         switch(featureType)
         {
             case HOTEL:
-                Log.e("GET","HOT");
+//                Log.e("GET","HOT");
                 tourFeatures = Hotels;
                 break;
 
             case FOODNDRINK:
-                Log.e("GET","FOOD");
+//                Log.e("GET","FOOD");
                 tourFeatures = FoodAndDrinks;
                 break;
 
             case ATTRACTION:
-                Log.e("GET","ATTR");
+//                Log.e("GET","ATTR");
                 tourFeatures = Attractions;
                 break;
 
             case SHOPPING:
-                Log.e("GET","SHOP");
+//                Log.e("GET","SHOP");
                 tourFeatures = Shops;
                 break;
         }
@@ -103,19 +104,19 @@ public class GlobalsClass extends Application {
         switch(featureType)
         {
             case HOTEL:
-                Log.e("SET","HOTEL");
+//                Log.e("SET","HOTEL");
                 this.Hotels = FeaturesArrayList;
                 break;
             case FOODNDRINK:
-                Log.e("SET","FOODDRINK");
+//                Log.e("SET","FOODDRINK");
                 this.FoodAndDrinks = FeaturesArrayList;
                 break;
             case ATTRACTION:
-                Log.e("SET","ATTRACTION");
+//                Log.e("SET","ATTRACTION");
                 this.Attractions = FeaturesArrayList;
                 break;
             case SHOPPING:
-                Log.e("SET","SHOP");
+//                Log.e("SET","SHOP");
                 this.Shops = FeaturesArrayList;
                 break;
         }

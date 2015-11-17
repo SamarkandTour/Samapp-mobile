@@ -29,13 +29,12 @@ public class LanguageSettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_language_setting);
 
         globals = (GlobalsClass)getApplicationContext();
-        APP_DB = openOrCreateDatabase("SamTour_data",MODE_PRIVATE,null);
+        APP_DB = openOrCreateDatabase(getString(R.string.data_base_name),MODE_PRIVATE,null);
         ConfigurePropertiesDB configurePropertiesDB = new ConfigurePropertiesDB(APP_DB);
         configurePropertiesDB.RepairDB();
         Cursor APP_PROPERTIES = APP_DB.rawQuery("Select `app_first_launch` from app_properties", null);
         APP_PROPERTIES.moveToFirst();
         boolean AP_FIRSTLAUNCH = Boolean.parseBoolean(APP_PROPERTIES.getString(0));
-        Log.e("FL", AP_FIRSTLAUNCH + "");
 
         if (AP_FIRSTLAUNCH) {
             // Set App name and version
@@ -90,7 +89,6 @@ public class LanguageSettingActivity extends AppCompatActivity {
     private void setUserLanguage(String currentLang) {
         globals = (GlobalsClass)getApplicationContext();
         globals.setApplicationLanguage(currentLang);
-        Log.e("LANG", globals.getApplicationLanguage());
 
         // Set Display UI locale
         Locale locale = new Locale(currentLang);
