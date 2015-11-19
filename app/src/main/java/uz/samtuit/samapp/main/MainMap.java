@@ -82,7 +82,8 @@ public class MainMap extends ActionBarActivity {
     private boolean isNavigationEnabled;
     private ProgressBar progressBar;
     private GeomagneticField geoField;
-
+    private CustomInfoWindow pressedCustomInfoWindow;
+    private Marker pressedMarker;
 
     private final int POPULATE_HOTELS_MARKERS = 100;
     private final int POPULATE_FOODS_MARKERS = 101;
@@ -91,10 +92,6 @@ public class MainMap extends ActionBarActivity {
     private final int POPULATE_ITINERARY_MARKERS = 104;
     private final int HANDLE_REQUEST = 105;
     private final int DRAW_MENU = 105;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,6 +230,34 @@ public class MainMap extends ActionBarActivity {
         populateMarkers.execute(featureType);
     }
 
+    public void onTooltipBtnClick(View v){
+        pressedCustomInfoWindow.close();
+
+        if (SystemSetting.checkGPSStatus(MainMap.this) == 0) { // If GPS is OFF
+            mGPSSettingDialog = new CustomDialog(MainMap.this,
+                    R.string.title_dialog_gps_setting,
+                    R.string.dialog_gps_setting,
+                    R.string.yes,
+                    R.string.no,
+                    yesClickListener,
+                    noClickListener);
+            mGPSSettingDialog.show();
+        } else {
+            animGPS = AnimationUtils.loadAnimation(MainMap.this, R.anim.scale);
+            mAnimMyPosImage.startAnimation(animGPS);
+
+            mDestinationLoc.setLongitude(pressedMarker.getPosition().getLongitude());
+            mDestinationLoc.setLatitude(pressedMarker.getPosition().getLatitude());
+
+            // Indicate the marker as destination and turn on the navigation
+            setNavigationEnable(true);
+
+            // When selected other destination, init a distance
+            mNavigationView.setDistance(0);
+            mNavigationView.invalidate();
+        }
+    }
+
     private void setUserLocationOverlay() {
         mGpsLocProvider = new GpsLocationProvider(this){
             @Override
@@ -335,8 +360,8 @@ public class MainMap extends ActionBarActivity {
         compass.setRotation(0);
     }
 
-    public void onNaviToggleClick(View view) {
-        isNavigationEnabled = !isNavigationEnabled;
+    private void setNavigationEnable(boolean isEnabled) {
+        isNavigationEnabled = isEnabled;
 
         ToggleButton toggleButton = (ToggleButton)findViewById(R.id.naviToggleBtn);
         toggleButton.setChecked(isNavigationEnabled);
@@ -346,12 +371,16 @@ public class MainMap extends ActionBarActivity {
             mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
 
             if (mDestinationLoc.getLongitude() == 0 && mDestinationLoc.getLatitude() == 0) {
-                Toast.makeText(MainMap.this, R.string.toast_select_destination, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainMap.this, R.string.toast_select_destination, Toast.LENGTH_LONG).show();
             }
         } else {
             mNavigationView.setVisibility(View.INVISIBLE);
             mSensorManager.unregisterListener(mListener);
         }
+    }
+
+    public void onNaviToggleClick(View view) {
+        setNavigationEnable(!isNavigationEnabled);
     }
 
     //Search
@@ -472,8 +501,6 @@ public class MainMap extends ActionBarActivity {
         Marker m = null;
         int index = 0;
 
-
-
         @Override
         protected Void doInBackground(FeatureType... params) {
             boolean generateMarker = false;
@@ -497,15 +524,15 @@ public class MainMap extends ActionBarActivity {
         @Override
         protected void onProgressUpdate(Pair<FeatureType, Object>... values) {
             super.onProgressUpdate(values);
-            if(values[0].first!=FeatureType.PATHOVERLAY)
-            {
+            if(values[0].first!=FeatureType.PATHOVERLAY) {
                 m = (Marker)values[0].second;
                 String title = null;
-                if(values[0].first==FeatureType.ITINERARY)
-                {
+
+                if(values[0].first==FeatureType.ITINERARY) {
                     title = globalVariables.getItineraryFeatures().get(index).getString("name");
                     BitmapWithText markerimg = new BitmapWithText(MainMap.this, new Integer(++index).toString(), R.drawable.poi_bg);
                     m.setMarker((Drawable) markerimg);
+                    m.setToolTip(new CustomInfoWindow(MainMap.this, mapView, index));
                 }
                 else {
                     title = globalVariables.getTourFeatures(values[0].first).get(index).getString("name");
@@ -532,36 +559,14 @@ public class MainMap extends ActionBarActivity {
             mapView.addItemizedOverlay(new ItemizedIconOverlay(MainMap.this, markers, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
                 @Override
                 public boolean onItemSingleTapUp(int i, Marker marker) {
+                    pressedMarker = marker;
+                    pressedCustomInfoWindow = (CustomInfoWindow)marker.getToolTip(mapView);
                     return false;
                 }
 
                 @Override
-                public boolean onItemLongPress(int i, Marker marker) {
-                    if (SystemSetting.checkGPSStatus(MainMap.this) == 0) { // If GPS is OFF
-                        mGPSSettingDialog = new CustomDialog(MainMap.this,
-                                R.string.title_dialog_gps_setting,
-                                R.string.dialog_gps_setting,
-                                R.string.yes,
-                                R.string.no,
-                                yesClickListener,
-                                noClickListener);
-                        mGPSSettingDialog.show();
-                    } else {
-                        // Indicate the marker as destination
-
-                        Toast.makeText(MainMap.this, R.string.toast_navi_finding, Toast.LENGTH_SHORT).show();
-
-                        animGPS = AnimationUtils.loadAnimation(MainMap.this, R.anim.scale);
-                        mAnimMyPosImage.startAnimation(animGPS);
-
-                        mDestinationLoc.setLongitude(marker.getPosition().getLongitude());
-                        mDestinationLoc.setLatitude(marker.getPosition().getLatitude());
-
-                        // When selected other destination, init a distance
-                        mNavigationView.setDistance(0);
-                        mNavigationView.invalidate();
-                    }
-                    return true;
+                public boolean onItemLongPress(int index, Marker item) {
+                    return false;
                 }
             }));
             progressBar.setVisibility(View.GONE);

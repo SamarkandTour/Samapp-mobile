@@ -19,6 +19,7 @@
         <activity android:name="uz.samtuit.samapp.main.LogoActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -26,8 +27,7 @@
             android:name="uz.samtuit.samapp.main.MainMap"
             android:theme="@style/AppTheme" >
         </activity>
-        <activity
-            android:name="uz.samtuit.samapp.main.ItemsListActivity">
+        <activity android:name="uz.samtuit.samapp.main.ItemsListActivity" >
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -39,9 +39,13 @@
         <activity android:name="uz.samtuit.samapp.main.AboutCityActivity" />
         <activity android:name="uz.samtuit.samapp.main.DaySelectWizardActivity" />
         <activity android:name="uz.samtuit.samapp.main.SuggestedItineraryActivity" />
-        <activity android:name="uz.samtuit.samapp.main.TrainsTimeTableActivity"/>
+        <activity android:name="uz.samtuit.samapp.main.TrainsTimeTableActivity" />
         <activity android:name="uz.samtuit.samapp.main.TashkentSamarkandActivity" />
         <activity android:name="uz.samtuit.samapp.main.AboutAppActivity" />
+        <activity
+            android:name="uz.samtuit.samapp.main.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

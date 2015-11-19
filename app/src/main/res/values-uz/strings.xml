@@ -17,8 +17,14 @@
     <string name="Err_wrong_itinerary_file">Error! wrong feature name in the itinerary file</string>
     <string name="title_dialog_update_available">Update available</string>
     <string name="dialog_update_available">Now recent information is available!\nDo you want to update?</string>
-    <string name="toast_select_destination">"Please select the destination by long press on the marker"</string>
+    <string name="toast_select_destination">"First select a marker and press the GuideMe button"</string>
     <string name="select_your_language">"Please select your language"</string>
-    <string name="toast_navi_finding">"Start to find a distance and a direction"</string>
     <string name="wizard_day_select">"How many days do you plan to stay in Samarkand?"</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_title_about_this_app">"About this App</string>
+    <string name="pref_title_data_sync">Now data &amp; sync</string>
+    <string name="pref_title_language_selection">Language Selection</string>
+    <string name="btn_title_guide_me">Guide Me here</string>
+    <string name="btn_title_show_detail">Show in detail</string>
+    <string name="toast_wait_for_gps">Please wait for catching the GPS signal</string>
 </resources>

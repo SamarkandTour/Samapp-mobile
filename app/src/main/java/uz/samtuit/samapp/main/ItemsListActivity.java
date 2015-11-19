@@ -98,6 +98,7 @@ public class ItemsListActivity extends ActionBarActivity {
 
         adapter = new ItemsListAdapter(this,R.layout.list_item, items);
         list.setAdapter(adapter);
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

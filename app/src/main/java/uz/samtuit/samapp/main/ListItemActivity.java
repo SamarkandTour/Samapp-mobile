@@ -134,10 +134,8 @@ public class ListItemActivity extends ActionBarActivity {
             }
         });
 
-
         LoadImageFromExternalStorage loadImageFromExternalStorage = new LoadImageFromExternalStorage();
         loadImageFromExternalStorage.execute(extras.getString("name"));
-
 
         titleSmall.setText(extras.getString("name"));
         int Rating = extras.getInt("rating");

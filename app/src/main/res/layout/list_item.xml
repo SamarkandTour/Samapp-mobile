@@ -12,7 +12,7 @@
         android:layout_height="76dp"
         >
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/listViewThumbnail"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:background = "@android:color/transparent"

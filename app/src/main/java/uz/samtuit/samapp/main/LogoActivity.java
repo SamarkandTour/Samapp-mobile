@@ -58,8 +58,6 @@ public class LogoActivity extends ActionBarActivity {
 
         globals = (GlobalsClass)getApplicationContext();
         continueInBackgroundTask();
-        // Check update available
-
     }
 
     private void continueInBackgroundTask(){

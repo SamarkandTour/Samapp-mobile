@@ -45,7 +45,7 @@ public class LanguageSettingActivity extends AppCompatActivity {
 
             // All downloaded GeoJSON files from server will be located in ExternalDir
             // So working directory is ExternalDir, all files in the asset should be copied to ExternalDir at first launch
-            if (TourFeatureList.CopyLocalGeoJSONFilesToExternalDir(this)) {
+            if (!TourFeatureList.CopyLocalGeoJSONFilesToExternalDir(this)) {
                 Toast.makeText(this, R.string.Err_file_not_found, Toast.LENGTH_SHORT).show();
             }
 
