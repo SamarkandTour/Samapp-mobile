@@ -100,54 +100,49 @@ public class LogoActivity extends ActionBarActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-            // Since language selection has finished, Set features lists
-            publishProgress(new Pair<Integer, String>(LOAD_START, "hotels"));
-            TourFeatureList tourFeatureList = new TourFeatureList();
-            tourFeatureList.CopyLocalGeoJSONFilesToExternalDir(getApplicationContext());
-            String ChoosenLang = globals.getApplicationLanguage();
+                // Since language selection has finished, Set features lists
+                String ChoosenLang = globals.getApplicationLanguage();
+                TourFeatureList tourFeatureList = new TourFeatureList();
 
-            path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.HOTEL.ordinal()];
-            Hotels = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
-            globals.setFeatures(GlobalsClass.FeatureType.HOTEL, Hotels);
-            publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
+                publishProgress(new Pair<Integer, String>(LOAD_START, "hotels"));
+                path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.HOTEL.ordinal()];
+                Hotels = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
+                globals.setFeatures(GlobalsClass.FeatureType.HOTEL, Hotels);
+                publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
-//            TimeUnit.MILLISECONDS.sleep(500);
+    //            TimeUnit.MILLISECONDS.sleep(500);
 
-            publishProgress(new Pair<Integer, String>(LOAD_START, "restourants"));
-            path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.FOODNDRINK.ordinal()];
-            tourFeatureList = new TourFeatureList();
-            Foods = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
-            globals.setFeatures(GlobalsClass.FeatureType.FOODNDRINK, Foods);
-            publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
+                publishProgress(new Pair<Integer, String>(LOAD_START, "restourants"));
+                path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.FOODNDRINK.ordinal()];
+                Foods = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
+                globals.setFeatures(GlobalsClass.FeatureType.FOODNDRINK, Foods);
+                publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
-//            TimeUnit.MILLISECONDS.sleep(500);
+    //            TimeUnit.MILLISECONDS.sleep(500);
 
-            publishProgress(new Pair<Integer, String>(LOAD_START, "attractions"));
-            path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.ATTRACTION.ordinal()];
-            tourFeatureList = new TourFeatureList();
-            Attractions = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
-            globals.setFeatures(GlobalsClass.FeatureType.ATTRACTION, Attractions);
-            publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
+                publishProgress(new Pair<Integer, String>(LOAD_START, "attractions"));
+                path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.ATTRACTION.ordinal()];
+                Attractions = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
+                globals.setFeatures(GlobalsClass.FeatureType.ATTRACTION, Attractions);
+                publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
-//            TimeUnit.MILLISECONDS.sleep(500);
+    //            TimeUnit.MILLISECONDS.sleep(500);
 
-            publishProgress(new Pair<Integer, String>(LOAD_START,"shops"));
-            path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.SHOPPING.ordinal()];
-            tourFeatureList = new TourFeatureList();
-            Shops = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
+                publishProgress(new Pair<Integer, String>(LOAD_START,"shops"));
+                path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.SHOPPING.ordinal()];
+                Shops = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
+                globals.setFeatures(GlobalsClass.FeatureType.SHOPPING, Shops);
+                publishProgress(new Pair<Integer, String>(LOAD_DONE,""));
 
-            globals.setFeatures(GlobalsClass.FeatureType.SHOPPING, Shops);
-            publishProgress(new Pair<Integer, String>(LOAD_DONE,""));
-            TourFeatureList itineraryList = new TourFeatureList();
+    //            TimeUnit.MILLISECONDS.sleep(500);
 
-//            TimeUnit.MILLISECONDS.sleep(500);
+                publishProgress(new Pair<Integer, String>(LOAD_DONE, "itinerary"));
+                Itinerary = tourFeatureList.getItineraryFeatureList(getApplicationContext(), ChoosenLang + "_itinerary_mixed_1.5.geojson");
+                globals.setItineraryFeatures(Itinerary);
+                TourFeatureList.ItineraryWriteToGeoJSONFile(LogoActivity.this, Itinerary, ChoosenLang + "_MyItinerary.geojson");
+                publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
-            publishProgress(new Pair<Integer, String>(LOAD_DONE, "itinerary"));
-            Itinerary = itineraryList.getItineraryFeatureList(getApplicationContext(), ChoosenLang + "_itinerary_mixed_nightlife_onenhalf_day.geojson");
-            globals.setItineraryFeatures(Itinerary);
-            TourFeatureList.ItineraryWriteToGeoJSONFile(LogoActivity.this, Itinerary, ChoosenLang + "_MyItinerary.geojson");
-            publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
-//            TimeUnit.MILLISECONDS.sleep(500);
+    //            TimeUnit.MILLISECONDS.sleep(500);
 
             } catch (Exception e) {
                 e.printStackTrace();
