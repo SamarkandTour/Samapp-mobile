@@ -3,9 +3,7 @@ package uz.samtuit.samapp.main;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import uz.samtuit.samapp.util.RoundedDrawable;
+import uz.samtuit.samapp.util.BitmapUtil;
+import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.sammap.main.R;
 
@@ -52,10 +49,10 @@ class ItemsListAdapter extends ArrayAdapter<TourFeature> {
         ImageView star4 = (ImageView)convertView.findViewById(R.id.star4);
         ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
 
+        String encodedBytes = FileUtil.fileReadFromExternal(context, data.get(position).getPhoto());
+        Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
+        BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
         ImageView mainImage = (ImageView)convertView.findViewById(R.id.listViewThumbnail);
-        byte[] decodedString = Base64.decode(data.get(position).getPhoto(), Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        RoundedDrawable roundedDrawable = new RoundedDrawable(decodedByte, false);
         mainImage.setImageDrawable(roundedDrawable);
 
         TourFeature item = data.get(position);

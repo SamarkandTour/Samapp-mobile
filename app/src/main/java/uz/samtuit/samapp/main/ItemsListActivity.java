@@ -104,7 +104,7 @@ public class ItemsListActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ItemsListActivity.this, ListItemActivity.class);
                 intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
-                //intent.putExtra("photo",items.get(position).getPhoto());
+                intent.putExtra("photo",items.get(position).getPhoto());
                 intent.putExtra("rating",items.get(position).getRating());
                 intent.putExtra("name",items.get(position).getString("name"));
                 intent.putExtra("desc",items.get(position).getString("desc"));

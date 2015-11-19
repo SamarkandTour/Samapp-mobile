@@ -1,8 +1,6 @@
 package uz.samtuit.samapp.main;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,7 +11,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,12 +20,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
+import uz.samtuit.samapp.util.BitmapUtil;
+import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.sammap.main.R;
 
 
@@ -41,8 +34,6 @@ public class ListItemActivity extends ActionBarActivity {
     private RelativeLayout relLayout;
     private ImageView imageView;
     private ImageButton call,link;
-    private Bitmap decodedImage;
-    private String encodedImage = null;
     private String featureType;
 
     @Override
@@ -135,7 +126,7 @@ public class ListItemActivity extends ActionBarActivity {
         });
 
         LoadImageFromExternalStorage loadImageFromExternalStorage = new LoadImageFromExternalStorage();
-        loadImageFromExternalStorage.execute(extras.getString("name"));
+        loadImageFromExternalStorage.execute(extras.getString("photo"));
 
         titleSmall.setText(extras.getString("name"));
         int Rating = extras.getInt("rating");
@@ -202,30 +193,15 @@ public class ListItemActivity extends ActionBarActivity {
 
         @Override
         protected Void doInBackground(String... params) {
-            BufferedReader input = null;
-            File file = null;
-            try {
-                file = new File(getExternalFilesDir(null), params[0]); // Pass getFilesDir() and "MyFile" to read file
-                input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-                String line;
-                StringBuffer buffer = new StringBuffer();
-                while ((line = input.readLine()) != null) {
-                    buffer.append(line);
-                }
-                publishProgress(buffer.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            String encodedBytes = FileUtil.fileReadFromExternal(ListItemActivity.this, params[0]);
+            publishProgress(encodedBytes);
             return null;
         }
 
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            encodedImage = values[0];
-            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            Drawable dr = new BitmapDrawable(decodedByte);
+            Drawable dr = new BitmapDrawable(BitmapUtil.decodeBase64Image(values[0]));
             imageView.setImageDrawable(dr);
         }
     }

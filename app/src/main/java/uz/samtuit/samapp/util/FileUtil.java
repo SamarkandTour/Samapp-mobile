@@ -4,16 +4,40 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Environment;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * File handling Utilities
  */
 public class FileUtil {
-    public static boolean fileWrite(Context context, String fileName, String content) {
+
+    public static String fileReadFromExternal(Context context, String fileName) {
+        BufferedReader input = null;
+        File file = null;
+        StringBuffer buffer = new StringBuffer();
+
+        try {
+            file = new File(context.getExternalFilesDir(null), fileName); // Pass getFilesDir() and "MyFile" to read file
+            input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            String line;
+
+            while ((line = input.readLine()) != null) {
+                buffer.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return buffer.toString();
+    }
+
+    public static boolean fileWriteToExternal(Context context, String fileName, String content) {
         File file = new File(context.getExternalFilesDir(null), fileName);
 
         try {
@@ -46,7 +70,7 @@ public class FileUtil {
                 InputStream is = am.open("data/" + filename);
                 FileOutputStream os = new FileOutputStream(destpath);
                 byte buffer[] = new byte[1024];
-                for (; ; ) {
+                for ( ; ; ) {
                     int read = is.read(buffer);
                     if (read <= 0) break;
                     os.write(buffer, 0, read);

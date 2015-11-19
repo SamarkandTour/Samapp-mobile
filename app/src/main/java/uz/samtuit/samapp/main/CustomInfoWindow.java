@@ -2,8 +2,6 @@ package uz.samtuit.samapp.main;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,8 +11,9 @@ import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.views.InfoWindow;
 import com.mapbox.mapboxsdk.views.MapView;
 
+import uz.samtuit.samapp.util.BitmapUtil;
+import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
-import uz.samtuit.samapp.util.RoundedDrawable;
 import uz.samtuit.sammap.main.R;
 
 /**
@@ -55,11 +54,13 @@ public class CustomInfoWindow extends InfoWindow {
         ((TextView) mView.findViewById(R.id.customTooltip_title)).setText(title);
 
         GlobalsClass globalVariables = (GlobalsClass)mContext.getApplicationContext();
-        String photo = globalVariables.getItineraryFeatures().get(mLinkedListIndex).getPhoto();
+
+        String photoFileName = globalVariables.getItineraryFeatures().get(mLinkedListIndex).getPhoto();
+        String encodedBytes = FileUtil.fileReadFromExternal(mContext, photoFileName);
+        Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
+        BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, true);
+
         ImageView mainImage = (ImageView)mView.findViewById(R.id.tooltip_imageView);
-        byte[] decodedString = Base64.decode(photo, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        RoundedDrawable roundedDrawable = new RoundedDrawable(decodedByte, true);
         mainImage.setImageDrawable(roundedDrawable);
     }
 }

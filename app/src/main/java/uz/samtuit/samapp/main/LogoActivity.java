@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import com.mapbox.mapboxsdk.util.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.concurrent.TimeUnit;
 
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.GlobalsClass;
@@ -109,7 +107,7 @@ public class LogoActivity extends ActionBarActivity {
             String ChoosenLang = globals.getApplicationLanguage();
 
             path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.HOTEL.ordinal()];
-            Hotels = tourFeatureList.getTourFeatureList(getApplicationContext(), ChoosenLang + path);
+            Hotels = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
             globals.setFeatures(GlobalsClass.FeatureType.HOTEL, Hotels);
             publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
@@ -118,7 +116,7 @@ public class LogoActivity extends ActionBarActivity {
             publishProgress(new Pair<Integer, String>(LOAD_START, "restourants"));
             path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.FOODNDRINK.ordinal()];
             tourFeatureList = new TourFeatureList();
-            Foods = tourFeatureList.getTourFeatureList(getApplicationContext(), ChoosenLang + path);
+            Foods = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
             globals.setFeatures(GlobalsClass.FeatureType.FOODNDRINK, Foods);
             publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
@@ -127,7 +125,7 @@ public class LogoActivity extends ActionBarActivity {
             publishProgress(new Pair<Integer, String>(LOAD_START, "attractions"));
             path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.ATTRACTION.ordinal()];
             tourFeatureList = new TourFeatureList();
-            Attractions = tourFeatureList.getTourFeatureList(getApplicationContext(), ChoosenLang + path);
+            Attractions = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
             globals.setFeatures(GlobalsClass.FeatureType.ATTRACTION, Attractions);
             publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
@@ -136,7 +134,7 @@ public class LogoActivity extends ActionBarActivity {
             publishProgress(new Pair<Integer, String>(LOAD_START,"shops"));
             path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.SHOPPING.ordinal()];
             tourFeatureList = new TourFeatureList();
-            Shops = tourFeatureList.getTourFeatureList(getApplicationContext(), ChoosenLang + path);
+            Shops = tourFeatureList.getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
 
             globals.setFeatures(GlobalsClass.FeatureType.SHOPPING, Shops);
             publishProgress(new Pair<Integer, String>(LOAD_DONE,""));

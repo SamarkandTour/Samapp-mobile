@@ -38,10 +38,9 @@ public class TourFeatureList {
         itineraryList = new LinkedList<TourFeature>();
     }
 
-    public ArrayList<TourFeature> getTourFeatureList(Context context, String fileName) {
+    public ArrayList<TourFeature> getTourFeatureListFromGeoJSONFile(Context context, String fileName) {
         try {
             FeatureCollection featureCollection = loadGeoJSONFromExternalFilesDir(context, fileName);
-            CopyImageToStorage copyImage = new CopyImageToStorage();
             List<Feature> featuresList = featureCollection.getFeatures();
             Log.e("SIZE",featuresList.size()+"");
 
@@ -49,10 +48,12 @@ public class TourFeatureList {
                 TourFeature tourFeature = new TourFeature();
 
                 if (v.getProperties().isNull("photo")) {
-                    //tourFeature.setPhoto(null);
+                    tourFeature.setPhoto(null);
                 } else {
-                    copyImage.CopyToExternalFiles(context, v.getProperties().getString("name"),v.getProperties().getString("photo"));
-                    //tourFeature.setPhoto(v.getProperties().getString("photo"));
+                    // Changed the location of physical photo to a file to reduce on-memory size
+                    // Just leave the name of the file here
+                    tourFeature.setPhoto(v.getProperties().getString("name"));
+                    FileUtil.fileWriteToExternal(context, v.getProperties().getString("name"),v.getProperties().getString("photo"));
                 }
 
                 tourFeature.setRating(v.getProperties().getInt("rating"));
@@ -215,7 +216,7 @@ public class TourFeatureList {
 
         try {
             String ItineraryGeoJSON = featureCollection.toJSON().toString();
-            FileUtil.fileWrite(context, fileName, ItineraryGeoJSON);
+            FileUtil.fileWriteToExternal(context, fileName, ItineraryGeoJSON);
 
         } catch (JSONException e) {
             e.printStackTrace();

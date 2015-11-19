@@ -48,7 +48,7 @@ import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 
 import java.util.ArrayList;
 
-import uz.samtuit.samapp.util.BitmapWithText;
+import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.MenuItems;
@@ -530,7 +530,7 @@ public class MainMap extends ActionBarActivity {
 
                 if(values[0].first==FeatureType.ITINERARY) {
                     title = globalVariables.getItineraryFeatures().get(index).getString("name");
-                    BitmapWithText markerimg = new BitmapWithText(MainMap.this, new Integer(++index).toString(), R.drawable.poi_bg);
+                    BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, new Integer(++index).toString(), R.drawable.poi_bg);
                     m.setMarker((Drawable) markerimg);
                     m.setToolTip(new CustomInfoWindow(MainMap.this, mapView, index));
                 }
