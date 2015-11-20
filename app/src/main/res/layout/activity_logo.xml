@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="uz.samtuit.samapp.main.LogoActivity"
-    android:padding="0dp">
+    android:padding="0dp"
+    android:id="@+id/logoMainLayout">
 
     <ImageView
         android:layout_width="fill_parent"

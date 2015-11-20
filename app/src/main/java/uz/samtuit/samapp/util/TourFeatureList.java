@@ -35,8 +35,44 @@ public class TourFeatureList {
 
     public TourFeatureList() {
         tourFeatureList = new ArrayList<TourFeature>();
-        itineraryList = new LinkedList<TourFeature>();
     }
+
+    public TourFeatureList(GlobalsClass.FeatureType featureType) {
+        if (featureType == GlobalsClass.FeatureType.ITINERARY) {
+            itineraryList = new LinkedList<TourFeature>();
+        }
+    }
+
+    public static boolean writeAllPhotosToFiles(Context context) {
+        try {
+            for ( String lang : GlobalsClass.supportedLanguages) {
+                for (int i = 0; i < 4; i++) {
+                    FeatureCollection featureCollection = loadGeoJSONFromExternalFilesDir(context, lang + GlobalsClass.GeoJSONFileName[i]);
+                    List<Feature> featuresList = featureCollection.getFeatures();
+                    Log.e("SIZE", featuresList.size() + "");
+
+                    for (Feature v : featuresList) {
+                        if (!v.getProperties().isNull("photo")) {
+                            FileUtil.fileWriteToExternalDir(context, v.getProperties().getString("name"), v.getProperties().getString("photo"));
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            // File not found, Try re-download
+            Toast.makeText(context, R.string.Err_file_not_found, Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+            return false;
+        } catch (JSONException e) {
+            // JSON Format is malformed
+            Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
 
     public ArrayList<TourFeature> getTourFeatureListFromGeoJSONFile(Context context, String fileName) {
         try {
@@ -53,7 +89,6 @@ public class TourFeatureList {
                     // Changed the location of physical photo to a file to reduce on-memory size
                     // Just leave the name of the file here
                     tourFeature.setPhoto(v.getProperties().getString("name"));
-                    FileUtil.fileWriteToExternal(context, v.getProperties().getString("name"),v.getProperties().getString("photo"));
                 }
 
                 tourFeature.setRating(v.getProperties().getInt("rating"));
@@ -216,7 +251,7 @@ public class TourFeatureList {
 
         try {
             String ItineraryGeoJSON = featureCollection.toJSON().toString();
-            FileUtil.fileWriteToExternal(context, fileName, ItineraryGeoJSON);
+            FileUtil.fileWriteToExternalDir(context, fileName, ItineraryGeoJSON);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -225,7 +260,7 @@ public class TourFeatureList {
         return true;
     }
 
-    // All downloaded GeoJSON files from server will be located in ExternalDir
+    // All downloaded GeoJSON files from server should be located in ExternalDir
     // So working directory is ExternalDir, all files in the asset should be copied to ExternalDir at first launch
     public static boolean CopyLocalGeoJSONFilesToExternalDir(Context context) {
         try {

@@ -56,7 +56,7 @@ public class CustomInfoWindow extends InfoWindow {
         GlobalsClass globalVariables = (GlobalsClass)mContext.getApplicationContext();
 
         String photoFileName = globalVariables.getItineraryFeatures().get(mLinkedListIndex).getPhoto();
-        String encodedBytes = FileUtil.fileReadFromExternal(mContext, photoFileName);
+        String encodedBytes = FileUtil.fileReadFromExternalDir(mContext, photoFileName);
         Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
         BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, true);
 

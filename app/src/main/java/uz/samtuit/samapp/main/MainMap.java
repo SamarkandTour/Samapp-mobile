@@ -503,10 +503,11 @@ public class MainMap extends ActionBarActivity {
 
         @Override
         protected Void doInBackground(FeatureType... params) {
-            boolean generateMarker = false;
             String path = GlobalsClass.GeoJSONFileName[params[0].ordinal()];
+            String lang = getApplicationContext().getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null);
+
             try {
-                features = TourFeatureList.loadGeoJSONFromExternalFilesDir(MainMap.this, globalVariables.getApplicationLanguage() + path);
+                features = TourFeatureList.loadGeoJSONFromExternalFilesDir(MainMap.this, lang + path);
                 ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
                 for (Object obj : uiObjects) {
                     FeatureType type = FeatureType.PATHOVERLAY;

@@ -49,7 +49,7 @@ class ItemsListAdapter extends ArrayAdapter<TourFeature> {
         ImageView star4 = (ImageView)convertView.findViewById(R.id.star4);
         ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
 
-        String encodedBytes = FileUtil.fileReadFromExternal(context, data.get(position).getPhoto());
+        String encodedBytes = FileUtil.fileReadFromExternalDir(context, data.get(position).getPhoto());
         Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
         BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
         ImageView mainImage = (ImageView)convertView.findViewById(R.id.listViewThumbnail);

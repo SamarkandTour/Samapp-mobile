@@ -17,7 +17,7 @@ import java.io.InputStreamReader;
  */
 public class FileUtil {
 
-    public static String fileReadFromExternal(Context context, String fileName) {
+    public static String fileReadFromExternalDir(Context context, String fileName) {
         BufferedReader input = null;
         File file = null;
         StringBuffer buffer = new StringBuffer();
@@ -37,7 +37,7 @@ public class FileUtil {
         return buffer.toString();
     }
 
-    public static boolean fileWriteToExternal(Context context, String fileName, String content) {
+    public static boolean fileWriteToExternalDir(Context context, String fileName, String content) {
         File file = new File(context.getExternalFilesDir(null), fileName);
 
         try {

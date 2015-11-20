@@ -1,10 +1,13 @@
 package uz.samtuit.samapp.util;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.location.LocationManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
+
+import java.util.Locale;
 
 /**
  * Utility for System settings
@@ -37,5 +40,15 @@ public class SystemSetting {
         String systemLocale = System.getProperty("user.language", "en"); // If there is no property, "en" will be default
 
         return systemLocale;
+    }
+
+    public static void setUserLanguage(Context context, String currentLang) {
+
+        // Set Display UI locale
+        Locale locale = new Locale(currentLang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 }

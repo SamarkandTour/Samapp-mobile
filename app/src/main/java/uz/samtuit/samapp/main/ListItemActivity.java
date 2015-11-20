@@ -193,7 +193,7 @@ public class ListItemActivity extends ActionBarActivity {
 
         @Override
         protected Void doInBackground(String... params) {
-            String encodedBytes = FileUtil.fileReadFromExternal(ListItemActivity.this, params[0]);
+            String encodedBytes = FileUtil.fileReadFromExternalDir(ListItemActivity.this, params[0]);
             publishProgress(encodedBytes);
             return null;
         }
