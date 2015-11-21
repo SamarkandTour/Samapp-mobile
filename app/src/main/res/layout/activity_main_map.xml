@@ -24,7 +24,8 @@ android:gravity="bottom"
             android:layout_height="50dp"
             android:onClick="CompassClick"
             android:src="@drawable/ic_s_compass"
-            android:id="@+id/compass" />
+            android:id="@+id/compass"
+            android:focusable="false" />
 
         <ImageView
             android:layout_margin="10dp"
@@ -32,7 +33,8 @@ android:gravity="bottom"
             android:layout_height="40dp"
             android:onClick="myLocationClick"
             android:src="@drawable/myposition"
-            android:id="@+id/myPositon" />
+            android:id="@+id/myPositon"
+            android:focusable="false" />
 
         <ToggleButton
             android:layout_width="50dp"
@@ -42,16 +44,23 @@ android:gravity="bottom"
             android:textOn="On"
             android:textOff="Off" />
 
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="#0a0"
-            android:textSize="20sp"
-            android:visibility="invisible"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/marqueeText"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="5sp"
             android:gravity="center_vertical"
-            android:lines="1"
-            android:id="@+id/search_text"
-            android:layout_marginRight="60dp" />
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="Welcome to Samarkand!"
+            android:focusable="true"
+            android:enabled="false"
+            android:focusableInTouchMode="true" />
 
     </LinearLayout>
 <SlidingDrawer

@@ -3,7 +3,6 @@ package uz.samtuit.samapp.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
@@ -22,12 +21,12 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SlidingDrawer;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -70,7 +69,7 @@ public class MainMap extends ActionBarActivity {
     private boolean isSearchMyLocEnabled;
     private GpsLocationProvider mGpsLocProvider;
     private UserLocationOverlay myLocationOverlay;
-    private EditText searchText;
+    private TextView marqueeText;
     private Animation animGPS;
     private ImageView mAnimMyPosImage;
     private CustomDialog mGPSSettingDialog;
@@ -82,7 +81,6 @@ public class MainMap extends ActionBarActivity {
     private boolean isNavigationEnabled;
     private ProgressBar progressBar;
     private GeomagneticField geoField;
-    private CustomInfoWindow pressedCustomInfoWindow;
     private Marker pressedMarker;
 
     private final int POPULATE_HOTELS_MARKERS = 100;
@@ -105,11 +103,7 @@ public class MainMap extends ActionBarActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mapView = (MapView)findViewById(R.id.mapview);
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
-
-        //search text typeface
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-        searchText = (EditText)findViewById(R.id.search_text);
-        searchText.setTypeface(tf);
+        marqueeText = (TextView)findViewById(R.id.marqueeText);
         progressBar = (ProgressBar)findViewById(R.id.waitProgressBar);
 
         setMapView(); //Set MapView configuration
@@ -231,7 +225,7 @@ public class MainMap extends ActionBarActivity {
     }
 
     public void onTooltipBtnClick(View v){
-        pressedCustomInfoWindow.close();
+        pressedMarker.closeToolTip();
 
         if (SystemSetting.checkGPSStatus(MainMap.this) == 0) { // If GPS is OFF
             mGPSSettingDialog = new CustomDialog(MainMap.this,
@@ -243,8 +237,10 @@ public class MainMap extends ActionBarActivity {
                     noClickListener);
             mGPSSettingDialog.show();
         } else {
+            isSearchMyLocEnabled = true;
             animGPS = AnimationUtils.loadAnimation(MainMap.this, R.anim.scale);
             mAnimMyPosImage.startAnimation(animGPS);
+            marqueeText.setText(getString(R.string.marquee_searching_target) + pressedMarker.getTitle());
 
             mDestinationLoc.setLongitude(pressedMarker.getPosition().getLongitude());
             mDestinationLoc.setLatitude(pressedMarker.getPosition().getLatitude());
@@ -268,7 +264,13 @@ public class MainMap extends ActionBarActivity {
                 if (isSearchMyLocEnabled || isNavigationEnabled) {
                     myLocationOverlay.goToMyPosition(true);
                     mAnimMyPosImage.clearAnimation(); //Stop icon animation
-                    isSearchMyLocEnabled = false;
+                    if (isSearchMyLocEnabled && !isSearchMyLocEnabled) {
+                        isSearchMyLocEnabled = false;
+                        marqueeText.setText("");
+                    } else if (isSearchMyLocEnabled && isNavigationEnabled) {
+                        isSearchMyLocEnabled = false;
+                        marqueeText.setText(getString(R.string.marquee_guiding) + pressedMarker.getTitle());
+                    }
                 }
 
                 // Check the value of mDestinationLoc
@@ -330,6 +332,7 @@ public class MainMap extends ActionBarActivity {
             myLocationOverlay.goToMyPosition(true);
             animGPS = AnimationUtils.loadAnimation(this, R.anim.scale);
             mAnimMyPosImage.startAnimation(animGPS);
+            marqueeText.setText(R.string.marquee_searching_you);
         }
     }
 
@@ -372,29 +375,24 @@ public class MainMap extends ActionBarActivity {
 
             if (mDestinationLoc.getLongitude() == 0 && mDestinationLoc.getLatitude() == 0) {
                 Toast.makeText(MainMap.this, R.string.toast_select_destination, Toast.LENGTH_LONG).show();
+                marqueeText.setText(R.string.toast_select_destination);
+            } else {
+                if (!isSearchMyLocEnabled) {// In case the GPS is not working
+                    marqueeText.setText(getString(R.string.marquee_guiding) + pressedMarker.getTitle());
+                }
             }
         } else {
             mNavigationView.setVisibility(View.INVISIBLE);
             mSensorManager.unregisterListener(mListener);
+            if (!isSearchMyLocEnabled) {
+                marqueeText.setText("");
+
+            }
         }
     }
 
     public void onNaviToggleClick(View view) {
         setNavigationEnable(!isNavigationEnabled);
-    }
-
-    //Search
-    public void Search(View view)
-    {
-        EditText searchText = (EditText)findViewById(R.id.search_text);
-        if(searchText.getVisibility()==View.VISIBLE)
-        {
-            //search
-            searchText.setVisibility(View.INVISIBLE);
-        }
-        else {
-            searchText.setVisibility(View.VISIBLE);
-        }
     }
 
     private Intent GetActivityName(MenuItems.MainMenu mainMenu)
@@ -471,6 +469,7 @@ public class MainMap extends ActionBarActivity {
                 //Show icon animation until my location is recognized by first GPS signal
                 animGPS = AnimationUtils.loadAnimation(this, R.anim.scale);
                 mAnimMyPosImage.startAnimation(animGPS);
+                marqueeText.setText(R.string.marquee_searching_you);
             }
         } else {
             mAnimMyPosImage.clearAnimation();
@@ -533,10 +532,10 @@ public class MainMap extends ActionBarActivity {
                     title = globalVariables.getItineraryFeatures().get(index).getString("name");
                     BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, new Integer(++index).toString(), R.drawable.poi_bg);
                     m.setMarker((Drawable) markerimg);
-                    m.setToolTip(new CustomInfoWindow(MainMap.this, mapView, index));
+                    m.setToolTip(new CustomInfoWindow(MainMap.this, mapView, index-1)); // Set as array index
                 }
                 else {
-                    title = globalVariables.getTourFeatures(values[0].first).get(index).getString("name");
+                    title = globalVariables.getTourFeatures(values[0].first).get(index++).getString("name");
                     m.setMarker(markerDrawables.get(values[0].first.ordinal()));
                 }
                 m.setTitle(title);
@@ -561,7 +560,6 @@ public class MainMap extends ActionBarActivity {
                 @Override
                 public boolean onItemSingleTapUp(int i, Marker marker) {
                     pressedMarker = marker;
-                    pressedCustomInfoWindow = (CustomInfoWindow)marker.getToolTip(mapView);
                     return false;
                 }
 

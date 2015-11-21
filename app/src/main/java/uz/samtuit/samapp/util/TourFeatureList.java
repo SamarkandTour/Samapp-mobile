@@ -197,7 +197,7 @@ public class TourFeatureList {
 
     }
 
-    public LinkedList<TourFeature> getItineraryFeatureList(Context context, String fileName) {
+    public LinkedList<TourFeature> getItineraryFeatureListFromGeoJSONFile(Context context, String fileName) {
         try {
             FeatureCollection featureCollection = loadGeoJSONFromExternalFilesDir(context, fileName);
             List<Feature> featuresList = featureCollection.getFeatures();

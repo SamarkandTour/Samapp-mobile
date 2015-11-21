@@ -27,6 +27,7 @@ public class BitmapUtil {
     public static Bitmap decodeBase64Image(String encodedImage) {
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
         return decodedByte;
     }
 
@@ -65,7 +66,7 @@ public class BitmapUtil {
             arg0.drawText(name, centerX - textWidth, centerY, textPaint);
         }
 
-        int getTextWidth(String text) {
+        private int getTextWidth(String text) {
             int count = text.length();
             float[] widths = new float[count];
             textPaint.getTextWidths(text, widths);

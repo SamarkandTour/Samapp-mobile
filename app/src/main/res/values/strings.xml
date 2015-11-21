@@ -33,4 +33,7 @@
     <string name="btn_title_guide_me">Guide Me here</string>
     <string name="btn_title_show_detail">Show in detail</string>
     <string name="toast_wait_for_gps">Please wait for catching the GPS signal</string>
+    <string name="marquee_searching_you">Searching your location...</string>
+    <string name="marquee_searching_target">"Searching direction and distance of "</string>
+    <string name="marquee_guiding">"Guiding to "</string>
 </resources>

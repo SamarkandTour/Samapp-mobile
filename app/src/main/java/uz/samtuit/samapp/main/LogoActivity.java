@@ -177,7 +177,7 @@ public class LogoActivity extends ActionBarActivity {
     //            TimeUnit.MILLISECONDS.sleep(500);
 
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, "itinerary"));
-                Itinerary = new TourFeatureList(GlobalsClass.FeatureType.ITINERARY).getItineraryFeatureList(getApplicationContext(), ChoosenLang + "_itinerary_mixed_1.5.geojson");
+                Itinerary = new TourFeatureList(GlobalsClass.FeatureType.ITINERARY).getItineraryFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + "_itinerary_mixed_1.5.geojson");
                 globals.setItineraryFeatures(Itinerary);
                 TourFeatureList.ItineraryWriteToGeoJSONFile(LogoActivity.this, Itinerary, ChoosenLang + "_MyItinerary.geojson");
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
