@@ -30,7 +30,7 @@ public class GlobalsClass extends Application {
         ATTRACTION(2),
         SHOPPING(3),
         ITINERARY(4),
-        PATHOVERLAY(5);
+        NONE(5);
 
         private int num;
         FeatureType(int arg){

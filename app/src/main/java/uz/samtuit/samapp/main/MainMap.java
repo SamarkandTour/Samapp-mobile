@@ -3,6 +3,7 @@ package uz.samtuit.samapp.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
@@ -11,8 +12,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Pair;
@@ -37,7 +41,6 @@ import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
 import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
 import com.mapbox.mapboxsdk.overlay.Marker;
-import com.mapbox.mapboxsdk.overlay.PathOverlay;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
@@ -82,6 +85,7 @@ public class MainMap extends ActionBarActivity {
     private ProgressBar progressBar;
     private GeomagneticField geoField;
     private Marker pressedMarker;
+    private boolean isNotified;
 
     private final int POPULATE_HOTELS_MARKERS = 100;
     private final int POPULATE_FOODS_MARKERS = 101;
@@ -286,14 +290,40 @@ public class MainMap extends ActionBarActivity {
                     mNavigationView.setDeclination(geoField.getDeclination());
                     mNavigationView.setDistance(location.distanceTo(mDestinationLoc));
                     mNavigationView.setBearing(location.bearingTo(mDestinationLoc));
+
+                    // Notify one time as the value of Settings menu when I arrived near the destination
+                    if (location.distanceTo(mDestinationLoc) < 70) { // 70m
+                        marqueeText.setEnabled(true);
+                        marqueeText.setTextColor(Color.RED);
+                        marqueeText.setText(R.string.marquee_arrival_noti);
+
+                        if (!isNotified) {
+                            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                            vibrator.vibrate(500);
+
+                            SoundPool soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+                            int soundId = soundPool.load(getApplicationContext(), R.raw.dingdong, 1);
+                            soundPool.play(soundId, 1, 1, 0, 0, 1);
+
+                            isNotified = true;
+                        }
+                    } else {
+                        marqueeText.setEnabled(false);
+                    }
                 }
             }
 
             @Override
-            public void onProviderDisabled(String provider) { // When turn off GPS
+            public void onProviderDisabled(String provider) { // When turn off GPS by shortcut
                 super.onProviderDisabled(provider);
-                mAnimMyPosImage.clearAnimation();
-                mSensorManager.unregisterListener(mListener); // Without GPS, sensor value is meaningless
+                setSearchMyLocEnabled(false);
+                setNavigationEnable(false);
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) { // When turn on GPS by shortcut
+                super.onProviderEnabled(provider);
+                setSearchMyLocEnabled(true);
             }
         };
 
@@ -313,11 +343,32 @@ public class MainMap extends ActionBarActivity {
         mDestinationLoc = new Location(LocationManager.GPS_PROVIDER);
     }
 
+    private void setSearchMyLocEnabled(boolean enabled) {
+        isSearchMyLocEnabled = enabled;
+
+        if (enabled) {
+            //Show icon animation until my location is recognized by first GPS signal
+            myLocationOverlay.goToMyPosition(true);
+            animGPS = AnimationUtils.loadAnimation(this, R.anim.scale);
+            mAnimMyPosImage.startAnimation(animGPS);
+            marqueeText.setText(R.string.marquee_searching_you);
+
+            if(isNavigationEnabled) {
+                mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
+            }
+        } else {
+            mAnimMyPosImage.clearAnimation();
+            marqueeText.setText("");
+
+            if(isNavigationEnabled) {
+                mSensorManager.unregisterListener(mListener);
+            }
+        }
+    }
+
     //myLocation button click
     public void myLocationClick(View view)
     {
-        isSearchMyLocEnabled = true;
-
         if(SystemSetting.checkGPSStatus(this) == 0) { // If GPS is OFF
             mGPSSettingDialog = new CustomDialog(this,
                     R.string.title_dialog_gps_setting,
@@ -328,11 +379,7 @@ public class MainMap extends ActionBarActivity {
                     noClickListener);
             mGPSSettingDialog.show();
         } else {
-            //Show icon animation until my location is recognized by first GPS signal
-            myLocationOverlay.goToMyPosition(true);
-            animGPS = AnimationUtils.loadAnimation(this, R.anim.scale);
-            mAnimMyPosImage.startAnimation(animGPS);
-            marqueeText.setText(R.string.marquee_searching_you);
+            setSearchMyLocEnabled(true);
         }
     }
 
@@ -386,8 +433,9 @@ public class MainMap extends ActionBarActivity {
             mSensorManager.unregisterListener(mListener);
             if (!isSearchMyLocEnabled) {
                 marqueeText.setText("");
-
             }
+            mDestinationLoc.setLongitude(0);
+            mDestinationLoc.setLatitude(0);
         }
     }
 
@@ -426,19 +474,20 @@ public class MainMap extends ActionBarActivity {
                 case "features":
                     drawFeatures(FeatureType.valueOf(extras.getString("featureType")));
                     break;
+
                 case "feature":
                     String name = extras.getString("name");
 
                     double lat = 0 ,longt = 0;
                     lat = extras.getDouble("lat");
                     longt = extras.getDouble("long");
-                    LatLng loc = new LatLng(lat,longt);
+                    LatLng loc = new LatLng(lat, longt);
 
                     FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
-                    Marker m = new Marker(name,"", loc);
-                    m.setIcon(new Icon(markerDrawables.get(featureType.ordinal())));
+                    Marker marker = new Marker(name, "", loc);
+                    marker.setIcon(new Icon(markerDrawables.get(featureType.ordinal())));
 
-                    mapView.addMarker(m);
+                    mapView.addMarker(marker);
                     mapView.getController().animateTo(loc);
                     break;
             }
@@ -463,22 +512,17 @@ public class MainMap extends ActionBarActivity {
         if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON, Always indicate my location on the map
             myLocationOverlay.enableMyLocation();
             myLocationOverlay.setDrawAccuracyEnabled(true);
+            myLocationOverlay.setOverlayIndex(5); // To make be layers like, 0: Map, 3:TourFeatures, 4:Itinerary, 5:MyLocation
             mapView.getOverlays().add(myLocationOverlay);
 
             if(isSearchMyLocEnabled) {
-                //Show icon animation until my location is recognized by first GPS signal
-                animGPS = AnimationUtils.loadAnimation(this, R.anim.scale);
-                mAnimMyPosImage.startAnimation(animGPS);
-                marqueeText.setText(R.string.marquee_searching_you);
+                setSearchMyLocEnabled(true);
+            } else if (isNavigationEnabled) {
+                setNavigationEnable(true);
             }
-        } else {
-            mAnimMyPosImage.clearAnimation();
-        }
-
-        mapView.invalidate();
-
-        if(isNavigationEnabled) {
-            mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
+        } else { // GPS is OFF
+            setSearchMyLocEnabled(false);
+            setNavigationEnable(false);
         }
     }
 
@@ -486,34 +530,29 @@ public class MainMap extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         myLocationOverlay.disableMyLocation(); // Don't forget to prevent battery leak.
-        mAnimMyPosImage.clearAnimation();
-
-        if(isNavigationEnabled) {
-            mSensorManager.unregisterListener(mListener);
-        }
+        setSearchMyLocEnabled(false);
     }
 
     class PopulateMarkers extends AsyncTask<FeatureType, Pair<FeatureType,Object>, Void>{
 
-        ArrayList<Marker> markers = new ArrayList<Marker>();
+        ArrayList<Marker> itineraryMarkers = new ArrayList<Marker>();
+        ArrayList<Marker> featuresMarkers = new ArrayList<Marker>();
+        FeatureType markersFeatureType = FeatureType.NONE;
         FeatureCollection features = null;
-        Marker m = null;
+        Marker marker = null;
         int index = 0;
 
         @Override
         protected Void doInBackground(FeatureType... params) {
             String path = GlobalsClass.GeoJSONFileName[params[0].ordinal()];
             String lang = getApplicationContext().getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null);
+            markersFeatureType = params[0];
 
             try {
                 features = TourFeatureList.loadGeoJSONFromExternalFilesDir(MainMap.this, lang + path);
                 ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
                 for (Object obj : uiObjects) {
-                    FeatureType type = FeatureType.PATHOVERLAY;
-                    if (obj instanceof Marker) {
-                        type = params[0];
-                    }
-                    publishProgress(new Pair<FeatureType, Object>(type, obj));
+                    publishProgress(new Pair<FeatureType, Object>(markersFeatureType, obj));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -524,26 +563,25 @@ public class MainMap extends ActionBarActivity {
         @Override
         protected void onProgressUpdate(Pair<FeatureType, Object>... values) {
             super.onProgressUpdate(values);
-            if(values[0].first!=FeatureType.PATHOVERLAY) {
-                m = (Marker)values[0].second;
-                String title = null;
 
-                if(values[0].first==FeatureType.ITINERARY) {
-                    title = globalVariables.getItineraryFeatures().get(index).getString("name");
-                    BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, new Integer(++index).toString(), R.drawable.poi_bg);
-                    m.setMarker((Drawable) markerimg);
-                    m.setToolTip(new CustomInfoWindow(MainMap.this, mapView, index-1)); // Set as array index
-                }
-                else {
-                    title = globalVariables.getTourFeatures(values[0].first).get(index++).getString("name");
-                    m.setMarker(markerDrawables.get(values[0].first.ordinal()));
-                }
-                m.setTitle(title);
-                markers.add(m); // Add for IconOverlay event handling
-                mapView.addMarker(m);
+            marker = (Marker)values[0].second;
+            String title = null;
+
+            if (values[0].first == FeatureType.ITINERARY) {
+                title = globalVariables.getItineraryFeatures().get(index).getString("name");
+                BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, new Integer(++index).toString(), R.drawable.poi_bg);
+                marker.setMarker(markerimg);
+                marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, index-1)); // Set as array index
+                marker.setTitle(title);
+                mapView.addMarker(marker);
+                itineraryMarkers.add(marker); // For adding as ItemizedIconOverlay
             }
-            else {
-                mapView.getOverlays().add((PathOverlay) values[0].second);
+            else { // TourFeatures
+                title = globalVariables.getTourFeatures(values[0].first).get(index++).getString("name");
+                marker.setMarker(markerDrawables.get(values[0].first.ordinal()));
+                marker.setTitle(title);
+                mapView.addMarker(marker);
+                featuresMarkers.add(marker); // For adding as ItemizedIconOverlay
             }
         }
 
@@ -556,7 +594,19 @@ public class MainMap extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            mapView.addItemizedOverlay(new ItemizedIconOverlay(MainMap.this, markers, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
+
+            ArrayList markers =  null;
+            int overlayIndex = 0;
+
+            if (markersFeatureType == FeatureType.ITINERARY) {
+                markers = itineraryMarkers;
+                overlayIndex = 4;
+            } else {
+                markers = featuresMarkers;
+                overlayIndex = 3;
+            }
+
+            ItemizedIconOverlay iOverlay = new ItemizedIconOverlay(MainMap.this, markers, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
                 @Override
                 public boolean onItemSingleTapUp(int i, Marker marker) {
                     pressedMarker = marker;
@@ -567,9 +617,12 @@ public class MainMap extends ActionBarActivity {
                 public boolean onItemLongPress(int index, Marker item) {
                     return false;
                 }
-            }));
+            });
+
+            iOverlay.setOverlayIndex(overlayIndex); // To make be layers like, 0: Map, 3:TourFeatures, 4:Itinerary, 5:MyLocation
+            mapView.addItemizedOverlay(iOverlay);
+
             progressBar.setVisibility(View.GONE);
         }
-
     }
 }

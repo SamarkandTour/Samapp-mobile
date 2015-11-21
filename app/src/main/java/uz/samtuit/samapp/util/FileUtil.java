@@ -40,6 +40,10 @@ public class FileUtil {
     public static boolean fileWriteToExternalDir(Context context, String fileName, String content) {
         File file = new File(context.getExternalFilesDir(null), fileName);
 
+        if(file.exists()) {
+            return true;
+        }
+
         try {
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(content.getBytes());
@@ -48,7 +52,7 @@ public class FileUtil {
             e.printStackTrace();
         }
 
-        return  true;
+        return true;
     }
 
     public static boolean CopyFilesFromAssetToExternalDir(Context context, String[] listFiles) {

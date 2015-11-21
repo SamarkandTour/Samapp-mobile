@@ -43,6 +43,7 @@ public class TourFeatureList {
         }
     }
 
+    // Do this when first launch
     public static boolean writeAllPhotosToFiles(Context context) {
         try {
             for ( String lang : GlobalsClass.supportedLanguages) {
