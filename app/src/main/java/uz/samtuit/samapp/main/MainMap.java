@@ -34,28 +34,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.cocoahero.android.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
-import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
 import com.mapbox.mapboxsdk.overlay.Marker;
+import com.mapbox.mapboxsdk.overlay.Overlay;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
-import com.mapbox.mapboxsdk.util.DataLoadingUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.MenuItems;
 import uz.samtuit.samapp.util.SystemSetting;
-import uz.samtuit.samapp.util.TourFeatureList;
+import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.sammap.main.R;
 
 import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
@@ -120,8 +119,6 @@ public class MainMap extends ActionBarActivity {
 
         setMarkerIcons();
         drawFeatures(FeatureType.ITINERARY);
-
-        handleExtraRequest();
     }
 
     private void setMapView() {
@@ -293,7 +290,6 @@ public class MainMap extends ActionBarActivity {
 
                     // Notify one time as the value of Settings menu when I arrived near the destination
                     if (location.distanceTo(mDestinationLoc) < 70) { // 70m
-                        marqueeText.setEnabled(true);
                         marqueeText.setTextColor(Color.RED);
                         marqueeText.setText(R.string.marquee_arrival_noti);
 
@@ -308,7 +304,7 @@ public class MainMap extends ActionBarActivity {
                             isNotified = true;
                         }
                     } else {
-                        marqueeText.setEnabled(false);
+                        marqueeText.setTextColor(Color.BLACK);
                     }
                 }
             }
@@ -332,6 +328,13 @@ public class MainMap extends ActionBarActivity {
         mGpsLocProvider.setLocationUpdateMinDistance(5); //5m
 
         myLocationOverlay = new UserLocationOverlay(mGpsLocProvider, mapView);
+        myLocationOverlay.enableMyLocation();
+        myLocationOverlay.setDrawAccuracyEnabled(true);
+
+        // To make be layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker, 4:TourFeatures, 5:Itinerary, 6:MyLocation
+        myLocationOverlay.setOverlayIndex(6);
+        mapView.getOverlays().add(myLocationOverlay);
+
         mAnimMyPosImage = (ImageView)findViewById(R.id.myPositon);
     }
 
@@ -467,33 +470,6 @@ public class MainMap extends ActionBarActivity {
         return intent;
     }
 
-    private void handleExtraRequest() {
-        Bundle extras = getIntent().getExtras();
-        if (extras!=null) {
-            switch (extras.getString("type")){
-                case "features":
-                    drawFeatures(FeatureType.valueOf(extras.getString("featureType")));
-                    break;
-
-                case "feature":
-                    String name = extras.getString("name");
-
-                    double lat = 0 ,longt = 0;
-                    lat = extras.getDouble("lat");
-                    longt = extras.getDouble("long");
-                    LatLng loc = new LatLng(lat, longt);
-
-                    FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
-                    Marker marker = new Marker(name, "", loc);
-                    marker.setIcon(new Icon(markerDrawables.get(featureType.ordinal())));
-
-                    mapView.addMarker(marker);
-                    mapView.getController().animateTo(loc);
-                    break;
-            }
-        }
-    }
-
     private final SensorEventListener mListener = new SensorEventListener() {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
@@ -511,9 +487,6 @@ public class MainMap extends ActionBarActivity {
 
         if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON, Always indicate my location on the map
             myLocationOverlay.enableMyLocation();
-            myLocationOverlay.setDrawAccuracyEnabled(true);
-            myLocationOverlay.setOverlayIndex(5); // To make be layers like, 0: Map, 3:TourFeatures, 4:Itinerary, 5:MyLocation
-            mapView.getOverlays().add(myLocationOverlay);
 
             if(isSearchMyLocEnabled) {
                 setSearchMyLocEnabled(true);
@@ -533,38 +506,76 @@ public class MainMap extends ActionBarActivity {
         setSearchMyLocEnabled(false);
     }
 
-    class PopulateMarkers extends AsyncTask<FeatureType, Pair<FeatureType,Object>, Void>{
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
 
-        ArrayList<Marker> itineraryMarkers = new ArrayList<Marker>();
-        ArrayList<Marker> featuresMarkers = new ArrayList<Marker>();
-        FeatureType markersFeatureType = FeatureType.NONE;
-        FeatureCollection features = null;
-        Marker marker = null;
+        Bundle extras = intent.getExtras();
+        if (extras!=null) {
+            // If there are already drawn features, remove and redraw
+            if (mapView.getItemizedOverlays().size() != 1) { // If there is only Itinerary layer, size is 1
+                for (Overlay overlay : mapView.getOverlays()) {
+                    // 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker, 4:TourFeatures, 5:Itinerary, 6:MyLocation
+                    if (overlay.getOverlayIndex() == 4) {
+                        mapView.removeOverlay(overlay);
+                    } else if (overlay.getOverlayIndex() == 3) {
+                        ItemizedIconOverlay iOveray = (ItemizedIconOverlay)overlay;
+                        iOveray.getItem(0).closeToolTip();
+                        iOveray.removeItem(0);
+                    }
+                }
+            }
+
+            switch (extras.getString("type")){
+                case "features":
+                    drawFeatures(FeatureType.valueOf(extras.getString("featureType")));
+                    break;
+
+                case "feature":
+                    LatLng loc = new LatLng(extras.getDouble("lat"), extras.getDouble("long"));
+                    FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
+                    Marker marker = new Marker(extras.getString("name"), "", loc);
+                    marker.setMarker(markerDrawables.get(featureType.ordinal()));
+                    mapView.addMarker(marker);
+                    mapView.getController().animateTo(loc);
+                    break;
+            }
+        }
+    }
+
+    class PopulateMarkers extends AsyncTask<FeatureType, Pair<FeatureType, Marker>, FeatureType>{
+
+        ArrayList<Marker> itineraryMarkers;
+        ArrayList<Marker> featuresMarkers;
         int index = 0;
 
         @Override
-        protected Void doInBackground(FeatureType... params) {
-            String path = GlobalsClass.GeoJSONFileName[params[0].ordinal()];
-            String lang = getApplicationContext().getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null);
-            markersFeatureType = params[0];
+        protected FeatureType doInBackground(FeatureType... params) {
 
-            try {
-                features = TourFeatureList.loadGeoJSONFromExternalFilesDir(MainMap.this, lang + path);
-                ArrayList<Object> uiObjects = DataLoadingUtils.createUIObjectsFromGeoJSONObjects(features, null);
-                for (Object obj : uiObjects) {
-                    publishProgress(new Pair<FeatureType, Object>(markersFeatureType, obj));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            List features = null;
+
+            if (params[0] == FeatureType.ITINERARY) {
+                features = globalVariables.getItineraryFeatures();
+                itineraryMarkers = new ArrayList<Marker>();
+            } else {
+                features = globalVariables.getTourFeatures(params[0]);
+                featuresMarkers = new ArrayList<Marker>();
             }
-            return null;
-        }
+
+            for (Object feature : features) {
+                TourFeature tourFeature =  (TourFeature)feature;
+                Marker marker = new Marker(tourFeature.getString("name"), "", new LatLng(tourFeature.getLatitude(), tourFeature.getLongitude()));
+                publishProgress(new Pair<FeatureType, Marker>(params[0], marker));
+            }
+
+            return params[0];
+    }
 
         @Override
-        protected void onProgressUpdate(Pair<FeatureType, Object>... values) {
+        protected void onProgressUpdate(Pair<FeatureType, Marker>... values) {
             super.onProgressUpdate(values);
 
-            marker = (Marker)values[0].second;
+            Marker marker = (Marker)values[0].second;
             String title = null;
 
             if (values[0].first == FeatureType.ITINERARY) {
@@ -573,14 +584,12 @@ public class MainMap extends ActionBarActivity {
                 marker.setMarker(markerimg);
                 marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, index-1)); // Set as array index
                 marker.setTitle(title);
-                mapView.addMarker(marker);
                 itineraryMarkers.add(marker); // For adding as ItemizedIconOverlay
             }
             else { // TourFeatures
                 title = globalVariables.getTourFeatures(values[0].first).get(index++).getString("name");
                 marker.setMarker(markerDrawables.get(values[0].first.ordinal()));
                 marker.setTitle(title);
-                mapView.addMarker(marker);
                 featuresMarkers.add(marker); // For adding as ItemizedIconOverlay
             }
         }
@@ -592,25 +601,26 @@ public class MainMap extends ActionBarActivity {
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(FeatureType featureType) {
+            super.onPostExecute(featureType);
 
             ArrayList markers =  null;
             int overlayIndex = 0;
 
-            if (markersFeatureType == FeatureType.ITINERARY) {
+            if (featureType == FeatureType.ITINERARY) {
                 markers = itineraryMarkers;
-                overlayIndex = 4;
+                overlayIndex = 5;
             } else {
                 markers = featuresMarkers;
-                overlayIndex = 3;
+                overlayIndex = 4;
             }
 
             ItemizedIconOverlay iOverlay = new ItemizedIconOverlay(MainMap.this, markers, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
                 @Override
                 public boolean onItemSingleTapUp(int i, Marker marker) {
                     pressedMarker = marker;
-                    return false;
+                    mapView.selectMarker(marker);
+                    return true;
                 }
 
                 @Override
@@ -619,7 +629,8 @@ public class MainMap extends ActionBarActivity {
                 }
             });
 
-            iOverlay.setOverlayIndex(overlayIndex); // To make be layers like, 0: Map, 3:TourFeatures, 4:Itinerary, 5:MyLocation
+            // To make be layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker, 4:TourFeatures, 5:Itinerary, 6:MyLocation
+            iOverlay.setOverlayIndex(overlayIndex);
             mapView.addItemizedOverlay(iOverlay);
 
             progressBar.setVisibility(View.GONE);

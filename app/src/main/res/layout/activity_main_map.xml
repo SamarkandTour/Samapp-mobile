@@ -59,7 +59,6 @@ android:gravity="bottom"
             android:textSize="20sp"
             android:text="Welcome to Samarkand!"
             android:focusable="true"
-            android:enabled="false"
             android:focusableInTouchMode="true" />
 
     </LinearLayout>

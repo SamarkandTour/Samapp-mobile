@@ -317,6 +317,7 @@ public class ItemsListActivity extends ActionBarActivity {
                 Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
                 intent.putExtra("type", "features");
                 intent.putExtra("featureType",S_ACTIVITY_NAME.toString());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
             case R.id.action_sort:
                 Collections.sort(items, new CustomComparator());

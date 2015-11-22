@@ -53,7 +53,9 @@ public class BitmapUtil {
 
         @Override
         public void draw(Canvas arg0) {
-            arg0.drawBitmap(bitmap, null, this.getBounds(), textPaint);
+            Paint bitmapPaint = new Paint();
+            bitmapPaint.setAlpha(127);
+            arg0.drawBitmap(bitmap, null, this.getBounds(), bitmapPaint);
             textPaint.setTypeface(Typeface.create((String) null, Typeface.BOLD));
             textPaint.setTextSize(18 * density);
             textPaint.setTypeface(Typeface.DEFAULT);

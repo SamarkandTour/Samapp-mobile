@@ -167,6 +167,7 @@ public class ListItemActivity extends ActionBarActivity {
                 Log.e(latitude + "", longitude + "");
                 intent.putExtra("name", name);
                 intent.putExtra("featureType",featureType);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 return false;
             }
