@@ -452,7 +452,7 @@ public class MainMap extends ActionBarActivity {
         switch (mainMenu)
         {
             case ITINERARYWIZARD:
-                intent = new Intent(MainMap.this, DaySelectWizardActivity.class);
+                intent = new Intent(MainMap.this, WizardDaySelectActivity.class);
                 break;
             case ITINERARY:
                 intent = new Intent(MainMap.this, SuggestedItineraryActivity.class);
@@ -464,7 +464,7 @@ public class MainMap extends ActionBarActivity {
                 intent = new Intent(MainMap.this, ItemsListActivity.class);
                 break;
             case SETTING:
-                intent = new Intent(MainMap.this, AboutAppActivity.class);
+                intent = new Intent(MainMap.this, LanguageSettingActivity.class);
                 break;
         }
         return intent;
@@ -506,34 +506,49 @@ public class MainMap extends ActionBarActivity {
         setSearchMyLocEnabled(false);
     }
 
+    private void clearItineraryLayer() {
+        for (Overlay overlay : mapView.getOverlays()) {
+            if (overlay.getOverlayIndex() == 5) {
+                mapView.removeOverlay(overlay);
+            }
+        }
+    }
+
+    private void clearAllLayersExceptForItinerary() {
+        if (mapView.getItemizedOverlays().size() != 1) { // If there is only Itinerary layer, size is 1
+            for (Overlay overlay : mapView.getOverlays()) {
+                // Layer's Index - 0:Map(default), 2:Path(default), 2:UserLoc(default),
+                // 3:Marker(custom), 4:TourFeatures(custom), 5:Itinerary(custom), 6:MyLocation(custom)
+                if (overlay.getOverlayIndex() == 4) {
+                    mapView.removeOverlay(overlay);
+                } else if (overlay.getOverlayIndex() == 3) {
+                    ItemizedIconOverlay iOveray = (ItemizedIconOverlay)overlay;
+                    iOveray.getItem(0).closeToolTip();
+                    iOveray.removeItem(0);
+                }
+            }
+        }
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
         Bundle extras = intent.getExtras();
         if (extras!=null) {
-            // If there are already drawn features, remove and redraw
-            if (mapView.getItemizedOverlays().size() != 1) { // If there is only Itinerary layer, size is 1
-                for (Overlay overlay : mapView.getOverlays()) {
-                    // 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker, 4:TourFeatures, 5:Itinerary, 6:MyLocation
-                    if (overlay.getOverlayIndex() == 4) {
-                        mapView.removeOverlay(overlay);
-                    } else if (overlay.getOverlayIndex() == 3) {
-                        ItemizedIconOverlay iOveray = (ItemizedIconOverlay)overlay;
-                        iOveray.getItem(0).closeToolTip();
-                        iOveray.removeItem(0);
-                    }
-                }
-            }
+            clearAllLayersExceptForItinerary(); // If there are already drawn features, remove and redraw
+            FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
 
             switch (extras.getString("type")){
                 case "features":
-                    drawFeatures(FeatureType.valueOf(extras.getString("featureType")));
+                    if (featureType == FeatureType.ITINERARY) {
+                        clearItineraryLayer();
+                    }
+                    drawFeatures(featureType);
                     break;
 
                 case "feature":
                     LatLng loc = new LatLng(extras.getDouble("lat"), extras.getDouble("long"));
-                    FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
                     Marker marker = new Marker(extras.getString("name"), "", loc);
                     marker.setMarker(markerDrawables.get(featureType.ordinal()));
                     mapView.addMarker(marker);
@@ -560,6 +575,10 @@ public class MainMap extends ActionBarActivity {
             } else {
                 features = globalVariables.getTourFeatures(params[0]);
                 featuresMarkers = new ArrayList<Marker>();
+            }
+
+            if(features == null) {
+                return null;
             }
 
             for (Object feature : features) {
@@ -607,6 +626,12 @@ public class MainMap extends ActionBarActivity {
             ArrayList markers =  null;
             int overlayIndex = 0;
 
+            if (featureType == null) {
+                progressBar.setVisibility(View.GONE);
+                return;
+            }
+
+            // To make custom layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker, 4:TourFeatures, 5:Itinerary, 6:MyLocation
             if (featureType == FeatureType.ITINERARY) {
                 markers = itineraryMarkers;
                 overlayIndex = 5;
@@ -620,7 +645,7 @@ public class MainMap extends ActionBarActivity {
                 public boolean onItemSingleTapUp(int i, Marker marker) {
                     pressedMarker = marker;
                     mapView.selectMarker(marker);
-                    return true;
+                    return true; // Should be true because we handled this event
                 }
 
                 @Override
@@ -629,7 +654,6 @@ public class MainMap extends ActionBarActivity {
                 }
             });
 
-            // To make be layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker, 4:TourFeatures, 5:Itinerary, 6:MyLocation
             iOverlay.setOverlayIndex(overlayIndex);
             mapView.addItemizedOverlay(iOverlay);
 

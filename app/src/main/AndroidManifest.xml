@@ -17,7 +17,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.NoActionBar" >
-        <activity android:name="uz.samtuit.samapp.main.LogoActivity" >
+        <activity android:name="uz.samtuit.samapp.main.LogoActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,14 +39,12 @@
         <activity android:name="uz.samtuit.samapp.main.tabActivity" />
         <activity android:name="uz.samtuit.samapp.main.LanguageSettingActivity" />
         <activity android:name="uz.samtuit.samapp.main.AboutCityActivity" />
-        <activity android:name="uz.samtuit.samapp.main.DaySelectWizardActivity" />
+        <activity android:name="uz.samtuit.samapp.main.WizardDaySelectActivity" />
+        <activity android:name="uz.samtuit.samapp.main.WizardCourseSelectActivity" />
         <activity android:name="uz.samtuit.samapp.main.SuggestedItineraryActivity" />
         <activity android:name="uz.samtuit.samapp.main.TrainsTimeTableActivity" />
         <activity android:name="uz.samtuit.samapp.main.TashkentSamarkandActivity" />
-        <activity android:name="uz.samtuit.samapp.main.AboutAppActivity" />
-        <activity
-            android:name="uz.samtuit.samapp.main.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+        <activity android:name="uz.samtuit.samapp.main.AboutAppActivity" >
         </activity>
     </application>
 

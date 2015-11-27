@@ -1,27 +1,17 @@
 package uz.samtuit.samapp.util;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.cocoahero.android.geojson.Feature;
 import com.cocoahero.android.geojson.FeatureCollection;
-import com.cocoahero.android.geojson.GeoJSON;
 import com.cocoahero.android.geojson.Point;
-import com.mapbox.mapboxsdk.util.DataLoadingUtils;
-import com.mapbox.mapboxsdk.util.constants.UtilConstants;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import uz.samtuit.sammap.main.R;
@@ -30,31 +20,27 @@ import uz.samtuit.sammap.main.R;
  * Create Tour Features List from GeoJSON file
  */
 public class TourFeatureList {
+    private static final String photoDirectory = "photo/";
     private ArrayList<TourFeature> tourFeatureList;
-    private LinkedList<TourFeature> itineraryList;
 
     public TourFeatureList() {
         tourFeatureList = new ArrayList<TourFeature>();
     }
 
-    public TourFeatureList(GlobalsClass.FeatureType featureType) {
-        if (featureType == GlobalsClass.FeatureType.ITINERARY) {
-            itineraryList = new LinkedList<TourFeature>();
-        }
-    }
-
     // Do this when first launch
     public static boolean writeAllPhotosToFiles(Context context) {
         try {
+            FileUtil.createDirectoryInExternalDir(context, photoDirectory);
+
             for ( String lang : GlobalsClass.supportedLanguages) {
-                for (int i = 0; i < 4; i++) {
-                    FeatureCollection featureCollection = loadGeoJSONFromExternalFilesDir(context, lang + GlobalsClass.GeoJSONFileName[i]);
+                for (int i = 0; i < GlobalsClass.featuresGeoJSONFileName.length; i++) {
+                    FeatureCollection featureCollection = FileUtil.loadFeatureCollectionfromExternalGeoJSONFile(context, lang + GlobalsClass.featuresGeoJSONFileName[i]);
                     List<Feature> featuresList = featureCollection.getFeatures();
                     Log.e("SIZE", featuresList.size() + "");
 
                     for (Feature v : featuresList) {
                         if (!v.getProperties().isNull("photo")) {
-                            FileUtil.fileWriteToExternalDir(context, v.getProperties().getString("name"), v.getProperties().getString("photo"));
+                            FileUtil.fileWriteToExternalDir(context, photoDirectory + v.getProperties().getString("name"), v.getProperties().getString("photo"));
                         }
                     }
                 }
@@ -77,7 +63,7 @@ public class TourFeatureList {
 
     public ArrayList<TourFeature> getTourFeatureListFromGeoJSONFile(Context context, String fileName) {
         try {
-            FeatureCollection featureCollection = loadGeoJSONFromExternalFilesDir(context, fileName);
+            FeatureCollection featureCollection = FileUtil.loadFeatureCollectionfromExternalGeoJSONFile(context, fileName);
             List<Feature> featuresList = featureCollection.getFeatures();
             Log.e("SIZE",featuresList.size()+"");
 
@@ -89,7 +75,7 @@ public class TourFeatureList {
                 } else {
                     // Changed the location of physical photo to a file to reduce on-memory size
                     // Just leave the name of the file here
-                    tourFeature.setPhoto(v.getProperties().getString("name"));
+                    tourFeature.setPhoto(photoDirectory + v.getProperties().getString("name"));
                 }
 
                 tourFeature.setRating(v.getProperties().getInt("rating"));
@@ -198,69 +184,6 @@ public class TourFeatureList {
 
     }
 
-    public LinkedList<TourFeature> getItineraryFeatureListFromGeoJSONFile(Context context, String fileName) {
-        try {
-            FeatureCollection featureCollection = loadGeoJSONFromExternalFilesDir(context, fileName);
-            List<Feature> featuresList = featureCollection.getFeatures();
-            Log.e("SIZE", featuresList.size() + "");
-
-            for (Feature v:featuresList) {
-                TourFeature itineraryElement = findFeature(context, v.getProperties().getString("name"));
-                if (itineraryElement == null) {
-                    Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
-                    return null;
-                }
-                itineraryElement.setDay(v.getProperties().getInt("day"));
-                itineraryList.add(itineraryElement);
-            }
-        } catch (IOException e) {
-            // File not found, Try re-download
-            Toast.makeText(context, R.string.Err_file_not_found, Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-            return null;
-        } catch (JSONException e) {
-            // JSON Format is malformed
-            Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-            return null;
-        }
-
-        return itineraryList;
-    }
-
-    public static boolean ItineraryWriteToGeoJSONFile(Context context, LinkedList<TourFeature> itineraryList, String fileName) {
-        FeatureCollection featureCollection = new FeatureCollection();
-        for (TourFeature v : itineraryList) {
-            Feature feature = new Feature();
-
-            try {
-                Point coordinates = new Point(v.getLatitude(), v.getLongitude()); // Caution! the order of coordinates
-                feature.setGeometry(coordinates);
-
-                JSONObject properties = new JSONObject();
-                properties.put("photo", v.getPhoto());
-                properties.put("rating", v.getRating());
-                properties.put("name", v.getString("name"));
-                properties.put("day", v.getDay());
-                properties.put("comment", "");
-                feature.setProperties(properties);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            featureCollection.addFeature(feature);
-        }
-
-        try {
-            String ItineraryGeoJSON = featureCollection.toJSON().toString();
-            FileUtil.fileWriteToExternalDir(context, fileName, ItineraryGeoJSON);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return true;
-    }
-
     // All downloaded GeoJSON files from server should be located in ExternalDir
     // So working directory is ExternalDir, all files in the asset should be copied to ExternalDir at first launch
     public static boolean CopyLocalGeoJSONFilesToExternalDir(Context context) {
@@ -275,26 +198,5 @@ public class TourFeatureList {
         }
 
         return true;
-    }
-
-    public static FeatureCollection loadGeoJSONFromExternalFilesDir(final Context context, final String fileName)  throws IOException, JSONException {
-        if (TextUtils.isEmpty(fileName)) {
-            throw new NullPointerException("No GeoJSON File Name passed in.");
-        }
-
-        if (UtilConstants.DEBUGMODE) {
-            Log.d(DataLoadingUtils.class.getCanonicalName(), "Mapbox SDK loading GeoJSON URL: " + fileName);
-        }
-
-        FileInputStream fis = new FileInputStream(context.getExternalFilesDir(null).getAbsolutePath() + "/" + fileName);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(fis, Charset.forName("UTF-8")));
-        String jsonText = DataLoadingUtils.readAll(rd);
-
-        FeatureCollection parsed = (FeatureCollection) GeoJSON.parse(jsonText);
-        if (UtilConstants.DEBUGMODE) {
-            Log.d(DataLoadingUtils.class.getCanonicalName(), "Parsed GeoJSON with " + parsed.getFeatures().size() + " features.");
-        }
-
-        return parsed;
     }
 }

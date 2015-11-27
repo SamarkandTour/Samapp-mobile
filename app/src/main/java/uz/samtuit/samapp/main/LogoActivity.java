@@ -14,10 +14,10 @@ import android.widget.Toast;
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.GlobalsClass;
+import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.samapp.util.TourFeatureList;
@@ -25,17 +25,17 @@ import uz.samtuit.sammap.main.R;
 
 
 public class LogoActivity extends ActionBarActivity {
-    private boolean updateAvailable = false;
     private static ArrayList<TourFeature> Hotels;
     private static ArrayList<TourFeature> Shops;
     private static ArrayList<TourFeature> Attractions;
     private static ArrayList<TourFeature> Foods;
-    private static LinkedList<TourFeature> Itinerary;
+
     private CustomDialog mUpdateAvalDialog;
     private String path;
     private TextView tvInfo;
     private GlobalsClass globals;
     private SharedPreferences pref;
+    private boolean updateAvailable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class LogoActivity extends ActionBarActivity {
         setContentView(R.layout.activity_logo);
         tvInfo = (TextView)findViewById(R.id.tv_info);
 
-        pref = getApplicationContext().getSharedPreferences("SamTour_Pref", 0);
+        pref = LogoActivity.this.getSharedPreferences("SamTour_Pref", 0);
         if (pref.getBoolean("app_first_launch", true)) {
             // IF the system locale is same as one of supported languages, set as it
             String systemLocale = SystemSetting.checkSystemLocale();
@@ -57,6 +57,8 @@ public class LogoActivity extends ActionBarActivity {
                 editor.putString("app_lang", systemLocale); // Set App language
                 editor.putString("app_version", "0.01"); // Set App version
                 editor.commit();
+
+                continueInBackgroundTask();
             } else {
                 // Go to language selection for UI, but set the delay for showing logo screen for a moment
                 Handler handler = new Handler();
@@ -128,6 +130,10 @@ public class LogoActivity extends ActionBarActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
+                // Since language selection has finished, Set features lists
+                String chosenLang = pref.getString("app_lang", null);
+
+
                 // Do below, when first launch
                 if (pref.getBoolean("app_first_launch", true)) {
                     // All downloaded GeoJSON files from server will be located in ExternalDir
@@ -137,52 +143,48 @@ public class LogoActivity extends ActionBarActivity {
                     }
 
                     TourFeatureList.writeAllPhotosToFiles(LogoActivity.this); // Make all photo data to files
-
-                    pref.edit().putBoolean("app_first_launch", false).commit(); // Set first_launch to false
                 }
 
-                // Since language selection has finished, Set features lists
-                String ChoosenLang = pref.getString("app_lang", null);
-
                 publishProgress(new Pair<Integer, String>(LOAD_START, "hotels"));
-                path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.HOTEL.ordinal()];
-                Hotels = new TourFeatureList().getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
+                path = GlobalsClass.featuresGeoJSONFileName[GlobalsClass.FeatureType.HOTEL.ordinal()];
+                Hotels = new TourFeatureList().getTourFeatureListFromGeoJSONFile(LogoActivity.this, chosenLang + path);
                 globals.setFeatures(GlobalsClass.FeatureType.HOTEL, Hotels);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
     //            TimeUnit.MILLISECONDS.sleep(500);
 
-                publishProgress(new Pair<Integer, String>(LOAD_START, "restourants"));
-                path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.FOODNDRINK.ordinal()];
-                Foods = new TourFeatureList().getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
+                publishProgress(new Pair<Integer, String>(LOAD_START, "restaurant"));
+                path = GlobalsClass.featuresGeoJSONFileName[GlobalsClass.FeatureType.FOODNDRINK.ordinal()];
+                Foods = new TourFeatureList().getTourFeatureListFromGeoJSONFile(LogoActivity.this, chosenLang + path);
                 globals.setFeatures(GlobalsClass.FeatureType.FOODNDRINK, Foods);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
     //            TimeUnit.MILLISECONDS.sleep(500);
 
                 publishProgress(new Pair<Integer, String>(LOAD_START, "attractions"));
-                path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.ATTRACTION.ordinal()];
-                Attractions = new TourFeatureList().getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
+                path = GlobalsClass.featuresGeoJSONFileName[GlobalsClass.FeatureType.ATTRACTION.ordinal()];
+                Attractions = new TourFeatureList().getTourFeatureListFromGeoJSONFile(LogoActivity.this, chosenLang + path);
                 globals.setFeatures(GlobalsClass.FeatureType.ATTRACTION, Attractions);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
     //            TimeUnit.MILLISECONDS.sleep(500);
 
                 publishProgress(new Pair<Integer, String>(LOAD_START,"shops"));
-                path = GlobalsClass.GeoJSONFileName[GlobalsClass.FeatureType.SHOPPING.ordinal()];
-                Shops = new TourFeatureList().getTourFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + path);
+                path = GlobalsClass.featuresGeoJSONFileName[GlobalsClass.FeatureType.SHOPPING.ordinal()];
+                Shops = new TourFeatureList().getTourFeatureListFromGeoJSONFile(LogoActivity.this, chosenLang + path);
                 globals.setFeatures(GlobalsClass.FeatureType.SHOPPING, Shops);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE,""));
 
     //            TimeUnit.MILLISECONDS.sleep(500);
 
-                publishProgress(new Pair<Integer, String>(LOAD_DONE, "itinerary"));
-                Itinerary = new TourFeatureList(GlobalsClass.FeatureType.ITINERARY).getItineraryFeatureListFromGeoJSONFile(getApplicationContext(), ChoosenLang + "_itinerary_mixed_1.5.geojson");
-                globals.setItineraryFeatures(Itinerary);
-                TourFeatureList.ItineraryWriteToGeoJSONFile(LogoActivity.this, Itinerary, ChoosenLang + "_MyItinerary.geojson");
+                publishProgress(new Pair<Integer, String>(LOAD_START, "itinerary"));
+                if (!pref.getBoolean("app_first_launch", true)) { // At first launch, there is no my itinerary
+                    path = ItineraryList.myItineraryGeoJSONFileName;
+                    ItineraryList.getInstance().getItineraryFeatureListFromGeoJSONFile(LogoActivity.this, chosenLang + path);
+                    ItineraryList.getInstance().setItinearyFeaturesToGlobal(LogoActivity.this);
+                }
+                ItineraryList.categorizeItineraryWithDays(LogoActivity.this, chosenLang); // Categorize the name of itinerary course with days
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
-
-    //            TimeUnit.MILLISECONDS.sleep(500);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -225,10 +227,19 @@ public class LogoActivity extends ActionBarActivity {
                 mUpdateAvalDialog.show();
             } else {
 //            Log.e("NEW LOG", "ENTER TO MAIN");
+                if (pref.getBoolean("app_first_launch", true)) {
+                    pref.edit().putBoolean("app_first_launch", false).commit(); // Don't forget, Set first_launch to false
 
-                Intent mainMap = new Intent(LogoActivity.this, MainMap.class);
-                startActivity(mainMap);
-                finish();
+                    Intent intent = new Intent(LogoActivity.this, WizardDaySelectActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(LogoActivity.this, MainMap.class);
+                    intent.putExtra("type", "features");
+                    intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
+                    startActivity(intent);
+                    finish();
+                }
 
 //            Log.e("NEW LOG","OUT FROM MAIN");
             }

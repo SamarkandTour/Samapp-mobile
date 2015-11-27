@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Samarkand Central Museum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chorsu Art Gallery",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Afrasiyab Museum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ulugh Beg Museum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Museum of Natural History",
+        "day": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Regional Studies Museum",
+        "day": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Uzbek Jewish Museum",
+        "day": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wine Museum",
+        "day": 2
+      }
+    }
+  ]
+}

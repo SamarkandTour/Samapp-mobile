@@ -1,0 +1,40 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Amusement Park",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nava'i Park",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gur-e Amir Mausoleum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Music Fountain at Registan street",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Registan Square",
+        "day": 1
+      }
+    }
+  ]
+}

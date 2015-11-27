@@ -1,0 +1,54 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Al-Bukhari Mausoleum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mahdum-i-Azam Mausoleum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "St. Daniel Mausoleum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Shah-i-Zinda Necropolis",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hazrat-Khyzr Mosque",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Al-Maturidi Mausoleum",
+        "day": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Khoja Ahror Wali Mausoleum",
+        "day": 2
+      }
+    }
+  ]
+}

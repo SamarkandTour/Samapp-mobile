@@ -1,0 +1,103 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boulevard",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gur-e Amir Mausoleum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rukhabad Mausoleum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Registan Square",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chorsu Art Gallery",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Craftsman's center",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bibi-Khanym Mosque",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Siyob Bazaar",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hazrat-Khyzr Mosque",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Afrasiyab Museum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "St. Daniel Mausoleum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ulugh Beg Museum",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ulugh Beg Observatory",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Shah-i-Zinda Necropolis",
+        "day": 1
+      }
+    }
+  ]
+}

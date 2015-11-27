@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Craftsman's center",
+        "day": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Paper Mill",
+        "day": 1
+      }
+    }
+  ]
+}

@@ -16,12 +16,11 @@ public class GlobalsClass extends Application {
     };
 
     // Don't change the order of the file, it's synced with FeatureType
-    static final public String[] GeoJSONFileName = {
+    static final public String[] featuresGeoJSONFileName = {
             "_hotels.geojson",
             "_foodndrinks.geojson",
             "_attractions.geojson",
             "_shopping.geojson",
-            "_MyItinerary.geojson"
     };
 
     public enum FeatureType {
@@ -76,7 +75,7 @@ public class GlobalsClass extends Application {
 
     public LinkedList<TourFeature> getItineraryFeatures()
     {
-        return Itinerary;
+        return this.Itinerary;
     }
 
     public void setFeatures(FeatureType featureType, ArrayList<TourFeature> featureArrayList)

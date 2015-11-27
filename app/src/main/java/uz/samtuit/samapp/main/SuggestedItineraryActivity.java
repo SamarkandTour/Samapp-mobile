@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import uz.samtuit.samapp.util.GlobalsClass;
+import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.sammap.main.R;
 
@@ -22,7 +23,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
     ViewPager pager;
     ViewPagerAdapter vpadapter;
     SlidingTabLayout tabs;
-    private final static int maxDaysCount = 5;
     private LinkedList<TourFeature> itineraryListFromGlobal;
     private LinkedList<TourFeature> itineraryListDay;
 
@@ -44,11 +44,11 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
             }
         });
 
-        CharSequence Titles[] = new CharSequence[maxDaysCount];
-        for (int i = 0; i < maxDaysCount; i++) {
+        CharSequence Titles[] = new CharSequence[ItineraryList.MAX_ITINERARY_DAYS];
+        for (int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++) {
             Titles[i] = "Day " + (i + 1);
         }
-        vpadapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, maxDaysCount);
+        vpadapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, ItineraryList.MAX_ITINERARY_DAYS);
 
         pager = (ViewPager)findViewById(R.id.pager);
         pager.setAdapter(vpadapter);
@@ -73,9 +73,13 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         itineraryListFromGlobal = globals.getItineraryFeatures();
         itineraryListArray = new ArrayList<LinkedList<TourFeature>>();
 
-        for (int i = 0; i < maxDaysCount; i++) {
+        for (int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++) {
             itineraryListDay = new LinkedList<TourFeature>();
             itineraryListArray.add(itineraryListDay);
+        }
+
+        if (itineraryListFromGlobal == null) {
+            return;
         }
 
         for (TourFeature v : itineraryListFromGlobal) {

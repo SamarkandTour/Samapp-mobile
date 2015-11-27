@@ -9,8 +9,10 @@
     <string name="title_itinerary_wizard">Itinerary Wizard</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="previous">Previous</string>
     <string name="next">Next</string>
     <string name="skip">Skip</string>
+    <string name="done">Done</string>
     <string name="update_alert">New update available! Would you like to update?</string>
     <string name="reviews">Rev</string>
     <string name="address">Address</string>
@@ -25,7 +27,8 @@
     <string name="toast_select_destination">First select a marker and press the Guide Me button</string>
     <string name="select_your_language">Please select your language</string>
     <string name="toast_navi_finding">Start to find a distance and a direction</string>
-    <string name="wizard_day_select">How many days are you staying in Samarkand?</string>\
+    <string name="wizard_day_select">How many days are you staying in Samarkand?</string>
+    <string name="wizard_course_select">Please decide the priority of your favorite courses</string>
     <string name="data_base_name">SamTour_data</string>
     <string name="pref_title_about_this_app">About this App</string>
     <string name="pref_title_data_sync">Now data &amp; sync</string>
@@ -37,4 +40,10 @@
     <string name="marquee_searching_target">"Searching direction and distance of "</string>
     <string name="marquee_guiding">"Guiding to "</string>
     <string name="marquee_arrival_noti">Now you are around the target destination</string>
+    <string name="itinerary_select_day">Select stay period</string>
+    <string name="itinerary_1st_course">Choose 1st Course</string>
+    <string name="itinerary_2nd_course">Choose 2nd Course</string>
+    <string name="itinerary_3rd_course">Choose 3rd Course</string>
+    <string name="itinerary_4th_course">Choose 4th Course</string>
+    <string name="itinerary_5th_course">Choose 5th Course</string>
 </resources>
