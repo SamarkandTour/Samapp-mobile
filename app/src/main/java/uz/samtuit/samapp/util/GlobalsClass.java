@@ -9,6 +9,10 @@ import java.util.LinkedList;
  * Globally shared valuables
  */
 public class GlobalsClass extends Application {
+    static final public String featuresDownloadURL = "http://download.samarkandtour.org/tour_database.zip";
+    static final public String mapDownloadURL = "http://download.samarkandtour.org/samarkand.mbtiles";
+    static final public String mapFileName = "samarkand.mbtiles";
+
     static final public String[] supportedLanguages = {
             "en",
             "uz",
@@ -49,22 +53,18 @@ public class GlobalsClass extends Application {
         switch(featureType)
         {
             case HOTEL:
-//                Log.e("GET","HOT");
                 tourFeatures = Hotels;
                 break;
 
             case FOODNDRINK:
-//                Log.e("GET","FOOD");
                 tourFeatures = FoodAndDrinks;
                 break;
 
             case ATTRACTION:
-//                Log.e("GET","ATTR");
                 tourFeatures = Attractions;
                 break;
 
             case SHOPPING:
-//                Log.e("GET","SHOP");
                 tourFeatures = Shops;
                 break;
         }
@@ -83,19 +83,18 @@ public class GlobalsClass extends Application {
         switch(featureType)
         {
             case HOTEL:
-//                Log.e("SET","HOTEL");
                 this.Hotels = featureArrayList;
                 break;
+
             case FOODNDRINK:
-//                Log.e("SET","FOODDRINK");
                 this.FoodAndDrinks = featureArrayList;
                 break;
+
             case ATTRACTION:
-//                Log.e("SET","ATTRACTION");
                 this.Attractions = featureArrayList;
                 break;
+
             case SHOPPING:
-//                Log.e("SET","SHOP");
                 this.Shops = featureArrayList;
                 break;
         }

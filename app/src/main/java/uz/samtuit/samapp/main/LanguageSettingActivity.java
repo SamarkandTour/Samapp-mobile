@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import uz.samtuit.samapp.util.SystemSetting;
-import uz.samtuit.sammap.main.R;
 
 public class LanguageSettingActivity extends AppCompatActivity {
 

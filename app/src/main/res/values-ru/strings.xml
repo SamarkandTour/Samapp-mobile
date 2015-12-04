@@ -6,6 +6,8 @@
     <string name="attractions">Достопримечательности</string>
     <string name="foodanddrinks">Еда и напитки</string>
     <string name="shopping">Шоппинг</string>
+    <string name="suggested_itinerary">Suggested Itinerary</string>
+    <string name="new_update">New update</string>
     <string name="title_itinerary_wizard">Itinerary Wizard</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>

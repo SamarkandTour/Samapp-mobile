@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.LinkedList;
 
 import uz.samtuit.samapp.util.TourFeature;
-import uz.samtuit.sammap.main.R;
 
 public class SuggestedItineraryAdapter extends ArrayAdapter<TourFeature> {
     LinkedList<TourFeature> data = null;

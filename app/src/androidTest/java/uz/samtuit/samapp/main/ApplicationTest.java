@@ -1,4 +1,4 @@
-package uz.samtuit.sammap.main;
+package uz.samtuit.samapp.main;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

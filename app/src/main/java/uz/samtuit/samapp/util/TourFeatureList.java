@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import uz.samtuit.sammap.main.R;
+import uz.samtuit.samapp.main.R;
 
 /**
  * Create Tour Features List from GeoJSON file
@@ -34,7 +34,7 @@ public class TourFeatureList {
 
             for ( String lang : GlobalsClass.supportedLanguages) {
                 for (int i = 0; i < GlobalsClass.featuresGeoJSONFileName.length; i++) {
-                    FeatureCollection featureCollection = FileUtil.loadFeatureCollectionfromExternalGeoJSONFile(context, lang + GlobalsClass.featuresGeoJSONFileName[i]);
+                    FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, lang + GlobalsClass.featuresGeoJSONFileName[i]);
                     List<Feature> featuresList = featureCollection.getFeatures();
                     Log.e("SIZE", featuresList.size() + "");
 
@@ -45,11 +45,6 @@ public class TourFeatureList {
                     }
                 }
             }
-        } catch (IOException e) {
-            // File not found, Try re-download
-            Toast.makeText(context, R.string.Err_file_not_found, Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-            return false;
         } catch (JSONException e) {
             // JSON Format is malformed
             Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
@@ -63,7 +58,11 @@ public class TourFeatureList {
 
     public ArrayList<TourFeature> getTourFeatureListFromGeoJSONFile(Context context, String fileName) {
         try {
-            FeatureCollection featureCollection = FileUtil.loadFeatureCollectionfromExternalGeoJSONFile(context, fileName);
+            FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, fileName);
+            if (featureCollection == null) {
+                return tourFeatureList;
+            }
+
             List<Feature> featuresList = featureCollection.getFeatures();
             Log.e("SIZE",featuresList.size()+"");
 
@@ -140,17 +139,10 @@ public class TourFeatureList {
 
                 tourFeatureList.add(tourFeature);
             }
-
-        } catch (IOException e) {
-            // File not found, Try re-download
-            Toast.makeText(context, R.string.Err_file_not_found, Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-            return null;
         } catch (JSONException e) {
             // JSON Format is malformed
             Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
             e.printStackTrace();
-            return null;
         }
 
         return tourFeatureList;
@@ -189,12 +181,14 @@ public class TourFeatureList {
     public static boolean CopyLocalGeoJSONFilesToExternalDir(Context context) {
         try {
             String[] filelist = context.getAssets().list("data"); // Files in the assets/data
+
             if (!FileUtil.CopyFilesFromAssetToExternalDir(context, filelist)) {
                 return false;
             }
 
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
         return true;

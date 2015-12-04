@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
-import uz.samtuit.sammap.main.R;
 
 public class WizardCourseSelectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private ArrayList<String> course1= new ArrayList<String>();

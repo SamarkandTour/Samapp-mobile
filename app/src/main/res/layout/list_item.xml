@@ -19,7 +19,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="4dp"
             android:layout_marginLeft="4dp"
-            android:src="@drawable/rasm" />
+            android:src="@drawable/round_back"
+            android:scaleType="centerCrop" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="72dp"

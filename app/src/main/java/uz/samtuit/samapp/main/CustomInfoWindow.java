@@ -14,7 +14,6 @@ import com.mapbox.mapboxsdk.views.MapView;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
-import uz.samtuit.sammap.main.R;
 
 /**
  * Custom Tooltip Window

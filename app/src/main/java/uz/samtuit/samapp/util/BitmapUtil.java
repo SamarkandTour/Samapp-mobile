@@ -48,24 +48,25 @@ public class BitmapUtil {
             DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
             this.setTargetDensity(metrics);
             density = metrics.density; //mdpi=1, hdpi=1.5, xhdpi=2, xxhdpi=2.5
-            textPaint = new Paint();
-        }
 
-        @Override
-        public void draw(Canvas arg0) {
-            Paint bitmapPaint = new Paint();
-            bitmapPaint.setAlpha(127);
-            arg0.drawBitmap(bitmap, null, this.getBounds(), bitmapPaint);
+            textPaint = new Paint();
             textPaint.setTypeface(Typeface.create((String) null, Typeface.BOLD));
             textPaint.setTextSize(18 * density);
             textPaint.setTypeface(Typeface.DEFAULT);
             textPaint.setAntiAlias(true);
             textPaint.setStyle(Paint.Style.FILL);
+        }
+
+        @Override
+        public void draw(Canvas canvas) {
+            Paint bitmapPaint = new Paint();
+            bitmapPaint.setAlpha(127);
+            canvas.drawBitmap(bitmap, null, this.getBounds(), bitmapPaint);
 
             int textWidth = getTextWidth(name) / 2;
             int centerX = this.getBounds().width() / 2;
             int centerY = this.getBounds().height() / 2;
-            arg0.drawText(name, centerX - textWidth, centerY, textPaint);
+            canvas.drawText(name, centerX - textWidth, centerY, textPaint);
         }
 
         private int getTextWidth(String text) {
@@ -92,6 +93,7 @@ public class BitmapUtil {
         private final int mBitmapWidth;
         private final int mBitmapHeight;
         private boolean mRoundedRect;
+        private int mRadius;
 
         public RoundedDrawable(Bitmap bitmap, boolean roundedRect) {
             mBitmap = bitmap;
@@ -105,6 +107,12 @@ public class BitmapUtil {
             mBitmapWidth = mBitmap.getWidth();
             mBitmapHeight = mBitmap.getHeight();
 
+            if (mBitmapWidth > mBitmapHeight) {
+                mRadius = mBitmapHeight / 2;
+            } else {
+                mRadius = mBitmapWidth / 2;
+            }
+
             mRoundedRect = roundedRect;
         }
 
@@ -113,7 +121,7 @@ public class BitmapUtil {
             if (mRoundedRect) {
                 canvas.drawRoundRect(mRectF, 20, 20, mPaint);
             } else {
-                canvas.drawCircle(mRectF.centerX(), mRectF.centerY(), canvas.getHeight(), mPaint);
+                canvas.drawCircle(mRectF.centerX(), mRectF.centerY(), mRadius, mPaint);
             }
         }
 

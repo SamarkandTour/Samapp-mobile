@@ -11,19 +11,19 @@ import com.cocoahero.android.geojson.Point;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import uz.samtuit.sammap.main.R;
+import uz.samtuit.samapp.main.R;
 
 /**
  * Itinerary Class
  */
 public class ItineraryList {
-    static final public String myItineraryGeoJSONFileName = "_MyItinerary.geojson"; // my customized itinerary file
+    static final public String myItineraryDirectory = "my_itinerary/"; // my customized itinerary file
+    static final public String myItineraryGeoJSONFileName = "_my_itinerary.geojson"; // my customized itinerary file
 
     public static final int MAX_ITINERARY_DAYS = 5;
     private static HashMap<String , Float> mCourseHashMap;
@@ -82,7 +82,11 @@ public class ItineraryList {
 
     public LinkedList<TourFeature> getItineraryFeatureListFromGeoJSONFile(Context context, String fileName) {
         try {
-            FeatureCollection featureCollection = FileUtil.loadFeatureCollectionfromExternalGeoJSONFile(context, fileName);
+            FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, fileName);
+            if (featureCollection == null) {
+                return mItineraryList;
+            }
+
             List<Feature> featuresList = featureCollection.getFeatures();
             Log.e("SIZE", featuresList.size() + "");
 
@@ -96,16 +100,10 @@ public class ItineraryList {
                     mItineraryList.add(itineraryElement);
                 }
             }
-        } catch (IOException e) {
-            // File not found, Try re-download
-            Toast.makeText(context, R.string.Err_file_not_found, Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-            return null;
         } catch (JSONException e) {
             // JSON Format is malformed
             Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
             e.printStackTrace();
-            return null;
         }
 
         return mItineraryList;
@@ -129,17 +127,20 @@ public class ItineraryList {
                 feature.setProperties(properties);
             } catch (JSONException e) {
                 e.printStackTrace();
+                return false;
             }
             featureCollection.addFeature(feature);
         }
 
         try {
+            FileUtil.createDirectoryInExternalDir(context, myItineraryDirectory);
+            String fileName = myItineraryDirectory + lang + myItineraryGeoJSONFileName;
             String ItineraryGeoJSON = featureCollection.toJSON().toString();
-            String path = lang + myItineraryGeoJSONFileName;
-            FileUtil.fileWriteToExternalDir(context, path, ItineraryGeoJSON);
+            FileUtil.fileWriteToExternalDir(context, fileName, ItineraryGeoJSON);
 
         } catch (JSONException e) {
             e.printStackTrace();
+            return false;
         }
 
         return true;

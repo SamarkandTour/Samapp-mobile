@@ -6,6 +6,8 @@
     <string name="attractions">Attractions</string>
     <string name="foodanddrinks">Food and Drinks</string>
     <string name="shopping">Shopping</string>
+    <string name="suggested_itinerary">Suggested Itinerary</string>
+    <string name="new_update">New update</string>
     <string name="title_itinerary_wizard">Itinerary Wizard</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -23,7 +25,7 @@
     <string name="Err_file_not_found">Error! File not found. Go to the setting, Try re-download</string>
     <string name="Err_wrong_itinerary_file">Error! wrong feature name in the itinerary file</string>
     <string name="title_dialog_update_available">Update available</string>
-    <string name="dialog_update_available">Now recent information is available!\nDo you want to update?\nBut you are not connected to Wi-Fi, the cost of data usage would be high.</string>
+    <string name="dialog_update_available">Now recent information is available!\nDo you want to update?\nBut if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
     <string name="toast_select_destination">First select a marker and press the Guide Me button</string>
     <string name="select_your_language">Please select your language</string>
     <string name="toast_navi_finding">Start to find a distance and a direction</string>
@@ -40,6 +42,8 @@
     <string name="marquee_searching_target">"Searching direction and distance of "</string>
     <string name="marquee_guiding">"Guiding to "</string>
     <string name="marquee_arrival_noti">Now you are around the target destination</string>
+    <string name="notify_download_complete">SamTour Download Complete</string>
+    <string name="notify_updatable">When restarted, the update will be applied</string>
     <string name="itinerary_select_day">Select stay period</string>
     <string name="itinerary_1st_course">Choose 1st Course</string>
     <string name="itinerary_2nd_course">Choose 2nd Course</string>

@@ -4,18 +4,17 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.cocoahero.android.geojson.FeatureCollection;
 import com.cocoahero.android.geojson.GeoJSON;
 import com.mapbox.mapboxsdk.util.DataLoadingUtils;
-import com.mapbox.mapboxsdk.util.constants.UtilConstants;
 
 import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -51,7 +50,7 @@ public class FileUtil {
     public static boolean createDirectoryInExternalDir(Context context, String dirName) {
         File dir = new File(context.getExternalFilesDir(null), dirName);
 
-        if (!dir.mkdirs()) {
+        if (!dir.mkdirs()) { // With including parent directory
             return false;
         }
         return true;
@@ -66,6 +65,7 @@ public class FileUtil {
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
         return true;
@@ -105,22 +105,24 @@ public class FileUtil {
         return  true;
     }
 
-    public static FeatureCollection loadFeatureCollectionfromExternalGeoJSONFile(final Context context, final String fileName)  throws IOException, JSONException {
+    public static FeatureCollection loadFeatureCollectionFromExternalGeoJSONFile(final Context context, final String fileName) throws JSONException {
+        FeatureCollection parsed = null;
+
         if (TextUtils.isEmpty(fileName)) {
             throw new NullPointerException("No GeoJSON File Name passed in.");
         }
 
-        if (UtilConstants.DEBUGMODE) {
-            Log.d(DataLoadingUtils.class.getCanonicalName(), "Mapbox SDK loading GeoJSON URL: " + fileName);
-        }
-
-        FileInputStream fis = new FileInputStream(context.getExternalFilesDir(null).getAbsolutePath() + "/" + fileName);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(fis, Charset.forName("UTF-8")));
-        String jsonText = DataLoadingUtils.readAll(rd);
-
-        FeatureCollection parsed = (FeatureCollection) GeoJSON.parse(jsonText);
-        if (UtilConstants.DEBUGMODE) {
-            Log.d(DataLoadingUtils.class.getCanonicalName(), "Parsed GeoJSON with " + parsed.getFeatures().size() + " features.");
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(context.getExternalFilesDir(null).getAbsolutePath() + "/" + fileName);
+            BufferedReader rd = new BufferedReader(new InputStreamReader(fis, Charset.forName("UTF-8")));
+            String jsonText = null;
+            jsonText = DataLoadingUtils.readAll(rd);
+            parsed = (FeatureCollection) GeoJSON.parse(jsonText);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return parsed;
@@ -137,4 +139,42 @@ public class FileUtil {
 
         return file.list(filenameFilter);
     }
+
+    public static boolean deleteAllExternalFilesWithExtension(Context context, String path, String extension) {
+        File file = new File(context.getExternalFilesDir(null).getAbsolutePath(), path);
+        File[] tempFile = file.listFiles();
+
+        if(tempFile != null){
+
+            for (int i = 0; i < tempFile.length; i++) {
+
+                if (tempFile[i].isFile()) {
+                    if (tempFile[i].getName().contains(extension)) {
+                        tempFile[i].delete();
+                    }
+                } else {
+                    //To remove files in the sub directory, Do recursive call
+                    deleteAllExternalFilesWithExtension(context, tempFile[i].getPath(), extension);
+                }
+                tempFile[i].delete();
+            }
+            file.delete();
+        }
+
+        return true;
+    }
+
+    public static boolean fileMoveToExternalDir(Context context, String orgFilePath) {
+        String fileName = orgFilePath.substring(orgFilePath.lastIndexOf("/"));
+        File orgFile = new File(orgFilePath);
+        File newFile = new File(context.getExternalFilesDir(null).getAbsolutePath(), fileName);
+
+        if (orgFile.exists()) {
+            orgFile.renameTo(newFile);
+            return true;
+        }
+
+        return false;
+    }
+
 }

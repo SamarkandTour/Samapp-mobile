@@ -32,7 +32,6 @@ import java.util.Comparator;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 import uz.samtuit.samapp.util.TourFeature;
-import uz.samtuit.sammap.main.R;
 
 
 public class ItemsListActivity extends ActionBarActivity {

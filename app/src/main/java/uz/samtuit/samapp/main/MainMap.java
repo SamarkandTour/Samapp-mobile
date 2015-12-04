@@ -55,7 +55,6 @@ import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.MenuItems;
 import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeature;
-import uz.samtuit.sammap.main.R;
 
 import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 
@@ -124,7 +123,7 @@ public class MainMap extends ActionBarActivity {
     private void setMapView() {
         compass = (ImageView)findViewById(R.id.compass);
 
-        TileLayer mbTileLayer = new MBTilesLayer(this, "samarkand.mbtiles");
+        TileLayer mbTileLayer = new MBTilesLayer(this, GlobalsClass.mapFileName);
         mapView.setTileSource(mbTileLayer);
         mapView.setCenter(new ILatLng() { // Registon
             @Override
@@ -154,17 +153,17 @@ public class MainMap extends ActionBarActivity {
     }
 
     private void drawBottomMenuIcons() {
-        MenuItems item = new MenuItems(0,"Itinerary Wizard","drawable/ic_s_about_city_h", MenuItems.MainMenu.ITINERARYWIZARD);
+        MenuItems item = new MenuItems(0,"Itinerary Wizard","drawable/itinerary_wizard", MenuItems.MainMenu.ITINERARYWIZARD);
         Items.add(item);
-        item = new MenuItems(1,"Suggested Itinerary","drawable/itnbtn_selector", MenuItems.MainMenu.ITINERARY);
+        item = new MenuItems(1,"Suggested Itinerary","drawable/itinerary", MenuItems.MainMenu.ITINERARY);
         Items.add(item);
-        item = new MenuItems(2,"Hotels","drawable/ic_s_hotel_h", MenuItems.MainMenu.HOTEL);
+        item = new MenuItems(2,"Hotels","drawable/hotel", MenuItems.MainMenu.HOTEL);
         Items.add(item);
-        item = new MenuItems(3,"Food & Drink","drawable/ic_s_food_and_drink_h", MenuItems.MainMenu.FOODNDRINK);
+        item = new MenuItems(3,"Food & Drink","drawable/food", MenuItems.MainMenu.FOODNDRINK);
         Items.add(item);
-        item = new MenuItems(4,"Attractions","drawable/ic_s_attractions_h", MenuItems.MainMenu.ATTRACTION);
+        item = new MenuItems(4,"Attractions","drawable/attraction", MenuItems.MainMenu.ATTRACTION);
         Items.add(item);
-        item = new MenuItems(5,"Shopping","drawable/ic_s_shop_h", MenuItems.MainMenu.SHOPPING);
+        item = new MenuItems(5,"Shopping","drawable/shop", MenuItems.MainMenu.SHOPPING);
         Items.add(item);
         item = new MenuItems(6,"About This App","drawable/setting", MenuItems.MainMenu.SETTING);
         Items.add(item);

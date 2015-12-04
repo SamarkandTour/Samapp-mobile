@@ -6,6 +6,8 @@
     <string name="attractions">Ziyoratgohlar</string>
     <string name="foodanddrinks">Еда и напитки</string>
     <string name="shopping">Шоппинг</string>
+    <string name="suggested_itinerary">Suggested Itinerary</string>
+    <string name="new_update">New update</string>
     <string name="title_itinerary_wizard">Itinerary Wizard</string>
     <string name="title_dialog_gps_setting">Location Based Service</string>
     <string name="dialog_gps_setting">To guide you to the destination from your current position, please turn on the GPS.\nDo you want to turn on?</string>

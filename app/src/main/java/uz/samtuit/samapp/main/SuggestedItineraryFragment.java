@@ -13,7 +13,6 @@ import android.widget.ListAdapter;
 import java.util.LinkedList;
 
 import uz.samtuit.samapp.util.TourFeature;
-import uz.samtuit.sammap.main.R;
 
 public class SuggestedItineraryFragment extends Fragment implements AbsListView.OnItemClickListener {
     private final String SI_DAY = "Day";

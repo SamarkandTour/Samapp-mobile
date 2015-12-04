@@ -12,7 +12,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import uz.samtuit.samapp.util.ItineraryList;
-import uz.samtuit.sammap.main.R;
 
 public class WizardDaySelectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     ArrayList<String> items= new ArrayList<String>();

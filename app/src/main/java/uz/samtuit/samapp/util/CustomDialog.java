@@ -9,7 +9,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import uz.samtuit.sammap.main.R;
+import uz.samtuit.samapp.main.R;
+
 
 /**
  * Custom Dialog

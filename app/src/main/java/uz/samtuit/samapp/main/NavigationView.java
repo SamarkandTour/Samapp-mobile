@@ -1,13 +1,13 @@
 package uz.samtuit.samapp.main;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.view.View;
-
-import uz.samtuit.sammap.main.R;
 
 /**
  * Navigation View to guide you to the destination
@@ -18,12 +18,42 @@ public class NavigationView extends View {
     private float mDistance;
     private float mBearing;
     private float mAntipodal;
-    private int PADDING = 2;
+    private int PADDING = 20;
+    private int deviceWidth;
+    private int deviceHeight;
+    private int left, right, top, bottom;
+    private Paint textPaint;
 
     public NavigationView(Context ctx) {
         super(ctx);
 
-        this.mCompass = ctx.getResources().getDrawable(R.drawable.arrow_n);
+        this.mCompass = ctx.getResources().getDrawable(R.drawable.navigator_compass);
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float density = metrics.density;
+        deviceWidth = metrics.widthPixels;
+        deviceHeight = metrics.heightPixels;
+        left = (deviceWidth - mCompass.getMinimumWidth()) / 2;
+        top = (deviceHeight - mCompass.getMinimumHeight()) / 2;
+        right = left + mCompass.getMinimumWidth();
+        bottom = top + mCompass.getMinimumHeight();
+
+        textPaint = new Paint();
+        textPaint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
+        textPaint.setTextSize(18 * density);
+        textPaint.setAntiAlias(true);
+    }
+
+    private int getTextWidth(String text) {
+        int count = text.length();
+        float[] widths = new float[count];
+        textPaint.getTextWidths(text, widths);
+        int textWidth = 0;
+
+        for (int i = 0; i < count; i++) {
+            textWidth += widths[i];
+        }
+
+        return textWidth;
     }
 
     protected void onDraw(Canvas canvas) {
@@ -31,13 +61,11 @@ public class NavigationView extends View {
 
         // Because the degree of Azimuth is counter-clockwise, should be with minus(-)
         // Because the value of bearing is given as True north, Compensate difference of both Magnetic north and True north
-        canvas.rotate(-(mAzimuth+mAntipodal) + mBearing, PADDING + mCompass.getMinimumWidth()
-                / 2, PADDING + mCompass.getMinimumHeight() / 2);
-        canvas.drawText(getDistanceString(), PADDING + mCompass.getMinimumWidth()
-                / 2, mCompass.getMinimumHeight(),new Paint(Color.BLACK));
-        mCompass.setBounds(PADDING, PADDING, PADDING
-                + mCompass.getMinimumWidth(), PADDING
-                + mCompass.getMinimumHeight());
+        canvas.rotate(-(mAzimuth + mAntipodal) + mBearing, deviceWidth / 2, deviceHeight / 2);
+        mCompass.setBounds(left, top, right, bottom);
+        String distanceText = getDistanceString();
+        int startPoint = (mCompass.getBounds().width() - getTextWidth(distanceText)) / 2;
+        canvas.drawText(distanceText, left + startPoint, bottom + PADDING, textPaint);
 
         mCompass.draw(canvas);
         canvas.restore();

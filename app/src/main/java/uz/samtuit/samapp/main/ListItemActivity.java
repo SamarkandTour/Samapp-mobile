@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
-import uz.samtuit.sammap.main.R;
 
 
 public class ListItemActivity extends ActionBarActivity {

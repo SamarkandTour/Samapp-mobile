@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.TourFeature;
-import uz.samtuit.sammap.main.R;
 
 class ItemsListAdapter extends ArrayAdapter<TourFeature> {
 
