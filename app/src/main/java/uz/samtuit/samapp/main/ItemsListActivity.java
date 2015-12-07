@@ -95,13 +95,13 @@ public class ItemsListActivity extends ActionBarActivity {
         toolbar.setTitle(s);
     //end Action Bar
 
-        adapter = new ItemsListAdapter(this,R.layout.list_item, items);
+        adapter = new ItemsListAdapter(this,R.layout.items_list_adapter, items);
         list.setAdapter(adapter);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ItemsListActivity.this, ListItemActivity.class);
+                Intent intent = new Intent(ItemsListActivity.this, ItemActivity.class);
                 intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
                 intent.putExtra("photo",items.get(position).getPhoto());
                 intent.putExtra("rating",items.get(position).getRating());
@@ -232,7 +232,7 @@ public class ItemsListActivity extends ActionBarActivity {
                 found_items.add(items.get(i));
             }
         }
-        ItemsListAdapter adapter = new ItemsListAdapter(this, R.layout.list_item, found_items);
+        ItemsListAdapter adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, found_items);
         list.setAdapter(adapter);
     }
 
@@ -320,7 +320,7 @@ public class ItemsListActivity extends ActionBarActivity {
                 startActivity(intent);
             case R.id.action_sort:
                 Collections.sort(items, new CustomComparator());
-                adapter = new ItemsListAdapter(this, R.layout.list_item, items);
+                adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
                 list.setAdapter(adapter);
                 break;
             case R.id.action_search:

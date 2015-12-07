@@ -38,7 +38,7 @@ public class SuggestedItineraryFragment extends Fragment implements AbsListView.
             }
         }
         getData(day);
-        adapter = new SuggestedItineraryAdapter(getActivity(), R.layout.itinerary_list_item, data);
+        adapter = new SuggestedItineraryAdapter(getActivity(), R.layout.itinerary_list_adapter, data);
     }
 
     @Override

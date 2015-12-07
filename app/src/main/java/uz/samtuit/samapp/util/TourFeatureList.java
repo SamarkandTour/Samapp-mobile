@@ -24,7 +24,7 @@ public class TourFeatureList {
     private static ArrayList<TourFeature> Hotels;
     private static ArrayList<TourFeature> FoodnDrinks;
     private static ArrayList<TourFeature> Attractions;
-    private static ArrayList<TourFeature> Shoppings;
+    private static ArrayList<TourFeature> Shopping;
 
     private ArrayList<TourFeature> tourFeatureList;
 
@@ -80,8 +80,8 @@ public class TourFeatureList {
                 break;
 
             case SHOPPING:
-                Shoppings = tourFeatureList;
-                globalsClass.setFeatures(featureType, Shoppings);
+                Shopping = tourFeatureList;
+                globalsClass.setFeatures(featureType, Shopping);
                 break;
         }
     }

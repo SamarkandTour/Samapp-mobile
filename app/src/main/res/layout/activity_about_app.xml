@@ -26,7 +26,7 @@
                 android:layout_width="100dp"
                 android:layout_gravity="center"
                 android:tag="ForLogo"
-                android:src="@drawable/about_icon"
+                android:src="@drawable/launcher_icon"
                 android:background="@android:color/transparent"
                 android:layout_height="100dp" />
             <TextView

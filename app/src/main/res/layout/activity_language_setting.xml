@@ -27,7 +27,7 @@
         android:orientation="horizontal">
         <ImageButton
             android:id="@+id/lang_en"
-            android:src="@drawable/ic_gb_flag"
+            android:src="@drawable/ic_en_flag"
             android:scaleType="fitCenter"
             android:background="@android:color/transparent"
             android:layout_width="120dp"

@@ -32,13 +32,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Museum of Natural History",
-        "day": 2
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "Regional Studies Museum",
         "day": 2
       }

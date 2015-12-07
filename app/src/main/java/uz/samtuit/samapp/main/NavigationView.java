@@ -18,7 +18,7 @@ public class NavigationView extends View {
     private float mDistance;
     private float mBearing;
     private float mAntipodal;
-    private int PADDING = 20;
+    private float PADDING;
     private int deviceWidth;
     private int deviceHeight;
     private int left, right, top, bottom;
@@ -27,19 +27,21 @@ public class NavigationView extends View {
     public NavigationView(Context ctx) {
         super(ctx);
 
-        this.mCompass = ctx.getResources().getDrawable(R.drawable.navigator_compass);
+        this.mCompass = ctx.getResources().getDrawable(R.drawable.navigation_compass);
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         float density = metrics.density;
+
         deviceWidth = metrics.widthPixels;
         deviceHeight = metrics.heightPixels;
         left = (deviceWidth - mCompass.getMinimumWidth()) / 2;
         top = (deviceHeight - mCompass.getMinimumHeight()) / 2;
         right = left + mCompass.getMinimumWidth();
         bottom = top + mCompass.getMinimumHeight();
+        PADDING = density * 47;
 
         textPaint = new Paint();
         textPaint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        textPaint.setTextSize(18 * density);
+        textPaint.setTextSize(16 * density);
         textPaint.setAntiAlias(true);
     }
 
@@ -57,20 +59,20 @@ public class NavigationView extends View {
     }
 
     protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
         canvas.save();
 
         // Because the degree of Azimuth is counter-clockwise, should be with minus(-)
         // Because the value of bearing is given as True north, Compensate difference of both Magnetic north and True north
         canvas.rotate(-(mAzimuth + mAntipodal) + mBearing, deviceWidth / 2, deviceHeight / 2);
         mCompass.setBounds(left, top, right, bottom);
+
         String distanceText = getDistanceString();
         int startPoint = (mCompass.getBounds().width() - getTextWidth(distanceText)) / 2;
-        canvas.drawText(distanceText, left + startPoint, bottom + PADDING, textPaint);
+        canvas.drawText(distanceText, left + startPoint, top + PADDING, textPaint);
 
         mCompass.draw(canvas);
         canvas.restore();
-
-        super.onDraw(canvas);
     }
 
     public void setAzimuth(float aAzimuth) {

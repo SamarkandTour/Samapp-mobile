@@ -35,7 +35,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name="uz.samtuit.samapp.main.MainMenu" />
-        <activity android:name="uz.samtuit.samapp.main.ListItemActivity" />
+        <activity android:name=".ItemActivity" />
         <activity android:name="uz.samtuit.samapp.main.LanguageSettingActivity" />
         <activity android:name="uz.samtuit.samapp.main.AboutCityActivity" />
         <activity android:name="uz.samtuit.samapp.main.WizardDaySelectActivity" />

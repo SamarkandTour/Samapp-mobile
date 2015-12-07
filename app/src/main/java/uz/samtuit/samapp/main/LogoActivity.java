@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -108,7 +109,7 @@ public class LogoActivity extends ActionBarActivity {
 
     public void loadFeaturesToMemory(Context context, String chosenLang, String path, GlobalsClass.FeatureType featureType) {
         if (featureType == GlobalsClass.FeatureType.ITINERARY) {
-            ItineraryList.getInstance().getItineraryFeatureListFromGeoJSONFile(context, chosenLang + path);
+            ItineraryList.getInstance().getItineraryFeatureListFromGeoJSONFile(context, path);
             ItineraryList.getInstance().setItinearyFeaturesToGlobal(context);
             ItineraryList.getInstance().categorizeItineraryWithDays(context, chosenLang); // Categorize with days from the name of itinerary files
         } else {
@@ -265,8 +266,13 @@ public class LogoActivity extends ActionBarActivity {
         try {
             URL serverURL = new URL(url);
             connection = serverURL.openConnection();
+            connection.setReadTimeout(10000); // We will wait util max 10s for connection waiting
+        } catch (SocketTimeoutException e) {
+            e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
         long lastUpdated = pref.getLong("last_updated", 0);

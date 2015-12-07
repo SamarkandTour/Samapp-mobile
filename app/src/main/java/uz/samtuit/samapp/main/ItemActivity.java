@@ -24,7 +24,7 @@ import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
 
 
-public class ListItemActivity extends ActionBarActivity {
+public class ItemActivity extends ActionBarActivity {
 
     private MenuItem mActionNavigate;
     private TextView address,titleSmall,description;
@@ -51,7 +51,7 @@ public class ListItemActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_item);
+        setContentView(R.layout.activity_item);
         final Bundle extras = getIntent().getExtras();
 
         //ActionBar setting
@@ -159,7 +159,7 @@ public class ListItemActivity extends ActionBarActivity {
         mActionNavigate.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(ListItemActivity.this, MainMap.class);
+                Intent intent = new Intent(ItemActivity.this, MainMap.class);
                 intent.putExtra("type", "feature");
                 intent.putExtra("lat", latitude);
                 intent.putExtra("long", longitude);
@@ -193,7 +193,7 @@ public class ListItemActivity extends ActionBarActivity {
 
         @Override
         protected Void doInBackground(String... params) {
-            String encodedBytes = FileUtil.fileReadFromExternalDir(ListItemActivity.this, params[0]);
+            String encodedBytes = FileUtil.fileReadFromExternalDir(ItemActivity.this, params[0]);
             publishProgress(encodedBytes);
             return null;
         }

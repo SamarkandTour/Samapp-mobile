@@ -153,13 +153,13 @@ public class MainMap extends ActionBarActivity {
     }
 
     private void drawBottomMenuIcons() {
-        MenuItems item = new MenuItems(0,"Itinerary Wizard","drawable/itinerary_wizard", MenuItems.MainMenu.ITINERARYWIZARD);
+        MenuItems item = new MenuItems(0,"Itinerary Wizard","drawable/ic_s_itinerary_wizard_h", MenuItems.MainMenu.ITINERARYWIZARD);
         Items.add(item);
-        item = new MenuItems(1,"Suggested Itinerary","drawable/itinerary", MenuItems.MainMenu.ITINERARY);
+        item = new MenuItems(1,"Suggested Itinerary","drawable/my_schedule_h", MenuItems.MainMenu.ITINERARY);
         Items.add(item);
         item = new MenuItems(2,"Hotels","drawable/hotel", MenuItems.MainMenu.HOTEL);
         Items.add(item);
-        item = new MenuItems(3,"Food & Drink","drawable/food", MenuItems.MainMenu.FOODNDRINK);
+        item = new MenuItems(3,"Food & Drinks","drawable/food", MenuItems.MainMenu.FOODNDRINK);
         Items.add(item);
         item = new MenuItems(4,"Attractions","drawable/attraction", MenuItems.MainMenu.ATTRACTION);
         Items.add(item);

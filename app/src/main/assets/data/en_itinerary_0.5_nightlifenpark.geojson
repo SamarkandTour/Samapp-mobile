@@ -4,13 +4,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Amusement Park",
-        "day": 1
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "Nava'i Park",
         "day": 1
       }
