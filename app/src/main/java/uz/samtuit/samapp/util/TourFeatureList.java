@@ -21,6 +21,11 @@ import uz.samtuit.samapp.main.R;
  */
 public class TourFeatureList {
     private static final String photoDirectory = "photo/";
+    private static ArrayList<TourFeature> Hotels;
+    private static ArrayList<TourFeature> FoodnDrinks;
+    private static ArrayList<TourFeature> Attractions;
+    private static ArrayList<TourFeature> Shoppings;
+
     private ArrayList<TourFeature> tourFeatureList;
 
     public TourFeatureList() {
@@ -55,6 +60,31 @@ public class TourFeatureList {
         return true;
     }
 
+    public void setTourFeaturesToGlobal(Context context, GlobalsClass.FeatureType featureType, ArrayList<TourFeature> tourFeatureList) {
+        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
+
+        switch (featureType) {
+            case HOTEL:
+                Hotels = tourFeatureList;
+                globalsClass.setFeatures(featureType, Hotels);
+                break;
+
+            case FOODNDRINK:
+                FoodnDrinks = tourFeatureList;
+                globalsClass.setFeatures(featureType, FoodnDrinks);
+                break;
+
+            case ATTRACTION:
+                Attractions = tourFeatureList;
+                globalsClass.setFeatures(featureType, Attractions);
+                break;
+
+            case SHOPPING:
+                Shoppings = tourFeatureList;
+                globalsClass.setFeatures(featureType, Shoppings);
+                break;
+        }
+    }
 
     public ArrayList<TourFeature> getTourFeatureListFromGeoJSONFile(Context context, String fileName) {
         try {
@@ -192,5 +222,25 @@ public class TourFeatureList {
         }
 
         return true;
+    }
+
+    public static void loadAllFeaturesToMemory(Context context, String chosenLang) {
+        String path = null;
+
+        for (GlobalsClass.FeatureType featureType : GlobalsClass.FeatureType.values()){
+            if (featureType == GlobalsClass.FeatureType.ITINERARY) {
+                path = ItineraryList.myItineraryDirectory + chosenLang + ItineraryList.myItineraryGeoJSONFileName;
+
+                ItineraryList.getInstance().getItineraryFeatureListFromGeoJSONFile(context, chosenLang + path);
+                ItineraryList.getInstance().setItinearyFeaturesToGlobal(context);
+                ItineraryList.getInstance().categorizeItineraryWithDays(context, chosenLang); // Categorize with days from the name of itinerary files
+            } else {
+                path = GlobalsClass.featuresGeoJSONFileName[featureType.ordinal()];
+
+                TourFeatureList tourFeatureList = new TourFeatureList();
+                ArrayList<TourFeature> tourFeatureArrayList = tourFeatureList.getTourFeatureListFromGeoJSONFile(context, chosenLang + path);
+                tourFeatureList.setTourFeaturesToGlobal(context, featureType, tourFeatureArrayList);
+            }
+        }
     }
 }

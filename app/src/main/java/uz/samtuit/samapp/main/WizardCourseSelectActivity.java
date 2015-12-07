@@ -1,6 +1,7 @@
 package uz.samtuit.samapp.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -25,6 +26,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
     private ArrayList<String> selectedCourseList = new ArrayList<String>();
     private float selectedTotalDay;
     private Spinner spin1, spin2, spin3, spin4, spin5;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         Intent intent = getIntent();
         selectedTotalDay = intent.getIntExtra("day", 0);
         setSpinnerValueAndInflate(null, spin1, course1, getString(R.string.itinerary_1st_course));
+
+        sharedPreferences = this.getSharedPreferences("SamTour_Pref", 0);
     }
 
     private void setSpinnerValueAndInflate(String currentSelected, Spinner spinner, ArrayList<String> course, String initText) {
@@ -64,10 +68,16 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
     }
 
     public void onSkipBtnClick(View view) {
-        if (this.getSharedPreferences("SamTour_Pref", 0).getBoolean("app_first_launch", true)) {
+        if (sharedPreferences.getBoolean("app_first_launch", true)) { // Don't forget, Set first_launch to false
+            sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
+
             Intent intent = new Intent(this, MainMap.class);
             startActivity(intent);
         } else {
+            if (sharedPreferences.getBoolean("app_first_launch", true)) { // Don't forget, Set first_launch to false
+                sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
+            }
+
             finish();
         }
     }
@@ -104,6 +114,11 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
+
+        if (sharedPreferences.getBoolean("app_first_launch", true)) { // Don't forget, Set first_launch to false
+            sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
+        }
+
         finish();
     }
 

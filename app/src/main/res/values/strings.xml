@@ -26,6 +26,7 @@
     <string name="Err_wrong_itinerary_file">Error! wrong feature name in the itinerary file</string>
     <string name="title_dialog_update_available">Update available</string>
     <string name="dialog_update_available">Now recent information is available!\nDo you want to update?\nBut if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
+    <string name="dialog_load_features">"Loading Tour Data"</string>
     <string name="toast_select_destination">First select a marker and press the Guide Me button</string>
     <string name="select_your_language">Please select your language</string>
     <string name="toast_navi_finding">Start to find a distance and a direction</string>

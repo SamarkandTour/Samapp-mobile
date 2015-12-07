@@ -1,6 +1,9 @@
 package uz.samtuit.samapp.main;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,15 +11,24 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import uz.samtuit.samapp.util.SystemSetting;
+import uz.samtuit.samapp.util.TourFeatureList;
 
 public class LanguageSettingActivity extends AppCompatActivity {
 
     private ImageButton UZ_BTN,RU_BTN,EN_BTN;
+    private SharedPreferences sharedPreferences;
+    private boolean isFirstLaunch;
+    private ProgressDialog progressDialog;
+    private String selectLang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_language_setting);
+
+        sharedPreferences = this.getSharedPreferences("SamTour_Pref", 0);
+        isFirstLaunch = sharedPreferences.getBoolean("app_first_launch", true);
+        final String currentLang = sharedPreferences.getString("app_lang", null);
 
         UZ_BTN = (ImageButton) findViewById(R.id.lang_uz);
         RU_BTN = (ImageButton) findViewById(R.id.lang_ru);
@@ -25,14 +37,40 @@ public class LanguageSettingActivity extends AppCompatActivity {
         ImageButton.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String selectLang = view.getTag().toString();
+                selectLang = view.getTag().toString();
                 SystemSetting.setUserLanguage(LanguageSettingActivity.this, selectLang);
-                overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
 
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("sel_lang", selectLang);
-                setResult(0, resultIntent);
-                finish();
+                if (isFirstLaunch) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("sel_lang", selectLang);
+                    setResult(0, resultIntent);
+
+                    finish();
+                    overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+                } else if (!currentLang.equals(selectLang)) {
+                    progressDialog = ProgressDialog.show(LanguageSettingActivity.this, "", getString(R.string.dialog_load_features), true, true);
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void ... params)
+                        {
+                            TourFeatureList.loadAllFeaturesToMemory(LanguageSettingActivity.this, selectLang);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void result)
+                        {
+                            progressDialog.dismiss();
+                            sharedPreferences.edit().putString("app_lang", selectLang).commit(); // Set App language
+
+                            finish();
+                            overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+                        }
+                    }.execute();
+                } else {
+                    finish();
+                    overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+                }
             }
         };
 
@@ -43,7 +81,7 @@ public class LanguageSettingActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (this.getSharedPreferences("SamTour_Pref", 0).getBoolean("app_first_launch", true)) {
+        if (isFirstLaunch) {
             Toast.makeText(this, R.string.select_your_language, Toast.LENGTH_SHORT).show();
         } else {
             finish();

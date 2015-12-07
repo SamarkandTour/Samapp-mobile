@@ -1,5 +1,6 @@
 package uz.samtuit.samapp.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -33,13 +34,7 @@ import uz.samtuit.samapp.util.ZipFileUtil;
 
 
 public class LogoActivity extends ActionBarActivity {
-    private static ArrayList<TourFeature> Hotels;
-    private static ArrayList<TourFeature> Shops;
-    private static ArrayList<TourFeature> Attractions;
-    private static ArrayList<TourFeature> Foods;
-
     private CustomDialog mUpdateAvalDialog;
-    private String path;
     private TextView tvInfo;
     private GlobalsClass globals;
     private SharedPreferences pref;
@@ -67,7 +62,7 @@ public class LogoActivity extends ActionBarActivity {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putString("app_lang", systemLocale); // Set App language
                 editor.putString("app_version", "0.01"); // Set App version
-                editor.putLong("last-updated", new Date().getTime()); // Set installed date
+                editor.putLong("last_updated", new Date().getTime()); // Set installed date
                 editor.commit();
 
                 continueInBackgroundTask();
@@ -95,7 +90,7 @@ public class LogoActivity extends ActionBarActivity {
         editor.putString("app_lang", data.getExtras().getString("sel_lang")); // Set App language
         editor.putString("app_version", "0.01");// Set App version
         Date current = new Date();
-        editor.putLong("last-modified", current.getTime()); // Set installed date
+        editor.putLong("last_updated", current.getTime()); // Set installed date
         editor.commit();
 
         continueInBackgroundTask();
@@ -111,6 +106,18 @@ public class LogoActivity extends ActionBarActivity {
         super.onResume();
     }
 
+    public void loadFeaturesToMemory(Context context, String chosenLang, String path, GlobalsClass.FeatureType featureType) {
+        if (featureType == GlobalsClass.FeatureType.ITINERARY) {
+            ItineraryList.getInstance().getItineraryFeatureListFromGeoJSONFile(context, chosenLang + path);
+            ItineraryList.getInstance().setItinearyFeaturesToGlobal(context);
+            ItineraryList.getInstance().categorizeItineraryWithDays(context, chosenLang); // Categorize with days from the name of itinerary files
+        } else {
+            TourFeatureList tourFeatureList = new TourFeatureList();
+            ArrayList<TourFeature> tourFeatureArrayList = tourFeatureList.getTourFeatureListFromGeoJSONFile(context, chosenLang + path);
+            tourFeatureList.setTourFeaturesToGlobal(context, featureType, tourFeatureArrayList);
+        }
+    }
+
     class LoadGeoJsonFilesInBackground extends AsyncTask<Void, Pair<Integer, String>, Boolean> {
         private final int INIT_START = 1;
         private final int LOAD_START = 2;
@@ -123,6 +130,7 @@ public class LogoActivity extends ActionBarActivity {
             try {
                 // Since language selection has finished, Set features lists
                 String chosenLang = pref.getString("app_lang", null);
+                String path = null;
 
                 // Do below, when first launch and since new update has downloaded
                 if (isFirstLaunch || (countOfDownloaded = pref.getInt("download_request_count", 0)) > 0) {
@@ -144,7 +152,7 @@ public class LogoActivity extends ActionBarActivity {
                         // Don't forget belows
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putInt("download_request_count", 0);
-                        editor.putLong("last-updated", new Date().getTime()); // Set updated date
+                        editor.putLong("last_updated", new Date().getTime()); // Set updated date
                         editor.commit();
                     }
 
@@ -162,37 +170,31 @@ public class LogoActivity extends ActionBarActivity {
 
                 publishProgress(new Pair<Integer, String>(LOAD_START, getString(R.string.hotels)));
                 path = GlobalsClass.featuresGeoJSONFileName[GlobalsClass.FeatureType.HOTEL.ordinal()];
-                Hotels = new TourFeatureList().getTourFeatureListFromGeoJSONFile(LogoActivity.this, chosenLang + path);
-                globals.setFeatures(GlobalsClass.FeatureType.HOTEL, Hotels);
+                loadFeaturesToMemory(LogoActivity.this, chosenLang, path, GlobalsClass.FeatureType.HOTEL);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
 
                 publishProgress(new Pair<Integer, String>(LOAD_START, getString(R.string.foodanddrinks)));
                 path = GlobalsClass.featuresGeoJSONFileName[GlobalsClass.FeatureType.FOODNDRINK.ordinal()];
-                Foods = new TourFeatureList().getTourFeatureListFromGeoJSONFile(LogoActivity.this, chosenLang + path);
-                globals.setFeatures(GlobalsClass.FeatureType.FOODNDRINK, Foods);
+                loadFeaturesToMemory(LogoActivity.this, chosenLang, path, GlobalsClass.FeatureType.FOODNDRINK);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
 
                 publishProgress(new Pair<Integer, String>(LOAD_START, getString(R.string.attractions)));
                 path = GlobalsClass.featuresGeoJSONFileName[GlobalsClass.FeatureType.ATTRACTION.ordinal()];
-                Attractions = new TourFeatureList().getTourFeatureListFromGeoJSONFile(LogoActivity.this, chosenLang + path);
-                globals.setFeatures(GlobalsClass.FeatureType.ATTRACTION, Attractions);
+                loadFeaturesToMemory(LogoActivity.this, chosenLang, path, GlobalsClass.FeatureType.ATTRACTION);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
 
                 publishProgress(new Pair<Integer, String>(LOAD_START, getString(R.string.shopping)));
                 path = GlobalsClass.featuresGeoJSONFileName[GlobalsClass.FeatureType.SHOPPING.ordinal()];
-                Shops = new TourFeatureList().getTourFeatureListFromGeoJSONFile(LogoActivity.this, chosenLang + path);
-                globals.setFeatures(GlobalsClass.FeatureType.SHOPPING, Shops);
-                publishProgress(new Pair<Integer, String>(LOAD_DONE,""));
+                loadFeaturesToMemory(LogoActivity.this, chosenLang, path, GlobalsClass.FeatureType.SHOPPING);
+                publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
 
                 publishProgress(new Pair<Integer, String>(LOAD_START, getString(R.string.suggested_itinerary)));
                 path = ItineraryList.myItineraryDirectory + chosenLang + ItineraryList.myItineraryGeoJSONFileName;
-                ItineraryList.getInstance().getItineraryFeatureListFromGeoJSONFile(LogoActivity.this, path);
-                ItineraryList.getInstance().setItinearyFeaturesToGlobal(LogoActivity.this);
-                ItineraryList.categorizeItineraryWithDays(LogoActivity.this, chosenLang); // Categorize with days from the name of itinerary files
+                loadFeaturesToMemory(LogoActivity.this, chosenLang, path, GlobalsClass.FeatureType.ITINERARY);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
                 publishProgress(new Pair<Integer, String>(CHECK_START, getString(R.string.new_update)));
@@ -278,8 +280,6 @@ public class LogoActivity extends ActionBarActivity {
 
     private void decideNextActivity() {
         if (isFirstLaunch) {
-            pref.edit().putBoolean("app_first_launch", false).commit(); // Don't forget, Set first_launch to false
-
             Intent intent = new Intent(LogoActivity.this, WizardDaySelectActivity.class);
             startActivity(intent);
             finish();

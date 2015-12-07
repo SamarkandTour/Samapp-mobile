@@ -32,8 +32,7 @@ public class GlobalsClass extends Application {
         FOODNDRINK(1),
         ATTRACTION(2),
         SHOPPING(3),
-        ITINERARY(4),
-        NONE(5);
+        ITINERARY(4);
 
         private int num;
         FeatureType(int arg){

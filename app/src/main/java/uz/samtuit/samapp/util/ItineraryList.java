@@ -22,10 +22,10 @@ import uz.samtuit.samapp.main.R;
  * Itinerary Class
  */
 public class ItineraryList {
-    static final public String myItineraryDirectory = "my_itinerary/"; // my customized itinerary file
-    static final public String myItineraryGeoJSONFileName = "_my_itinerary.geojson"; // my customized itinerary file
-
+    public static final String myItineraryDirectory = "my_itinerary/"; // my customized itinerary file
+    public static final String myItineraryGeoJSONFileName = "_my_itinerary.geojson"; // my customized itinerary file
     public static final int MAX_ITINERARY_DAYS = 5;
+
     private static HashMap<String , Float> mCourseHashMap;
     private static LinkedList<TourFeature> mItineraryList;
     private static ItineraryList ourInstance = new ItineraryList(); // Singleton
@@ -146,7 +146,7 @@ public class ItineraryList {
         return true;
     }
 
-    public static void categorizeItineraryWithDays(Context context, String lang) {
+    public void categorizeItineraryWithDays(Context context, String lang) {
         String filter = new String(lang + "_itinerary");
         String[] stringArray = FileUtil.getFileNameListWithFilter(context, filter);
 
