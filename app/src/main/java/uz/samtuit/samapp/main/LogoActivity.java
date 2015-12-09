@@ -34,6 +34,7 @@ import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.samapp.util.ZipFileUtil;
 
 
+
 public class LogoActivity extends ActionBarActivity {
     private CustomDialog mUpdateAvalDialog;
     private TextView tvInfo;
@@ -44,12 +45,14 @@ public class LogoActivity extends ActionBarActivity {
     private boolean isFirstLaunch;
     private int countOfDownloaded;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_logo);
         tvInfo = (TextView)findViewById(R.id.tv_info);
+
 
         pref = LogoActivity.this.getSharedPreferences("SamTour_Pref", 0);
         if (isFirstLaunch = pref.getBoolean("app_first_launch", true)) {

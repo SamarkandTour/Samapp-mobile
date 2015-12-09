@@ -13,9 +13,10 @@ import java.util.LinkedList;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.sammap.main.R;
 
 
-public class SuggestedItineraryActivity extends ActionBarActivity {
+public class MyItineraryActivity extends ActionBarActivity {
     public static ArrayList<LinkedList<TourFeature>> itineraryListArray;
 
     Toolbar toolbar;
@@ -31,7 +32,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_itinerary);
         toolbar = (Toolbar)findViewById(R.id.si_toolbar);
-        toolbar.setTitle(R.string.suggested_itinerary);
+        toolbar.setTitle("My Itinerary");
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.ColorPrimary));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);

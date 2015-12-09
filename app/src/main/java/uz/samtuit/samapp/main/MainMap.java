@@ -454,7 +454,7 @@ public class MainMap extends ActionBarActivity {
                 intent = new Intent(MainMap.this, WizardDaySelectActivity.class);
                 break;
             case ITINERARY:
-                intent = new Intent(MainMap.this, SuggestedItineraryActivity.class);
+                intent = new Intent(MainMap.this, MyItineraryActivity.class);
                 break;
             case HOTEL:
             case FOODNDRINK:

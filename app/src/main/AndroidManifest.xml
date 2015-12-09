@@ -40,7 +40,7 @@
         <activity android:name="uz.samtuit.samapp.main.AboutCityActivity" />
         <activity android:name="uz.samtuit.samapp.main.WizardDaySelectActivity" />
         <activity android:name="uz.samtuit.samapp.main.WizardCourseSelectActivity" />
-        <activity android:name="uz.samtuit.samapp.main.SuggestedItineraryActivity" />
+        <activity android:name="uz.samtuit.samapp.main.MyItineraryActivity" />
         <activity android:name="uz.samtuit.samapp.main.TrainsTimeTableActivity" />
         <activity android:name="uz.samtuit.samapp.main.TashkentSamarkandActivity" />
         <activity android:name="uz.samtuit.samapp.main.AboutAppActivity" >

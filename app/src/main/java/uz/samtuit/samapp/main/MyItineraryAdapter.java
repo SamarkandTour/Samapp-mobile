@@ -1,6 +1,7 @@
 package uz.samtuit.samapp.main;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +13,19 @@ import android.widget.TextView;
 
 import java.util.LinkedList;
 
+import uz.samtuit.samapp.util.ActionItem;
 import uz.samtuit.samapp.util.TourFeature;
 
-public class SuggestedItineraryAdapter extends ArrayAdapter<TourFeature> {
+public class MyItineraryAdapter extends ArrayAdapter<TourFeature> {
     LinkedList<TourFeature> data = null;
     Context context;
     int layoutResId;
     int dataSize;
+    int ID_ADD = 1;
+    int ID_DELETE = 2;
+    int ID_REFRESH = 3;
 
-    public SuggestedItineraryAdapter(Context context, int layoutResId, LinkedList<TourFeature> data)
+    public MyItineraryAdapter(Context context, int layoutResId, LinkedList<TourFeature> data)
     {
         super(context,layoutResId, data);
 
