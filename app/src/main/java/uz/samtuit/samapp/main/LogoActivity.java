@@ -249,10 +249,10 @@ public class LogoActivity extends ActionBarActivity {
                 mUpdateAvalDialog = new CustomDialog(LogoActivity.this,
                         R.string.title_dialog_update_available,
                         R.string.dialog_update_available,
-                        R.string.yes,
                         R.string.no,
-                        yesClickListener,
-                        noClickListener);
+                        R.string.yes,
+                        noClickListener,
+                        yesClickListener);
                 mUpdateAvalDialog.show();
             } else {
                 decideNextActivity();
