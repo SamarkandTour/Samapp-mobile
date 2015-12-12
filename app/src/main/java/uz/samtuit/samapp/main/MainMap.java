@@ -57,6 +57,8 @@ import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeature;
 
 import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
+import static uz.samtuit.samapp.util.TourFeatureList.findFeatureByName;
+import static uz.samtuit.samapp.util.TourFeatureList.findFeatureTypeByName;
 
 
 public class MainMap extends ActionBarActivity {
@@ -231,8 +233,8 @@ public class MainMap extends ActionBarActivity {
             mGPSSettingDialog = new CustomDialog(MainMap.this,
                     R.string.title_dialog_gps_setting,
                     R.string.dialog_gps_setting,
-                    R.string.yes,
-                    R.string.no,
+                    R.string.btn_yes,
+                    R.string.btn_no,
                     yesClickListener,
                     noClickListener);
             mGPSSettingDialog.show();
@@ -369,14 +371,13 @@ public class MainMap extends ActionBarActivity {
     }
 
     //myLocation button click
-    public void myLocationClick(View view)
-    {
+    public void myLocationClick(View view) {
         if(SystemSetting.checkGPSStatus(this) == 0) { // If GPS is OFF
             mGPSSettingDialog = new CustomDialog(this,
                     R.string.title_dialog_gps_setting,
                     R.string.dialog_gps_setting,
-                    R.string.yes,
-                    R.string.no,
+                    R.string.btn_yes,
+                    R.string.btn_no,
                     yesClickListener,
                     noClickListener);
             mGPSSettingDialog.show();
@@ -548,10 +549,13 @@ public class MainMap extends ActionBarActivity {
 
                 case "feature":
                     LatLng loc = new LatLng(extras.getDouble("lat"), extras.getDouble("long"));
-                    Marker marker = new Marker(extras.getString("name"), "", loc);
+                    String name = extras.getString("name");
+                    Marker marker = new Marker(name, "", loc);
                     marker.setMarker(markerDrawables.get(featureType.ordinal()));
+                    marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, featureType, findFeatureByName(MainMap.this, name)));
                     mapView.addMarker(marker);
                     mapView.getController().animateTo(loc);
+                    pressedMarker = marker;
                     break;
             }
         }
@@ -576,7 +580,7 @@ public class MainMap extends ActionBarActivity {
                 featuresMarkers = new ArrayList<Marker>();
             }
 
-            if(features == null) {
+            if(features == null || features.size() == 0) {
                 return null;
             }
 
@@ -595,18 +599,24 @@ public class MainMap extends ActionBarActivity {
 
             Marker marker = (Marker)values[0].second;
             String title = null;
+            FeatureType featureType = values[0].first;
+            TourFeature tourFeature = null;
 
-            if (values[0].first == FeatureType.ITINERARY) {
+            if (featureType == FeatureType.ITINERARY) {
                 title = globalVariables.getItineraryFeatures().get(index).getString("name");
+                tourFeature = findFeatureByName(MainMap.this, title);
+                FeatureType tourFeatureType = findFeatureTypeByName(MainMap.this, title);
                 BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, new Integer(++index).toString(), R.drawable.poi_bg);
                 marker.setMarker(markerimg);
-                marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, index-1)); // Set as array index
+                marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, tourFeatureType, tourFeature)); // Set as array index
                 marker.setTitle(title);
                 itineraryMarkers.add(marker); // For adding as ItemizedIconOverlay
             }
             else { // TourFeatures
-                title = globalVariables.getTourFeatures(values[0].first).get(index++).getString("name");
+                tourFeature = globalVariables.getTourFeatures(values[0].first).get(index++);
+                title = tourFeature.getString("name");
                 marker.setMarker(markerDrawables.get(values[0].first.ordinal()));
+                marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, featureType, tourFeature)); // Set as array index
                 marker.setTitle(title);
                 featuresMarkers.add(marker); // For adding as ItemizedIconOverlay
             }

@@ -193,7 +193,7 @@ public class LogoActivity extends ActionBarActivity {
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
 
-                publishProgress(new Pair<Integer, String>(LOAD_START, getString(R.string.suggested_itinerary)));
+                publishProgress(new Pair<Integer, String>(LOAD_START, getString(R.string.title_suggested_itinerary)));
                 path = ItineraryList.myItineraryDirectory + chosenLang + ItineraryList.myItineraryGeoJSONFileName;
                 loadFeaturesToMemory(LogoActivity.this, chosenLang, path, GlobalsClass.FeatureType.ITINERARY);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
@@ -249,8 +249,8 @@ public class LogoActivity extends ActionBarActivity {
                 mUpdateAvalDialog = new CustomDialog(LogoActivity.this,
                         R.string.title_dialog_update_available,
                         R.string.dialog_update_available,
-                        R.string.no,
-                        R.string.yes,
+                        R.string.btn_no,
+                        R.string.btn_yes,
                         noClickListener,
                         yesClickListener);
                 mUpdateAvalDialog.show();

@@ -35,8 +35,11 @@ import uz.samtuit.samapp.util.TourFeature;
 
 
 public class ItemsListActivity extends ActionBarActivity {
+    private int PRIMARY_COLOR;
+    private int TOOLBAR_COLOR;
     private ArrayList<TourFeature> items;
-    ListView list;
+    private FeatureType S_ACTIVITY_NAME;
+    private ListView list;
     private EditText search_text;
     private MenuItem mActionSearch;
     private MenuItem mActionSort;
@@ -44,11 +47,8 @@ public class ItemsListActivity extends ActionBarActivity {
     private ItemsListAdapter adapter;
     private boolean isSearchOpen = false;
     private RelativeLayout RelLayout;
-    private int PRIMARY_COLOR;
-    private int TOOLBAR_COLOR;
     private String TITLE;
-    FeatureType S_ACTIVITY_NAME;
-    android.support.v7.widget.Toolbar toolbar;
+    private android.support.v7.widget.Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,27 +101,33 @@ public class ItemsListActivity extends ActionBarActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ItemsListActivity.this, ItemActivity.class);
-                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
-                intent.putExtra("photo",items.get(position).getPhoto());
-                intent.putExtra("rating",items.get(position).getRating());
-                intent.putExtra("name",items.get(position).getString("name"));
-                intent.putExtra("desc",items.get(position).getString("desc"));
-                intent.putExtra("type",items.get(position).getString("type"));
-                intent.putExtra("price",items.get(position).getString("price"));
-                intent.putExtra("wifi",items.get(position).getString("wifi"));
-                intent.putExtra("open",items.get(position).getString("open"));
-                intent.putExtra("addr",items.get(position).getString("addr"));
-                intent.putExtra("tel", items.get(position).getString("tel"));
-                intent.putExtra("url",items.get(position).getString("url"));
-                intent.putExtra("long",items.get(position).getLongitude());
-                intent.putExtra("lat",items.get(position).getLatitude());
-                intent.putExtra("primaryColorId",PRIMARY_COLOR);
-                intent.putExtra("toolbarColorId",TOOLBAR_COLOR);
-                startActivity(intent);
+                startItemActivity(ItemsListActivity.this, S_ACTIVITY_NAME, items.get(position));
             }
         });
         extras.clear();
+    }
+
+    public static void startItemActivity(Context context, FeatureType featureType, TourFeature feature) {
+        Intent intent = new Intent(context, ItemActivity.class);
+
+        intent.putExtra("featureType", featureType.toString());
+        intent.putExtra("photo", feature.getPhoto());
+        intent.putExtra("rating", feature.getRating());
+        intent.putExtra("name", feature.getString("name"));
+        intent.putExtra("desc", feature.getString("desc"));
+        intent.putExtra("type", feature.getString("type"));
+        intent.putExtra("price", feature.getString("price"));
+        intent.putExtra("wifi", feature.getString("wifi"));
+        intent.putExtra("open", feature.getString("open"));
+        intent.putExtra("addr", feature.getString("addr"));
+        intent.putExtra("tel", feature.getString("tel"));
+        intent.putExtra("url", feature.getString("url"));
+        intent.putExtra("long", feature.getLongitude());
+        intent.putExtra("lat", feature.getLatitude());
+        intent.putExtra("primaryColorId", getPrimaryColorId(featureType));
+        intent.putExtra("toolbarColorId", getToolbarColorId(featureType));
+
+        context.startActivity(intent);
     }
 
     @Override
@@ -236,7 +242,7 @@ public class ItemsListActivity extends ActionBarActivity {
         list.setAdapter(adapter);
     }
 
-    private int getPrimaryColorId(FeatureType type)
+    private static int getPrimaryColorId(FeatureType type)
     {
         int id = 0;
 
@@ -258,7 +264,7 @@ public class ItemsListActivity extends ActionBarActivity {
         return id;
     }
 
-    private int getToolbarColorId(FeatureType type)
+    private static int getToolbarColorId(FeatureType type)
     {
         int id = 0;
 
@@ -315,7 +321,7 @@ public class ItemsListActivity extends ActionBarActivity {
             case R.id.action_show_markers:
                 Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
                 intent.putExtra("type", "features");
-                intent.putExtra("featureType",S_ACTIVITY_NAME.toString());
+                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
             case R.id.action_sort:

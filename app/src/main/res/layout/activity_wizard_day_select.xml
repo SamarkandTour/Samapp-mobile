@@ -49,7 +49,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/later"
+        android:text="@string/btn_later"
         android:id="@+id/button2"
         android:layout_marginBottom="48dp"
         android:layout_alignParentBottom="true"
@@ -60,7 +60,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next"
+        android:text="@string/btn_next"
         android:id="@+id/button3"
         android:layout_alignBottom="@+id/button2"
         android:layout_alignRight="@+id/daySpinner1"

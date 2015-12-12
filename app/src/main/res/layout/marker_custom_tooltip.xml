@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tooltip_button"
-        android:text="@string/btn_title_guide_me"
+        android:text="@string/btn_guide_me"
         android:layout_gravity="center"
         android:onClick="onTooltipBtnClick" />
 

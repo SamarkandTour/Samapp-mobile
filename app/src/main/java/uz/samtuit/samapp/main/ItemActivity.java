@@ -34,6 +34,7 @@ public class ItemActivity extends ActionBarActivity {
     private ImageButton callBtn, linkBtn;
     private String featureType;
     private String url, wifi, telNum;
+    private int index;
 
     @Override
     protected void onStop() {
@@ -172,6 +173,9 @@ public class ItemActivity extends ActionBarActivity {
         TextView open = (TextView)findViewById(R.id.open);
         open.setText(extras.getString("open"));
 
+        // Index
+        index = extras.getInt("index");
+
         extras.clear();
     }
 
@@ -196,6 +200,7 @@ public class ItemActivity extends ActionBarActivity {
                 Log.e(latitude + "", longitude + "");
                 intent.putExtra("name", name);
                 intent.putExtra("featureType",featureType);
+                intent.putExtra("index", index);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 return false;
