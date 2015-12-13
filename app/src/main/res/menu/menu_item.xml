@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="uz.samtuit.samapp.main.FoodActivity">
     <item
-        android:id="@+id/action_navigate"
+        android:id="@+id/action_location"
         android:orderInCategory="300"
-        android:title="Navigate"
+        android:title="Location"
         android:icon="@drawable/place_white"
         app:showAsAction="ifRoom"/>
 </menu>

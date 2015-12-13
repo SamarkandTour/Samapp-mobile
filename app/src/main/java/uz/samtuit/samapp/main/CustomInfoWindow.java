@@ -60,12 +60,14 @@ public class CustomInfoWindow extends InfoWindow {
         ((TextView) mView.findViewById(R.id.customTooltip_title)).setText(title);
 
         String photoFileName = mFeature.getPhoto();
-        String encodedBytes = FileUtil.fileReadFromExternalDir(mContext, photoFileName);
-        Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
-        BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, true);
+        if (photoFileName != null) {
+            String encodedBytes = FileUtil.fileReadFromExternalDir(mContext, photoFileName);
+            Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
+            BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, true);
 
-        ImageView mainImage = (ImageView)mView.findViewById(R.id.tooltip_imageView);
-        mainImage.setImageDrawable(roundedDrawable);
+            ImageView mainImage = (ImageView) mView.findViewById(R.id.tooltip_imageView);
+            mainImage.setImageDrawable(roundedDrawable);
+        }
     }
 }
 

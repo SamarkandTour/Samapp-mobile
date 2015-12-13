@@ -182,46 +182,27 @@ public class ItemActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list_item, menu);
+        getMenuInflater().inflate(R.menu.menu_item, menu);
         return true;
     }
 
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        mActionNavigate = menu.findItem(R.id.action_navigate);
+        mActionNavigate = menu.findItem(R.id.action_location);
         mActionNavigate.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(ItemActivity.this, MainMap.class);
                 intent.putExtra("type", "feature");
-                intent.putExtra("lat", latitude);
-                intent.putExtra("long", longitude);
-                Log.e(latitude + "", longitude + "");
                 intent.putExtra("name", name);
                 intent.putExtra("featureType",featureType);
-                intent.putExtra("index", index);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 return false;
             }
         });
         return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     class LoadImageFromExternalStorage extends AsyncTask<String,String,Void>{
