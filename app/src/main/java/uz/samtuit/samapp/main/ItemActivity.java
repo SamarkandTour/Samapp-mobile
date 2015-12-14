@@ -27,13 +27,14 @@ import uz.samtuit.samapp.util.FileUtil;
 public class ItemActivity extends ActionBarActivity {
 
     private MenuItem mActionNavigate;
-    private TextView address,titleSmall,description;
     private double latitude, longitude;
     private String name;
     private RelativeLayout relLayout;
     private ImageView imageView;
-    private ImageButton call,link;
+    private ImageButton callBtn, linkBtn;
     private String featureType;
+    private String url, wifi, telNum;
+    private int index;
 
     @Override
     protected void onStop() {
@@ -61,12 +62,15 @@ public class ItemActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         relLayout.setBackground(getResources().getDrawable(extras.getInt("primaryColorId")));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/segoeui.ttf");
-        SpannableString s = new SpannableString(extras.getString("name"));
+        name = extras.getString("name");
+        SpannableString s = new SpannableString(name);
         s.setSpan(new CustomTypefaceSpan("", tf), 0, s.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getSupportActionBar().setTitle(s);
         toolbar.setTitle(s);
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,60 +80,26 @@ public class ItemActivity extends ActionBarActivity {
         });
         //end ActionBar Setting
 
-        imageView = (ImageView)findViewById(R.id.hotel_image);
-        address = (TextView)findViewById(R.id.hotel_address);
-        address.setText(extras.getString("addr"));
-        link = (ImageButton)findViewById(R.id.hotel_link_btn);
+        // Loc
+        featureType = extras.getString("featureType");
+        latitude = extras.getDouble("lat");
+        longitude = extras.getDouble("long");
 
-        link.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String url = extras.getString("url");
-                try {
-                    if (!url.startsWith("https://") && !url.startsWith("http://")){
-                        url = "http://" + url;
-                    }
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                }catch (Exception ex)
-                {
-                    ex.printStackTrace();
-                }
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
-        });
-        description = (TextView)findViewById(R.id.hotel_desc);
-        titleSmall = (TextView)findViewById(R.id.hotel_title_small);
+        // Photo
+        imageView = (ImageView)findViewById(R.id.hotel_image);
+        LoadImageFromExternalStorage loadImageFromExternalStorage = new LoadImageFromExternalStorage();
+        loadImageFromExternalStorage.execute(extras.getString("photo"));
+
+        // Rating
+        int Rating = extras.getInt("rating");
+        Log.e("Rating", Rating + "");
+
         ImageView star1 = (ImageView)findViewById(R.id.star1);
         ImageView star2 = (ImageView)findViewById(R.id.star2);
         ImageView star3 = (ImageView)findViewById(R.id.star3);
         ImageView star4 = (ImageView)findViewById(R.id.star4);
         ImageView star5 = (ImageView)findViewById(R.id.star5);
-        latitude = extras.getDouble("lat");
-        longitude = extras.getDouble("long");
-        name = extras.getString("name");
-        featureType = extras.getString("featureType");
 
-        call = (ImageButton)findViewById(R.id.call_button);
-
-        call.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + extras.getString("tel")));
-                startActivity(intent);
-            }
-        });
-
-        LoadImageFromExternalStorage loadImageFromExternalStorage = new LoadImageFromExternalStorage();
-        loadImageFromExternalStorage.execute(extras.getString("photo"));
-
-        titleSmall.setText(extras.getString("name"));
-        int Rating = extras.getInt("rating");
-        Log.e("Rating",Rating+"");
         if(Rating>4)
             star5.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(Rating>3)
@@ -141,29 +111,90 @@ public class ItemActivity extends ActionBarActivity {
         if(Rating>0)
             star1.setImageResource(R.drawable.ic_star_rate_white_18dp);
 
+        // Wifi
+        wifi = extras.getString("wifi");
+        if (wifi.length() != 0 && wifi.equals("Yes")) {
+            ImageView wifi = (ImageView) findViewById(R.id.wifi);
+            wifi.setVisibility(View.VISIBLE);
+        }
+
+        // Tel
+        if ((telNum = extras.getString("tel")).length() != 0) {
+            callBtn = (ImageButton) findViewById(R.id.call_button);
+            callBtn.setVisibility(View.VISIBLE);
+            callBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + telNum));
+                    startActivity(intent);
+                }
+            });
+        }
+
+        // URL
+        if ((url = extras.getString("url")).length() != 0) {
+            linkBtn = (ImageButton) findViewById(R.id.hotel_link_btn);
+            linkBtn.setVisibility(View.VISIBLE);
+            linkBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (!url.startsWith("https://") && !url.startsWith("http://")) {
+                            url = "http://" + url;
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+        }
+
+        // Title
+        TextView titleSmall = (TextView)findViewById(R.id.hotel_title_small);
+        titleSmall.setText(extras.getString("name"));
+
+        // Description
+        TextView description = (TextView)findViewById(R.id.hotel_desc);
         description.setText(extras.getString("desc"));
+
+        // Addr
+        TextView address = (TextView)findViewById(R.id.hotel_address);
+        address.setText(extras.getString("addr"));
+
+        // Price
+        TextView price = (TextView)findViewById(R.id.price);
+        price.setText(extras.getString("price"));
+
+        // Open
+        TextView open = (TextView)findViewById(R.id.open);
+        open.setText(extras.getString("open"));
+
+        // Index
+        index = extras.getInt("index");
+
         extras.clear();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list_item, menu);
+        getMenuInflater().inflate(R.menu.menu_item, menu);
         return true;
     }
 
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        mActionNavigate = menu.findItem(R.id.action_navigate);
+        mActionNavigate = menu.findItem(R.id.action_location);
         mActionNavigate.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(ItemActivity.this, MainMap.class);
                 intent.putExtra("type", "feature");
-                intent.putExtra("lat", latitude);
-                intent.putExtra("long", longitude);
-                Log.e(latitude + "", longitude + "");
                 intent.putExtra("name", name);
                 intent.putExtra("featureType",featureType);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -174,27 +205,15 @@ public class ItemActivity extends ActionBarActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     class LoadImageFromExternalStorage extends AsyncTask<String,String,Void>{
 
         @Override
         protected Void doInBackground(String... params) {
-            String encodedBytes = FileUtil.fileReadFromExternalDir(ItemActivity.this, params[0]);
-            publishProgress(encodedBytes);
+            if (params[0] != null) {
+                String encodedBytes = FileUtil.fileReadFromExternalDir(ItemActivity.this, params[0]);
+                publishProgress(encodedBytes);
+            }
+
             return null;
         }
 

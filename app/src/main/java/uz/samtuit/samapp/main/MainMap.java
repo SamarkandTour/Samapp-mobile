@@ -57,6 +57,7 @@ import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeature;
 
 import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
+import static uz.samtuit.samapp.util.TourFeatureList.findFeatureByName;
 
 
 public class MainMap extends ActionBarActivity {
@@ -85,14 +86,6 @@ public class MainMap extends ActionBarActivity {
     private Marker pressedMarker;
     private boolean isNotified;
 
-    private final int POPULATE_HOTELS_MARKERS = 100;
-    private final int POPULATE_FOODS_MARKERS = 101;
-    private final int POPULATE_ATTRACTIONS_MARKERS = 102;
-    private final int POPULATE_SHOPS_MARKERS = 103;
-    private final int POPULATE_ITINERARY_MARKERS = 104;
-    private final int HANDLE_REQUEST = 105;
-    private final int DRAW_MENU = 105;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -117,7 +110,7 @@ public class MainMap extends ActionBarActivity {
         drawBottomMenuIcons(); //Generate bottom Menu items
 
         setMarkerIcons();
-        drawFeatures(FeatureType.ITINERARY);
+        drawFeatures(FeatureType.ITINERARY, null);
     }
 
     private void setMapView() {
@@ -219,9 +212,9 @@ public class MainMap extends ActionBarActivity {
         markerDrawables.add(FeatureType.SHOPPING.ordinal(), getResources().getDrawable(R.drawable.shop_marker));
     }
 
-    private void drawFeatures(FeatureType featureType) {
+    private void drawFeatures(FeatureType featureType, TourFeature tourFeature) {
         PopulateMarkers populateMarkers = new PopulateMarkers();
-        populateMarkers.execute(featureType);
+        populateMarkers.execute(new Pair<FeatureType, TourFeature>(featureType, tourFeature));
     }
 
     public void onTooltipBtnClick(View v){
@@ -231,8 +224,8 @@ public class MainMap extends ActionBarActivity {
             mGPSSettingDialog = new CustomDialog(MainMap.this,
                     R.string.title_dialog_gps_setting,
                     R.string.dialog_gps_setting,
-                    R.string.yes,
-                    R.string.no,
+                    R.string.btn_yes,
+                    R.string.btn_no,
                     yesClickListener,
                     noClickListener);
             mGPSSettingDialog.show();
@@ -369,14 +362,13 @@ public class MainMap extends ActionBarActivity {
     }
 
     //myLocation button click
-    public void myLocationClick(View view)
-    {
+    public void myLocationClick(View view) {
         if(SystemSetting.checkGPSStatus(this) == 0) { // If GPS is OFF
             mGPSSettingDialog = new CustomDialog(this,
                     R.string.title_dialog_gps_setting,
                     R.string.dialog_gps_setting,
-                    R.string.yes,
-                    R.string.no,
+                    R.string.btn_yes,
+                    R.string.btn_no,
                     yesClickListener,
                     noClickListener);
             mGPSSettingDialog.show();
@@ -515,15 +507,11 @@ public class MainMap extends ActionBarActivity {
 
     private void clearAllLayersExceptForItinerary() {
         if (mapView.getItemizedOverlays().size() != 1) { // If there is only Itinerary layer, size is 1
-            for (Overlay overlay : mapView.getOverlays()) {
+            for (ItemizedIconOverlay iOverlay : mapView.getItemizedOverlays()) {
                 // Layer's Index - 0:Map(default), 2:Path(default), 2:UserLoc(default),
-                // 3:Marker(custom), 4:TourFeatures(custom), 5:Itinerary(custom), 6:MyLocation(custom)
-                if (overlay.getOverlayIndex() == 4) {
-                    mapView.removeOverlay(overlay);
-                } else if (overlay.getOverlayIndex() == 3) {
-                    ItemizedIconOverlay iOveray = (ItemizedIconOverlay)overlay;
-                    iOveray.getItem(0).closeToolTip();
-                    iOveray.removeItem(0);
+                // 3:Marker(custom-but, now unused), 4:TourFeatures(custom), 5:Itinerary(custom), 6:MyLocation(custom)
+                if (iOverlay.getOverlayIndex() == 4) {
+                    mapView.removeOverlay(iOverlay);
                 }
             }
         }
@@ -536,77 +524,83 @@ public class MainMap extends ActionBarActivity {
         Bundle extras = intent.getExtras();
         if (extras!=null) {
             clearAllLayersExceptForItinerary(); // If there are already drawn features, remove and redraw
-            FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
+            pressedMarker.closeToolTip(); // Close opened tooltip
 
+            FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
             switch (extras.getString("type")){
                 case "features":
                     if (featureType == FeatureType.ITINERARY) {
                         clearItineraryLayer();
                     }
-                    drawFeatures(featureType);
+                    drawFeatures(featureType, null);
                     break;
 
                 case "feature":
-                    LatLng loc = new LatLng(extras.getDouble("lat"), extras.getDouble("long"));
-                    Marker marker = new Marker(extras.getString("name"), "", loc);
-                    marker.setMarker(markerDrawables.get(featureType.ordinal()));
-                    mapView.addMarker(marker);
+                    TourFeature tourFeature = findFeatureByName(MainMap.this, extras.getString("name"));
+                    drawFeatures(featureType, tourFeature);
+                    LatLng loc = new LatLng(tourFeature.getLatitude(), tourFeature.getLongitude());
                     mapView.getController().animateTo(loc);
                     break;
             }
         }
     }
 
-    class PopulateMarkers extends AsyncTask<FeatureType, Pair<FeatureType, Marker>, FeatureType>{
+    class PopulateMarkers extends AsyncTask<Pair<FeatureType, TourFeature>, Pair<FeatureType, TourFeature>, FeatureType>{
 
         ArrayList<Marker> itineraryMarkers;
         ArrayList<Marker> featuresMarkers;
         int index = 0;
 
         @Override
-        protected FeatureType doInBackground(FeatureType... params) {
-
+        protected FeatureType doInBackground(Pair<FeatureType, TourFeature>... params) {
             List features = null;
+            FeatureType featureType = params[0].first;
+            TourFeature feature = params[0].second;
 
-            if (params[0] == FeatureType.ITINERARY) {
-                features = globalVariables.getItineraryFeatures();
-                itineraryMarkers = new ArrayList<Marker>();
-            } else {
-                features = globalVariables.getTourFeatures(params[0]);
+            if (feature != null) { // For one feature
                 featuresMarkers = new ArrayList<Marker>();
+                publishProgress(new Pair<FeatureType, TourFeature>(featureType, feature));
+            } else { // For features
+                if (featureType == FeatureType.ITINERARY) {
+                    features = globalVariables.getItineraryFeatures();
+                    itineraryMarkers = new ArrayList<Marker>();
+                } else {
+                    features = globalVariables.getTourFeatures(featureType);
+                    featuresMarkers = new ArrayList<Marker>();
+                }
+
+                if (features == null || features.size() == 0) {
+                    return null;
+                }
+
+                for (Object featureObj : features) {
+                    TourFeature tourFeature = (TourFeature) featureObj;
+                    publishProgress(new Pair<FeatureType, TourFeature>(featureType, tourFeature));
+                }
             }
 
-            if(features == null) {
-                return null;
-            }
-
-            for (Object feature : features) {
-                TourFeature tourFeature =  (TourFeature)feature;
-                Marker marker = new Marker(tourFeature.getString("name"), "", new LatLng(tourFeature.getLatitude(), tourFeature.getLongitude()));
-                publishProgress(new Pair<FeatureType, Marker>(params[0], marker));
-            }
-
-            return params[0];
+            return featureType;
     }
 
         @Override
-        protected void onProgressUpdate(Pair<FeatureType, Marker>... values) {
+        protected void onProgressUpdate(Pair<FeatureType, TourFeature>... values) {
             super.onProgressUpdate(values);
 
-            Marker marker = (Marker)values[0].second;
-            String title = null;
+            FeatureType featureType = values[0].first;
+            TourFeature tourFeature = values[0].second;
+            Marker marker = new Marker(tourFeature.getString("name"), "", new LatLng(tourFeature.getLatitude(), tourFeature.getLongitude()));
+            String title = tourFeature.getString("name");
 
-            if (values[0].first == FeatureType.ITINERARY) {
-                title = globalVariables.getItineraryFeatures().get(index).getString("name");
+            if (featureType == FeatureType.ITINERARY) { // Itinerary Feature
                 BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, new Integer(++index).toString(), R.drawable.poi_bg);
                 marker.setMarker(markerimg);
-                marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, index-1)); // Set as array index
+                marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, featureType, tourFeature));
                 marker.setTitle(title);
                 itineraryMarkers.add(marker); // For adding as ItemizedIconOverlay
             }
-            else { // TourFeatures
-                title = globalVariables.getTourFeatures(values[0].first).get(index++).getString("name");
-                marker.setMarker(markerDrawables.get(values[0].first.ordinal()));
+            else { // Tour Feature
+                marker.setMarker(markerDrawables.get(featureType.ordinal()));
+                marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, featureType, tourFeature));
                 marker.setTitle(title);
                 featuresMarkers.add(marker); // For adding as ItemizedIconOverlay
             }
@@ -622,41 +616,38 @@ public class MainMap extends ActionBarActivity {
         protected void onPostExecute(FeatureType featureType) {
             super.onPostExecute(featureType);
 
-            ArrayList markers =  null;
-            int overlayIndex = 0;
-
             if (featureType == null) {
                 progressBar.setVisibility(View.GONE);
                 return;
             }
 
-            // To make custom layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker, 4:TourFeatures, 5:Itinerary, 6:MyLocation
             if (featureType == FeatureType.ITINERARY) {
-                markers = itineraryMarkers;
-                overlayIndex = 5;
+                drawOverlay(5, itineraryMarkers);
             } else {
-                markers = featuresMarkers;
-                overlayIndex = 4;
+                drawOverlay(4, featuresMarkers);
             }
-
-            ItemizedIconOverlay iOverlay = new ItemizedIconOverlay(MainMap.this, markers, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
-                @Override
-                public boolean onItemSingleTapUp(int i, Marker marker) {
-                    pressedMarker = marker;
-                    mapView.selectMarker(marker);
-                    return true; // Should be true because we handled this event
-                }
-
-                @Override
-                public boolean onItemLongPress(int index, Marker item) {
-                    return false;
-                }
-            });
-
-            iOverlay.setOverlayIndex(overlayIndex);
-            mapView.addItemizedOverlay(iOverlay);
-
             progressBar.setVisibility(View.GONE);
         }
+
+    }
+
+    // To make custom layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker(unused), 4:TourFeatures, 5:Itinerary, 6:MyLocation
+    void drawOverlay(int overlayIndex, ArrayList<Marker> markersList) {
+        ItemizedIconOverlay iOverlay = new ItemizedIconOverlay(MainMap.this, markersList, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
+            @Override
+            public boolean onItemSingleTapUp(int i, Marker marker) {
+                pressedMarker = marker;
+                mapView.selectMarker(marker);
+                return true; // Should be true because we handled this event
+            }
+
+            @Override
+            public boolean onItemLongPress(int index, Marker item) {
+                return false;
+            }
+        });
+
+        iOverlay.setOverlayIndex(overlayIndex);
+        mapView.addItemizedOverlay(iOverlay);
     }
 }

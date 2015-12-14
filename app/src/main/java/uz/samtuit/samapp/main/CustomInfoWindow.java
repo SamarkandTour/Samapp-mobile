@@ -14,19 +14,25 @@ import com.mapbox.mapboxsdk.views.MapView;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
+import uz.samtuit.samapp.util.TourFeature;
+
+import static uz.samtuit.samapp.main.ItemsListActivity.startItemActivity;
 
 /**
  * Custom Tooltip Window
  */
 public class CustomInfoWindow extends InfoWindow {
-    private int mLinkedListIndex;
+    private GlobalsClass.FeatureType featureType;
+    private TourFeature mFeature;
     private Context mContext;
+    private GlobalsClass.FeatureType mFeatureType;
 
-    public CustomInfoWindow(Context context, MapView mv, int index) {
-        super(R.layout.marker_description, mv);
+    public CustomInfoWindow(Context context, MapView mv, GlobalsClass.FeatureType featureType, TourFeature tourFeature) {
+        super(R.layout.marker_custom_tooltip, mv);
 
         mContext = context;
-        mLinkedListIndex = index;
+        mFeatureType = featureType;
+        mFeature = tourFeature;
 
         // Add own OnTouchListener to customize handling InfoWindow touch events
         setOnTouchListener(new View.OnTouchListener() {
@@ -34,6 +40,7 @@ public class CustomInfoWindow extends InfoWindow {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     // Still close the InfoWindow though
+                    startItemActivity(mContext, mFeatureType, mFeature);
                     close();
                 }
 
@@ -52,15 +59,15 @@ public class CustomInfoWindow extends InfoWindow {
         String title = overlayItem.getTitle();
         ((TextView) mView.findViewById(R.id.customTooltip_title)).setText(title);
 
-        GlobalsClass globalVariables = (GlobalsClass)mContext.getApplicationContext();
+        String photoFileName = mFeature.getPhoto();
+        if (photoFileName != null) {
+            String encodedBytes = FileUtil.fileReadFromExternalDir(mContext, photoFileName);
+            Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
+            BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, true);
 
-        String photoFileName = globalVariables.getItineraryFeatures().get(mLinkedListIndex).getPhoto();
-        String encodedBytes = FileUtil.fileReadFromExternalDir(mContext, photoFileName);
-        Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
-        BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, true);
-
-        ImageView mainImage = (ImageView)mView.findViewById(R.id.tooltip_imageView);
-        mainImage.setImageDrawable(roundedDrawable);
+            ImageView mainImage = (ImageView) mView.findViewById(R.id.tooltip_imageView);
+            mainImage.setImageDrawable(roundedDrawable);
+        }
     }
 }
 

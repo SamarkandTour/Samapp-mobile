@@ -1,6 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('/Users/MBP/AndroidStudioProjects/Samapp-mobile-origin/samtour.jks')
+        }
+    }
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
     defaultConfig {
@@ -36,5 +41,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.google.android.gms:play-services-analytics:7.0.0'
     compile 'com.h6ah4i.android.materialshadowninepatch:materialshadowninepatch:0.6.5'
 }

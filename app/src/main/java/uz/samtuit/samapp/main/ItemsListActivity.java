@@ -32,11 +32,15 @@ import java.util.Comparator;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TourFeatureList;
 
 
 public class ItemsListActivity extends ActionBarActivity {
+    private int PRIMARY_COLOR;
+    private int TOOLBAR_COLOR;
     private ArrayList<TourFeature> items;
-    ListView list;
+    private FeatureType S_ACTIVITY_NAME;
+    private ListView list;
     private EditText search_text;
     private MenuItem mActionSearch;
     private MenuItem mActionSort;
@@ -44,11 +48,8 @@ public class ItemsListActivity extends ActionBarActivity {
     private ItemsListAdapter adapter;
     private boolean isSearchOpen = false;
     private RelativeLayout RelLayout;
-    private int PRIMARY_COLOR;
-    private int TOOLBAR_COLOR;
     private String TITLE;
-    FeatureType S_ACTIVITY_NAME;
-    android.support.v7.widget.Toolbar toolbar;
+    private android.support.v7.widget.Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,27 +102,103 @@ public class ItemsListActivity extends ActionBarActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ItemsListActivity.this, ItemActivity.class);
-                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
-                intent.putExtra("photo",items.get(position).getPhoto());
-                intent.putExtra("rating",items.get(position).getRating());
-                intent.putExtra("name",items.get(position).getString("name"));
-                intent.putExtra("desc",items.get(position).getString("desc"));
-                intent.putExtra("type",items.get(position).getString("type"));
-                intent.putExtra("price",items.get(position).getString("price"));
-                intent.putExtra("wifi",items.get(position).getString("wifi"));
-                intent.putExtra("open",items.get(position).getString("open"));
-                intent.putExtra("addr",items.get(position).getString("addr"));
-                intent.putExtra("tel", items.get(position).getString("tel"));
-                intent.putExtra("url",items.get(position).getString("url"));
-                intent.putExtra("long",items.get(position).getLongitude());
-                intent.putExtra("lat",items.get(position).getLatitude());
-                intent.putExtra("primaryColorId",PRIMARY_COLOR);
-                intent.putExtra("toolbarColorId",TOOLBAR_COLOR);
-                startActivity(intent);
+                startItemActivity(ItemsListActivity.this, S_ACTIVITY_NAME, items.get(position));
             }
         });
         extras.clear();
+    }
+
+    private static int getPrimaryColorId(FeatureType type)
+    {
+        int id = 0;
+
+        switch (type)
+        {
+            case HOTEL:
+                id = R.color.hotel_primary;
+                break;
+            case FOODNDRINK:
+                id = R.color.foodanddrink_primary;
+                break;
+            case ATTRACTION:
+                id = R.color.attraction_primary;
+                break;
+            case SHOPPING:
+                id = R.color.shop_primary;
+                break;
+        }
+        return id;
+    }
+
+    private static int getToolbarColorId(FeatureType type)
+    {
+        int id = 0;
+
+        switch (type)
+        {
+            case HOTEL:
+                id = R.color.hotel_tool;
+                break;
+            case FOODNDRINK:
+                id = R.color.foodanddrink_tool;
+                break;
+            case ATTRACTION:
+                id = R.color.attraction_tool;
+                break;
+            case SHOPPING:
+                id = R.color.shop_tool;
+                break;
+        }
+        return id;
+    }
+
+    private int getTitle(FeatureType type)
+    {
+        int id = 0;
+
+        switch (type)
+        {
+            case HOTEL:
+                id = R.string.hotels;
+                break;
+            case FOODNDRINK:
+                id = R.string.foodanddrinks;
+                break;
+            case ATTRACTION:
+                id = R.string.attractions;
+                break;
+            case SHOPPING:
+                id = R.string.shopping;
+                break;
+        }
+        return id;
+    }
+
+    public static void startItemActivity(Context context, FeatureType featureType, TourFeature feature) {
+        Intent intent = new Intent(context, ItemActivity.class);
+
+        if (featureType == FeatureType.ITINERARY) {
+            featureType = TourFeatureList.findFeatureTypeByName(context, feature.getString("name"));
+        }
+        intent.putExtra("featureType", featureType.toString());
+
+        intent.putExtra("photo", feature.getPhoto());
+        intent.putExtra("rating", feature.getRating());
+        intent.putExtra("name", feature.getString("name"));
+        intent.putExtra("desc", feature.getString("desc"));
+        intent.putExtra("type", feature.getString("type"));
+        intent.putExtra("price", feature.getString("price"));
+        intent.putExtra("wifi", feature.getString("wifi"));
+        intent.putExtra("open", feature.getString("open"));
+        intent.putExtra("addr", feature.getString("addr"));
+        intent.putExtra("tel", feature.getString("tel"));
+        intent.putExtra("url", feature.getString("url"));
+        intent.putExtra("long", feature.getLongitude());
+        intent.putExtra("lat", feature.getLatitude());
+        intent.putExtra("primaryColorId", getPrimaryColorId(featureType));
+        intent.putExtra("toolbarColorId", getToolbarColorId(featureType));
+
+        context.startActivity(intent);
     }
 
     @Override
@@ -137,17 +214,29 @@ public class ItemsListActivity extends ActionBarActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        mActionSearch = menu.findItem(R.id.action_search);
         mActionShowOnMap = menu.findItem(R.id.action_show_markers);
+        mActionShowOnMap.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
+                intent.putExtra("type", "features");
+                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                return false;
+            }
+        });
+
         mActionSort = menu.findItem(R.id.action_sort);
+        mActionSearch = menu.findItem(R.id.action_search);
+
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tour_features, menu);
-        // Associate searchable configuration with the SearchView
+        getMenuInflater().inflate(R.menu.menu_items_list, menu);
 
         return true;
     }
@@ -236,72 +325,6 @@ public class ItemsListActivity extends ActionBarActivity {
         list.setAdapter(adapter);
     }
 
-    private int getPrimaryColorId(FeatureType type)
-    {
-        int id = 0;
-
-        switch (type)
-        {
-            case HOTEL:
-                id = R.color.hotel_primary;
-                break;
-            case FOODNDRINK:
-                id = R.color.foodanddrink_primary;
-                break;
-            case ATTRACTION:
-                id = R.color.attraction_primary;
-                break;
-            case SHOPPING:
-                id = R.color.shop_primary;
-                break;
-        }
-        return id;
-    }
-
-    private int getToolbarColorId(FeatureType type)
-    {
-        int id = 0;
-
-        switch (type)
-        {
-            case HOTEL:
-                id = R.color.hotel_tool;
-                break;
-            case FOODNDRINK:
-                id = R.color.foodanddrink_tool;
-                break;
-            case ATTRACTION:
-                id = R.color.attraction_tool;
-                break;
-            case SHOPPING:
-                id = R.color.shop_tool;
-                break;
-        }
-        return id;
-    }
-
-    private int getTitle(FeatureType type)
-    {
-        int id = 0;
-
-        switch (type)
-        {
-            case HOTEL:
-                id = R.string.hotels;
-                break;
-            case FOODNDRINK:
-                id = R.string.foodanddrinks;
-                break;
-            case ATTRACTION:
-                id = R.string.attractions;
-                break;
-            case SHOPPING:
-                id = R.string.shopping;
-                break;
-        }
-        return id;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -312,12 +335,6 @@ public class ItemsListActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         switch (id)
         {
-            case R.id.action_show_markers:
-                Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
-                intent.putExtra("type", "features");
-                intent.putExtra("featureType",S_ACTIVITY_NAME.toString());
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
             case R.id.action_sort:
                 Collections.sort(items, new CustomComparator());
                 adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);

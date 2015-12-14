@@ -40,6 +40,10 @@ public class TourFeatureList {
             for ( String lang : GlobalsClass.supportedLanguages) {
                 for (int i = 0; i < GlobalsClass.featuresGeoJSONFileName.length; i++) {
                     FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, lang + GlobalsClass.featuresGeoJSONFileName[i]);
+                    if (featureCollection == null) { // If there is no file, skip this file
+                        continue;
+                    }
+
                     List<Feature> featuresList = featureCollection.getFeatures();
                     Log.e("SIZE", featuresList.size() + "");
 
@@ -151,6 +155,12 @@ public class TourFeatureList {
                     tourFeature.setStringHashMap("addr", v.getProperties().getString("addr"));
                 }
 
+                if (v.getProperties().isNull("tel")) {
+                    tourFeature.setStringHashMap("tel", null);
+                } else {
+                    tourFeature.setStringHashMap("tel", v.getProperties().getString("tel"));
+                }
+
                 if (v.getProperties().isNull("url")) {
                     tourFeature.setStringHashMap("url", null);
                 } else {
@@ -178,27 +188,35 @@ public class TourFeatureList {
         return tourFeatureList;
     }
 
-    /**
-     * There is no Hotel or Food&Drink in the Itinerary GeoJSON file
-     */
-    private TourFeature findFeature(Context context, String name) {
+    static public GlobalsClass.FeatureType findFeatureTypeByName(Context context, String name) {
         ArrayList<TourFeature> tourFeatures;
 
         GlobalsClass globalVariables = (GlobalsClass)context.getApplicationContext();
 
-        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.ATTRACTION);
-        for (TourFeature v:tourFeatures) {
-            if (v.getString("name").equals(name)) {
-                v.setStringHashMap("category", "attraction");
-                return v;
+        for (GlobalsClass.FeatureType featuretype : GlobalsClass.FeatureType.values()) {
+            tourFeatures = globalVariables.getTourFeatures(featuretype);
+            for (TourFeature v:tourFeatures) {
+                if (v.getString("name").equals(name)) {
+                    return featuretype;
+                }
             }
         }
 
-        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.SHOPPING);
-        for (TourFeature v:tourFeatures) {
-            if (v.getString("name").equals(name)) {
-                v.setStringHashMap("category", "shopping");
-                return v;
+        return null;
+
+    }
+
+    static public TourFeature findFeatureByName(Context context, String name) {
+        ArrayList<TourFeature> tourFeatures;
+
+        GlobalsClass globalVariables = (GlobalsClass)context.getApplicationContext();
+
+        for (GlobalsClass.FeatureType featuretype : GlobalsClass.FeatureType.values()) {
+            tourFeatures = globalVariables.getTourFeatures(featuretype);
+            for (TourFeature v:tourFeatures) {
+                if (v.getString("name").equals(name)) {
+                    return v;
+                }
             }
         }
 

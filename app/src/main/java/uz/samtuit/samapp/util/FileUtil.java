@@ -42,6 +42,7 @@ public class FileUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
 
         return buffer.toString();
@@ -121,8 +122,10 @@ public class FileUtil {
             parsed = (FeatureCollection) GeoJSON.parse(jsonText);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return null;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
 
         return parsed;

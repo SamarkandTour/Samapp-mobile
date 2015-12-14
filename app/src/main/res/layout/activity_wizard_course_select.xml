@@ -99,7 +99,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/previous"
+        android:text="@string/btn_previous"
         android:id="@+id/button2"
         android:layout_marginBottom="48dp"
         android:layout_alignParentBottom="true"
@@ -110,7 +110,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/done"
+        android:text="@string/btn_done"
         android:id="@+id/button3"
         android:layout_alignBottom="@+id/button2"
         android:layout_alignRight="@+id/button2"
@@ -120,7 +120,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/skip"
+        android:text="@string/btn_later"
         android:id="@+id/button"
         android:layout_alignTop="@+id/button2"
         android:layout_alignParentLeft="true"
