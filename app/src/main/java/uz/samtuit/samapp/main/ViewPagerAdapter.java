@@ -24,12 +24,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment f;
-        f = new MyItineraryFragment();
+        f = new SuggestedItineraryFragment();
 
         Bundle args = new Bundle();
         args.putInt(SI_DAY, position);
 
-        Log.e("Suggested Itinerary", " ViewPager " + position);
         f.setArguments(args);
 
         return f;

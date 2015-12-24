@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
@@ -23,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.ZipFile;
 
+import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
-import uz.samtuit.samapp.util.Downloader;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
@@ -32,7 +33,6 @@ import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.samapp.util.ZipFileUtil;
-
 
 
 public class LogoActivity extends ActionBarActivity {
@@ -45,14 +45,12 @@ public class LogoActivity extends ActionBarActivity {
     private boolean isFirstLaunch;
     private int countOfDownloaded;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_logo);
-        tvInfo = (TextView)findViewById(R.id.tv_info);
-
+        tvInfo = (TextView) findViewById(R.id.tv_info);
 
         pref = LogoActivity.this.getSharedPreferences("SamTour_Pref", 0);
         if (isFirstLaunch = pref.getBoolean("app_first_launch", true)) {
@@ -84,6 +82,12 @@ public class LogoActivity extends ActionBarActivity {
         } else {
             continueInBackgroundTask();
         }
+        findViewById(R.id.imageView2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LogoActivity.this, MainMap.class));
+            }
+        });
     }
 
     @Override
@@ -116,6 +120,7 @@ public class LogoActivity extends ActionBarActivity {
             ItineraryList.getInstance().setItinearyFeaturesToGlobal(context);
             ItineraryList.getInstance().categorizeItineraryWithDays(context, chosenLang); // Categorize with days from the name of itinerary files
         } else {
+            Log.e("LANG", chosenLang);;
             TourFeatureList tourFeatureList = new TourFeatureList();
             ArrayList<TourFeature> tourFeatureArrayList = tourFeatureList.getTourFeatureListFromGeoJSONFile(context, chosenLang + path);
             tourFeatureList.setTourFeaturesToGlobal(context, featureType, tourFeatureArrayList);
@@ -209,7 +214,6 @@ public class LogoActivity extends ActionBarActivity {
                         return true;
                     }
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -316,7 +320,7 @@ public class LogoActivity extends ActionBarActivity {
             if (isNeedMapDownload) {
                 URLArrayList.add(globals.mapDownloadURL);
             }
-            Downloader downloader = new Downloader(URLArrayList);
+            BitmapUtil.Downloader downloader = new BitmapUtil.Downloader(URLArrayList);
             downloader.startDownload(LogoActivity.this, "Sam Tour", "Tour Database");
 
             decideNextActivity();

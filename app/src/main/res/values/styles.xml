@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/ColorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
         <item name="android:windowBackground">@drawable/logo</item>
     </style>
@@ -44,4 +45,7 @@
         <item name="@android:windowExitAnimation">@anim/shrink_from_top</item>
     </style>
 
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

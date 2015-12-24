@@ -47,11 +47,15 @@ public class ItineraryList {
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         globalsClass.setItineraryFeatures(mItineraryList);
     }
+    public void setNewItinearyFeaturesToGlobal(Context context, LinkedList<TourFeature> list) {
+        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
+        globalsClass.setItineraryFeatures(list);
+    }
 
     /**
      * There is no Hotel or Food&Drink in the Itinerary GeoJSON file
      */
-    private TourFeature findFeatureInAttractionNShoppingList(Context context, String name) {
+    public TourFeature findFeatureInAttractionNShoppingList(Context context, String name) {
         ArrayList<TourFeature> tourFeatures;
 
         GlobalsClass globalVariables = (GlobalsClass)context.getApplicationContext();
@@ -76,6 +80,16 @@ public class ItineraryList {
 
     }
 
+    public boolean addNewFeatureToItineraryList(TourFeature tourFeature){
+        if(tourFeature!=null){
+            mItineraryList.add(tourFeature);
+            return true;
+        }
+        return false;
+    }
+
+
+
     public void clearItineraryFeatureList() {
         mItineraryList.clear();
     }
@@ -97,7 +111,22 @@ public class ItineraryList {
                     Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
                 } else {
                     itineraryElement.setDay(v.getProperties().getInt("day"));
-                    mItineraryList.add(itineraryElement);
+                    int last = mItineraryList.size();
+                    boolean found = false;
+                    for(int i = last-1; i >= 0; i--)
+                    {
+                        if(mItineraryList.get(i).getString("name")==itineraryElement.getString("name")){
+                            found = true;
+                            if(mItineraryList.get(i).getDay()>itineraryElement.getDay())
+                            {
+                                mItineraryList.get(i).setDay(itineraryElement.getDay());
+                            }
+                            break;
+                        }
+                    }
+                    if(!found){
+                        mItineraryList.add(itineraryElement);
+                    }
                 }
             }
         } catch (JSONException e) {
@@ -165,4 +194,6 @@ public class ItineraryList {
     public static HashMap<String , Float> getCourseHashMap() {
         return mCourseHashMap;
     }
+
+
 }

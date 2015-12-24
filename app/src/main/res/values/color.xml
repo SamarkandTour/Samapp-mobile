@@ -13,4 +13,5 @@
         <color name="list_item_tool">#33ffffff</color>
         <color name="foodanddrink_primary">#FF5722</color>
         <color name="foodanddrink_tool">#E64A19</color>
+        <color name="colorAccent">#4CAF50</color>
     </resources>

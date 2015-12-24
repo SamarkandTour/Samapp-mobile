@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -49,6 +50,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         setSpinnerValueAndInflate(null, spin1, course1, getString(R.string.itinerary_1st_course));
 
         sharedPreferences = this.getSharedPreferences("SamTour_Pref", 0);
+        sharedPreferences.edit().putInt("days",(int)selectedTotalDay);
     }
 
     private void setSpinnerValueAndInflate(String currentSelected, Spinner spinner, ArrayList<String> course, String initText) {
@@ -113,6 +115,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         intent.putExtra("type", "features");
         intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        Log.e("DAYS",selectedTotalDay+"");
         startActivity(intent);
 
         if (sharedPreferences.getBoolean("app_first_launch", true)) { // Don't forget, Set first_launch to false
@@ -132,6 +135,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         if (selectedTotalDay != 0) {
             setSpinnerValueAndInflate(selectedPureCourse, nextSpinner, nextArray, initText);
         }
+        Log.e("Days",selectedTotalDay+"");
     }
 
     @Override

@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -92,14 +93,14 @@ public class MainMap extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        globalVariables = (GlobalsClass)getApplicationContext();
+        globalVariables = (GlobalsClass) getApplicationContext();
 
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        mapView = (MapView)findViewById(R.id.mapview);
+        mapView = (MapView) findViewById(R.id.mapview);
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
-        marqueeText = (TextView)findViewById(R.id.marqueeText);
-        progressBar = (ProgressBar)findViewById(R.id.waitProgressBar);
+        marqueeText = (TextView) findViewById(R.id.marqueeText);
+        progressBar = (ProgressBar) findViewById(R.id.waitProgressBar);
 
         setMapView(); //Set MapView configuration
 
@@ -446,7 +447,7 @@ public class MainMap extends ActionBarActivity {
                 intent = new Intent(MainMap.this, WizardDaySelectActivity.class);
                 break;
             case ITINERARY:
-                intent = new Intent(MainMap.this, MyItineraryActivity.class);
+                intent = new Intent(MainMap.this, SuggestedItineraryActivity.class);
                 break;
             case HOTEL:
             case FOODNDRINK:
@@ -455,7 +456,7 @@ public class MainMap extends ActionBarActivity {
                 intent = new Intent(MainMap.this, ItemsListActivity.class);
                 break;
             case SETTING:
-                intent = new Intent(MainMap.this, LanguageSettingActivity.class);
+                intent = new Intent(MainMap.this, TourFeatureActivity.class);
                 break;
         }
         return intent;
@@ -475,6 +476,8 @@ public class MainMap extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        drawFeatures(FeatureType.ITINERARY,null);
+
 
         if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON, Always indicate my location on the map
             myLocationOverlay.enableMyLocation();
@@ -524,8 +527,9 @@ public class MainMap extends ActionBarActivity {
         Bundle extras = intent.getExtras();
         if (extras!=null) {
             clearAllLayersExceptForItinerary(); // If there are already drawn features, remove and redraw
-            pressedMarker.closeToolTip(); // Close opened tooltip
-
+            if(pressedMarker!=null){
+                pressedMarker.closeToolTip(); // Close opened tooltip
+            }
             FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
             switch (extras.getString("type")){
                 case "features":
