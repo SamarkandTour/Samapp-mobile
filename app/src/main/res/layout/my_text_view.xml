@@ -14,11 +14,6 @@
     android:orientation="vertical"
      >
 
-
-    <com.balysv.materialripple.MaterialRippleLayout
-        android:id="@+id/ripple"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
         <LinearLayout
             android:background="@drawable/layout_bg"
             android:paddingLeft="9dp"
@@ -66,7 +61,6 @@
 
             </LinearLayout>
         </LinearLayout>
-    </com.balysv.materialripple.MaterialRippleLayout>
         <LinearLayout
             android:visibility="visible"
             android:id="@+id/layout_between_items"

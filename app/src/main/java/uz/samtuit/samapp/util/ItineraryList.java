@@ -52,6 +52,18 @@ public class ItineraryList {
         globalsClass.setItineraryFeatures(list);
     }
 
+    public void sendToAnotherDay(Context context, String ItineraryFeatureName, int inc){
+        int last = mItineraryList.size() - 1;
+        for(int i = last; i >= 0; i--){
+            if(mItineraryList.get(i).getString("name")==ItineraryFeatureName){
+                mItineraryList.get(i).setDay(mItineraryList.get(i).getDay()+inc);
+                break;
+            }
+        }
+        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
+        globalsClass.setItineraryFeatures(mItineraryList);
+        itineraryWriteToGeoJSONFile(context,context.getSharedPreferences("SamTour_Pref",0).getString("app_lang",null));
+    }
     /**
      * There is no Hotel or Food&Drink in the Itinerary GeoJSON file
      */
