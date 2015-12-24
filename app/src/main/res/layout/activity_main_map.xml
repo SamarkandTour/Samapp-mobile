@@ -28,21 +28,23 @@ android:gravity="bottom"
             android:focusable="false" />
 
         <ImageView
-            android:layout_margin="10dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:onClick="myLocationClick"
-            android:src="@drawable/myposition"
             android:id="@+id/myPositon"
-            android:focusable="false" />
+            android:focusable="false"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/frame_ani" />
 
         <ToggleButton
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:id="@+id/naviToggleBtn"
             android:onClick="onNaviToggleClick"
-            android:textOn="On"
-            android:textOff="Off" />
+            style="@style/toggleButton"
+            android:background="@drawable/toggle_bg" />
 
         <TextView
             android:layout_width="match_parent"

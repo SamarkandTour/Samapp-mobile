@@ -266,7 +266,7 @@ public class LogoActivity extends ActionBarActivity {
         try {
             URL serverURL = new URL(url);
             connection = serverURL.openConnection();
-            connection.setReadTimeout(10000); // We will wait util max 10s for connection waiting
+            connection.setReadTimeout(10000); // We will wait until max 10s for connection waiting
         } catch (SocketTimeoutException e) {
             e.printStackTrace();
             return false;

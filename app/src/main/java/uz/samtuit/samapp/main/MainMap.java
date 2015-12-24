@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
@@ -22,8 +23,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -72,7 +71,7 @@ public class MainMap extends ActionBarActivity {
     private GpsLocationProvider mGpsLocProvider;
     private UserLocationOverlay myLocationOverlay;
     private TextView marqueeText;
-    private Animation animGPS;
+    private  AnimationDrawable animGPS;
     private ImageView mAnimMyPosImage;
     private CustomDialog mGPSSettingDialog;
     private ArrayList<Drawable> markerDrawables;
@@ -146,9 +145,9 @@ public class MainMap extends ActionBarActivity {
     }
 
     private void drawBottomMenuIcons() {
-        MenuItems item = new MenuItems(0,"Itinerary Wizard","drawable/ic_s_itinerary_wizard_h", MenuItems.MainMenu.ITINERARYWIZARD);
+        MenuItems item = new MenuItems(0,"Itinerary Wizard","drawable/itinerary_wizard", MenuItems.MainMenu.ITINERARYWIZARD);
         Items.add(item);
-        item = new MenuItems(1,"Suggested Itinerary","drawable/my_schedule_h", MenuItems.MainMenu.ITINERARY);
+        item = new MenuItems(1,"Suggested Itinerary","drawable/itinerary", MenuItems.MainMenu.ITINERARY);
         Items.add(item);
         item = new MenuItems(2,"Hotels","drawable/hotel", MenuItems.MainMenu.HOTEL);
         Items.add(item);
@@ -158,7 +157,7 @@ public class MainMap extends ActionBarActivity {
         Items.add(item);
         item = new MenuItems(5,"Shopping","drawable/shop", MenuItems.MainMenu.SHOPPING);
         Items.add(item);
-        item = new MenuItems(6,"About This App","drawable/setting", MenuItems.MainMenu.SETTING);
+        item = new MenuItems(6,"About This App","drawable/settings", MenuItems.MainMenu.SETTING);
         Items.add(item);
         btn = (ImageView)findViewById(R.id.slideButton);
         slidingDrawer = (SlidingDrawer)findViewById(R.id.slidingDrawer);
@@ -231,8 +230,9 @@ public class MainMap extends ActionBarActivity {
             mGPSSettingDialog.show();
         } else {
             isSearchMyLocEnabled = true;
-            animGPS = AnimationUtils.loadAnimation(MainMap.this, R.anim.scale);
-            mAnimMyPosImage.startAnimation(animGPS);
+            mAnimMyPosImage = (ImageView) findViewById(R.id.myPositon);
+            animGPS = (AnimationDrawable) mAnimMyPosImage.getBackground();
+            animGPS.start();
             marqueeText.setText(getString(R.string.marquee_searching_target) + pressedMarker.getTitle());
 
             mDestinationLoc.setLongitude(pressedMarker.getPosition().getLongitude());
@@ -256,8 +256,10 @@ public class MainMap extends ActionBarActivity {
                 //Show icon animation until my location is recognized by first GPS signal
                 if (isSearchMyLocEnabled || isNavigationEnabled) {
                     myLocationOverlay.goToMyPosition(true);
-                    mAnimMyPosImage.clearAnimation(); //Stop icon animation
-                    if (isSearchMyLocEnabled && !isSearchMyLocEnabled) {
+                    animGPS.stop();
+                    animGPS.selectDrawable(0); // Return to first frame
+
+                    if (isSearchMyLocEnabled && !isNavigationEnabled) {
                         isSearchMyLocEnabled = false;
                         marqueeText.setText("");
                     } else if (isSearchMyLocEnabled && isNavigationEnabled) {
@@ -297,6 +299,7 @@ public class MainMap extends ActionBarActivity {
                         }
                     } else {
                         marqueeText.setTextColor(Color.BLACK);
+                        marqueeText.setText(getString(R.string.marquee_guiding) + pressedMarker.getTitle());
                     }
                 }
             }
@@ -344,15 +347,18 @@ public class MainMap extends ActionBarActivity {
         if (enabled) {
             //Show icon animation until my location is recognized by first GPS signal
             myLocationOverlay.goToMyPosition(true);
-            animGPS = AnimationUtils.loadAnimation(this, R.anim.scale);
-            mAnimMyPosImage.startAnimation(animGPS);
+            isSearchMyLocEnabled = true;
+            mAnimMyPosImage = (ImageView) findViewById(R.id.myPositon);
+            animGPS = (AnimationDrawable) mAnimMyPosImage.getBackground();
+            animGPS.start();
             marqueeText.setText(R.string.marquee_searching_you);
 
             if(isNavigationEnabled) {
                 mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
             }
         } else {
-            mAnimMyPosImage.clearAnimation();
+            animGPS.stop();
+            animGPS.selectDrawable(0); // Return to first frame
             marqueeText.setText("");
 
             if(isNavigationEnabled) {
@@ -524,7 +530,9 @@ public class MainMap extends ActionBarActivity {
         Bundle extras = intent.getExtras();
         if (extras!=null) {
             clearAllLayersExceptForItinerary(); // If there are already drawn features, remove and redraw
-            pressedMarker.closeToolTip(); // Close opened tooltip
+            if (pressedMarker != null) { // Close opened tooltip
+                pressedMarker.closeToolTip();
+            }
 
             FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
             switch (extras.getString("type")){

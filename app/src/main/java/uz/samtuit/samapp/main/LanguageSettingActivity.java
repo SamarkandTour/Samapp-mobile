@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeatureList;
 
@@ -63,7 +64,15 @@ public class LanguageSettingActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             sharedPreferences.edit().putString("app_lang", selectLang).commit(); // Set App language
 
-                            finish();
+                            if (!isFirstLaunch) {
+                                Intent intent = new Intent(LanguageSettingActivity.this, MainMap.class);
+                                intent.putExtra("type", "features");
+                                intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                startActivity(intent);
+                            } else {
+                                finish();
+                            }
                             overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
                         }
                     }.execute();

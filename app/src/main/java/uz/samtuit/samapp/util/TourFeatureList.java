@@ -249,7 +249,8 @@ public class TourFeatureList {
             if (featureType == GlobalsClass.FeatureType.ITINERARY) {
                 path = ItineraryList.myItineraryDirectory + chosenLang + ItineraryList.myItineraryGeoJSONFileName;
 
-                ItineraryList.getInstance().getItineraryFeatureListFromGeoJSONFile(context, chosenLang + path);
+                ItineraryList.getInstance().clearItineraryFeatureList(); // Clear itinerary list
+                ItineraryList.getInstance().getItineraryFeatureListFromGeoJSONFile(context, path);
                 ItineraryList.getInstance().setItinearyFeaturesToGlobal(context);
                 ItineraryList.getInstance().categorizeItineraryWithDays(context, chosenLang); // Categorize with days from the name of itinerary files
             } else {
