@@ -11,6 +11,7 @@ public class TourFeature {
     private HashMap<String, String> stringHashMap; //name, desc, type, price, wifi, open, addr, tel, url
     private int rating;
     private int day;
+    private int itineraryId;
     private double longitude;
     private double latitude;
 
@@ -41,6 +42,10 @@ public class TourFeature {
     public int getDay() {
         return day;
     }
+
+    public void setItineraryId(int id){this.itineraryId = id;}
+
+    public int getItineraryId() { return this.itineraryId; }
 
     public void setStringHashMap(String strKey, String strVal) {
         stringHashMap.put(strKey, strVal);

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ class ItemsListAdapter extends ArrayAdapter<TourFeature> {
             convertView = inflater.inflate(layoutResourceId, parent, false);
         }
 
+        LinearLayout holderLayout = (LinearLayout)convertView.findViewById(R.id.holder_layout);
         TextView name = (TextView) convertView.findViewById(R.id.title);
         TextView revs = (TextView) convertView.findViewById(R.id.reviewsCount);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
@@ -50,11 +52,12 @@ class ItemsListAdapter extends ArrayAdapter<TourFeature> {
 
         String fileName = data.get(position).getPhoto();
         if (fileName != null) {
+            ImageView mainImage = (ImageView) convertView.findViewById(R.id.listViewThumbnail);
             String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
-            Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
+            Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes, mainImage.getLayoutParams().height , mainImage.getLayoutParams().width);
             BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
 
-            ImageView mainImage = (ImageView) convertView.findViewById(R.id.listViewThumbnail);
+
             mainImage.setImageDrawable(roundedDrawable);
         }
 

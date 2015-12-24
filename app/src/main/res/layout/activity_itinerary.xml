@@ -16,11 +16,27 @@
         android:fadeScrollbars="true"
         android:fadingEdge="horizontal"
         android:background="@color/ColorPrimary"/>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_height="match_parent"
-        android:background="#777"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_weight="1">
-    </android.support.v4.view.ViewPager>
+        android:layout_height="match_parent">
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_height="match_parent"
+            android:background="#ccc"
+            android:layout_width="wrap_content"
+            >
+        </android.support.v4.view.ViewPager>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/ic_add_black_24dp"
+            android:elevation="4dp"
+            android:layout_gravity="bottom|right"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+
+
 </LinearLayout>

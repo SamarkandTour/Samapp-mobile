@@ -1,6 +1,8 @@
 package uz.samtuit.samapp.util;
 
+import android.app.DownloadManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,8 +17,15 @@ import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
+
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Bitmap Utilities
@@ -25,10 +34,55 @@ public class BitmapUtil {
 
     // Decode Base64 encoded image
     public static Bitmap decodeBase64Image(String encodedImage) {
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+
+
+
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
         return decodedByte;
+    }
+
+    public static Bitmap decodeBase64Bitmap(String encodedImage,
+                                                         float reqWidth, float reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+
+        BitmapFactory.decodeByteArray(decodedString,0,decodedString.length,options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length,options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, float reqWidth, float reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
     }
 
     /**
@@ -179,6 +233,57 @@ public class BitmapUtil {
 
         public Bitmap getBitmap() {
             return mBitmap;
+        }
+    }
+
+    /**
+     * Download Manager
+     */
+    public static class  Downloader {
+        private DownloadManager downloadManager;
+        private DownloadManager.Request[] downloadRequests;
+        private URL[] serverURLs;
+        private String[] fileNames;
+
+        public Downloader(ArrayList<String> urls) {
+            try {
+                serverURLs = new URL[urls.size()];
+                fileNames = new String[urls.size()];
+                int i = 0;
+                for (String url : urls) {
+                    serverURLs[i] = new URL(url);
+                    fileNames[i] = url.substring(url.lastIndexOf('/'));
+                    i++;
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void startDownload(Context context, String title, String desc) {
+            downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+            try {
+                downloadRequests = new DownloadManager.Request[serverURLs.length];
+                int i = 0;
+                for (URL url : serverURLs) {
+                    downloadRequests[i++] = new DownloadManager.Request(Uri.parse(url.toURI().toString()));
+                }
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            SharedPreferences.Editor editor = context.getSharedPreferences("SamTour_Pref", 0).edit();
+            int index = 0;
+            for (DownloadManager.Request request : downloadRequests) {
+                request.setTitle(title);
+                request.setDescription(desc);
+                request.setDestinationInExternalFilesDir(context, "download", fileNames[index]);
+                long id = downloadManager.enqueue(request);
+                editor.putLong("download_request_id" + index, id);
+                index++;
+            }
+            editor.putInt("download_request_count", index).commit();
+            editor.commit();
         }
     }
 }

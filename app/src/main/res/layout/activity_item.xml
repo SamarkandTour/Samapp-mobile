@@ -19,7 +19,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
+                    android:scaleType="centerCrop"
                     android:id="@+id/hotel_image" />
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -78,46 +78,68 @@
 
 
                             </LinearLayout>
-                            <ImageView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="50dp"
-                                android:src="@drawable/wifi"
-                                android:background="@android:color/transparent"
-                                android:layout_marginRight="110dp"
                                 android:layout_gravity="right"
-                                android:id="@+id/wifi"
-                                android:visibility="invisible" />
-                            <ImageButton
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/ic_local_phone_white_24dp"
-                                android:background="@android:color/transparent"
-                                android:layout_marginRight="55dp"
-                                android:layout_gravity="right"
-                                android:id="@+id/call_button"
-                                android:visibility="invisible" />
-                            <ImageButton
-                                android:background="@android:color/transparent"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_gravity="center|right"
-                                android:src="@drawable/ic_link_white_24dp"
-                                android:id="@+id/hotel_link_btn"
-                                android:visibility="invisible" />
+                                android:orientation="horizontal">
+                                <ImageButton
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/ic_wifi_white_24dp"
+                                    android:background="@android:color/transparent"
+                                    android:layout_gravity="right"
+                                    android:id="@+id/wifi"
+                                    android:visibility="gone" />
+                                <ImageButton
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/ic_local_phone_white_24dp"
+                                    android:background="@android:color/transparent"
+                                    android:layout_gravity="right"
+                                    android:id="@+id/call_button"
+                                    android:visibility="gone" />
+                                <ImageButton
+                                    android:background="@android:color/transparent"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_gravity="center|right"
+                                    android:src="@drawable/ic_link_white_24dp"
+                                    android:id="@+id/hotel_link_btn"
+                                    android:visibility="gone" />
+                            </LinearLayout>
+
                         </FrameLayout>
                     </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="@string/prop_title"
+                android:layout_height="wrap_content"
                 android:background="#fff"
-                android:textColor="@color/hotel_primary"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:id="@+id/hotel_title_small"
-                android:textSize="20sp"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="50dp"
+                    android:text="Title"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/hotel_primary"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:id="@+id/hotel_title_small"
+                    android:textSize="20sp"/>
+                <ImageButton
+                    android:id="@+id/add_to_my_itinerary"
+                    android:onClick="AddToMyItinerary"
+                    android:layout_marginLeft="-50dp"
+                    android:tag="Add to my itinerary"
+                    android:background="@android:color/transparent"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_add_black_24dp"/>
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
@@ -151,7 +173,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Registon street..."
+                android:text="address of this "
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="20dp"

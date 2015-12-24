@@ -1,12 +1,16 @@
 package uz.samtuit.samapp.main;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -15,25 +19,39 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.LinkedList;
 
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
+import uz.samtuit.samapp.util.GlobalsClass;
+import uz.samtuit.samapp.util.ItineraryList;
+import uz.samtuit.samapp.util.TourFeature;
 
 
-public class ItemActivity extends ActionBarActivity {
+public class ItemActivity extends ActionBarActivity implements NumberPicker.OnValueChangeListener{
 
     private MenuItem mActionNavigate;
     private double latitude, longitude;
     private String name;
     private RelativeLayout relLayout;
     private ImageView imageView;
+    private ImageView addToMyItineraryBtn;
+    private ImageButton call,link;
+
     private ImageButton callBtn, linkBtn;
+    private int selectedDay = 1;
+    private ImageButton mAddToMyItinerary;
     private String featureType;
     private String url, wifi, telNum;
+    private SharedPreferences sharedPreferences;
     private int index;
 
     @Override
@@ -55,14 +73,16 @@ public class ItemActivity extends ActionBarActivity {
         setContentView(R.layout.activity_item);
         final Bundle extras = getIntent().getExtras();
 
+        index = extras.getInt("index");
+
         //ActionBar setting
-        Toolbar toolbar = (Toolbar)findViewById(R.id.hotel_tool_bar);
-        relLayout = (RelativeLayout)findViewById(R.id.itemRelLayout);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.list_item_tool));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.hotel_tool_bar);
+        relLayout = (RelativeLayout) findViewById(R.id.itemRelLayout);
+        toolbar.setBackgroundColor(getResources().getColor(extras.getInt("primaryColorId")));
         setSupportActionBar(toolbar);
         relLayout.setBackground(getResources().getDrawable(extras.getInt("primaryColorId")));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-
+        mAddToMyItinerary = (ImageButton)findViewById(R.id.add_to_my_itinerary);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/segoeui.ttf");
         name = extras.getString("name");
         SpannableString s = new SpannableString(name);
@@ -82,6 +102,10 @@ public class ItemActivity extends ActionBarActivity {
 
         // Loc
         featureType = extras.getString("featureType");
+        Log.e("FEATURE TYPE", featureType + " " + GlobalsClass.FeatureType.HOTEL.name());
+        if(featureType.equals(GlobalsClass.FeatureType.HOTEL.toString())||featureType.equals(GlobalsClass.FeatureType.FOODNDRINK.toString())){
+            mAddToMyItinerary.setVisibility(View.GONE);
+        }
         latitude = extras.getDouble("lat");
         longitude = extras.getDouble("long");
 
@@ -177,6 +201,51 @@ public class ItemActivity extends ActionBarActivity {
         index = extras.getInt("index");
 
         extras.clear();
+
+        sharedPreferences = this.getSharedPreferences("SamTour_Pref",0);
+    }
+
+    public void AddToMyItinerary(View view){
+        final GlobalsClass globals = (GlobalsClass)getApplicationContext();
+        LinkedList<TourFeature> itineraryItems;
+        final Dialog d = new Dialog(ItemActivity.this);
+        d.setTitle("Pick The Day");
+        d.setContentView(R.layout.day_dialog);
+        Button b1 = (Button)d.findViewById(R.id.ok_btn);
+        Button b2 = (Button)d.findViewById(R.id.cancel_btn);
+        final NumberPicker numberPicker = (NumberPicker)d.findViewById(R.id.num_pckr);
+        numberPicker.setMaxValue(5);
+        numberPicker.setMinValue(1);
+        numberPicker.setWrapSelectorWheel(false);
+        numberPicker.setOnValueChangedListener(this);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Bundle extras = getIntent().getExtras();
+                ItineraryList list = ItineraryList.getInstance();
+                TourFeature feature = list.findFeatureInAttractionNShoppingList(getApplicationContext(), extras.getString("name"));
+                LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
+                if(itineraryItems.contains(feature)){
+                    Toast.makeText(ItemActivity.this, "This feature is already in your itinerary list", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    feature.setDay(selectedDay);
+                    list.addNewFeatureToItineraryList(feature);
+                    list.setNewItinearyFeaturesToGlobal(getApplicationContext(), itineraryItems);
+                    Log.e("QUERY",ItemActivity.this.getSharedPreferences("SamTour_Pref",0).getString("app_lang",null));
+                    list.itineraryWriteToGeoJSONFile(getApplicationContext(), ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+                    Toast.makeText(ItemActivity.this,"The Feature succesfuly added to your itinerary list",Toast.LENGTH_LONG).show();
+                    d.hide();
+                }
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.hide();
+            }
+        });
+        d.show();
     }
 
     @Override
@@ -196,13 +265,22 @@ public class ItemActivity extends ActionBarActivity {
                 Intent intent = new Intent(ItemActivity.this, MainMap.class);
                 intent.putExtra("type", "feature");
                 intent.putExtra("name", name);
-                intent.putExtra("featureType",featureType);
+                intent.putExtra("featureType", featureType);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 return false;
             }
         });
         return super.onPrepareOptionsMenu(menu);
+    }
+
+
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        if(oldVal==newVal)
+            selectedDay=oldVal;
+        else
+            selectedDay=newVal;
     }
 
     class LoadImageFromExternalStorage extends AsyncTask<String,String,Void>{
@@ -213,14 +291,14 @@ public class ItemActivity extends ActionBarActivity {
                 String encodedBytes = FileUtil.fileReadFromExternalDir(ItemActivity.this, params[0]);
                 publishProgress(encodedBytes);
             }
-
             return null;
         }
 
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            Drawable dr = new BitmapDrawable(BitmapUtil.decodeBase64Image(values[0]));
+            Log.e("SCREEN SIZE",imageView.getHeight()+ " "+imageView.getWidth());
+            Drawable dr = new BitmapDrawable(BitmapUtil.decodeBase64Bitmap(values[0],imageView.getWidth(),imageView.getHeight()));
             imageView.setImageDrawable(dr);
         }
     }

@@ -83,7 +83,7 @@ public class TourFeatureList {
                 globalsClass.setFeatures(featureType, Attractions);
                 break;
 
-            case SHOPPING:
+        case SHOPPING:
                 Shopping = tourFeatureList;
                 globalsClass.setFeatures(featureType, Shopping);
                 break;
@@ -254,6 +254,7 @@ public class TourFeatureList {
                 ItineraryList.getInstance().setItinearyFeaturesToGlobal(context);
                 ItineraryList.getInstance().categorizeItineraryWithDays(context, chosenLang); // Categorize with days from the name of itinerary files
             } else {
+                Log.e("TAG",featureType.toString());
                 path = GlobalsClass.featuresGeoJSONFileName[featureType.ordinal()];
 
                 TourFeatureList tourFeatureList = new TourFeatureList();
@@ -261,5 +262,9 @@ public class TourFeatureList {
                 tourFeatureList.setTourFeaturesToGlobal(context, featureType, tourFeatureArrayList);
             }
         }
+    }
+
+    public static void addToMyItineraryList(Context context, int day, int tourFeatureId, int chosenNumber) {
+        String path = null;
     }
 }

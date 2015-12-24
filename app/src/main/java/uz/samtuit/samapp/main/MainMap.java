@@ -71,7 +71,7 @@ public class MainMap extends ActionBarActivity {
     private GpsLocationProvider mGpsLocProvider;
     private UserLocationOverlay myLocationOverlay;
     private TextView marqueeText;
-    private  AnimationDrawable animGPS;
+    private AnimationDrawable animGPS;
     private ImageView mAnimMyPosImage;
     private CustomDialog mGPSSettingDialog;
     private ArrayList<Drawable> markerDrawables;
