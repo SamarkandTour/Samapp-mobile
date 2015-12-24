@@ -456,7 +456,7 @@ public class MainMap extends ActionBarActivity {
                 intent = new Intent(MainMap.this, ItemsListActivity.class);
                 break;
             case SETTING:
-                intent = new Intent(MainMap.this, TourFeatureActivity.class);
+                intent = new Intent(MainMap.this, LanguageSettingActivity.class);
                 break;
         }
         return intent;

@@ -32,6 +32,7 @@ import java.util.Objects;
 import uz.samtuit.samapp.util.ActionItem;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
+import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryItem;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.QuickAction;
@@ -186,6 +187,16 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         calc.execute();
         setAnimation(holder.container,position);
 
+    }
+
+    private void changeDay(int position, int inc){
+        GlobalsClass globals = (GlobalsClass)context;
+        ItineraryList list = ItineraryList.getInstance();
+        LinkedList<TourFeature> itineraryList = globals.getItineraryFeatures();
+        int last = itineraryList.size()-1;
+        for(int i = last; i >= 0; i--){
+
+        }
     }
 
     private void setAnimation(View viewToAnimate, int position){
