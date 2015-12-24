@@ -53,6 +53,7 @@ import java.util.List;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.GlobalsClass;
+import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.MenuItems;
 import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeature;
@@ -547,6 +548,14 @@ public class MainMap extends ActionBarActivity {
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e("OnDestroy", "beep");
+        ItineraryList list = ItineraryList.getInstance();
+        list.clearItineraryFeatureList();
     }
 
     class PopulateMarkers extends AsyncTask<Pair<FeatureType, TourFeature>, Pair<FeatureType, TourFeature>, FeatureType>{

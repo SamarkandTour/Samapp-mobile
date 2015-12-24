@@ -23,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -126,7 +127,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             @Override
             public void onClick(View v) {
 
-
+            Log.e("FAF","ASD");
 
                 Context context = v.getContext();
 
@@ -152,9 +153,19 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 quickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
                     @Override
                     public void onItemClick(QuickAction source, int pos, int actionId) {
-                        switch (actionId){
+                        switch (actionId) {
                             case PREVIOUSDAY_ITEM_ID:
-
+                                changeDay(position,-1);
+                                break;
+                            case NEXTDAY_ITEM_ID:
+                                changeDay(position,1);
+                                break;
+                            case DELETE_ITEM_ID:
+                                break;
+                            case DOWN_ITEM_ID:
+                                break;
+                            case UP_ITEM_ID:
+                                break;
                         }
                     }
                 });
@@ -190,13 +201,9 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     private void changeDay(int position, int inc){
-        GlobalsClass globals = (GlobalsClass)context;
         ItineraryList list = ItineraryList.getInstance();
-        LinkedList<TourFeature> itineraryList = globals.getItineraryFeatures();
-        int last = itineraryList.size()-1;
-        for(int i = last; i >= 0; i--){
-
-        }
+        list.sendToAnotherDay(context,mDataset.get(position).getString("name"),inc);
+        Toast.makeText(context, "Item Transfered to 1 day " + ((inc==-1)?" backward":" forward"),Toast.LENGTH_LONG).show();
     }
 
     private void setAnimation(View viewToAnimate, int position){
@@ -238,12 +245,12 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes, imageSize, imageSize);
                 BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
             }
-            Log.e("OKAY","DONE");
             return roundedDrawable;
         }
 
         @Override
         protected void onPostExecute(Drawable drawable) {
+            Log.e("String","ADD");
             mHolder.mItemImage.setImageDrawable(drawable);
         }
     }

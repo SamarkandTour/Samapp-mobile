@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:fadingEdgeLength="0dip"
         android:paddingLeft="10dp"
-        android:background="@drawable/quickaction_slider_background"
+        android:background="#fff"
         android:scrollbars="none">
 
         <LinearLayout
