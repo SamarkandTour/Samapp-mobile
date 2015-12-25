@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.ZipFile;
 
-import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
+import uz.samtuit.samapp.util.Downloader;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
@@ -320,7 +320,7 @@ public class LogoActivity extends ActionBarActivity {
             if (isNeedMapDownload) {
                 URLArrayList.add(globals.mapDownloadURL);
             }
-            BitmapUtil.Downloader downloader = new BitmapUtil.Downloader(URLArrayList);
+            Downloader downloader = new Downloader(URLArrayList);
             downloader.startDownload(LogoActivity.this, "Sam Tour", "Tour Database");
 
             decideNextActivity();

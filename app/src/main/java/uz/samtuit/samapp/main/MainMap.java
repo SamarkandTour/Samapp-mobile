@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -73,7 +74,7 @@ public class MainMap extends ActionBarActivity {
     private UserLocationOverlay myLocationOverlay;
     private TextView marqueeText;
     private AnimationDrawable animGPS;
-    private ImageView mAnimMyPosImage;
+    //private ImageView mAnimMyPosImage;
     private CustomDialog mGPSSettingDialog;
     private ArrayList<Drawable> markerDrawables;
     private NavigationView mNavigationView;
@@ -100,6 +101,8 @@ public class MainMap extends ActionBarActivity {
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         marqueeText = (TextView)findViewById(R.id.marqueeText);
         progressBar = (ProgressBar)findViewById(R.id.waitProgressBar);
+        ImageView mAnimMyPosImage = (ImageView) findViewById(R.id.myPositon);
+        animGPS = (AnimationDrawable) mAnimMyPosImage.getBackground();
 
         setMapView(); //Set MapView configuration
 
@@ -206,10 +209,10 @@ public class MainMap extends ActionBarActivity {
 
     private void setMarkerIcons() {
         markerDrawables = new ArrayList<Drawable>();
-        markerDrawables.add(FeatureType.HOTEL.ordinal(), getResources().getDrawable(R.drawable.hotel_marker));
-        markerDrawables.add(FeatureType.FOODNDRINK.ordinal(), getResources().getDrawable(R.drawable.food_marker));
-        markerDrawables.add(FeatureType.ATTRACTION.ordinal(), getResources().getDrawable(R.drawable.attraction_marker));
-        markerDrawables.add(FeatureType.SHOPPING.ordinal(), getResources().getDrawable(R.drawable.shop_marker));
+        markerDrawables.add(FeatureType.HOTEL.ordinal(), getResources().getDrawable(R.drawable.hotel_m));
+        markerDrawables.add(FeatureType.FOODNDRINK.ordinal(), getResources().getDrawable(R.drawable.food_m));
+        markerDrawables.add(FeatureType.ATTRACTION.ordinal(), getResources().getDrawable(R.drawable.attr_m));
+        markerDrawables.add(FeatureType.SHOPPING.ordinal(), getResources().getDrawable(R.drawable.shop_m));
     }
 
     private void drawFeatures(FeatureType featureType, TourFeature tourFeature) {
@@ -231,8 +234,6 @@ public class MainMap extends ActionBarActivity {
             mGPSSettingDialog.show();
         } else {
             isSearchMyLocEnabled = true;
-            mAnimMyPosImage = (ImageView) findViewById(R.id.myPositon);
-            animGPS = (AnimationDrawable) mAnimMyPosImage.getBackground();
             animGPS.start();
             marqueeText.setText(getString(R.string.marquee_searching_target) + pressedMarker.getTitle());
 
@@ -330,8 +331,6 @@ public class MainMap extends ActionBarActivity {
         // To make be layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker, 4:TourFeatures, 5:Itinerary, 6:MyLocation
         myLocationOverlay.setOverlayIndex(6);
         mapView.getOverlays().add(myLocationOverlay);
-
-        mAnimMyPosImage = (ImageView)findViewById(R.id.myPositon);
     }
 
     private void setNavigationOverlay() {
@@ -349,8 +348,6 @@ public class MainMap extends ActionBarActivity {
             //Show icon animation until my location is recognized by first GPS signal
             myLocationOverlay.goToMyPosition(true);
             isSearchMyLocEnabled = true;
-            mAnimMyPosImage = (ImageView) findViewById(R.id.myPositon);
-            animGPS = (AnimationDrawable) mAnimMyPosImage.getBackground();
             animGPS.start();
             marqueeText.setText(R.string.marquee_searching_you);
 
@@ -358,8 +355,10 @@ public class MainMap extends ActionBarActivity {
                 mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
             }
         } else {
-            animGPS.stop();
-            animGPS.selectDrawable(0); // Return to first frame
+            if (animGPS.isRunning()) {
+                animGPS.stop();
+                animGPS.selectDrawable(0); // Return to first frame
+            }
             marqueeText.setText("");
 
             if(isNavigationEnabled) {
