@@ -155,13 +155,8 @@ public class FileUtil {
                     if (tempFile[i].getName().contains(extension)) {
                         tempFile[i].delete();
                     }
-                } else {
-                    //To remove files in the sub directory, Do recursive call
-                    deleteAllExternalFilesWithExtension(context, tempFile[i].getPath(), extension);
                 }
-                tempFile[i].delete();
             }
-            file.delete();
         }
 
         return true;

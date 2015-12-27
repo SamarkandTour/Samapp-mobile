@@ -38,8 +38,6 @@ public class DownloadCompleteReceiver extends BroadcastReceiver {
 
         // Notify download is completed and the upgrade will be applied when the App restarts
         if (downloadUriIndex == countOfDownRequest) {
-            editor.putInt("downloaded_uri_index", 0).commit(); // Don't forget this
-
             PendingIntent contentIntent = PendingIntent.getActivity(
                    context,
                     0,

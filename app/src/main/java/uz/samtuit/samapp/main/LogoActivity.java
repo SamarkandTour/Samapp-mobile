@@ -43,7 +43,7 @@ public class LogoActivity extends ActionBarActivity {
     private boolean isNeedFeaturesDownload;
     private boolean isNeedMapDownload;
     private boolean isFirstLaunch;
-    private int countOfDownloaded;
+    private int downloadRequestCnt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,10 @@ public class LogoActivity extends ActionBarActivity {
         tvInfo = (TextView) findViewById(R.id.tv_info);
 
         pref = LogoActivity.this.getSharedPreferences("SamTour_Pref", 0);
-        if (isFirstLaunch = pref.getBoolean("app_first_launch", true)) {
+        isFirstLaunch = pref.getBoolean("app_first_launch", true);
+        downloadRequestCnt = pref.getInt("download_request_count", 0);
+
+        if (isFirstLaunch) {
             // IF the system locale is same as one of supported languages, set as it
             String systemLocale = SystemSetting.checkSystemLocale();
             if (systemLocale.equals(GlobalsClass.supportedLanguages[0])
@@ -141,11 +144,11 @@ public class LogoActivity extends ActionBarActivity {
                 String chosenLang = pref.getString("app_lang", null);
                 String path = null;
 
-                // Do below, when first launch and since new update has downloaded
-                if (isFirstLaunch || (countOfDownloaded = pref.getInt("download_request_count", 0)) > 0) {
-                    if (countOfDownloaded > 0) {
+                // Do below, when first launch or since new update has been downloaded
+                if (isFirstLaunch || Downloader.isDownloadFinished(LogoActivity.this)) {
+                    if (downloadRequestCnt > 0) {
                         publishProgress(new Pair<Integer, String>(UPDATE_START, "new update"));
-                        for (int i = 0; i < countOfDownloaded; i++) {
+                        for (int i = 0; i < downloadRequestCnt; i++) {
                             String uriString = pref.getString("downloaded_uri" + i, "");
                             String filePath = Uri.parse(uriString).getPath();
 
@@ -161,6 +164,7 @@ public class LogoActivity extends ActionBarActivity {
                         // Don't forget belows
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putInt("download_request_count", 0);
+                        editor.putInt("downloaded_uri_index", 0);
                         editor.putLong("last_updated", new Date().getTime()); // Set updated date
                         editor.commit();
                     }
@@ -170,10 +174,11 @@ public class LogoActivity extends ActionBarActivity {
                         // All downloaded GeoJSON files from server will be located in ExternalDir
                         // So working directory is ExternalDir, all files in the asset should be copied to ExternalDir at first launch
                         if (!TourFeatureList.CopyLocalGeoJSONFilesToExternalDir(LogoActivity.this)) {
-                            Toast.makeText(LogoActivity.this, R.string.Err_file_not_found, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LogoActivity.this, R.string.Err_file_not_found, Toast.LENGTH_LONG).show();
                         }
                     }
 
+                    FileUtil.deleteAllExternalFilesWithExtension(LogoActivity.this, TourFeatureList.photoDirectory, "");
                     TourFeatureList.writeAllPhotosToFiles(LogoActivity.this); // Make all photo data to files
                 }
 
@@ -207,7 +212,7 @@ public class LogoActivity extends ActionBarActivity {
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
                 publishProgress(new Pair<Integer, String>(CHECK_START, getString(R.string.new_update)));
-                if (NetworkUtils.isNetworkAvailable(LogoActivity.this)) {
+                if (downloadRequestCnt == 0 && NetworkUtils.isNetworkAvailable(LogoActivity.this)) {
                     isNeedFeaturesDownload = isNewUpdate(globals.featuresDownloadURL);
                     isNeedMapDownload = isNewUpdate(globals.mapDownloadURL);
                     if (isNeedFeaturesDownload || isNeedMapDownload) {

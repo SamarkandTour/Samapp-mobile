@@ -46,6 +46,7 @@ import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,9 +118,17 @@ public class MainMap extends ActionBarActivity {
     }
 
     private void setMapView() {
-        compass = (ImageView)findViewById(R.id.compass);
+        TileLayer mbTileLayer = null;
 
-        TileLayer mbTileLayer = new MBTilesLayer(this, GlobalsClass.mapFileName);
+        compass = (ImageView)findViewById(R.id.compass);
+        File mbtiles = new File(this.getExternalFilesDir(null), GlobalsClass.mapFileName);
+
+        if (!mbtiles.exists()) { // If no mbtiles in ExternalDir, it will be copied to ExternalDir from mbtiles in assets
+            mbTileLayer = new MBTilesLayer(this, GlobalsClass.mapFileName);
+        } else {
+            mbTileLayer = new MBTilesLayer(mbtiles);
+        }
+
         mapView.setTileSource(mbTileLayer);
         mapView.setCenter(new ILatLng() { // Registon
             @Override

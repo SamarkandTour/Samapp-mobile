@@ -20,7 +20,7 @@ import uz.samtuit.samapp.main.R;
  * Create Tour Features List from GeoJSON file
  */
 public class TourFeatureList {
-    private static final String photoDirectory = "photo/";
+    public static final String photoDirectory = "photo/";
     private static ArrayList<TourFeature> Hotels;
     private static ArrayList<TourFeature> FoodnDrinks;
     private static ArrayList<TourFeature> Attractions;
@@ -32,10 +32,10 @@ public class TourFeatureList {
         tourFeatureList = new ArrayList<TourFeature>();
     }
 
-    // Do this when first launch
+    // Do this when first launch or since new update has been downloaded
     public static boolean writeAllPhotosToFiles(Context context) {
         try {
-            FileUtil.createDirectoryInExternalDir(context, photoDirectory);
+            FileUtil.createDirectoryInExternalDir(context, photoDirectory); // If photo directory is not
 
             for ( String lang : GlobalsClass.supportedLanguages) {
                 for (int i = 0; i < GlobalsClass.featuresGeoJSONFileName.length; i++) {

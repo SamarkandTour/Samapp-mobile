@@ -59,4 +59,20 @@ public class Downloader {
         editor.putInt("download_request_count", index).commit();
         editor.commit();
     }
+
+    static public boolean isDownloadFinished(Context context) {
+        SharedPreferences pref = context.getSharedPreferences("SamTour_Pref", 0);
+
+        int downloadRequestCnt = pref.getInt("download_request_count", 0);
+        if (downloadRequestCnt == 0) { // If no download request
+            return false;
+        }
+
+        int downloadedCnt = pref.getInt("downloaded_uri_index", 0);
+        if (downloadRequestCnt == downloadedCnt) {
+            return true;
+        }
+
+        return false;
+    }
 }
