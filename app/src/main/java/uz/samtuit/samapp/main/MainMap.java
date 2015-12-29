@@ -17,6 +17,8 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
@@ -49,6 +51,8 @@ import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
@@ -75,7 +79,6 @@ public class MainMap extends ActionBarActivity {
     private UserLocationOverlay myLocationOverlay;
     private TextView marqueeText;
     private AnimationDrawable animGPS;
-    //private ImageView mAnimMyPosImage;
     private CustomDialog mGPSSettingDialog;
     private ArrayList<Drawable> markerDrawables;
     private NavigationView mNavigationView;
@@ -87,6 +90,7 @@ public class MainMap extends ActionBarActivity {
     private GeomagneticField geoField;
     private Marker pressedMarker;
     private boolean isNotified;
+    private Timer gpsTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,6 +248,7 @@ public class MainMap extends ActionBarActivity {
         } else {
             isSearchMyLocEnabled = true;
             animGPS.start();
+            setGPSSignalTimer();
             marqueeText.setText(getString(R.string.marquee_searching_target) + pressedMarker.getTitle());
 
             mDestinationLoc.setLongitude(pressedMarker.getPosition().getLongitude());
@@ -269,13 +274,16 @@ public class MainMap extends ActionBarActivity {
                     myLocationOverlay.goToMyPosition(true);
                     animGPS.stop();
                     animGPS.selectDrawable(0); // Return to first frame
+                    cancelGPSSignalTimer();
 
                     if (isSearchMyLocEnabled && !isNavigationEnabled) {
                         isSearchMyLocEnabled = false;
                         marqueeText.setText("");
                     } else if (isSearchMyLocEnabled && isNavigationEnabled) {
                         isSearchMyLocEnabled = false;
-                        marqueeText.setText(getString(R.string.marquee_guiding) + pressedMarker.getTitle());
+                        if (pressedMarker != null) {
+                            marqueeText.setText(getString(R.string.marquee_guiding) + pressedMarker.getTitle());
+                        }
                     }
                 }
 
@@ -350,6 +358,34 @@ public class MainMap extends ActionBarActivity {
         mDestinationLoc = new Location(LocationManager.GPS_PROVIDER);
     }
 
+    private void cancelGPSSignalTimer() {
+        if (gpsTimer != null) {
+            gpsTimer.cancel();
+        }
+    }
+
+    private final Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            if(msg.arg1 == 1) {
+                Toast.makeText(MainMap.this, R.string.Warn_weak_gps_signal, Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
+    private void setGPSSignalTimer() {
+        cancelGPSSignalTimer();
+
+        gpsTimer = new Timer();
+        gpsTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Message msg = handler.obtainMessage();
+                msg.arg1 = 1;
+                handler.sendMessage(msg);
+            }
+        }, 30000L); // If you don't get GPS signal within 30s, display weak signal
+    }
+
     private void setSearchMyLocEnabled(boolean enabled) {
         isSearchMyLocEnabled = enabled;
 
@@ -358,6 +394,7 @@ public class MainMap extends ActionBarActivity {
             myLocationOverlay.goToMyPosition(true);
             isSearchMyLocEnabled = true;
             animGPS.start();
+            setGPSSignalTimer(); // If you don't get GPS signal within 10s, display weak signal
             marqueeText.setText(R.string.marquee_searching_you);
 
             if(isNavigationEnabled) {
@@ -367,6 +404,7 @@ public class MainMap extends ActionBarActivity {
             if (animGPS.isRunning()) {
                 animGPS.stop();
                 animGPS.selectDrawable(0); // Return to first frame
+                cancelGPSSignalTimer();
             }
             marqueeText.setText("");
 

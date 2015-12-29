@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.util.Pair;
@@ -22,6 +23,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.zip.ZipFile;
 
 import uz.samtuit.samapp.util.CustomDialog;
@@ -173,9 +176,7 @@ public class LogoActivity extends ActionBarActivity {
                     if (isFirstLaunch) {
                         // All downloaded GeoJSON files from server will be located in ExternalDir
                         // So working directory is ExternalDir, all files in the asset should be copied to ExternalDir at first launch
-                        if (!TourFeatureList.CopyLocalGeoJSONFilesToExternalDir(LogoActivity.this)) {
-                            Toast.makeText(LogoActivity.this, R.string.Err_file_not_found, Toast.LENGTH_LONG).show();
-                        }
+                        TourFeatureList.CopyLocalGeoJSONFilesToExternalDir(LogoActivity.this);
                     }
 
                     FileUtil.deleteAllExternalFilesWithExtension(LogoActivity.this, TourFeatureList.photoDirectory, "");
@@ -272,13 +273,33 @@ public class LogoActivity extends ActionBarActivity {
         }
     }
 
+    private final Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            if(msg.arg1 == 1) {
+                Toast.makeText(LogoActivity.this, R.string.Err_connection_speed, Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
     private boolean isNewUpdate(String url) {
         URLConnection connection = null;
+        Timer timer = null;
 
         try {
             URL serverURL = new URL(url);
             connection = serverURL.openConnection();
-            connection.setReadTimeout(10000); // We will wait until max 10s for connection waiting
+            connection.setConnectTimeout(10000); // We will wait until max 10s for connection waiting
+            connection.setReadTimeout(10000);
+
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Message msg = handler.obtainMessage();
+                    msg.arg1 = 1;
+                    handler.sendMessage(msg);
+                }
+            }, 5000L); // If this routine doesn't handle within 5s, display connection problem
         } catch (SocketTimeoutException e) {
             e.printStackTrace();
             return false;
@@ -286,6 +307,8 @@ public class LogoActivity extends ActionBarActivity {
             e.printStackTrace();
             return false;
         }
+
+        timer.cancel();
 
         long lastUpdated = pref.getLong("last_updated", 0);
         long lastModifiedServer =  connection.getLastModified();

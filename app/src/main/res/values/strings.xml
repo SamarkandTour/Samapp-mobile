@@ -21,6 +21,7 @@
     <string name="Err_wrong_geojson_file">Error! Malformed JSON in the geojson file. Go to the setting, Try re-download</string>
     <string name="Err_file_not_found">Error! File not found. Go to the setting, Try re-download</string>
     <string name="Err_wrong_itinerary_file">Error! wrong feature name in the itinerary file</string>
+    <string name="Err_connection_speed">The speed of connection is not good</string>
     <string name="dialog_update_available">Now recent tour information is available!\nDo you want to update?\nBut if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
     <string name="dialog_load_features">"Loading Tour Data"</string>
     <string name="dialog_gps_setting">To guide you to the destination from where your are, please turn on GPS.\nDo you want to turn on?</string>
@@ -42,6 +43,7 @@
     <string name="marquee_guiding">"Guiding to "</string>
     <string name="marquee_arrival_noti">Now you are around the target destination</string>
     <string name="marquee_greeting">Welcome to Samarkand!</string>
+    <string name="Warn_weak_gps_signal">Weak GPS signal! Move to open space where the sky is seen</string>
     <string name="notify_download_complete">Download Complete</string>
     <string name="notify_updatable">When restarted, the update will be applied</string>
     <string name="suggested_itinerary">Suggested Itinerary</string>
