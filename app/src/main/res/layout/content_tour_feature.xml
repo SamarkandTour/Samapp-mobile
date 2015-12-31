@@ -5,15 +5,107 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="uz.samtuit.samapp.main.TourFeatureActivity"
+    tools:context=".TourFeatureActivity"
     tools:showIn="@layout/activity_tour_feature">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:paddingLeft="10dp"
+            android:layout_height="50dp">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_star_rate_black_18dp"
+                android:id="@+id/star1"
+                />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_star_rate_black_18dp"
+                android:id="@+id/star2"
+                />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_star_rate_black_18dp"
+                android:id="@+id/star3"
+                />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_star_rate_black_18dp"
+                android:id="@+id/star4"
+                />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_star_rate_black_18dp"
+                android:id="@+id/star5"
+                />
 
-    <TextView
-        android:id="@+id/desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textColor="#000"
-        android:text="@string/large_text" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="right">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:clickable="false"
+                        android:src="@drawable/ic_wifi_white_24dp"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="right"
+                        android:id="@+id/wifi"
+                        android:visibility="visible" />
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:clickable="true"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_local_phone_white_24dp"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="right"
+                        android:id="@+id/call_button"
+                        android:visibility="visible" />
+                    <ImageButton
+                        android:background="@android:color/transparent"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:clickable="true"
+                        android:layout_gravity="center|right"
+                        android:src="@drawable/ic_link_white_24dp"
+                        android:id="@+id/hotel_link_btn"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tour_feature_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/tour_feature_content" />
+    </LinearLayout>
+
+
 
 </android.support.v4.widget.NestedScrollView>

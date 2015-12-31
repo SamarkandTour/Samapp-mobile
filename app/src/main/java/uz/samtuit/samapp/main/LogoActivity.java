@@ -123,7 +123,6 @@ public class LogoActivity extends ActionBarActivity {
             ItineraryList.getInstance().setItinearyFeaturesToGlobal(context);
             ItineraryList.getInstance().categorizeItineraryWithDays(context, chosenLang); // Categorize with days from the name of itinerary files
         } else {
-            Log.e("LANG", chosenLang);;
             TourFeatureList tourFeatureList = new TourFeatureList();
             ArrayList<TourFeature> tourFeatureArrayList = tourFeatureList.getTourFeatureListFromGeoJSONFile(context, chosenLang + path);
             tourFeatureList.setTourFeaturesToGlobal(context, featureType, tourFeatureArrayList);

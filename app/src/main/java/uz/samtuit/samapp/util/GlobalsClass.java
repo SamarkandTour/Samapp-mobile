@@ -100,6 +100,11 @@ public class GlobalsClass extends Application {
     }
 
     public void  setItineraryFeatures(LinkedList featureLinkedList) {
-        this.Itinerary = featureLinkedList;
+        this.Itinerary = new LinkedList<TourFeature>();
+        for(int i = 0; i < featureLinkedList.size(); i++){
+            if(!this.Itinerary.contains(featureLinkedList.get(i)))
+                this.Itinerary.add((TourFeature)featureLinkedList.get(i));
+        }
+
     }
 }

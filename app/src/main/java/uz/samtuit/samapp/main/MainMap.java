@@ -661,6 +661,7 @@ public class MainMap extends ActionBarActivity {
         ItemizedIconOverlay iOverlay = new ItemizedIconOverlay(MainMap.this, markersList, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
             @Override
             public boolean onItemSingleTapUp(int i, Marker marker) {
+                mapView.setRotation(0f);
                 pressedMarker = marker;
                 mapView.selectMarker(marker);
                 return true; // Should be true because we handled this event

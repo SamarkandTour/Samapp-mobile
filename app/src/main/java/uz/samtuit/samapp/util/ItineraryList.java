@@ -62,7 +62,7 @@ public class ItineraryList {
         }
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         globalsClass.setItineraryFeatures(mItineraryList);
-        itineraryWriteToGeoJSONFile(context,context.getSharedPreferences("SamTour_Pref",0).getString("app_lang",null));
+        itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
     }
     /**
      * There is no Hotel or Food&Drink in the Itinerary GeoJSON file
@@ -81,6 +81,46 @@ public class ItineraryList {
         }
 
         tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.SHOPPING);
+        for (TourFeature v:tourFeatures) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "shopping");
+                return v;
+            }
+        }
+
+        return null;
+
+    }
+
+    public TourFeature findFeature(Context context, String name) {
+        ArrayList<TourFeature> tourFeatures;
+
+        GlobalsClass globalVariables = (GlobalsClass)context.getApplicationContext();
+
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.ATTRACTION);
+        for (TourFeature v:tourFeatures) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "attraction");
+                return v;
+            }
+        }
+
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.SHOPPING);
+        for (TourFeature v:tourFeatures) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "shopping");
+                return v;
+            }
+        }
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.FOODNDRINK);
+        for (TourFeature v:tourFeatures) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "attraction");
+                return v;
+            }
+        }
+
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.HOTEL);
         for (TourFeature v:tourFeatures) {
             if (v.getString("name").equals(name)) {
                 v.setStringHashMap("category", "shopping");
