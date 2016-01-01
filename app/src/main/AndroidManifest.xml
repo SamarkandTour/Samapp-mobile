@@ -37,8 +37,10 @@
         <activity android:name=".ItemActivity" />
         <activity android:name=".LanguageSettingActivity" />
         <activity android:name=".AboutCityActivity" />
-        <activity android:name=".WizardDaySelectActivity" />
-        <activity android:name=".WizardCourseSelectActivity" />
+        <activity android:name=".WizardDaySelectActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".WizardCourseSelectActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".SuggestedItineraryActivity" />
         <activity android:name=".MainMenu" />
         <activity android:name=".TrainsTimeTableActivity" />

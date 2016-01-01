@@ -50,6 +50,14 @@
     <string name="itinerary_3rd_course">Choose 3rd Course</string>
     <string name="itinerary_4th_course">Choose 4th Course</string>
     <string name="itinerary_5th_course">Choose 5th Course</string>
+    <string name="itinerary_6th_course">Choose 6th Course</string>
+    <string name="itinerary_day">" Day"</string>
+    <string name="itinerary_mixed">Mixed Course</string>
+    <string name="itinerary_nightlifenpark">Nightlife and Park Course</string>
+    <string name="itinerary_shopping">Shopping Course</string>
+    <string name="itinerary_traditionalhandmade">Traditional Handmade Course</string>
+    <string name="itinerary_museum">Museum Course</string>
+    <string name="itinerary_religion">Religion Course</string>
     <string name="prop_title">Title</string>
     <string name="prop_addr">Address</string>
     <string name="prop_price">Price</string>

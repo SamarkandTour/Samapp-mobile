@@ -18,6 +18,7 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
     ArrayList<String> items= new ArrayList<String>();
     int selected;
     SharedPreferences sharedPreferences;
+    boolean isFirstLaunch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
 
         items.add(0, getString(R.string.itinerary_select_day));
         for (int i=1; i <= ItineraryList.MAX_ITINERARY_DAYS; i++) {
-            items.add(i, i + " Day");
+            items.add(i, i + getString(R.string.itinerary_day));
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
@@ -38,10 +39,11 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
         spin.setAdapter(adapter);
 
         sharedPreferences = this.getSharedPreferences("SamTour_Pref", 0);
+        isFirstLaunch = sharedPreferences.getBoolean("app_first_launch", true);
     }
 
-    public void onSkipBtnClick(View view) {
-        if (sharedPreferences.getBoolean("app_first_launch", true)) {
+    public void onLaterBtnClick(View view) {
+        if (isFirstLaunch) {
             Intent intent = new Intent(this, MainMap.class);
             startActivity(intent);
         } else {
@@ -74,7 +76,7 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
     public void onBackPressed() {
         super.onBackPressed();
 
-        if (sharedPreferences.getBoolean("app_first_launch", true)) {
+        if (isFirstLaunch) {
             Intent intent = new Intent(this, MainMap.class);
             startActivity(intent);
         } else {
@@ -86,7 +88,7 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
     protected void onStop() { // Don't forget, Set first_launch to false
         super.onStop();
 
-        if (sharedPreferences.getBoolean("app_first_launch", true)) {
+        if (isFirstLaunch) {
             sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
         }
     }

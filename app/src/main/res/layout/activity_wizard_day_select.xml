@@ -56,7 +56,7 @@
         android:elevation="4dp"
         android:layout_centerHorizontal="true"
         android:nestedScrollingEnabled="false"
-        android:onClick="onSkipBtnClick" />
+        android:onClick="onLaterBtnClick" />
     <Button
         android:background="@color/white"
         android:layout_width="wrap_content"

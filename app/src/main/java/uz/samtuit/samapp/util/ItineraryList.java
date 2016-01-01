@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import uz.samtuit.samapp.main.R;
 
@@ -25,8 +26,10 @@ public class ItineraryList {
     public static final String myItineraryDirectory = "my_itinerary/"; // my customized itinerary file
     public static final String myItineraryGeoJSONFileName = "_my_itinerary.geojson"; // my customized itinerary file
     public static final int MAX_ITINERARY_DAYS = 5;
+    public static int MAX_ITINERARY_COURSES;
 
-    private static HashMap<String , Float> mCourseHashMap;
+    private static HashMap<String , Float> mCourseWithDayHashMap;
+    private static HashMap<String , String> mCourseWithUiNameHashMap;
     private static LinkedList<TourFeature> mItineraryList;
     private static ItineraryList ourInstance = new ItineraryList(); // Singleton
 
@@ -62,7 +65,7 @@ public class ItineraryList {
         }
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         globalsClass.setItineraryFeatures(mItineraryList);
-        itineraryWriteToGeoJSONFile(context,context.getSharedPreferences("SamTour_Pref",0).getString("app_lang",null));
+        itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
     }
     /**
      * There is no Hotel or Food&Drink in the Itinerary GeoJSON file
@@ -100,8 +103,6 @@ public class ItineraryList {
         return false;
     }
 
-
-
     public void clearItineraryFeatureList() {
         mItineraryList.clear();
     }
@@ -125,9 +126,8 @@ public class ItineraryList {
                     itineraryElement.setDay(v.getProperties().getInt("day"));
                     int last = mItineraryList.size();
                     boolean found = false;
-                    for(int i = last-1; i >= 0; i--)
-                    {
-                        if(mItineraryList.get(i).getString("name")==itineraryElement.getString("name")){
+                    for (int i = last-1; i >= 0; i--) {
+                        if(mItineraryList.get(i).getString("name").equals(itineraryElement.getString("name"))){
                             found = true;
                             if(mItineraryList.get(i).getDay()>itineraryElement.getDay())
                             {
@@ -187,25 +187,51 @@ public class ItineraryList {
         return true;
     }
 
+    private String courseNameToUiName(Context context, String key) {
+        int resID = context.getResources().getIdentifier("itinerary_" + key, "string", context.getPackageName());
+        return context.getString(resID);
+    }
+
     public void categorizeItineraryWithDays(Context context, String lang) {
         String filter = new String(lang + "_itinerary");
         String[] stringArray = FileUtil.getFileNameListWithFilter(context, filter);
 
-        mCourseHashMap = new HashMap<String, Float>();
+        mCourseWithDayHashMap = new HashMap<String, Float>();
+        mCourseWithUiNameHashMap = new HashMap<String, String>();
 
+        // Make HashMap with a pair of both course name and the tour day
         for (String fileName : stringArray) {
             String[] splits1 = fileName.split("_");
             float day = Float.valueOf(splits1[2]);
             String[] splits2 = splits1[3].split("\\.");
-            String course = splits2[0];
+            String courseName = splits2[0];
 
-            mCourseHashMap.put(course, day);
+            mCourseWithDayHashMap.put(courseName, day);
+            mCourseWithUiNameHashMap.put(courseName, courseNameToUiName(context, courseName));
         }
+
+        MAX_ITINERARY_COURSES = mCourseWithDayHashMap.size();
     }
 
-    public static HashMap<String , Float> getCourseHashMap() {
-        return mCourseHashMap;
+    public static float getCourseDayFromHashMap(String key) {
+        return mCourseWithDayHashMap.get(key);
     }
 
+    public static Set<String> getCourseHashMap() {
+        return mCourseWithDayHashMap.keySet();
+    }
 
+    public static String getUiNameFromHashMap(String key) {
+        return mCourseWithUiNameHashMap.get(key);
+    }
+
+    public static String UiCourseNameToCourseName(String value) {
+        for (String key : mCourseWithUiNameHashMap.keySet()) {
+            if (mCourseWithUiNameHashMap.get(key).equals(value)) {
+                return key;
+            }
+        }
+
+        return null;
+    }
 }

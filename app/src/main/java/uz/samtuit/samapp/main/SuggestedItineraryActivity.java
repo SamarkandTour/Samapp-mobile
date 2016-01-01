@@ -1,28 +1,18 @@
 package uz.samtuit.samapp.main;
 
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
-import uz.samtuit.samapp.util.BitmapUtil;
-import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
-import uz.samtuit.samapp.util.ItineraryItem;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.TourFeature;
 
@@ -116,6 +106,13 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+
+        Intent intent = new Intent(this, MainMap.class);
+        intent.putExtra("type", "features");
+        intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
     }
 
 }

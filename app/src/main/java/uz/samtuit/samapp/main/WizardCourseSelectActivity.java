@@ -1,10 +1,8 @@
 package uz.samtuit.samapp.main;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,74 +10,160 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
 
 public class WizardCourseSelectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private ArrayList<String> course1= new ArrayList<String>();
-    private ArrayList<String> course2= new ArrayList<String>();
-    private ArrayList<String> course3= new ArrayList<String>();
-    private ArrayList<String> course4= new ArrayList<String>();
-    private ArrayList<String> course5= new ArrayList<String>();
-    private ArrayList<String> selectedCourseList = new ArrayList<String>();
-    private float selectedTotalDay;
-    private Spinner spin1, spin2, spin3, spin4, spin5;
-    private SharedPreferences sharedPreferences;
+    private String selectedCourseList[] = new String[ItineraryList.MAX_ITINERARY_COURSES];
+    private float selectedTourDay, remainDay;
+
+    private ArrayList<String>[] courseArray = new ArrayList[ItineraryList.MAX_ITINERARY_COURSES];
+    private int[] courseInitNameId = {
+            R.string.itinerary_1st_course,
+            R.string.itinerary_2nd_course,
+            R.string.itinerary_3rd_course,
+            R.string.itinerary_4th_course,
+            R.string.itinerary_5th_course,
+            R.string.itinerary_6th_course,
+    };
+
+    private Spinner[] spinnerArray = new Spinner[ItineraryList.MAX_ITINERARY_COURSES];
+    private int[] spinnerId = {
+            R.id.courseSpinner1,
+            R.id.courseSpinner2,
+            R.id.courseSpinner3,
+            R.id.courseSpinner4,
+            R.id.courseSpinner5,
+            R.id.courseSpinner6,
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wizard_course_select);
 
-        spin1 = (Spinner) findViewById(R.id.courseSpinner1);
-        spin1.setOnItemSelectedListener(this);
-        spin2 = (Spinner) findViewById(R.id.courseSpinner2);
-        spin2.setOnItemSelectedListener(this);
-        spin3 = (Spinner) findViewById(R.id.courseSpinner3);
-        spin3.setOnItemSelectedListener(this);
-        spin4 = (Spinner) findViewById(R.id.courseSpinner4);
-        spin4.setOnItemSelectedListener(this);
-        spin5 = (Spinner) findViewById(R.id.courseSpinner5);
-        spin5.setOnItemSelectedListener(this);
+        initCourses();
 
         Intent intent = getIntent();
-        selectedTotalDay = intent.getIntExtra("day", 0);
-        setSpinnerValueAndInflate(null, spin1, course1, getString(R.string.itinerary_1st_course));
+        selectedTourDay = intent.getIntExtra("day", 0);
 
-        sharedPreferences = this.getSharedPreferences("SamTour_Pref", 0);
-        sharedPreferences.edit().putInt("days",(int)selectedTotalDay);
+        remainDay = selectedTourDay;
+        setSpinnerValueAndInflate(spinnerArray[0], courseArray[0]);
     }
 
-    private void setSpinnerValueAndInflate(String currentSelected, Spinner spinner, ArrayList<String> course, String initText) {
-        course.add(0, initText);
+    private void initCourses() {
+        for (int i = 0; i < ItineraryList.MAX_ITINERARY_COURSES; i++) {
+            courseArray[i] = new ArrayList<String>();
+            courseArray[i].add(getString(courseInitNameId[i]));
 
-        int i = 1;
-        for (String key :  ItineraryList.getCourseHashMap().keySet()) {
-            if (ItineraryList.getCourseHashMap().get(key) <= selectedTotalDay && !key.equals(currentSelected)) { // Except current selected
-                course.add(i++, key + "(" + ItineraryList.getCourseHashMap().get(key).toString() + "day" + ")");
+            // Set spinner and adapter
+            spinnerArray[i] = (Spinner) findViewById(spinnerId[i]);
+            spinnerArray[i].setOnItemSelectedListener(this);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                    this, android.R.layout.simple_spinner_item, courseArray[i]);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spinnerArray[i].setAdapter(adapter);
+            spinnerArray[i].setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private boolean isAlreadySelected(String courseName) {
+        for (String selectedCourse : selectedCourseList) {
+            if (selectedCourse != null && selectedCourse.equals(courseName)) {
+                return true;
             }
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, course);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.invalidate();
+        return false;
     }
 
-    public void onSkipBtnClick(View view) {
-        if (sharedPreferences.getBoolean("app_first_launch", true)) { // Don't forget, Set first_launch to false
-            sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
+    private void setSpinnerValueAndInflate(Spinner spinner, ArrayList<String> courseArray) {
+        int i = 1;
 
+        for (String courseName :  ItineraryList.getCourseHashMap()) {
+            float courseDay = ItineraryList.getCourseDayFromHashMap(courseName);
+            if ( courseDay <= remainDay && !isAlreadySelected(courseName)) { // Except already selected
+                courseArray.add(i++, ItineraryList.getUiNameFromHashMap(courseName) + " (" + courseDay + getString(R.string.itinerary_day) + ")");
+            }
+        }
+
+        spinner.setSelection(0);
+        spinner.setVisibility(View.VISIBLE);
+    }
+
+    void setCurrentCourseAndInflateNextCourse(String selectedName, int curIndex, Spinner nextSpinner, ArrayList<String> nextArray) {
+        // Detach braces from selected text
+        String split[] = selectedName.split("\\(");
+        String selectedCourseUiName = split[0].trim();
+        String selectedCourseName = ItineraryList.UiCourseNameToCourseName(selectedCourseUiName);
+        selectedCourseList[curIndex] = selectedCourseName;
+
+        remainDay -= ItineraryList.getCourseDayFromHashMap(selectedCourseName);
+
+        if (remainDay <= 0 && nextSpinner != null) {
+            setSpinnerValueAndInflate(nextSpinner, nextArray);
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getId()) {
+            case R.id.courseSpinner1:
+                if (parent.getSelectedItemPosition() != 0 && !isAlreadySelected(ItineraryList.UiCourseNameToCourseName(courseArray[0].get(position)))) {
+                    spinnerArray[0].setEnabled(false);
+                    setCurrentCourseAndInflateNextCourse(courseArray[0].get(position), 0, spinnerArray[1], courseArray[1]);
+                }
+                break;
+
+            case R.id.courseSpinner2:
+                if (parent.getSelectedItemPosition() != 0 && !isAlreadySelected(ItineraryList.UiCourseNameToCourseName(courseArray[1].get(position)))) {
+                    spinnerArray[1].setEnabled(false);
+                    setCurrentCourseAndInflateNextCourse(courseArray[1].get(position), 1, spinnerArray[2], courseArray[2]);
+                }
+                break;
+
+            case R.id.courseSpinner3:
+                if (parent.getSelectedItemPosition() != 0 && !isAlreadySelected(ItineraryList.UiCourseNameToCourseName(courseArray[2].get(position)))) {
+                    spinnerArray[2].setEnabled(false);
+                    setCurrentCourseAndInflateNextCourse(courseArray[2].get(position), 2, spinnerArray[3], courseArray[3]);
+                }
+                break;
+
+            case R.id.courseSpinner4:
+                if (parent.getSelectedItemPosition() != 0 && !isAlreadySelected(ItineraryList.UiCourseNameToCourseName(courseArray[3].get(position)))) {
+                    spinnerArray[3].setEnabled(false);
+                    setCurrentCourseAndInflateNextCourse(courseArray[3].get(position), 3, spinnerArray[4], courseArray[4]);
+                }
+                break;
+
+            case R.id.courseSpinner5:
+                if (parent.getSelectedItemPosition() != 0 && !isAlreadySelected(ItineraryList.UiCourseNameToCourseName(courseArray[4].get(position)))) {
+                    spinnerArray[4].setEnabled(false);
+                    setCurrentCourseAndInflateNextCourse(courseArray[4].get(position), 4, null, courseArray[5]);
+                }
+                break;
+
+            case R.id.courseSpinner6:
+                if (parent.getSelectedItemPosition() != 0 && !isAlreadySelected(ItineraryList.UiCourseNameToCourseName(courseArray[5].get(position)))) {
+                    spinnerArray[5].setEnabled(false);
+                    setCurrentCourseAndInflateNextCourse(courseArray[5].get(position), 5, spinnerArray[6], courseArray[6]);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    public void onLaterBtnClick(View view) {
+        if (this.getSharedPreferences("SamTour_Pref", 0).getBoolean("app_first_launch", true)) {
             Intent intent = new Intent(this, MainMap.class);
             startActivity(intent);
         } else {
-            if (sharedPreferences.getBoolean("app_first_launch", true)) { // Don't forget, Set first_launch to false
-                sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
-            }
-
             finish();
         }
     }
@@ -95,14 +179,14 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         String path = null;
         ItineraryList itineraryListInstance = ItineraryList.getInstance();
 
-        if (spin1.getSelectedItemPosition() == 0) {
+        if (spinnerArray[0].getSelectedItemPosition() == 0) {
             Toast.makeText(this, R.string.itinerary_1st_course, Toast.LENGTH_LONG).show();
             return;
         }
 
         itineraryListInstance.clearItineraryFeatureList(); // For new, clear the old itinerary
         for (String selectedCourse : selectedCourseList) { // Courses will be merged here
-            float day = ItineraryList.getCourseHashMap().get(selectedCourse);
+            float day = ItineraryList.getCourseDayFromHashMap(selectedCourse);
             path = lang + "_itinerary_" + String.valueOf(day) + "_" + selectedCourse + ".geojson";
 
             itineraryListInstance.getItineraryFeatureListFromGeoJSONFile(this, path);
@@ -115,63 +199,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         intent.putExtra("type", "features");
         intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        Log.e("DAYS",selectedTotalDay+"");
         startActivity(intent);
-
-        if (sharedPreferences.getBoolean("app_first_launch", true)) { // Don't forget, Set first_launch to false
-            sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
-        }
-
         finish();
-    }
-
-    void setCurrentCourseAndInflateNextCourse(ArrayList<String> currentArray, int position, Spinner nextSpinner, ArrayList<String> nextArray, String initText ) {
-        String selectedCourse = currentArray.get(position);
-        Matcher m = Pattern.compile("[a-z]+").matcher(selectedCourse); // Detach braces
-        m.find();
-        String selectedPureCourse = m.group(0);
-        selectedCourseList.add(selectedPureCourse);
-        selectedTotalDay -= ItineraryList.getCourseHashMap().get(selectedPureCourse);
-        if (selectedTotalDay != 0) {
-            setSpinnerValueAndInflate(selectedPureCourse, nextSpinner, nextArray, initText);
-        }
-        Log.e("Days",selectedTotalDay+"");
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()) {
-            case R.id.courseSpinner1:
-                if (parent.getSelectedItemPosition() != 0) {
-                    setCurrentCourseAndInflateNextCourse(course1, position, spin2, course2, getString(R.string.itinerary_2nd_course));
-                }
-                break;
-
-            case R.id.courseSpinner2:
-                if (parent.getSelectedItemPosition() != 0) {
-                    setCurrentCourseAndInflateNextCourse(course2, position, spin3, course3, getString(R.string.itinerary_3rd_course));
-                }
-                break;
-            case R.id.courseSpinner3:
-                if (parent.getSelectedItemPosition() != 0) {
-                    setCurrentCourseAndInflateNextCourse(course3, position, spin4, course4, getString(R.string.itinerary_4th_course));
-                }
-                break;
-            case R.id.courseSpinner4:
-                if (parent.getSelectedItemPosition() != 0) {
-                    setCurrentCourseAndInflateNextCourse(course4, position, spin5, course5, getString(R.string.itinerary_5th_course));
-                }
-                break;
-            case R.id.courseSpinner5:
-                if (parent.getSelectedItemPosition() != 0) {
-                    setCurrentCourseAndInflateNextCourse(course5, position, null, null, null);
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }
