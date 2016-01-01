@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,18 +52,25 @@ class ItemsListAdapter extends ArrayAdapter<TourFeature> {
         ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
 
         String fileName = data.get(position).getPhoto();
-        if (fileName != null) {
-            ImageView mainImage = (ImageView) convertView.findViewById(R.id.listViewThumbnail);
-            String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
-            Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes, mainImage.getLayoutParams().height , mainImage.getLayoutParams().width);
-            BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
-
-
-            mainImage.setImageDrawable(roundedDrawable);
+        try {
+            if (fileName != null) {
+                ImageView mainImage = (ImageView) convertView.findViewById(R.id.listViewThumbnail);
+                String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
+                Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes, mainImage.getLayoutParams().height , mainImage.getLayoutParams().width);
+                BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
+                mainImage.setImageDrawable(roundedDrawable);
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
 
         TourFeature item = data.get(position);
         int Rating = item.getRating();
+        star1.setImageResource(R.drawable.ic_star_rate_black_18dp);
+        star2.setImageResource(R.drawable.ic_star_rate_black_18dp);
+        star3.setImageResource(R.drawable.ic_star_rate_black_18dp);
+        star4.setImageResource(R.drawable.ic_star_rate_black_18dp);
+        star5.setImageResource(R.drawable.ic_star_rate_black_18dp);
         if(Rating>4)
             star5.setImageResource(R.drawable.ic_star_rate_white_18dp);
         if(Rating>3)

@@ -21,6 +21,7 @@
     <string name="Err_wrong_geojson_file">"Xato! GeoJson faylda buzilgan JSON. Qayta yuklash uchun sozlamalar bo'limiga o'ting!"</string>
     <string name="Err_file_not_found">"Xato! Fayl topilmadi. Sozlamalarga o'tib qayta yuklab ko'ring"</string>
     <string name="Err_wrong_itinerary_file">"Xato! Yo'nalishar faylida noto'g'ri xususiyatlar"</string>
+    <string name="Err_connection_speed">Aloqa tezlik yaxshi emas</string>
     <string name="dialog_update_available">"Hozirda sayohatlar haqidagi oxirgi ma'lumot mavjud!\nYangilashni xoxlaysizmi?\Agar siz Wi-Fi ga ulanmagan bo'lsangiz,sizning mobil internetingizdan ko'p trafik sarflanadi"</string>
     <string name="dialog_load_features">"Sayohat ma'lumotlari yuklanmoqda..."</string>
     <string name="dialog_gps_setting">"Siz turgan joydan boradigan manzilingizgacha yo'l-yo'riqni bilmoqchi bo'lsangiz, iltimos GPSni yoqing.\nYoqishni xoxlaysizmi?"</string>
@@ -42,6 +43,7 @@
     <string name="marquee_guiding">"gacha yo'l ko'rsatish"</string>
     <string name="marquee_arrival_noti">Hozir siz beligilangan manzil atrofidasiz</string>
     <string name="marquee_greeting">Samarqandga Xushkelibsiz!</string>
+    <string name="Warn_weak_gps_signal">GPS singlan sust! Quyosh nuri tushadigan ochiqroq joyga chiqing</string>
     <string name="notify_download_complete">Yuklash yakunlandi</string>
     <string name="notify_updatable">Qayta ishga tushirsangiz yangilanish ishlaydi</string>
     <string name="itinerary_select_day">Turush muddatingizni tanlang</string>

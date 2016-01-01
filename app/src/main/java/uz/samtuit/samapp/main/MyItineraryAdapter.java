@@ -1,39 +1,26 @@
 package uz.samtuit.samapp.main;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Pair;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import java.util.LinkedList;
-import java.util.Objects;
 
 import uz.samtuit.samapp.util.ActionItem;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
-import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryItem;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.QuickAction;
@@ -97,7 +84,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                                                    int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.my_text_view, parent, false);
+                .inflate(R.layout.itinerary_card, parent, false);
         context = parent.getContext();
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
@@ -127,7 +114,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             @Override
             public void onClick(View v) {
 
-            Log.e("FAF","ASD");
 
                 Context context = v.getContext();
 
@@ -250,8 +236,8 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
         @Override
         protected void onPostExecute(Drawable drawable) {
-            Log.e("String","ADD");
             mHolder.mItemImage.setImageDrawable(drawable);
+            mHolder.mItemImage.setVisibility(View.GONE);
         }
     }
 
@@ -310,7 +296,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 b++;
             }
 
-            if (a > 24 && b > 0) {
+            if (a > 24 && b > 0){
                 a = (a + 23) / 24;
                 b++;
             }

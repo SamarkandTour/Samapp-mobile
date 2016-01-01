@@ -38,20 +38,23 @@ public class BitmapUtil {
 
     public static Bitmap decodeBase64Bitmap(String encodedImage,
                                                          float reqWidth, float reqHeight) {
+        try{
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
 
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+            BitmapFactory.decodeByteArray(decodedString,0,decodedString.length,options);
 
-        BitmapFactory.decodeByteArray(decodedString,0,decodedString.length,options);
+            // Calculate inSampleSize
+            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length,options);
+            // Decode bitmap with inSampleSize set
+            options.inJustDecodeBounds = false;
+            return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length,options);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     public static int calculateInSampleSize(

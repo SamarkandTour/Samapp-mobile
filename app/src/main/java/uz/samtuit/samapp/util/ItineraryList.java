@@ -95,6 +95,46 @@ public class ItineraryList {
 
     }
 
+    public TourFeature findFeature(Context context, String name) {
+        ArrayList<TourFeature> tourFeatures;
+
+        GlobalsClass globalVariables = (GlobalsClass)context.getApplicationContext();
+
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.ATTRACTION);
+        for (TourFeature v:tourFeatures) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "attraction");
+                return v;
+            }
+        }
+
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.SHOPPING);
+        for (TourFeature v:tourFeatures) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "shopping");
+                return v;
+            }
+        }
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.FOODNDRINK);
+        for (TourFeature v:tourFeatures) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "attraction");
+                return v;
+            }
+        }
+
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.HOTEL);
+        for (TourFeature v:tourFeatures) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "shopping");
+                return v;
+            }
+        }
+
+        return null;
+
+    }
+
     public boolean addNewFeatureToItineraryList(TourFeature tourFeature){
         if(tourFeature!=null){
             mItineraryList.add(tourFeature);

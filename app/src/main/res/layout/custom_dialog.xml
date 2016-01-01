@@ -18,12 +18,14 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Title"
+            android:layout_margin="4dp"
             android:textSize="20sp" 
             android:textColor="@android:color/holo_green_dark"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_content"
+            android:layout_margin="5dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" 
             android:gravity="center"
@@ -35,8 +37,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:orientation="horizontal" 
-            android:layout_marginTop="40dip"
+            android:layout_marginTop="10dip"
             >
 
             <Button

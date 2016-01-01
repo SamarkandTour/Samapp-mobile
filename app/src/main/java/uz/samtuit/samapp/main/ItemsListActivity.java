@@ -175,7 +175,7 @@ public class ItemsListActivity extends ActionBarActivity {
     }
 
     public static void startItemActivity(Context context, FeatureType featureType, TourFeature feature) {
-        Intent intent = new Intent(context, ItemActivity.class);
+        Intent intent = new Intent(context, TourFeatureActivity.class);
 
         if (featureType == FeatureType.ITINERARY) {
             featureType = TourFeatureList.findFeatureTypeByName(context, feature.getString("name"));

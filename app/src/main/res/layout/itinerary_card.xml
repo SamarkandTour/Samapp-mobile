@@ -55,6 +55,7 @@
                     android:id="@+id/it_image"
                     android:layout_marginLeft="-53dp"
                     android:layout_width="50dp"
+                    android:background="@drawable/round_back"
                     android:layout_height="50dp"
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginRight="4dp"/>

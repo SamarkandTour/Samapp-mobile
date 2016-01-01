@@ -35,7 +35,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         toolbar = (Toolbar)findViewById(R.id.si_toolbar);
         toolbar.setTitle(R.string.suggested_itinerary);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.ColorPrimary));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.itinerary_primary));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

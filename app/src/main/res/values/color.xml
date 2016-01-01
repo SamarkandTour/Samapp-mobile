@@ -9,9 +9,12 @@
         <color name="shop_primary">#8BC34A</color>
         <color name="shop_tool">#689F38</color>
         <color name="hotel_primary">#3F51B5</color>
+        <color name="hotel_background">#3F51B5</color>
         <color name="hotel_tool">#303F9F</color>
         <color name="list_item_tool">#33ffffff</color>
         <color name="foodanddrink_primary">#FF5722</color>
         <color name="foodanddrink_tool">#E64A19</color>
+        <color name="itinerary_primary">#009688</color>
+        <color name="itinerary_background">#B2DFDB</color>
         <color name="colorAccent">#4CAF50</color>
     </resources>

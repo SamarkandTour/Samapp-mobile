@@ -4,24 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    style="@style/AppBarOverlay"
     android:fitsSystemWindows="true"
-    tools:context="uz.samtuit.samapp.main.TourFeatureActivity">
+    tools:context=".TourFeatureActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppBarOverlay">
+        android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#fff"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/itinerary_primary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <android.support.v7.widget.Toolbar
@@ -33,51 +31,8 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:paddingLeft="10dp"
-        android:background="#3fff"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_star_rate_black_18dp"
-            android:id="@+id/star1"
-            />
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_star_rate_black_18dp"
-            android:id="@+id/star2"
-            />
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_star_rate_black_18dp"
-            android:id="@+id/star3"
-            />
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_star_rate_black_18dp"
-            android:id="@+id/star4"
-            />
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_star_rate_black_18dp"
-            android:id="@+id/star5"
-            />
 
-
-    </LinearLayout>
-
-    <include android:id="@+id/item_content" layout="@layout/content_tour_feature" />
+    <include layout="@layout/content_tour_feature" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -85,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add_black_24dp"
+        app:backgroundTint="@color/itinerary_background"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end" />
-
 </android.support.design.widget.CoordinatorLayout>
