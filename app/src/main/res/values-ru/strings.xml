@@ -22,6 +22,7 @@
     <string name="Err_file_not_found">Error! File not found. Go to the setting, Try re-download</string>
     <string name="Err_wrong_itinerary_file">Error! wrong feature name in the itinerary file</string>
     <string name="Err_connection_speed">The speed of connection is not good</string>
+    <string name="Err_not_supported">Not supported in this language</string>
     <string name="Warn_weak_gps_signal">Weak GPS signal! Move to open space where the sky is seen</string>
     <string name="dialog_update_available">Now recent tour information is available!\nDo you want to update?\nBut if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
     <string name="dialog_load_features">"Loading Tour Data"</string>
@@ -60,6 +61,7 @@
     <string name="itinerary_traditionalhandmade">Traditional Handmade Course</string>
     <string name="itinerary_museum">Museum Course</string>
     <string name="itinerary_religion">Religion Course</string>
+    <string name="itinerary_overlap">"! When each course merged in order,\nduplication Not allowed"</string>
     <string name="prop_title">Title</string>
     <string name="prop_addr">Address</string>
     <string name="prop_price">Price</string>

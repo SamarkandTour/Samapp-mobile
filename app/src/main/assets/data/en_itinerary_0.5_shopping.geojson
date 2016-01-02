@@ -4,15 +4,17 @@
     {
       "type": "Feature",
       "properties": {
-          "name": "Craftsman's center",
-        "day": 1
+        "name": "Craftsman's center",
+        "day": 1,
+        "ampm": "a"
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Siyob Bazaar",
-        "day": 1
+        "day": 1,
+        "ampm": "a"
       }
     }
   ]

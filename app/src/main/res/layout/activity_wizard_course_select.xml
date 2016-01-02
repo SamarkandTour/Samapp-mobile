@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/title_itinerary_wizard"
-        android:id="@+id/textView"
+        android:id="@+id/title"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
@@ -25,8 +25,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/wizard_course_select"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/textView"
+        android:id="@+id/notice"
+        android:layout_below="@+id/title"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="40dp"
         android:background="@android:color/transparent"
@@ -36,11 +36,30 @@
         android:layout_alignParentRight="false"
         android:layout_alignWithParentIfMissing="false" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="1 / 5 day"
+        android:id="@+id/selected_total_day"
+        android:layout_below="@+id/notice"
+        android:layout_marginTop="20dp"
+        android:gravity="center" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/courseWizardProgressBar"
+        android:layout_below="@+id/selected_total_day"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp" />
+
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/courseSpinner1"
-        android:layout_below="@+id/textView3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@color/ColorPrimary"
@@ -49,7 +68,8 @@
         android:layout_marginTop="20dp"
         android:focusable="false"
         android:clickable="false"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false"
+        android:layout_below="@+id/courseWizardProgressBar" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -115,7 +135,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_previous"
-        android:id="@+id/button2"
+        android:id="@+id/btnPrev"
         android:background="@color/white"
         android:textColor="@color/black"
         android:layout_marginBottom="48dp"
@@ -128,11 +148,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_done"
-        android:id="@+id/button3"
+        android:id="@+id/btnDone"
         android:background="@color/white"
         android:textColor="@color/black"
-        android:layout_alignBottom="@+id/button2"
-        android:layout_alignRight="@+id/button2"
+        android:layout_alignBottom="@+id/btnPrev"
+        android:layout_alignRight="@+id/btnPrev"
         android:onClick="onDoneBtnClick"
         android:layout_alignParentEnd="true" />
 
@@ -140,12 +160,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_later"
-        android:id="@+id/button"
+        android:id="@+id/btnLater"
         android:background="@color/white"
         android:textColor="@color/black"
-        android:layout_alignTop="@+id/button2"
+        android:layout_alignTop="@+id/btnPrev"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="onLaterBtnClick" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/itinerary_overlap"
+        android:id="@+id/textView"
+        android:layout_below="@+id/btnLater"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center" />
 
 </RelativeLayout>

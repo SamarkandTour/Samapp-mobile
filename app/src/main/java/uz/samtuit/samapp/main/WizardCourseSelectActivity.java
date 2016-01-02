@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,7 +18,8 @@ import uz.samtuit.samapp.util.ItineraryList;
 
 public class WizardCourseSelectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private String selectedCourseList[] = new String[ItineraryList.MAX_ITINERARY_COURSES];
-    private float selectedTourDay, remainDay;
+    private float selectedTourDay, usedDay, remainDay;
+    private ProgressBar progressBar;
 
     private ArrayList<String>[] courseArray = new ArrayList[ItineraryList.MAX_ITINERARY_COURSES];
     private int[] courseInitNameId = {
@@ -43,10 +46,22 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wizard_course_select);
 
+        if (ItineraryList.MAX_ITINERARY_COURSES == 0) {
+            Toast.makeText(this, R.string.Err_not_supported, Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
         initCourses();
 
         Intent intent = getIntent();
         selectedTourDay = intent.getIntExtra("day", 0);
+
+        progressBar = (ProgressBar) findViewById(R.id.courseWizardProgressBar);
+        progressBar.setMax((int)(selectedTourDay*10));
+
+        TextView textView = (TextView) findViewById(R.id.selected_total_day);
+        textView.setText(0 + " / " + selectedTourDay + getString(R.string.itinerary_day));
 
         remainDay = selectedTourDay;
         setSpinnerValueAndInflate(spinnerArray[0], courseArray[0]);
@@ -100,9 +115,16 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         String selectedCourseName = ItineraryList.UiCourseNameToCourseName(selectedCourseUiName);
         selectedCourseList[curIndex] = selectedCourseName;
 
-        remainDay -= ItineraryList.getCourseDayFromHashMap(selectedCourseName);
+        float selectedCourseDay = ItineraryList.getCourseDayFromHashMap(selectedCourseName);
+        usedDay += selectedCourseDay;
 
-        if (remainDay <= 0 && nextSpinner != null) {
+        remainDay -= selectedCourseDay;
+        progressBar.setProgress((int) (usedDay * 10)); // For Progress bar support only integer
+
+        TextView textView = (TextView) findViewById(R.id.selected_total_day);
+        textView.setText(usedDay + " / " + selectedTourDay + getString(R.string.itinerary_day));
+
+        if (remainDay > 0 && nextSpinner != null) {
             setSpinnerValueAndInflate(nextSpinner, nextArray);
         }
     }
@@ -185,11 +207,15 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         }
 
         itineraryListInstance.clearItineraryFeatureList(); // For new, clear the old itinerary
+        itineraryListInstance.initTourday();
+
         for (String selectedCourse : selectedCourseList) { // Courses will be merged here
+            if (selectedCourse == null) break;
+
             float day = ItineraryList.getCourseDayFromHashMap(selectedCourse);
             path = lang + "_itinerary_" + String.valueOf(day) + "_" + selectedCourse + ".geojson";
 
-            itineraryListInstance.getItineraryFeatureListFromGeoJSONFile(this, path);
+            itineraryListInstance.mergeCoursesFromGeoJSONFileToItineraryList(this, path);
         }
 
         itineraryListInstance.setItinearyFeaturesToGlobal(this);

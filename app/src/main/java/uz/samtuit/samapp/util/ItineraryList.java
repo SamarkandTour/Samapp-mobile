@@ -23,10 +23,11 @@ import uz.samtuit.samapp.main.R;
  * Itinerary Class
  */
 public class ItineraryList {
-    public static final String myItineraryDirectory = "my_itinerary/"; // my customized itinerary file
+    public static final String myItineraryDirectory = "my_itinerary/";
     public static final String myItineraryGeoJSONFileName = "_my_itinerary.geojson"; // my customized itinerary file
     public static final int MAX_ITINERARY_DAYS = 5;
     public static int MAX_ITINERARY_COURSES;
+    private static float tourDay;
 
     private static HashMap<String , Float> mCourseWithDayHashMap;
     private static HashMap<String , String> mCourseWithUiNameHashMap;
@@ -50,6 +51,7 @@ public class ItineraryList {
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         globalsClass.setItineraryFeatures(mItineraryList);
     }
+
     public void setNewItinearyFeaturesToGlobal(Context context, LinkedList<TourFeature> list) {
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         globalsClass.setItineraryFeatures(list);
@@ -57,8 +59,8 @@ public class ItineraryList {
 
     public void sendToAnotherDay(Context context, String ItineraryFeatureName, int inc){
         int last = mItineraryList.size() - 1;
-        for(int i = last; i >= 0; i--){
-            if(mItineraryList.get(i).getString("name")==ItineraryFeatureName){
+        for (int i = last; i >= 0; i--) {
+            if (mItineraryList.get(i).getString("name")==ItineraryFeatureName) {
                 mItineraryList.get(i).setDay(mItineraryList.get(i).getDay()+inc);
                 break;
             }
@@ -67,6 +69,7 @@ public class ItineraryList {
         globalsClass.setItineraryFeatures(mItineraryList);
         itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
     }
+
     /**
      * There is no Hotel or Food&Drink in the Itinerary GeoJSON file
      */
@@ -115,6 +118,7 @@ public class ItineraryList {
                 return v;
             }
         }
+
         tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.FOODNDRINK);
         for (TourFeature v:tourFeatures) {
             if (v.getString("name").equals(name)) {
@@ -147,6 +151,61 @@ public class ItineraryList {
         mItineraryList.clear();
     }
 
+    public static void initTourday() {
+        tourDay = 0;
+    }
+
+    public LinkedList<TourFeature> mergeCoursesFromGeoJSONFileToItineraryList(Context context, String fileName) {
+        String prevAmPm = null;
+
+        try {
+            FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, fileName);
+            if (featureCollection == null) {
+                return mItineraryList;
+            }
+
+            List<Feature> featuresList = featureCollection.getFeatures();
+            Log.e("SIZE", featuresList.size() + "");
+
+            for (Feature v:featuresList) {
+                TourFeature itineraryElement = findFeature(context, v.getProperties().getString("name"));
+
+                if (itineraryElement == null) {
+                    Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
+                } else {
+                    boolean found = false;
+
+                    // Remove duplication
+                    for (TourFeature feature : mItineraryList) {
+                        if (feature.getString("name").equals(itineraryElement.getString("name"))) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        String curAmPm = v.getProperties().getString("ampm");
+
+                        // Whenever change between AM and PM, increase tour day by 0.5day
+                        if (!curAmPm.equals(prevAmPm)) {
+                            tourDay += 0.5F;
+                        }
+
+                        itineraryElement.setDay(Math.round(tourDay)); // Round up
+                        mItineraryList.add(itineraryElement);
+                        prevAmPm = curAmPm;
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            // JSON Format is malformed
+            Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+
+        return mItineraryList;
+    }
+
     public LinkedList<TourFeature> getItineraryFeatureListFromGeoJSONFile(Context context, String fileName) {
         try {
             FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, fileName);
@@ -158,27 +217,13 @@ public class ItineraryList {
             Log.e("SIZE", featuresList.size() + "");
 
             for (Feature v:featuresList) {
-                TourFeature itineraryElement = findFeatureInAttractionNShoppingList(context, v.getProperties().getString("name"));
+                TourFeature itineraryElement = findFeature(context, v.getProperties().getString("name"));
 
                 if (itineraryElement == null) {
                     Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
                 } else {
                     itineraryElement.setDay(v.getProperties().getInt("day"));
-                    int last = mItineraryList.size();
-                    boolean found = false;
-                    for (int i = last-1; i >= 0; i--) {
-                        if(mItineraryList.get(i).getString("name").equals(itineraryElement.getString("name"))){
-                            found = true;
-                            if(mItineraryList.get(i).getDay()>itineraryElement.getDay())
-                            {
-                                mItineraryList.get(i).setDay(itineraryElement.getDay());
-                            }
-                            break;
-                        }
-                    }
-                    if(!found){
-                        mItineraryList.add(itineraryElement);
-                    }
+                    mItineraryList.add(itineraryElement);
                 }
             }
         } catch (JSONException e) {

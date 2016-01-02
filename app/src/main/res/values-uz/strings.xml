@@ -22,6 +22,7 @@
     <string name="Err_file_not_found">"Xato! Fayl topilmadi. Sozlamalarga o'tib qayta yuklab ko'ring"</string>
     <string name="Err_wrong_itinerary_file">"Xato! Yo'nalishar faylida noto'g'ri xususiyatlar"</string>
     <string name="Err_connection_speed">Aloqa tezlik yaxshi emas</string>
+    <string name="Err_not_supported">Not supported in this language</string>
     <string name="dialog_update_available">"Hozirda sayohatlar haqidagi oxirgi ma'lumot mavjud!\nYangilashni xoxlaysizmi?\Agar siz Wi-Fi ga ulanmagan bo'lsangiz,sizning mobil internetingizdan ko'p trafik sarflanadi"</string>
     <string name="dialog_load_features">"Sayohat ma'lumotlari yuklanmoqda..."</string>
     <string name="dialog_gps_setting">"Siz turgan joydan boradigan manzilingizgacha yo'l-yo'riqni bilmoqchi bo'lsangiz, iltimos GPSni yoqing.\nYoqishni xoxlaysizmi?"</string>
@@ -60,6 +61,7 @@
     <string name="itinerary_traditionalhandmade">Traditional Handmade Course</string>
     <string name="itinerary_museum">Museum Course</string>
     <string name="itinerary_religion">Religion Course</string>
+    <string name="itinerary_overlap">"! When each course merged in order,\nduplication Not allowed"</string>
     <string name="prop_title">Title</string>
     <string name="prop_addr">Manzil</string>
     <string name="prop_price">Narxlar</string>

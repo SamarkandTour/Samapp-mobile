@@ -4,50 +4,57 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Samarkand Central Museum",
-        "day": 1
+        "name": "Uzbek Culture History Museum",
+        "day": 1,
+        "ampm": "a"
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chorsu Art Gallery",
-        "day": 1
+        "day": 1,
+        "ampm": "a"
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Afrasiyab Museum",
-        "day": 1
+        "day": 1,
+        "ampm": "p"
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Ulugh Beg Museum",
-        "day": 1
+        "day": 1,
+        "ampm": "p"
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Regional Studies Museum",
-        "day": 2
+        "day": 2,
+        "ampm": "a"
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Uzbek Jewish Museum",
-        "day": 2
+        "day": 2,
+        "ampm": "a"
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Wine Museum",
-        "day": 2
+        "day": 2,
+        "ampm": "a"
       }
     }
   ]

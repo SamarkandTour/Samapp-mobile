@@ -481,8 +481,6 @@ public class MainMap extends ActionBarActivity {
             if (!isSearchMyLocEnabled) {
                 marqueeText.setText("");
             }
-            mDestinationLoc.setLongitude(0);
-            mDestinationLoc.setLatitude(0);
         }
     }
 
