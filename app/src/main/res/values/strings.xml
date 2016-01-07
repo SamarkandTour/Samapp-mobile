@@ -63,7 +63,6 @@
     <string name="itinerary_museum">Museum Course</string>
     <string name="itinerary_religion">Religion Course</string>
     <string name="itinerary_overlap">"! When each course merged in order,\nduplication Not allowed"</string>
-    <string name="prop_title">Title</string>
     <string name="prop_addr">Address</string>
     <string name="prop_price">Price</string>
     <string name="prop_open">Open</string>

@@ -66,9 +66,6 @@
         android:prompt="@string/itinerary_1st_course"
         android:spinnerMode="dropdown"
         android:layout_marginTop="20dp"
-        android:focusable="false"
-        android:clickable="false"
-        android:focusableInTouchMode="false"
         android:layout_below="@+id/courseWizardProgressBar" />
 
     <Spinner

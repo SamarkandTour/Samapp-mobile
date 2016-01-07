@@ -49,6 +49,10 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
         } else {
             finish();
         }
+
+        if (isFirstLaunch) { // Don't forget, Set first_launch to false
+            sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
+        }
     }
 
     public void onNextBtnClick(View view) {
@@ -82,13 +86,8 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
         } else {
             finish();
         }
-    }
 
-    @Override
-    protected void onStop() { // Don't forget, Set first_launch to false
-        super.onStop();
-
-        if (isFirstLaunch) {
+        if (isFirstLaunch) { // Don't forget, Set first_launch to false
             sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
         }
     }

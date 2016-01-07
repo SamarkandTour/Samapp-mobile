@@ -1,6 +1,7 @@
 package uz.samtuit.samapp.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,6 +21,8 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
     private String selectedCourseList[] = new String[ItineraryList.MAX_ITINERARY_COURSES];
     private float selectedTourDay, usedDay, remainDay;
     private ProgressBar progressBar;
+    SharedPreferences sharedPreferences;
+    boolean isFirstLaunch;
 
     private ArrayList<String>[] courseArray = new ArrayList[ItineraryList.MAX_ITINERARY_COURSES];
     private int[] courseInitNameId = {
@@ -65,6 +68,9 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
 
         remainDay = selectedTourDay;
         setSpinnerValueAndInflate(spinnerArray[0], courseArray[0]);
+
+        sharedPreferences = this.getSharedPreferences("SamTour_Pref", 0);
+        isFirstLaunch = sharedPreferences.getBoolean("app_first_launch", true);
     }
 
     private void initCourses() {
@@ -188,6 +194,10 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         } else {
             finish();
         }
+
+        if (isFirstLaunch) { // Don't forget, Set first_launch to false
+            sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
+        }
     }
 
     public void onPreviousBtnClick(View view) {
@@ -227,5 +237,9 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();
+
+        if (isFirstLaunch) { // Don't forget, Set first_launch to false
+            sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
+        }
     }
 }
