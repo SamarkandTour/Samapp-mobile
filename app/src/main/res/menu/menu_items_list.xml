@@ -17,9 +17,16 @@
         app:showAsAction="collapseActionView|ifRoom">
     </item>
     <item
-        android:id="@+id/action_sort"
+        android:id="@+id/action_sort_by_title"
         android:orderInCategory="300"
-        android:title="Sort"
+        android:title="@string/sort_by_title"
+        android:icon="@drawable/ic_sort_white_24dp"
+        android:showAsAction="ifRoom">
+    </item>
+    <item
+        android:id="@+id/action_sort_by_mylocation"
+        android:orderInCategory="300"
+        android:title="@string/sort_by_mylocation"
         android:icon="@drawable/ic_sort_white_24dp"
         android:showAsAction="ifRoom">
     </item>

@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -227,7 +228,8 @@ public class ItemsListActivity extends ActionBarActivity {
             }
         });
 
-        mActionSort = menu.findItem(R.id.action_sort);
+        mActionSort = menu.findItem(R.id.action_sort_by_title);
+        mActionSort = menu.findItem(R.id.action_sort_by_mylocation);
         mActionSearch = menu.findItem(R.id.action_search);
 
         return super.onPrepareOptionsMenu(menu);
@@ -335,10 +337,13 @@ public class ItemsListActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         switch (id)
         {
-            case R.id.action_sort:
+            case R.id.action_sort_by_title:
                 Collections.sort(items, new CustomComparator());
                 adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
                 list.setAdapter(adapter);
+                break;
+            case R.id.action_sort_by_mylocation:
+                Toast.makeText(this, getString(R.string.Err_not_supported), Toast.LENGTH_LONG).show();
                 break;
             case R.id.action_search:
                 handleMenuSearch();

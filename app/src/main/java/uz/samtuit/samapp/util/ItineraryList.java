@@ -156,7 +156,7 @@ public class ItineraryList {
     }
 
     public LinkedList<TourFeature> mergeCoursesFromGeoJSONFileToItineraryList(Context context, String fileName) {
-        String prevAmPm = null;
+        String prevAmPm = null, preDay = null;
 
         try {
             FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, fileName);
@@ -174,6 +174,16 @@ public class ItineraryList {
                     Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
                 } else {
                     boolean found = false;
+                    String curAmPm = v.getProperties().getString("ampm");
+                    String curDay = v.getProperties().getString("day");
+
+                    // Whenever change between AM and PM, increase tour day by 0.5day
+                    if (!curAmPm.equals(prevAmPm) || !curDay.equals(preDay)) {
+                        tourDay += 0.5F;
+                    }
+
+                    prevAmPm = curAmPm;
+                    preDay = curDay;
 
                     // Remove duplication
                     for (TourFeature feature : mItineraryList) {
@@ -184,16 +194,8 @@ public class ItineraryList {
                     }
 
                     if (!found) {
-                        String curAmPm = v.getProperties().getString("ampm");
-
-                        // Whenever change between AM and PM, increase tour day by 0.5day
-                        if (!curAmPm.equals(prevAmPm)) {
-                            tourDay += 0.5F;
-                        }
-
                         itineraryElement.setDay(Math.round(tourDay)); // Round up
                         mItineraryList.add(itineraryElement);
-                        prevAmPm = curAmPm;
                     }
                 }
             }

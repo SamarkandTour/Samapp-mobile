@@ -62,7 +62,6 @@
         android:id="@+id/courseSpinner1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/ColorPrimary"
         android:prompt="@string/itinerary_1st_course"
         android:spinnerMode="dropdown"
         android:layout_marginTop="20dp"
@@ -75,7 +74,6 @@
         android:layout_below="@+id/courseSpinner1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/ColorPrimary"
         android:prompt="@string/itinerary_2nd_course"
         android:spinnerMode="dropdown"
         android:layout_marginTop="20dp" />
@@ -87,7 +85,6 @@
         android:layout_below="@+id/courseSpinner2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/ColorPrimary"
         android:prompt="@string/itinerary_3rd_course"
         android:spinnerMode="dropdown"
         android:layout_marginTop="20dp" />
@@ -99,7 +96,6 @@
         android:layout_below="@+id/courseSpinner3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/ColorPrimary"
         android:prompt="@string/itinerary_4th_course"
         android:spinnerMode="dropdown"
         android:layout_marginTop="20dp" />
@@ -111,7 +107,6 @@
         android:layout_below="@+id/courseSpinner4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/ColorPrimary"
         android:prompt="@string/itinerary_5th_course"
         android:spinnerMode="dropdown"
         android:layout_marginTop="20dp" />
@@ -123,7 +118,6 @@
         android:layout_below="@+id/courseSpinner4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/ColorPrimary"
         android:prompt="@string/itinerary_6th_course"
         android:spinnerMode="dropdown"
         android:layout_marginTop="20dp" />

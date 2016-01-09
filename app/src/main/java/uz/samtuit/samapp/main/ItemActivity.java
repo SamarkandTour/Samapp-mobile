@@ -1,7 +1,6 @@
 package uz.samtuit.samapp.main;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -10,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -27,7 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import uz.samtuit.samapp.util.BitmapUtil;
@@ -210,7 +207,7 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
         final GlobalsClass globals = (GlobalsClass)getApplicationContext();
         LinkedList<TourFeature> itineraryItems;
         final Dialog d = new Dialog(ItemActivity.this);
-        d.setTitle("Pick The Day");
+        d.setTitle(getString(R.string.itinerary_pick_day));
         d.setContentView(R.layout.day_dialog);
         Button b1 = (Button)d.findViewById(R.id.ok_btn);
         Button b2 = (Button)d.findViewById(R.id.cancel_btn);
@@ -227,15 +224,15 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
                 TourFeature feature = list.findFeatureInAttractionNShoppingList(getApplicationContext(), extras.getString("name"));
                 LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
                 if(itineraryItems.contains(feature)){
-                    Toast.makeText(ItemActivity.this, "This feature is already in your itinerary list", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ItemActivity.this, getString(R.string.itinerary_already_exist), Toast.LENGTH_SHORT).show();
                 }
                 else {
                     feature.setDay(selectedDay);
                     list.addNewFeatureToItineraryList(feature);
                     list.setNewItinearyFeaturesToGlobal(getApplicationContext(), itineraryItems);
-                    Log.e("QUERY",ItemActivity.this.getSharedPreferences("SamTour_Pref",0).getString("app_lang",null));
+                    Log.e("QUERY", ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
                     list.itineraryWriteToGeoJSONFile(getApplicationContext(), ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
-                    Toast.makeText(ItemActivity.this,"The Feature succesfuly added to your itinerary list",Toast.LENGTH_LONG).show();
+                    Toast.makeText(ItemActivity.this, getString(R.string.itinerary_added_successfully), Toast.LENGTH_LONG).show();
                     d.hide();
                 }
             }

@@ -40,7 +40,6 @@
         android:id="@+id/daySpinner1"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/ColorPrimary"
         android:prompt="@string/itinerary_select_day"
         android:spinnerMode="dropdown" />
 

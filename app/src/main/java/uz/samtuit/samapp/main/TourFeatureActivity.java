@@ -30,11 +30,9 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.LinkedList;
 
-import uz.samtuit.samapp.main.R;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
@@ -228,7 +226,7 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
     public void AddToMyItinerary(final View view){
         final GlobalsClass globals = (GlobalsClass)getApplicationContext();
         final Dialog d = new Dialog(TourFeatureActivity.this);
-        d.setTitle("Pick The Day");
+        d.setTitle(getString(R.string.itinerary_pick_day));
         d.setContentView(R.layout.day_dialog);
         Button b1 = (Button)d.findViewById(R.id.ok_btn);
         Button b2 = (Button)d.findViewById(R.id.cancel_btn);
@@ -246,7 +244,7 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
                 LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
                 if(itineraryItems.contains(feature)){
 
-                    Snackbar.make(view, "This feature is already in your itinerary list", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view, getString(R.string.itinerary_already_exist), Snackbar.LENGTH_SHORT).show();
                 }
                 else {
                     feature.setDay(selectedDay);
@@ -254,7 +252,7 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
                     list.setNewItinearyFeaturesToGlobal(getApplicationContext(), itineraryItems);
                     Log.e("QUERY", TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
                     list.itineraryWriteToGeoJSONFile(getApplicationContext(), TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
-                    Snackbar.make(view, "The Feature succesfuly added to your itinerary list", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
                     d.hide();
                 }
             }

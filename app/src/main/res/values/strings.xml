@@ -63,9 +63,14 @@
     <string name="itinerary_museum">Museum Course</string>
     <string name="itinerary_religion">Religion Course</string>
     <string name="itinerary_overlap">"! When each course merged in order,\nduplication Not allowed"</string>
+    <string name="itinerary_pick_day">Select your itinerary day</string>
+    <string name="itinerary_already_exist">Already in your itinerary</string>
+    <string name="itinerary_added_successfully">Successfully added to your itinerary</string>
     <string name="prop_addr">Address</string>
     <string name="prop_price">Price</string>
     <string name="prop_open">Open</string>
+    <string name="sort_by_title">Sort by Title</string>
+    <string name="sort_by_mylocation">Sort by My Loc</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

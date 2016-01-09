@@ -62,7 +62,12 @@
     <string name="itinerary_museum">Muzey yo`nalishi</string>
     <string name="itinerary_religion">Diniy yo`nalish</string>
     <string name="itinerary_overlap">"! Qachonki bitta yo`nalish ikki marta tanlansa,\n nusxasi o`chiriladi"</string>
+    <string name="itinerary_pick_day">Sayohat kunini belgilang</string>
+    <string name="itinerary_already_exist">Sayohat rejangizda mavjud</string>
+    <string name="itinerary_added_successfully">"Sayohat rejangizga muvoffaqiyatli qo'shildi"</string>
     <string name="prop_addr">Manzil</string>
     <string name="prop_price">Narxlar</string>
     <string name="prop_open">Ish vaqti</string>
+    <string name="sort_by_title">Sort by Title</string>
+    <string name="sort_by_mylocation">Sort by My Loc</string>
 </resources>
