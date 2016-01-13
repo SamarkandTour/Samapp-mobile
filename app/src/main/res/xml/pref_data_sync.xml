@@ -8,8 +8,8 @@
         android:title="@string/pref_title_update_on_boot" />
 
     <!-- This preference simply launches an intent when selected. Use this UI sparingly, per
-         design guidelines. -->
+         design guidelines.
     <Preference android:title="@string/pref_title_now_update"
         android:fragment="uz.samtuit.samapp.main.SettingsActivity$CheckNewUpdate"/>
-
+    -->
 </PreferenceScreen>
