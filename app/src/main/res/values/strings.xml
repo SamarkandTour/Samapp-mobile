@@ -15,16 +15,19 @@
     <string name="btn_done">Done</string>
     <string name="btn_guide_me">Guide Me here</string>
     <string name="update_alert">New update available! Would you like to download?</string>
+    <string name="update_nothing">There is no update</string>
     <string name="reviews">Reviews</string>
     <string name="address">Address</string>
     <string name="search_hint">Search</string>
     <string name="Err_wrong_geojson_file">Error! Malformed JSON in the geojson file. Go to the setting, Try re-download</string>
     <string name="Err_file_not_found">Error! File not found. Go to the setting, Try re-download</string>
     <string name="Err_wrong_itinerary_file">Error! wrong feature name in the itinerary file</string>
-    <string name="Err_connection_speed">The speed of connection is not good</string>
+    <string name="Err_network_state">The state of network is not good</string>
+    <string name="Err_no_connection">There is no Internet connection</string>
     <string name="Err_not_supported">Not supported in this language</string>
     <string name="dialog_update_available">Now recent tour information is available!\nDo you want to update?\nBut if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
-    <string name="dialog_load_features">"Loading Tour Data"</string>
+    <string name="dialog_load_features">Loading Tour Data</string>
+    <string name="dialog_check_update">Checking New Update</string>
     <string name="dialog_gps_setting">To guide you to the destination from where your are, please turn on GPS.\nDo you want to turn on?</string>
     <string name="select_your_language">Please select your language</string>
     <string name="wizard_day_select">How many days are you staying in Samarkand?</string>
@@ -69,8 +72,21 @@
     <string name="prop_addr">Address</string>
     <string name="prop_price">Price</string>
     <string name="prop_open">Open</string>
-    <string name="sort_by_title">Sort by Title</string>
+    <string name="sort_by_title">Sort by Name</string>
     <string name="sort_by_mylocation">Sort by My Loc</string>
+    <string name="pref_header_about">About App</string>
+    <string name="pref_header_data_sync">Check new update</string>
+    <string name="pref_summary_data_sync">Check if the recent tour data is in the server</string>
+    <string name="pref_title_update_on_boot">Check the update on boot</string>
+    <string name="pref_title_now_update">Now Update</string>
+    <string name="pref_header_notifications">Target arrival notification</string>
+    <string name="pref_summary_notifications">When arrived near target destination, notify it by vibrate</string>
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="pref_header_languages">Languages</string>
+    <string name="setting_about_app">"        This is the cooperation project of universities in Samarkand of which the center is a UNESCO world Heritage Site.
+        We're targeting to provide unknown, hidden and unique all tour information for your visit.
+        We're also suggesting recommended itineraries for your great experience at this city. Of course, you can create your own customized itinerary based on the recommendation.
+        Furthermore, because it's designed for offline usage, even though you don't have any Internet connection on your way, you can utilize all information and it will guide you safely to the destination by GPS."</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -37,15 +37,17 @@
         <activity android:name=".ItemActivity" />
         <activity android:name=".LanguageSettingActivity" />
         <activity android:name=".AboutCityActivity" />
-        <activity android:name=".WizardDaySelectActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".WizardCourseSelectActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".WizardDaySelectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WizardCourseSelectActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".SuggestedItineraryActivity" />
         <activity android:name=".MainMenu" />
-        <activity android:name=".TrainsTimeTableActivity" />
-        <activity android:name=".TashkentSamarkandActivity" />
         <activity android:name=".AboutAppActivity" />
+        <activity android:name=".SettingsActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <receiver
             android:name=".DownloadCompleteReceiver"
@@ -63,7 +65,7 @@
         <activity
             android:name=".TourFeatureActivity"
             android:label="@string/title_activity_tour_feature"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
 </manifest>

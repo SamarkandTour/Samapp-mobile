@@ -2,6 +2,7 @@ package uz.samtuit.samapp.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
@@ -13,13 +14,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -98,10 +98,10 @@ public class MainMap extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        globalVariables = (GlobalsClass)getApplicationContext();
-
         setContentView(R.layout.activity_main_map);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        globalVariables = (GlobalsClass)getApplicationContext();
         mapView = (MapView)findViewById(R.id.mapview);
         mainLayout = (FrameLayout) findViewById(R.id.mainLayout);
         marqueeText = (TextView)findViewById(R.id.marqueeText);
@@ -132,6 +132,8 @@ public class MainMap extends ActionBarActivity {
         } else {
             mbTileLayer = new MBTilesLayer(mbtiles);
         }
+
+        mbTileLayer.setAttribution("© OpenStreetMap Contributors");
 
         mapView.setTileSource(mbTileLayer);
         mapView.setCenter(new ILatLng() { // Registon
@@ -306,14 +308,12 @@ public class MainMap extends ActionBarActivity {
                         marqueeText.setTextColor(Color.RED);
                         marqueeText.setText(R.string.marquee_arrival_noti);
 
-                        if (!isNotified) {
+                        SharedPreferences defaultPref = PreferenceManager.getDefaultSharedPreferences(MainMap.this);
+                        boolean settingValue = defaultPref.getBoolean("target_arrival_vibrate", true);
+
+                        if (!isNotified && settingValue) {
                             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                             vibrator.vibrate(500);
-
-                            SoundPool soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-                            int soundId = soundPool.load(getApplicationContext(), R.raw.dingdong, 1);
-                            soundPool.play(soundId, 1, 1, 0, 0, 1);
-
                             isNotified = true;
                         }
                     } else {
@@ -506,7 +506,7 @@ public class MainMap extends ActionBarActivity {
                 intent = new Intent(MainMap.this, ItemsListActivity.class);
                 break;
             case SETTING:
-                intent = new Intent(MainMap.this, LanguageSettingActivity.class);
+                intent = new Intent(MainMap.this, SettingsActivity.class);
                 break;
         }
         return intent;

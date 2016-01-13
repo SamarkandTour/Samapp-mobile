@@ -8,8 +8,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
@@ -17,16 +17,11 @@ import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.zip.ZipFile;
 
+import uz.samtuit.samapp.util.CheckUpdateManager;
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.Downloader;
 import uz.samtuit.samapp.util.FileUtil;
@@ -45,7 +40,7 @@ public class LogoActivity extends ActionBarActivity {
     private SharedPreferences pref;
     private boolean isNeedFeaturesDownload;
     private boolean isNeedMapDownload;
-    private boolean isFirstLaunch;
+    private boolean isFirstLaunch, isCheckUpdateOnboot;
     private int downloadRequestCnt;
 
     @Override
@@ -55,23 +50,27 @@ public class LogoActivity extends ActionBarActivity {
         setContentView(R.layout.activity_logo);
         tvInfo = (TextView) findViewById(R.id.tv_info);
 
-        pref = LogoActivity.this.getSharedPreferences("SamTour_Pref", 0);
+        pref = this.getSharedPreferences("SamTour_Pref", 0);
         isFirstLaunch = pref.getBoolean("app_first_launch", true);
         downloadRequestCnt = pref.getInt("download_request_count", 0);
 
+        SharedPreferences defaultPref = PreferenceManager.getDefaultSharedPreferences(this);
+        isCheckUpdateOnboot = defaultPref.getBoolean("update_check_on_boot", true);
+
         if (isFirstLaunch) {
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("app_version", "0.5.0"); // Set App version
+            editor.putLong("last_updated", new Date().getTime()); // Set installed date
+            editor.commit();
+
             // IF the system locale is same as one of supported languages, set as it
             String systemLocale = SystemSetting.checkSystemLocale();
             if (systemLocale.equals(GlobalsClass.supportedLanguages[0])
                     || systemLocale.equals(GlobalsClass.supportedLanguages[1])
                     || systemLocale.equals(GlobalsClass.supportedLanguages[2])) {
-                SystemSetting.setUserLanguage(LogoActivity.this, systemLocale);
 
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("app_lang", systemLocale); // Set App language
-                editor.putString("app_version", "0.01"); // Set App version
-                editor.putLong("last_updated", new Date().getTime()); // Set installed date
-                editor.commit();
+                SystemSetting.setUserLanguage(LogoActivity.this, systemLocale);
+                editor.putString("app_lang", systemLocale).commit(); // Set App language
 
                 continueInBackgroundTask();
             } else {
@@ -88,12 +87,6 @@ public class LogoActivity extends ActionBarActivity {
         } else {
             continueInBackgroundTask();
         }
-        findViewById(R.id.imageView2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LogoActivity.this, MainMap.class));
-            }
-        });
     }
 
     @Override
@@ -101,11 +94,7 @@ public class LogoActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("app_lang", data.getExtras().getString("sel_lang")); // Set App language
-        editor.putString("app_version", "0.01");// Set App version
-        Date current = new Date();
-        editor.putLong("last_updated", current.getTime()); // Set installed date
-        editor.commit();
+        editor.putString("app_lang", data.getExtras().getString("sel_lang")).commit(); // Set App language
 
         continueInBackgroundTask();
     }
@@ -211,10 +200,12 @@ public class LogoActivity extends ActionBarActivity {
                 loadFeaturesToMemory(LogoActivity.this, chosenLang, path, GlobalsClass.FeatureType.ITINERARY);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
-                publishProgress(new Pair<Integer, String>(CHECK_START, getString(R.string.new_update)));
-                if (downloadRequestCnt == 0 && NetworkUtils.isNetworkAvailable(LogoActivity.this)) {
-                    isNeedFeaturesDownload = isNewUpdate(globals.featuresDownloadURL);
-                    isNeedMapDownload = isNewUpdate(globals.mapDownloadURL);
+                if (downloadRequestCnt == 0 && NetworkUtils.isNetworkAvailable(LogoActivity.this) && isCheckUpdateOnboot) {
+                    publishProgress(new Pair<Integer, String>(CHECK_START, getString(R.string.new_update)));
+                    CheckUpdateManager checkUpdateManager = new CheckUpdateManager();
+
+                    isNeedFeaturesDownload = checkUpdateManager.isNewUpdate(LogoActivity.this, handler, globals.featuresDownloadURL);
+                    isNeedMapDownload = checkUpdateManager.isNewUpdate(LogoActivity.this, handler, globals.mapDownloadURL);
                     if (isNeedFeaturesDownload || isNeedMapDownload) {
                         return true;
                     }
@@ -272,51 +263,14 @@ public class LogoActivity extends ActionBarActivity {
         }
     }
 
+    // Added for when check update is delayed
     private final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             if(msg.arg1 == 1) {
-                Toast.makeText(LogoActivity.this, R.string.Err_connection_speed, Toast.LENGTH_LONG).show();
+                Toast.makeText(LogoActivity.this, R.string.Err_network_state, Toast.LENGTH_LONG).show();
             }
         }
     };
-
-    private boolean isNewUpdate(String url) {
-        URLConnection connection = null;
-        Timer timer = null;
-
-        try {
-            URL serverURL = new URL(url);
-            connection = serverURL.openConnection();
-            connection.setConnectTimeout(10000); // We will wait until max 10s for connection waiting
-            connection.setReadTimeout(10000);
-
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Message msg = handler.obtainMessage();
-                    msg.arg1 = 1;
-                    handler.sendMessage(msg);
-                }
-            }, 5000L); // If this routine doesn't handle within 5s, display connection problem
-        } catch (SocketTimeoutException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        timer.cancel();
-
-        long lastUpdated = pref.getLong("last_updated", 0);
-        long lastModifiedServer =  connection.getLastModified();
-
-        if (lastUpdated < lastModifiedServer) {
-            return true;
-        }
-        return false;
-    }
 
     private void decideNextActivity() {
         if (isFirstLaunch) {

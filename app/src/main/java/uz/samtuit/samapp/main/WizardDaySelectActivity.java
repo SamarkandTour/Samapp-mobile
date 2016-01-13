@@ -46,6 +46,7 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
         if (isFirstLaunch) {
             Intent intent = new Intent(this, MainMap.class);
             startActivity(intent);
+            finish();
         } else {
             finish();
         }
@@ -83,6 +84,7 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
         if (isFirstLaunch) {
             Intent intent = new Intent(this, MainMap.class);
             startActivity(intent);
+            finish();
         } else {
             finish();
         }

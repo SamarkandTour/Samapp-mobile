@@ -1,0 +1,15 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+         dismiss it. -->
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="update_check_on_boot"
+        android:title="@string/pref_title_update_on_boot" />
+
+    <!-- This preference simply launches an intent when selected. Use this UI sparingly, per
+         design guidelines. -->
+    <Preference android:title="@string/pref_title_now_update"
+        android:fragment="uz.samtuit.samapp.main.SettingsActivity$CheckNewUpdate"/>
+
+</PreferenceScreen>
