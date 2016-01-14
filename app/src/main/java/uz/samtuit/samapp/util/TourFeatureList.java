@@ -1,6 +1,7 @@
 package uz.samtuit.samapp.util;
 
 import android.content.Context;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class TourFeatureList {
 
     // Do this when first launch or since new update has been downloaded
     public static boolean writeAllPhotosToFiles(Context context) {
+        Log.e("BBBBB","BEEEP");
         try {
             FileUtil.createDirectoryInExternalDir(context, photoDirectory); // If photo directory is not
 
@@ -49,7 +51,7 @@ public class TourFeatureList {
 
                     for (Feature v : featuresList) {
                         if (!v.getProperties().isNull("photo")) {
-                            FileUtil.fileWriteToExternalDir(context, photoDirectory + v.getProperties().getString("name"), v.getProperties().getString("photo"));
+                            FileUtil.fileWriteToExternalDir(context, photoDirectory + v.getProperties().getString("name"),  v.getProperties().getString("photo"));
                         }
                     }
                 }

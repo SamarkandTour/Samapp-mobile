@@ -25,13 +25,17 @@ public class BitmapUtil {
 
     // Decode Base64 encoded image
     public static Bitmap decodeBase64Image(String encodedImage) {
+        Bitmap decodedByte = null;
+        try{
+            final BitmapFactory.Options options = new BitmapFactory.Options();
 
-        final BitmapFactory.Options options = new BitmapFactory.Options();
+            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
 
 
-
-        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
         return decodedByte;
     }
@@ -157,7 +161,8 @@ public class BitmapUtil {
 
             if (mBitmapWidth > mBitmapHeight) {
                 mRadius = mBitmapHeight / 2;
-            } else {
+            } else
+            if (mBitmapHeight > mBitmapWidth){
                 mRadius = mBitmapWidth / 2;
             }
 

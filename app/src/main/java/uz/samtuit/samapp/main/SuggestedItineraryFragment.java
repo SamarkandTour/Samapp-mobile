@@ -22,9 +22,8 @@ import uz.samtuit.samapp.util.TourFeature;
 
 public class SuggestedItineraryFragment extends Fragment implements RecyclerView.OnClickListener {
     private final String SI_DAY = "Day";
-    private AbsListView mListView;
     private MyItineraryAdapter adapter;
-    private LinkedList<TourFeature> data;
+    private int day = 0;
     private static final String TAG = "SuggestedItineraryFragment";
 
 //    private enum LayoutManagerType{
@@ -45,8 +44,6 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int day = 0;
-
         if (getArguments() != null) {
             day = getArguments().getInt(SI_DAY);
             try {
@@ -56,45 +53,47 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
             }
         }
         try{
-            getData(day);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
-        WindowManager wm = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        adapter = new MyItineraryAdapter(data);
+        adapter = new MyItineraryAdapter(day);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_suggesteditinerary_list, container, false);
         view.setTag(TAG);
+        adapter = new MyItineraryAdapter(day);
 
         mRecyclerView = (RecyclerView)view.findViewById(R.id.it_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        if (data != null && data.size() != 0) {
-            mRecyclerView.setAdapter(adapter);
-            mRecyclerView.setTag(SI_DAY);
-            mRecyclerView.setOnClickListener(this);
-        } else {
-            // Draw "Add" button
-        }
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setTag(day);
+        mRecyclerView.setOnClickListener(this);
 
         return view;
     }
 
-    private void getData(int day) {
-        data = SuggestedItineraryActivity.itineraryListArray.get(day);
+    public interface SendListener{
+        public void reDrawList();
     }
 
 
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("TEg",day+"");
+        adapter = new MyItineraryAdapter(day);
+        mRecyclerView.setAdapter(adapter);
     }
 }

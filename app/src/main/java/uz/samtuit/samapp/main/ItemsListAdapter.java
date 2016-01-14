@@ -2,7 +2,9 @@ package uz.samtuit.samapp.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
 
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
@@ -52,9 +56,9 @@ class ItemsListAdapter extends ArrayAdapter<TourFeature> {
         ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
 
         String fileName = data.get(position).getPhoto();
+        ImageView mainImage = (ImageView) convertView.findViewById(R.id.listViewThumbnail);
         try {
             if (fileName != null) {
-                ImageView mainImage = (ImageView) convertView.findViewById(R.id.listViewThumbnail);
                 String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
                 Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes, mainImage.getLayoutParams().height , mainImage.getLayoutParams().width);
                 BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);

@@ -3,15 +3,17 @@
     android:layout_height="match_parent"
     tools:context="uz.samtuit.samapp.main.LogoActivity"
     android:padding="0dp"
+    android:background="@color/ColorPrimary"
     android:id="@+id/logoMainLayout">
 
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/logo_horizontal_margin"
+        android:layout_marginRight="@dimen/logo_horizontal_margin"
         android:id="@+id/imageView2"
-        android:src="@drawable/logo"
-        android:scaleType="centerCrop"
-
+        android:src="@drawable/sam_tour_logo"
+        android:scaleType="centerInside"
         />
     <TextView
         android:id="@+id/tv_info"

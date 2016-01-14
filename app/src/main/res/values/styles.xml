@@ -56,11 +56,11 @@
         <item name="@android:windowExitAnimation">@anim/shrink_from_top</item>
     </style>
 
-    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
     </style>
 
-    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:colorAccent">@color/colorAccent</item>
     </style>
 </resources>

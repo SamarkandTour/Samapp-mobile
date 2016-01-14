@@ -24,8 +24,14 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
     ViewPager pager;
     ViewPagerAdapter vpadapter;
     SlidingTabLayout tabs;
-    private LinkedList<TourFeature> itineraryListFromGlobal;
+    private GlobalsClass globals;
+
+    private static SuggestedItineraryActivity ourInstance = new SuggestedItineraryActivity();
     private LinkedList<TourFeature> itineraryItemDay;
+
+    public static SuggestedItineraryActivity getInstance(){
+        return ourInstance;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         toolbar = (Toolbar)findViewById(R.id.si_toolbar);
         toolbar.setTitle(R.string.suggested_itinerary);
         setSupportActionBar(toolbar);
+        globals = (GlobalsClass)this.getApplicationContext();
         toolbar.setBackgroundColor(getResources().getColor(R.color.itinerary_primary));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -56,9 +63,26 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
 
         pager = (ViewPager)findViewById(R.id.pager);
-        InitItineraryListArray();
-        vpadapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, ItineraryList.MAX_ITINERARY_DAYS);
+        InitItineraryListArray(globals);
+        vpadapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, ItineraryList.MAX_ITINERARY_DAYS,this);
         pager.setAdapter(vpadapter);
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.e("PAGE","Scrolled" + position);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.e("PAGE","Selected" + position);
+                pager.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         tabs = (SlidingTabLayout)findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true);
@@ -75,9 +99,8 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
     }
 
     // Gather each feature in itineraryList by day
-    private void InitItineraryListArray() {
-        GlobalsClass globals = (GlobalsClass)this.getApplicationContext();
-        itineraryListFromGlobal = globals.getItineraryFeatures();
+    public void InitItineraryListArray(GlobalsClass globalsClass) {
+        LinkedList<TourFeature> itineraryListFromGlobal = globalsClass.getItineraryFeatures();
 
         itineraryListArray = new ArrayList<LinkedList<TourFeature>>();
         for(int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++){
@@ -98,7 +121,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
             else {
                 Toast.makeText(getApplicationContext(), R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
             }
-            Log.e("tag",itineraryListArray.size()+" "+itineraryListArray.get(0).size());
         }
     }
 

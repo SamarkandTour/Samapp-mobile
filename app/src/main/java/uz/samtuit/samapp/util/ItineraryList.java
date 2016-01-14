@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import uz.samtuit.samapp.main.R;
+import uz.samtuit.samapp.main.SuggestedItineraryActivity;
 
 /**
  * Itinerary Class
@@ -55,6 +56,8 @@ public class ItineraryList {
     public void setNewItinearyFeaturesToGlobal(Context context, LinkedList<TourFeature> list) {
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         globalsClass.setItineraryFeatures(list);
+        mItineraryList.clear();
+        mItineraryList = list;
     }
 
     public void sendToAnotherDay(Context context, String ItineraryFeatureName, int inc){
@@ -65,8 +68,11 @@ public class ItineraryList {
                 break;
             }
         }
+
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         globalsClass.setItineraryFeatures(mItineraryList);
+        SuggestedItineraryActivity suggestedItineraryActivity = SuggestedItineraryActivity.getInstance();
+        suggestedItineraryActivity.InitItineraryListArray(globalsClass);
         itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
     }
 
@@ -122,7 +128,7 @@ public class ItineraryList {
         tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.FOODNDRINK);
         for (TourFeature v:tourFeatures) {
             if (v.getString("name").equals(name)) {
-                v.setStringHashMap("category", "attraction");
+                v.setStringHashMap("category", "foodndrink");
                 return v;
             }
         }
@@ -130,7 +136,7 @@ public class ItineraryList {
         tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.HOTEL);
         for (TourFeature v:tourFeatures) {
             if (v.getString("name").equals(name)) {
-                v.setStringHashMap("category", "shopping");
+                v.setStringHashMap("category", "hotel");
                 return v;
             }
         }
@@ -209,6 +215,7 @@ public class ItineraryList {
     }
 
     public LinkedList<TourFeature> getItineraryFeatureListFromGeoJSONFile(Context context, String fileName) {
+        int index = 0;
         try {
             FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, fileName);
             if (featureCollection == null) {
@@ -224,6 +231,7 @@ public class ItineraryList {
                 if (itineraryElement == null) {
                     Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
                 } else {
+                    itineraryElement.setStringHashMap("index",(++index)+"");
                     itineraryElement.setDay(v.getProperties().getInt("day"));
                     mItineraryList.add(itineraryElement);
                 }

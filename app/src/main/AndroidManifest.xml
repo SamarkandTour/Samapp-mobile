@@ -63,6 +63,10 @@
         <activity
             android:name=".TourFeatureActivity"
             android:label="@string/title_activity_tour_feature"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".MyItineraryActivity"
+            android:label="@string/title_activity_my_itinerary"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 

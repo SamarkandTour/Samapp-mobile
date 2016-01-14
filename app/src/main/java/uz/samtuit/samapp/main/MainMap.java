@@ -653,7 +653,7 @@ public class MainMap extends ActionBarActivity {
             String title = tourFeature.getString("name");
 
             if (featureType == FeatureType.ITINERARY) { // Itinerary Feature
-                BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, new Integer(++index).toString(), R.drawable.poi_bg);
+                BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, tourFeature.getString("index"), R.drawable.poi_bg);
                 marker.setMarker(markerimg);
                 marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, featureType, tourFeature));
                 marker.setTitle(title);

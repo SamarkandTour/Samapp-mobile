@@ -3,6 +3,8 @@ package uz.samtuit.samapp.main;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
@@ -42,19 +44,20 @@ import uz.samtuit.samapp.util.TourFeature;
 public class TourFeatureActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener {
 
     private MenuItem mActionNavigate;
-    private double latitude, longitude;
     private String name;
-    private RelativeLayout relLayout;
     private View mAppBarLayout;
-    private ImageView imageView;
-    private ImageView addToMyItineraryBtn;
+
 
     private ImageButton callBtn, linkBtn;
     private int selectedDay = 1;
-    private ImageButton mAddToMyItinerary;
     private String featureType;
     private String url, wifi, telNum;
     private SharedPreferences sharedPreferences;
+    private TextView mInfo;
+    private TextView mAddress;
+    private SpannableString s;
+    private TextView mPrice;
+    private TextView mOpen;
     private int index;
 
     @Override
@@ -67,8 +70,8 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         name = extras.getString("name");
-        SpannableString s = new SpannableString(name);
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/segoeui.ttf");
+        s = new SpannableString(name);
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
         s.setSpan(new CustomTypefaceSpan("", tf), 0, s.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getSupportActionBar().setTitle(s);
@@ -94,23 +97,21 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
         });
         LoadImageFromExternalStorage loadImageFromExternalStorage = new LoadImageFromExternalStorage();
         loadImageFromExternalStorage.execute(extras.getString("photo"));
+        mInfo = (TextView)findViewById(R.id.tour_feature_info);
+        mAddress = (TextView)findViewById(R.id.tour_feature_address);
+        mPrice = (TextView)findViewById(R.id.tour_feature_price);
+        mOpen = (TextView)findViewById(R.id.tour_feature_open);
         mAppBarLayout = findViewById(R.id.toolbar_layout);
 
         index = extras.getInt("index");
 
         //ActionBar setting
 
-        mAddToMyItinerary = (ImageButton)findViewById(R.id.add_to_my_itinerary);
-
 
 
         //end ActionBar Setting
         // Loc
         featureType = extras.getString("featureType");
-        Log.e("FEATURE TYPE", featureType + " " + GlobalsClass.FeatureType.HOTEL.name());
-        latitude = extras.getDouble("lat");
-        longitude = extras.getDouble("long");
-
 
         // Rating
         int Rating = extras.getInt("rating");
@@ -136,8 +137,6 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
         // Wifi
         wifi = extras.getString("wifi");
 
-        ColorFilter colorFilterDisabled = new PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
-        ColorFilter colorFilterEnabled = new PorterDuffColorFilter(0xffffff, PorterDuff.Mode.MULTIPLY);
         ImageView wifiIcon = (ImageView) findViewById(R.id.wifi);
         callBtn = (ImageButton) findViewById(R.id.call_button);
         linkBtn = (ImageButton) findViewById(R.id.hotel_link_btn);
@@ -187,8 +186,10 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
 
 
         // Description
-        TextView description = (TextView)findViewById(R.id.tour_feature_content);
-        description.setText(getResources().getString(R.string.tour_feature_content,extras.getString("desc"),extras.getString("addr"),extras.getString("price"),extras.getString("open")));
+        mInfo.setText(extras.getString("desc"));
+        mAddress.setText(extras.getString("addr"));
+        mPrice.setText(extras.getString("price"));
+        mOpen.setText(extras.getString("open"));
 
 //        // Addr
 //        TextView address = (TextView)findViewById(R.id.hotel_address);
@@ -301,21 +302,22 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
             selectedDay=newVal;
     }
 
-    class LoadImageFromExternalStorage extends AsyncTask<String,String,Void> {
+    class LoadImageFromExternalStorage extends AsyncTask<String,String,Void>{
+        Drawable dr = null;
 
         @Override
         protected Void doInBackground(String... params) {
             if (params[0] != null) {
                 String encodedBytes = FileUtil.fileReadFromExternalDir(TourFeatureActivity.this, params[0]);
+                dr = new BitmapDrawable(BitmapUtil.decodeBase64Image(encodedBytes));
                 publishProgress(encodedBytes);
             }
             return null;
         }
 
         @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-            Drawable dr = new BitmapDrawable(BitmapUtil.decodeBase64Image(values[0]));
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
             mAppBarLayout.setBackground(dr);
         }
     }

@@ -51,6 +51,13 @@ public class LanguageSettingActivity extends AppCompatActivity {
                 } else if (!currentLang.equals(selectLang)) {
                     progressDialog = ProgressDialog.show(LanguageSettingActivity.this, "", getString(R.string.dialog_load_features), true, true);
                     new AsyncTask<Void, Void, Void>() {
+
+                        @Override
+                        protected void onPreExecute() {
+                            super.onPreExecute();
+                            sharedPreferences.edit().putString("app_lang", selectLang).commit(); // Set App language
+                        }
+
                         @Override
                         protected Void doInBackground(Void ... params)
                         {
@@ -62,7 +69,7 @@ public class LanguageSettingActivity extends AppCompatActivity {
                         protected void onPostExecute(Void result)
                         {
                             progressDialog.dismiss();
-                            sharedPreferences.edit().putString("app_lang", selectLang).commit(); // Set App language
+
 
                             if (!isFirstLaunch) {
                                 Intent intent = new Intent(LanguageSettingActivity.this, MainMap.class);
