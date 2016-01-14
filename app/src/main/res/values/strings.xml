@@ -25,15 +25,19 @@
     <string name="Err_network_state">The state of network is not good</string>
     <string name="Err_no_connection">There is no Internet connection</string>
     <string name="Err_not_supported">Not supported in this language</string>
-    <string name="dialog_update_available">Now recent tour information is available!\nDo you want to update?\nBut if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
+    <string name="dialog_update_available">Now recent tour information is available!
+        \nDo you want to update? But if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
     <string name="dialog_load_features">Loading Tour Data</string>
     <string name="dialog_check_update">Checking New Update</string>
     <string name="dialog_gps_setting">To guide you to the destination from where your are, please turn on GPS.\nDo you want to turn on?</string>
+    <string name="dialog_need_map_download">To see map background, first time, you need to download map file from server
+        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
     <string name="select_your_language">Please select your language</string>
     <string name="wizard_day_select">How many days are you staying in Samarkand?</string>
     <string name="wizard_course_select">Please decide the priority of your favorite courses</string>
     <string name="title_dialog_gps_setting">Location Based Service</string>
     <string name="title_dialog_update_available">Update available</string>
+    <string name="title_dialog_map_download">Map Download</string>
     <string name="title_itinerary_wizard">Itinerary Wizard</string>
     <string name="title_about_this_app">About this App</string>
     <string name="title_check_new_update">Check new update</string>
@@ -89,7 +93,6 @@
         Furthermore, because it's designed for offline usage, even though you don't have any Internet connection on your way, you can utilize all information and it will guide you safely to the destination by GPS."</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_tour_feature">TourFeatureActivity</string>
     <string name="tour_feature_content">
         "%1$s\n\n"

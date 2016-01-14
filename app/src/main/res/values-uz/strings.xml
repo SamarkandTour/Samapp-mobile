@@ -23,16 +23,21 @@
     <string name="Err_file_not_found">"Xato! Fayl topilmadi. Sozlamalarga o'tib qayta yuklab ko'ring"</string>
     <string name="Err_wrong_itinerary_file">"Xato! Yo'nalishar faylida noto'g'ri xususiyatlar"</string>
     <string name="Err_network_state">Aloqa tezlik yaxshi emas</string>
+    <string name="Err_no_connection">There is no Internet connection</string>
     <string name="Err_not_supported">Not supported in this language</string>
-    <string name="dialog_update_available">"Hozirda sayohatlar haqidagi oxirgi ma'lumot mavjud!\nYangilashni xoxlaysizmi?\Agar siz Wi-Fi ga ulanmagan bo'lsangiz,sizning mobil internetingizdan ko'p trafik sarflanadi"</string>
+    <string name="dialog_update_available">"Hozirda sayohatlar haqidagi oxirgi ma'lumot mavjud!
+        \nYangilashni xoxlaysizmi? Agar siz Wi-Fi ga ulanmagan bo'lsangiz,sizning mobil internetingizdan ko'p trafik sarflanadi"</string>
     <string name="dialog_load_features">"Sayohat ma'lumotlari yuklanmoqda..."</string>
     <string name="dialog_check_update">Checking New Update</string>
     <string name="dialog_gps_setting">"Siz turgan joydan boradigan manzilingizgacha yo'l-yo'riqni bilmoqchi bo'lsangiz, iltimos GPSni yoqing.\nYoqishni xoxlaysizmi?"</string>
+    <string name="dialog_need_map_download">To see map background, first time, you need to download the map from server
+        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
     <string name="select_your_language">Iltimos, tilni tanlang</string>
     <string name="wizard_day_select">"Samarqandda necha kun bo'lmoqchisiz?"</string>
     <string name="wizard_course_select">Yoqtirgan kursingiz muddatini belgilang</string>
     <string name="title_dialog_gps_setting">Manzilga asoslangan xizmat</string>
     <string name="title_dialog_update_available">Yangilanish mavjud</string>
+    <string name="title_dialog_map_download">Map Download</string>
     <string name="title_itinerary_wizard">"Yo'nalishlar ustasi"</string>
     <string name="title_about_this_app">Ilova haqida</string>
     <string name="title_check_new_update">Yangilanishga tekshiring</string>
@@ -85,4 +90,17 @@
         We're targeting to provide unknown, hidden and unique all tour information for your visit.
         We're also suggesting recommend itineraries for your great experience at this city. Of course, you can create your own customized itinerary based on the recommendation.
         Furthermore, because it's designed for offline usage, even though you don't have any Internet connection on your way, you can utilize all information and it will guide you safely to the destination by GPS."</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_tour_feature">TourFeatureActivity</string>
+    <string name="tour_feature_content">
+        "%1$s\n\n"
+        "Address:\n\n"
+        "%2$s\n\n"
+        "Price:\n\n"
+        "%3$s\n\n"
+        "Open:\n\n"
+        "%4$s\n"
+    </string>
+    <string name="action_settings">Settings</string>
 </resources>

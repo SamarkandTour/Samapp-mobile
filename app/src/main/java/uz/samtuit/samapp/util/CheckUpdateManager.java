@@ -54,5 +54,4 @@ public class CheckUpdateManager {
         }
         return false;
     }
-
 }
