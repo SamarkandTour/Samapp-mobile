@@ -65,7 +65,7 @@
         <activity
             android:name=".TourFeatureActivity"
             android:label="@string/title_activity_tour_feature"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>

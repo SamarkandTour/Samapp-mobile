@@ -126,6 +126,8 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
 
         return parsed;

@@ -1,7 +1,10 @@
 package uz.samtuit.samapp.main;
 
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
@@ -71,11 +74,11 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyItineraryAdapter(LinkedList myDataset) {
-        mDataset = myDataset;
+    public MyItineraryAdapter(int day) {
+        mDataset = SuggestedItineraryActivity.itineraryListArray.get(day);
+//        mDataset = myDataset;
         if(mDataset!=null)
             dataSize = mDataset.size();
-        this.imageSize = imageSize;
     }
 
     // Create new views (invoked by the layout manager)
@@ -95,8 +98,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         mLayoutBetweenItems = holder.mLayoutBetweenItems;
-        GetBitmapAsync getBitmapAsync = new GetBitmapAsync(position,holder,holder.container.getHeight()*context.getResources().getDisplayMetrics().density);
-        getBitmapAsync.execute();
 
         if(position<dataSize-1){
             mLayoutBetweenItems.setVisibility(View.VISIBLE);
@@ -108,13 +109,24 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mName.setText(mDataset.get(position).getString("name"));
-        holder.mOrderNum.setText((position + 1) + "");
-
-        holder.container.setOnClickListener(new View.OnClickListener() {
+        holder.mOrderNum.setText(mDataset.get(position).getString("index"));
+        switch (mDataset.get(position).getString("category")){
+            case "hotel":
+                holder.mOrderNum.setBackgroundResource(R.drawable.hotel_round_bg);
+                break;
+            case "shopping":
+                holder.mOrderNum.setBackgroundResource(R.drawable.shop_round_bg);
+                break;
+            case "foodndrink":
+                holder.mOrderNum.setBackgroundResource(R.drawable.food_round_bg);
+                break;
+            case "attraction":
+                holder.mOrderNum.setBackgroundResource(R.drawable.attraction_round_bg);
+                break;
+        }
+        holder.container.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-
-
+            public boolean onLongClick(View v) {
                 Context context = v.getContext();
 
                 QuickAction quickAction = new QuickAction(context);
@@ -156,31 +168,41 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                     }
                 });
                 quickAction.setAnimStyle(QuickAction.ANIM_GROW_FROM_LEFT);
-
-//                Intent intent = new Intent(context,ItemActivity.class);
-//                intent.putExtra("featureType", mDataset.get(position).getString("type"));
-//                Log.e("FEATURETYPE", mDataset.get(position).getString("type"));
-//
-//                intent.putExtra("photo", mDataset.get(position).getPhoto());
-//                intent.putExtra("rating", mDataset.get(position).getRating());
-//                intent.putExtra("name", mDataset.get(position).getString("name"));
-//                intent.putExtra("desc", mDataset.get(position).getString("desc"));
-//                intent.putExtra("type", mDataset.get(position).getString("type"));
-//                intent.putExtra("price", mDataset.get(position).getString("price"));
-//                intent.putExtra("wifi", mDataset.get(position).getString("wifi"));
-//                intent.putExtra("open", mDataset.get(position).getString("open"));
-//                intent.putExtra("addr", mDataset.get(position).getString("addr"));
-//                intent.putExtra("tel", mDataset.get(position).getString("tel"));
-//                intent.putExtra("url", mDataset.get(position).getString("url"));
-//                intent.putExtra("long", mDataset.get(position).getLongitude());
-//                intent.putExtra("lat", mDataset.get(position).getLatitude());
-//                intent.putExtra("primaryColorId", R.color.attraction_primary);
-//                intent.putExtra("toolbarColorId", R.color.attraction_primary);
-//                context.startActivity(intent);
+                return false;
             }
         });
 
-        CalculateDistanceTimeAsync calc = new CalculateDistanceTimeAsync(position,holder);
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+
+                Intent intent = new Intent(context,TourFeatureActivity.class);
+                intent.putExtra("featureType", mDataset.get(position).getString("type"));
+                Log.e("FEATURETYPE", mDataset.get(position).getString("type"));
+
+                intent.putExtra("photo", mDataset.get(position).getPhoto());
+                intent.putExtra("rating", mDataset.get(position).getRating());
+                intent.putExtra("name", mDataset.get(position).getString("name"));
+                intent.putExtra("desc", mDataset.get(position).getString("desc"));
+                intent.putExtra("type", mDataset.get(position).getString("type"));
+                intent.putExtra("price", mDataset.get(position).getString("price"));
+                intent.putExtra("wifi", mDataset.get(position).getString("wifi"));
+                intent.putExtra("open", mDataset.get(position).getString("open"));
+                intent.putExtra("addr", mDataset.get(position).getString("addr"));
+                intent.putExtra("tel", mDataset.get(position).getString("tel"));
+                intent.putExtra("url", mDataset.get(position).getString("url"));
+                intent.putExtra("long", mDataset.get(position).getLongitude());
+                intent.putExtra("lat", mDataset.get(position).getLatitude());
+                intent.putExtra("primaryColorId", R.color.attraction_primary);
+                intent.putExtra("toolbarColorId", R.color.attraction_primary);
+                context.startActivity(intent);
+            }
+        });
+
+        CalculateDistanceTimeAsync calc = new CalculateDistanceTimeAsync(position,holder,512);
         calc.execute();
         setAnimation(holder.container,position);
 
@@ -188,7 +210,10 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
     private void changeDay(int position, int inc){
         ItineraryList list = ItineraryList.getInstance();
-        list.sendToAnotherDay(context,mDataset.get(position).getString("name"),inc);
+        list.sendToAnotherDay(context, mDataset.get(position).getString("name"), inc);
+        mDataset.remove(position);
+        notifyDataSetChanged();
+        dataSize = mDataset.size();
         Toast.makeText(context, "Item Transfered to 1 day " + ((inc==-1)?" backward":" forward"),Toast.LENGTH_LONG).show();
     }
 
@@ -208,10 +233,10 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return dataSize;
     }
 
-    private class GetBitmapAsync extends AsyncTask<Void, Void, Drawable>{
+    private class GetBitmapAsync extends AsyncTask<Void, Void, Void>{
         private int mPosition;
         private float mImageSize;
         private ViewHolder mHolder;
@@ -224,20 +249,20 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         }
 
         @Override
-        protected Drawable doInBackground(Void... params) {
+        protected Void doInBackground(Void... params) {
             String fileName = mDataset.get(mPosition).getPhoto();
             if (fileName != null) {
+                Log.e("LOGTAG","CHP");
                 String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
-                Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes, imageSize, imageSize);
-                BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
+                Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes,mImageSize, mImageSize);
+                roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
             }
-            return roundedDrawable;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Drawable drawable) {
-            mHolder.mItemImage.setImageDrawable(drawable);
-            mHolder.mItemImage.setVisibility(View.GONE);
+        protected void onPostExecute(Void params) {
+            mHolder.mItemImage.setImageDrawable(roundedDrawable);
         }
     }
 
@@ -246,10 +271,13 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         private float distance[] = new float[1];
         private int mPosition;
         private ViewHolder mHolder;
+        private float mImageSize;
+        private BitmapUtil.RoundedDrawable roundedDrawable;
 
-        public CalculateDistanceTimeAsync( int position, ViewHolder holder){
+        public CalculateDistanceTimeAsync( int position, ViewHolder holder,float imageSize){
             mPosition = position;
             mHolder = holder;
+            mImageSize = imageSize;
         }
 
         @Override
@@ -265,10 +293,13 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 mHolder.mCarTime.setText(item.getString("car_time"));
                 mHolder.mWalkTime.setText(item.getString("walk_time"));
             }
+            mHolder.mItemImage.setImageDrawable(roundedDrawable);
+
         }
 
         @Override
         protected ItineraryItem doInBackground(Void... params) {
+
             ItineraryItem item = new ItineraryItem();
             if (mPosition < (getItemCount() - 1)) { // No need to calculate for last feature
                 item.setIsLast(false);
@@ -282,6 +313,12 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 item.setStringHashMap("walk_time",getTimeToNext(distance[0], 0.5));
             } else { // And don't draw images regarding distance
                 item.setIsLast(true);
+            }
+            String fileName = mDataset.get(mPosition).getPhoto();
+            if (fileName != null) {
+                String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
+                Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes,mImageSize, mImageSize);
+                roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
             }
             return item;
         }
