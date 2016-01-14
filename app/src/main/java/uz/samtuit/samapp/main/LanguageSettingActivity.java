@@ -49,7 +49,7 @@ public class LanguageSettingActivity extends AppCompatActivity {
                     finish();
                     overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
                 } else if (!currentLang.equals(selectLang)) {
-                    progressDialog = ProgressDialog.show(LanguageSettingActivity.this, "", getString(R.string.dialog_load_features), true, true);
+                    progressDialog = ProgressDialog.show(LanguageSettingActivity.this, "", getString(R.string.dialog_load_features), true, false);
                     new AsyncTask<Void, Void, Void>() {
 
                         @Override

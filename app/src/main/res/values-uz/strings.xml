@@ -15,16 +15,18 @@
     <string name="btn_done">Bajarildi</string>
     <string name="btn_guide_me">Meni shu yerga olib bor</string>
     <string name="update_alert">Yangi update bor! Yuklab olishni xoxlaysizmi?</string>
+    <string name="update_nothing">There is no update</string>
     <string name="reviews">Izohlar</string>
     <string name="address">Manzil</string>
     <string name="search_hint">Qidiruv</string>
     <string name="Err_wrong_geojson_file">"Xato! GeoJson faylda buzilgan JSON. Qayta yuklash uchun sozlamalar bo'limiga o'ting!"</string>
     <string name="Err_file_not_found">"Xato! Fayl topilmadi. Sozlamalarga o'tib qayta yuklab ko'ring"</string>
     <string name="Err_wrong_itinerary_file">"Xato! Yo'nalishar faylida noto'g'ri xususiyatlar"</string>
-    <string name="Err_connection_speed">Aloqa tezlik yaxshi emas</string>
+    <string name="Err_network_state">Aloqa tezlik yaxshi emas</string>
     <string name="Err_not_supported">Not supported in this language</string>
     <string name="dialog_update_available">"Hozirda sayohatlar haqidagi oxirgi ma'lumot mavjud!\nYangilashni xoxlaysizmi?\Agar siz Wi-Fi ga ulanmagan bo'lsangiz,sizning mobil internetingizdan ko'p trafik sarflanadi"</string>
     <string name="dialog_load_features">"Sayohat ma'lumotlari yuklanmoqda..."</string>
+    <string name="dialog_check_update">Checking New Update</string>
     <string name="dialog_gps_setting">"Siz turgan joydan boradigan manzilingizgacha yo'l-yo'riqni bilmoqchi bo'lsangiz, iltimos GPSni yoqing.\nYoqishni xoxlaysizmi?"</string>
     <string name="select_your_language">Iltimos, tilni tanlang</string>
     <string name="wizard_day_select">"Samarqandda necha kun bo'lmoqchisiz?"</string>
@@ -68,6 +70,19 @@
     <string name="prop_addr">Manzil</string>
     <string name="prop_price">Narxlar</string>
     <string name="prop_open">Ish vaqti</string>
-    <string name="sort_by_title">Sort by Title</string>
+    <string name="sort_by_title">Sort by Name</string>
     <string name="sort_by_mylocation">Sort by My Loc</string>
+    <string name="pref_header_about">About App</string>
+    <string name="pref_header_data_sync">Check new update</string>
+    <string name="pref_summary_data_sync">Check if the recent tour data is in the server</string>
+    <string name="pref_title_update_on_boot">Check the update on boot</string>
+    <string name="pref_title_now_update">Now Update</string>
+    <string name="pref_header_notifications">Target arrival notification</string>
+    <string name="pref_summary_notifications">When arrived near target destination, notify it by vibrate</string>
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="pref_header_languages">Languages</string>
+    <string name="setting_about_app">"        This is the cooperation project of universities in Samarkand of which the center is a UNESCO world Heritage Site.
+        We're targeting to provide unknown, hidden and unique all tour information for your visit.
+        We're also suggesting recommend itineraries for your great experience at this city. Of course, you can create your own customized itinerary based on the recommendation.
+        Furthermore, because it's designed for offline usage, even though you don't have any Internet connection on your way, you can utilize all information and it will guide you safely to the destination by GPS."</string>
 </resources>

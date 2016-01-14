@@ -49,7 +49,7 @@ public class DownloadCompleteReceiver extends BroadcastReceiver {
                     .setTicker(context.getString(R.string.notify_download_complete))
                     .setContentTitle(context.getString(R.string.notify_download_complete))
                     .setContentText(context.getString(R.string.notify_updatable))
-                    .setSmallIcon(R.drawable.ic_directions_walk_white_18dp)
+                    .setSmallIcon(R.drawable.ic_done_all)
                     .setAutoCancel(true)
                     .setContentIntent(contentIntent)
                     .build();
