@@ -30,11 +30,14 @@
     <string name="dialog_load_features">"Загрузка тур. данных"</string>
     <string name="dialog_check_update">Checking New Update</string>
     <string name="dialog_gps_setting">Чтобы направить вас к месту назначения от вашей тек. положении необходимо включить GPS.\nХотите ли вы включить?</string>
+    <string name="dialog_need_map_download">To see map background, first time, you need to download map file from server
+        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
     <string name="select_your_language">Пожалуйста выбирайте ваш язык</string>
     <string name="wizard_day_select">Сколько дней вы будете в Самарканде?</string>
     <string name="wizard_course_select">Порядок вашых маршрутов</string>
     <string name="title_dialog_gps_setting">Необходимо геолокация</string>
     <string name="title_dialog_update_available">Новое обновление</string>
+    <string name="title_dialog_map_download">Map Download</string>
     <string name="title_itinerary_wizard">Мастер маршрутов</string>
     <string name="title_about_this_app">О приложении</string>
     <string name="title_check_new_update">Проверить на обновления</string>
