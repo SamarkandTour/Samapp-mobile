@@ -24,8 +24,8 @@ public class CheckUpdateManager {
         try {
             URL serverURL = new URL(url);
             connection = serverURL.openConnection();
-            connection.setConnectTimeout(10000); // We will wait until max 10s for connection waiting
-            connection.setReadTimeout(10000);
+            connection.setConnectTimeout(5000); // We will wait until max 5s for connection waiting
+            connection.setReadTimeout(5000);
 
             timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -44,10 +44,10 @@ public class CheckUpdateManager {
             return false;
         }
 
-        timer.cancel();
-
         long lastUpdated = context.getSharedPreferences("SamTour_Pref", 0).getLong("last_updated", 0);
         long lastModifiedServer =  connection.getLastModified();
+
+        timer.cancel();
 
         if (lastUpdated < lastModifiedServer) {
             return true;
