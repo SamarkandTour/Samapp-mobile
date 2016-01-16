@@ -11,10 +11,12 @@
         android:layout_width="match_parent"
         android:layout_marginTop="5dp"
         android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:paddingLeft="10dp"
             android:layout_height="50dp">
             <ImageView
                 android:layout_width="30dp"
@@ -103,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:background="#55ffffff"
+            android:background="#5fff"
             android:textColor="#000"
             android:elevation="4dp"
             android:text="Info"/>

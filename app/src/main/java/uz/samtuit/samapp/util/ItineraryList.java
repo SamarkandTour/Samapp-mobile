@@ -163,6 +163,12 @@ public class ItineraryList {
 
     public LinkedList<TourFeature> mergeCoursesFromGeoJSONFileToItineraryList(Context context, String fileName) {
         String prevAmPm = null, preDay = null;
+        int index = 0;
+        try {
+            index = mItineraryList.size();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
 
         try {
             FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, fileName);
@@ -201,6 +207,7 @@ public class ItineraryList {
 
                     if (!found) {
                         itineraryElement.setDay(Math.round(tourDay)); // Round up
+                        itineraryElement.setStringHashMap("index",(++index)+"");
                         mItineraryList.add(itineraryElement);
                     }
                 }

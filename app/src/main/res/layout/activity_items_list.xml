@@ -28,12 +28,15 @@
                 android:background="@drawable/shadow"
                 android:layout_height="4dp"/>
         </LinearLayout>
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="2dp"
-                android:id="@+id/hotelsListView"
-                android:listSelector="@drawable/list_selector"
-                android:divider="#fff" />
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/hotelsListView"
+            android:listSelector="@drawable/list_selector"
+            android:divider="#fff" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""/>
     </LinearLayout>
 </RelativeLayout>
