@@ -60,14 +60,26 @@ public class ItineraryList {
         mItineraryList = list;
     }
 
-    public void sendToAnotherDay(Context context, String ItineraryFeatureName, int inc){
+    public void sendToAnotherDay(Context context, String ItineraryFeatureName,int day, int index, int inc){
         int last = mItineraryList.size() - 1;
+        int pos = 0;
+        int newInd = 0;
         for (int i = last; i >= 0; i--) {
+            TourFeature item = mItineraryList.get(i);
+            if(item.getDay() == day){
+                if(Integer.parseInt(item.getString("index"))>index){
+                    mItineraryList.get(i).setStringHashMap("index",(Integer.parseInt(item.getString("index"))-1)+"");
+                }
+            }
+            if(item.getDay() == day + inc){
+                newInd = Math.max(newInd,Integer.parseInt(item.getString("index")));
+            }
             if (mItineraryList.get(i).getString("name")==ItineraryFeatureName) {
-                mItineraryList.get(i).setDay(mItineraryList.get(i).getDay()+inc);
-                break;
+                pos = i;
             }
         }
+        mItineraryList.get(pos).setDay(day+inc);
+        mItineraryList.get(pos).setStringHashMap("index",(++index)+"");
 
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         globalsClass.setItineraryFeatures(mItineraryList);

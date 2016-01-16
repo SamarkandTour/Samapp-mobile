@@ -210,7 +210,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
     private void changeDay(int position, int inc){
         ItineraryList list = ItineraryList.getInstance();
-        list.sendToAnotherDay(context, mDataset.get(position).getString("name"), inc);
+        list.sendToAnotherDay(context, mDataset.get(position).getString("name"), mDataset.get(position).getDay(),Integer.parseInt(mDataset.get(position).getString("index")),inc);
         mDataset.remove(position);
         notifyDataSetChanged();
         dataSize = mDataset.size();
