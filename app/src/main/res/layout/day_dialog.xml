@@ -8,18 +8,18 @@
         android:layout_margin="5dp"
         android:layout_height="wrap_content"/>
     <Button
-        android:id="@+id/ok_btn"
+        android:id="@+id/cancel_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="OK"
+        android:text="Cancel"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/num_pckr"
         />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/cancel_btn"
-        android:text="Cancel"
+        android:id="@+id/ok_btn"
+        android:text="OK"
         android:layout_below="@id/num_pckr"
         android:layout_alignParentRight="true"
         android:layout_toLeftOf="@id/ok_btn"/>

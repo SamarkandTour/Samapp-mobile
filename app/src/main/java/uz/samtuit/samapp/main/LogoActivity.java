@@ -52,7 +52,6 @@ public class LogoActivity extends ActionBarActivity {
 
         pref = this.getSharedPreferences("SamTour_Pref", 0);
         isFirstLaunch = pref.getBoolean("app_first_launch", true);
-        downloadRequestCnt = pref.getInt("download_request_count", 0);
 
         SharedPreferences defaultPref = PreferenceManager.getDefaultSharedPreferences(this);
         isCheckUpdateOnboot = defaultPref.getBoolean("update_check_on_boot", true);
@@ -136,39 +135,39 @@ public class LogoActivity extends ActionBarActivity {
                 String path = null;
 
                 // Do below, when first launch or since new update has been downloaded
-                if (isFirstLaunch || Downloader.isDownloadFinished(LogoActivity.this)) {
-                    if (downloadRequestCnt > 0) {
-                        publishProgress(new Pair<Integer, String>(UPDATE_START, "new update"));
-                        for (int i = 0; i < downloadRequestCnt; i++) {
-                            String uriString = pref.getString("downloaded_uri" + i, "");
-                            String filePath = Uri.parse(uriString).getPath();
-
-                            // If the downloaded file is zipped, Unzip it
-                            if (uriString.contains("zip")) {
-                                // Before unzip, delete all GeoJSON files in the directory
-                                FileUtil.deleteAllExternalFilesWithExtension(LogoActivity.this, "", "geojson");
-                                ZipFileUtil.unZipToExteranlDir(LogoActivity.this, filePath, ZipFile.OPEN_DELETE);
-                            } else {
-                                FileUtil.fileMoveToExternalDir(LogoActivity.this, filePath);
-                            }
-                        }
-                        // Don't forget belows
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putInt("download_request_count", 0);
-                        editor.putInt("downloaded_uri_index", 0);
-                        editor.putLong("last_updated", new Date().getTime()); // Set updated date
-                        editor.commit();
-                    }
-
+                if (isFirstLaunch) {
                     publishProgress(new Pair<Integer, String>(INIT_START, ""));
-                    if (isFirstLaunch) {
-                        // All downloaded GeoJSON files from server will be located in ExternalDir
-                        // So working directory is ExternalDir, all files in the asset should be copied to ExternalDir at first launch
-                        TourFeatureList.CopyLocalGeoJSONFilesToExternalDir(LogoActivity.this);
-                    }
+
+                    // All downloaded GeoJSON files from server will be located in ExternalDir
+                    // So working directory is ExternalDir, all files in the asset should be copied to ExternalDir at first launch
+                    TourFeatureList.CopyLocalGeoJSONFilesToExternalDir(LogoActivity.this);
 
                     FileUtil.deleteAllExternalFilesWithExtension(LogoActivity.this, TourFeatureList.photoDirectory, "");
                     TourFeatureList.writeAllPhotosToFiles(LogoActivity.this); // Make all photo data to files
+
+                }else if(Downloader.isDownloadFinished(LogoActivity.this)) {
+                    publishProgress(new Pair<Integer, String>(UPDATE_START, "new update"));
+
+                    downloadRequestCnt = Downloader.countOfDownloadRequest(LogoActivity.this);
+                    for (int i = 0; i < downloadRequestCnt; i++) {
+                        String uriString = pref.getString("downloaded_uri" + i, "");
+                        String filePath = Uri.parse(uriString).getPath();
+
+                        // If the downloaded file is zipped, Unzip it
+                        if (uriString.contains("zip")) {
+                            // Before unzip, delete all GeoJSON files in the directory
+                            FileUtil.deleteAllExternalFilesWithExtension(LogoActivity.this, "", "geojson");
+                            ZipFileUtil.unZipToExteranlDir(LogoActivity.this, filePath, ZipFile.OPEN_DELETE);
+
+                            FileUtil.deleteAllExternalFilesWithExtension(LogoActivity.this, TourFeatureList.photoDirectory, "");
+                            TourFeatureList.writeAllPhotosToFiles(LogoActivity.this); // Make all photo data to files
+                        } else { // Map file
+                            FileUtil.fileMoveToExternalDir(LogoActivity.this, filePath);
+                        }
+                    }
+
+                    // Don't forget below when the update process finished
+                    Downloader.initDownloaderState(LogoActivity.this);
                 }
 
                 publishProgress(new Pair<Integer, String>(LOAD_START, getString(R.string.hotels)));
@@ -200,7 +199,7 @@ public class LogoActivity extends ActionBarActivity {
                 loadFeaturesToMemory(LogoActivity.this, chosenLang, path, GlobalsClass.FeatureType.ITINERARY);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
-                if (downloadRequestCnt == 0 && NetworkUtils.isNetworkAvailable(LogoActivity.this) && isCheckUpdateOnboot) {
+                if (!Downloader.isAlreadyDownloadRequest(LogoActivity.this) && NetworkUtils.isNetworkAvailable(LogoActivity.this) && isCheckUpdateOnboot) {
                     publishProgress(new Pair<Integer, String>(CHECK_START, getString(R.string.new_update)));
                     CheckUpdateManager checkUpdateManager = new CheckUpdateManager();
 

@@ -15,23 +15,29 @@
     <string name="btn_done">Done</string>
     <string name="btn_guide_me">Guide Me Here</string>
     <string name="update_alert">Доступно новое обновление. Хотите обновить?</string>
+    <string name="update_nothing">There is no update</string>
     <string name="reviews">Отзв</string>
     <string name="address">Адресс</string>
     <string name="search_hint">Поиск</string>
     <string name="Err_wrong_geojson_file">Ошибка! Malformed JSON in the geojson file. Go to the setting, Try re-download</string>
     <string name="Err_file_not_found">Error! File not found. Go to the setting, Try re-download</string>
     <string name="Err_wrong_itinerary_file">Error! wrong feature name in the itinerary file</string>
-    <string name="Err_connection_speed">Плохое качество связи</string>
+    <string name="Err_network_state">Плохое качество связи</string>
+    <string name="Err_no_connection">There is no Internet connection</string>
     <string name="Err_not_supported">Не доступно в этом языке</string>
     <string name="Warn_weak_gps_signal">Слабый GPS сигнал! Переместитесь на место там где открытое небо</string>
     <string name="dialog_update_available">Доступны новые тур. данные!\nХотите ли обновит данные?\n Помните если вы не подключены к Wi-Fi стоимость за затраты данных будет высоким.</string>
     <string name="dialog_load_features">"Загрузка тур. данных"</string>
+    <string name="dialog_check_update">Checking New Update</string>
     <string name="dialog_gps_setting">Чтобы направить вас к месту назначения от вашей тек. положении необходимо включить GPS.\nХотите ли вы включить?</string>
+    <string name="dialog_need_map_download">To see map background, first time, you need to download map file from server
+        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
     <string name="select_your_language">Пожалуйста выбирайте ваш язык</string>
     <string name="wizard_day_select">Сколько дней вы будете в Самарканде?</string>
     <string name="wizard_course_select">Порядок вашых маршрутов</string>
     <string name="title_dialog_gps_setting">Необходимо геолокация</string>
     <string name="title_dialog_update_available">Новое обновление</string>
+    <string name="title_dialog_map_download">Map Download</string>
     <string name="title_itinerary_wizard">Мастер маршрутов</string>
     <string name="title_about_this_app">О приложении</string>
     <string name="title_check_new_update">Проверить на обновления</string>
@@ -70,4 +76,30 @@
     <string name="prop_open">Открыто</string>
     <string name="sort_by_title">Сортировать по имени</string>
     <string name="sort_by_mylocation">Сортировать по дистанцию ко мне</string>
+    <string name="pref_header_about">About App</string>
+    <string name="pref_header_data_sync">Check new update</string>
+    <string name="pref_summary_data_sync">Check if the recent tour data is in the server</string>
+    <string name="pref_title_update_on_boot">Check the update on boot</string>
+    <string name="pref_title_now_update">Now Update</string>
+    <string name="pref_header_notifications">Target arrival notification</string>
+    <string name="pref_summary_notifications">When arrived near target destination, notify it by vibrate</string>
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="pref_header_languages">Languages</string>
+    <string name="setting_about_app">"        This is the cooperation project of universities in Samarkand of which the center is a UNESCO world Heritage Site.
+        We're targeting to provide unknown, hidden and unique all tour information for your visit.
+        We're also suggesting recommend itineraries for your great experience at this city. Of course, you can create your own customized itinerary based on the recommendation.
+        Furthermore, because it's designed for offline usage, even though you don't have any Internet connection on your way, you can utilize all information and it will guide you safely to the destination by GPS."</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_tour_feature">TourFeatureActivity</string>
+    <string name="tour_feature_content">
+        "%1$s\n\n"
+        "Address:\n\n"
+        "%2$s\n\n"
+        "Price:\n\n"
+        "%3$s\n\n"
+        "Open:\n\n"
+        "%4$s\n"
+    </string>
+    <string name="action_settings">Settings</string>
 </resources>

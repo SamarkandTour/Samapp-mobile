@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Download Manager
@@ -60,16 +61,40 @@ public class Downloader {
         editor.commit();
     }
 
+
+    static public void initDownloaderState(Context context) {
+        SharedPreferences.Editor editor = context.getSharedPreferences("SamTour_Pref", 0).edit();
+        editor.putInt("download_request_count", 0);
+        editor.putInt("downloaded_uri_index", 0);
+        editor.putLong("last_updated", new Date().getTime()); // Set updated date
+        editor.commit();
+    }
+
+    static public boolean isAlreadyDownloadRequest(Context context) {
+        SharedPreferences pref = context.getSharedPreferences("SamTour_Pref", 0);
+
+        int downloadRequestCnt = pref.getInt("download_request_count", 0);
+        if (downloadRequestCnt > 0) {
+            return true;
+        }
+
+        return false; // If no download request
+    }
+
+    static public int countOfDownloadRequest(Context context) {
+        SharedPreferences pref = context.getSharedPreferences("SamTour_Pref", 0);
+        int downloadRequestCnt = pref.getInt("download_request_count", 0);
+
+        return downloadRequestCnt;
+    }
+
     static public boolean isDownloadFinished(Context context) {
         SharedPreferences pref = context.getSharedPreferences("SamTour_Pref", 0);
 
         int downloadRequestCnt = pref.getInt("download_request_count", 0);
-        if (downloadRequestCnt == 0) { // If no download request
-            return false;
-        }
-
         int downloadedCnt = pref.getInt("downloaded_uri_index", 0);
-        if (downloadRequestCnt == downloadedCnt) {
+
+        if (downloadRequestCnt != 0 && downloadRequestCnt == downloadedCnt) {
             return true;
         }
 

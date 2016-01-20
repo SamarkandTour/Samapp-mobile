@@ -45,6 +45,7 @@ import com.mapbox.mapboxsdk.overlay.Overlay;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MBTilesLayer;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
+import com.mapbox.mapboxsdk.util.NetworkUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
 
@@ -56,6 +57,7 @@ import java.util.TimerTask;
 
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
+import uz.samtuit.samapp.util.Downloader;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.MenuItems;
@@ -92,6 +94,7 @@ public class MainMap extends ActionBarActivity {
     private Marker pressedMarker;
     private boolean isNotified;
     private Timer gpsTimer;
+    private CustomDialog mMapDownloadDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,13 +129,51 @@ public class MainMap extends ActionBarActivity {
         drawFeatures(FeatureType.ITINERARY, null);
     }
 
+    private View.OnClickListener yesDownClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ArrayList<String> URLArrayList = new ArrayList<String>();
+
+            mMapDownloadDialog.dismiss();
+
+            if (NetworkUtils.isNetworkAvailable(MainMap.this)) {
+                // Start to download at Background
+                URLArrayList.add(GlobalsClass.mapDownloadURL);
+
+                Downloader downloader = new Downloader(URLArrayList);
+                downloader.startDownload(MainMap.this, "Sam Tour", "Map Database");
+            } else {
+                Toast.makeText(MainMap.this, R.string.Err_no_connection, Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
+    private View.OnClickListener noDownClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mMapDownloadDialog.dismiss();
+        }
+    };
+
     private void setMapView() {
         TileLayer mbTileLayer = null;
 
         compass = (ImageView)findViewById(R.id.compass);
         File mbtiles = new File(this.getExternalFilesDir(null), GlobalsClass.mapFileName);
 
-        if (!mbtiles.exists()) { // If no mbtiles in ExternalDir, it will be copied to ExternalDir from mbtiles in assets
+        if (!mbtiles.exists()) { // If no mbtiles in ExternalDir, require to download map file from server
+
+            if (!Downloader.isAlreadyDownloadRequest(this)) {
+                mMapDownloadDialog = new CustomDialog(this,
+                        R.string.title_dialog_map_download,
+                        R.string.dialog_need_map_download,
+                        R.string.btn_no,
+                        R.string.btn_yes,
+                        noDownClickListener,
+                        yesDownClickListener);
+                mMapDownloadDialog.show();
+            }
+
             mbTileLayer = new MBTilesLayer(this, GlobalsClass.mapFileName);
         } else {
             mbTileLayer = new MBTilesLayer(mbtiles);

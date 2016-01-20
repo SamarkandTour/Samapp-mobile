@@ -191,7 +191,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
     }
 
     public void onLaterBtnClick(View view) {
-        if (this.getSharedPreferences("SamTour_Pref", 0).getBoolean("app_first_launch", true)) {
+        if (isFirstLaunch) {
             Intent intent = new Intent(this, MainMap.class);
             startActivity(intent);
             finish();

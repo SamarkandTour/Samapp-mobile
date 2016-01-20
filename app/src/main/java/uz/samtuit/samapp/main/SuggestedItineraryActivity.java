@@ -40,7 +40,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_itinerary);
         toolbar = (Toolbar)findViewById(R.id.si_toolbar);
-        toolbar.setTitle(R.string.suggested_itinerary);
+        toolbar.setTitle(R.string.title_suggested_itinerary);
         setSupportActionBar(toolbar);
         globals = (GlobalsClass)this.getApplicationContext();
         toolbar.setBackgroundColor(getResources().getColor(R.color.itinerary_primary));
