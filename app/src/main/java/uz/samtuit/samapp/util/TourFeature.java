@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * Data type of GeoJSON feature for Tour Information
  */
-public class TourFeature {
+public class TourFeature implements Comparable<TourFeature> {
     //private Bitmap photo;
     private String photo;
     private HashMap<String, String> stringHashMap; //name, desc, type, price, wifi, open, addr, tel, url
@@ -60,4 +60,16 @@ public class TourFeature {
 
     public void setLatitude(double doubleVal) { latitude = doubleVal; }
     public double getLatitude() { return latitude; }
+
+    @Override
+    public int compareTo(TourFeature tf) {
+        if(Integer.parseInt(getString("index"))>Integer.parseInt(tf.getString("index"))){
+            return 1;
+        }
+        else
+        if(Integer.parseInt(getString("index"))<Integer.parseInt(tf.getString("index"))){
+            return -1;
+        }
+        return 0;
+    }
 }

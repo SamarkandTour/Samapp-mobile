@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import uz.samtuit.samapp.util.GlobalsClass;
@@ -122,7 +123,18 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
             }
         }
+        int index = 0,last;
+        for(int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++){
+            Collections.sort(itineraryListArray.get(i));
+            last = itineraryListArray.get(i).size();
+            for(int j = 0; j < last; j++){
+                itineraryListArray.get(i).get(j).setStringHashMap("index",(++index)+"");
+            }
+        }
+
     }
+
+
 
     @Override
     public void onBackPressed() {

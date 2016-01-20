@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,15 +64,18 @@ public class ItineraryList {
     public void sendToAnotherDay(Context context, String ItineraryFeatureName,int day, int index, int inc){
         int last = mItineraryList.size() - 1;
         int pos = 0;
+        int lcdpos = 0;
         int newInd = 0;
         for (int i = last; i >= 0; i--) {
             TourFeature item = mItineraryList.get(i);
             if(item.getDay() == day){
+                lcdpos = Math.max(lcdpos, Integer.parseInt(item.getString("index")));
                 if(Integer.parseInt(item.getString("index"))>index){
                     mItineraryList.get(i).setStringHashMap("index",(Integer.parseInt(item.getString("index"))-1)+"");
                 }
             }
             if(item.getDay() == day + inc){
+                Log.e("INDEX",item.getString("index"));
                 newInd = Math.max(newInd,Integer.parseInt(item.getString("index")));
             }
             if (mItineraryList.get(i).getString("name")==ItineraryFeatureName) {
@@ -79,13 +83,18 @@ public class ItineraryList {
             }
         }
         mItineraryList.get(pos).setDay(day+inc);
-        mItineraryList.get(pos).setStringHashMap("index",(++index)+"");
+        mItineraryList.get(pos).setStringHashMap("index",(Math.max(lcdpos,++newInd))+"");
 
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         globalsClass.setItineraryFeatures(mItineraryList);
         SuggestedItineraryActivity suggestedItineraryActivity = SuggestedItineraryActivity.getInstance();
         suggestedItineraryActivity.InitItineraryListArray(globalsClass);
         itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+    }
+
+    public LinkedList<TourFeature> sortedItinerary(LinkedList<TourFeature> items){
+        Collections.sort(items);
+        return items;
     }
 
     /**
