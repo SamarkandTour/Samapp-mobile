@@ -35,7 +35,7 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, items);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.wizard_spinner_item_layout);
         spin.setAdapter(adapter);
 
         sharedPreferences = this.getSharedPreferences("SamTour_Pref", 0);

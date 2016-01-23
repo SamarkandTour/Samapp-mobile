@@ -61,6 +61,7 @@ import uz.samtuit.samapp.util.Downloader;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.MenuItems;
+import uz.samtuit.samapp.util.SystemBarTintManager;
 import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeature;
 
@@ -102,6 +103,10 @@ public class MainMap extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main_map);
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setNavigationBarTintEnabled(true);
+        tintManager.setStatusBarTintColor(Color.WHITE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         globalVariables = (GlobalsClass)getApplicationContext();
@@ -694,11 +699,24 @@ public class MainMap extends ActionBarActivity {
             String title = tourFeature.getString("name");
 
             if (featureType == FeatureType.ITINERARY) { // Itinerary Feature
-                BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, tourFeature.getString("index"), R.drawable.poi_bg);
-                marker.setMarker(markerimg);
-                marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, featureType, tourFeature));
-                marker.setTitle(title);
-                itineraryMarkers.add(marker); // For adding as ItemizedIconOverlay
+
+                try{
+                    if(tourFeature.getString("index")==null){
+                        tourFeature.setStringHashMap("index",(++index)+"");
+                    }
+                    if(tourFeature!=null||tourFeature.getString("index")!=null){
+                        BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, tourFeature.getString("index"), R.drawable.poi_bg);
+                        index = Math.max(index,Integer.parseInt(tourFeature.getString("index")));
+                        marker.setMarker(markerimg);
+                        marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, featureType, tourFeature));
+                        marker.setTitle(title);
+                        itineraryMarkers.add(marker); // For adding as ItemizedIconOverlay
+                    }
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
+
+
             }
             else { // Tour Feature
                 marker.setMarker(markerDrawables.get(featureType.ordinal()));

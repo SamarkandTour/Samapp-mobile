@@ -6,8 +6,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="uz.samtuit.samapp.main.WizardDaySelectActivity"
-    android:background="@color/colorAccent">
-
+    android:background="@color/wizardBackground">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +17,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
         android:gravity="center" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,22 +32,22 @@
         android:layout_alignParentRight="false"
         android:layout_alignWithParentIfMissing="false" />
 
-    <Spinner
+    <android.support.v7.widget.AppCompatSpinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/daySpinner1"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:popupBackground="@color/wizardBackgroundLight"
         android:prompt="@string/itinerary_select_day"
         android:spinnerMode="dropdown" />
-
     <Button
         android:background="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_later"
         android:id="@+id/btnPrev"
-        android:textColor="@color/black"
+        android:textColor="@color/wizardBackground"
         android:layout_marginBottom="48dp"
         android:layout_alignParentBottom="true"
         android:elevation="4dp"
@@ -61,11 +59,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_next"
-        android:textColor="@color/black"
+        android:textColor="@color/wizardBackground"
         android:id="@+id/button3"
         android:elevation="4dp"
         android:layout_alignBottom="@+id/btnPrev"
+        android:layout_marginRight="16dp"
         android:layout_alignRight="@+id/daySpinner1"
         android:onClick="onNextBtnClick" />
-
 </RelativeLayout>

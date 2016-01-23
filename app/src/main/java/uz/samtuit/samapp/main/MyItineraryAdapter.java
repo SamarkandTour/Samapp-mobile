@@ -1,8 +1,11 @@
 package uz.samtuit.samapp.main;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -204,13 +207,13 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
     private void changeDay(int position, int inc) {
         ItineraryList list = ItineraryList.getInstance();
-
-        list.sendToAnotherDay(context, mDataset.get(position).getString("name"), inc);
+        
+        list.sendToAnotherDay(context, mDataset.get(position).getString("name"), mDataset.get(position).getDay(),Integer.parseInt(mDataset.get(position).getString("index")),inc);
         mDataset.remove(position);
         notifyDataSetChanged();
         dataSize = mDataset.size();
         Toast.makeText(context, context.getString(R.string.itinerary_item_transfer) +
-                ((inc == -1) ? context.getString(R.string.backward) : context.getString(R.string.backward)), Toast.LENGTH_LONG).show();
+                ((inc == -1) ? context.getString(R.string.backward) : context.getString(R.string.forward)), Toast.LENGTH_LONG).show();
     }
 
     private void setAnimation(View viewToAnimate, int position) {
@@ -232,7 +235,37 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         return dataSize;
     }
 
-    private class CalculateDistanceTimeAsync extends AsyncTask<Void, Void, ItineraryItem> {
+    private class GetBitmapAsync extends AsyncTask<Void, Void, Void>{
+        private int mPosition;
+        private float mImageSize;
+        private ViewHolder mHolder;
+        private BitmapUtil.RoundedDrawable roundedDrawable;
+
+        public GetBitmapAsync(int position, ViewHolder holder, float imageSize){
+            mPosition = position;
+            mHolder = holder;
+            mImageSize = imageSize;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String fileName = mDataset.get(mPosition).getPhoto();
+            if (fileName != null) {
+                Log.e("LOGTAG","CHP");
+                String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
+                Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes,mImageSize, mImageSize);
+                roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void params) {
+            mHolder.mItemImage.setImageDrawable(roundedDrawable);
+        }
+    }
+
+    private class CalculateDistanceTimeAsync extends AsyncTask<Void, Void, ItineraryItem>{
 
         private float distance[] = new float[1];
         private int mPosition;

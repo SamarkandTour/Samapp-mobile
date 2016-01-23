@@ -111,17 +111,25 @@ public class BitmapUtil {
 
         @Override
         public void draw(Canvas canvas) {
-            Paint bitmapPaint = new Paint();
-            bitmapPaint.setAlpha(127);
-            canvas.drawBitmap(bitmap, null, this.getBounds(), bitmapPaint);
+            try{
+                Paint bitmapPaint = new Paint();
+                bitmapPaint.setAlpha(127);
+                canvas.drawBitmap(bitmap, null, this.getBounds(), bitmapPaint);
 
-            int textWidth = getTextWidth(name) / 2;
-            int centerX = this.getBounds().width() / 2;
-            int centerY = this.getBounds().height() / 2;
-            canvas.drawText(name, centerX - textWidth, centerY, textPaint);
+                int textWidth = getTextWidth(name) / 2;
+                int centerX = this.getBounds().width() / 2;
+                int centerY = this.getBounds().height() / 2;
+                canvas.drawText(name, centerX - textWidth, centerY, textPaint);
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+
         }
 
         private int getTextWidth(String text) {
+            if(text==null){
+                text = "1";
+            }
             int count = text.length();
             float[] widths = new float[count];
             textPaint.getTextWidths(text, widths);
@@ -168,6 +176,8 @@ public class BitmapUtil {
 
             mRoundedRect = roundedRect;
         }
+
+
 
         @Override
         public void draw(Canvas canvas) {

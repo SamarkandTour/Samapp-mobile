@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
     <resources>
         <color name="ColorPrimary">#4CAF50</color>
+        <color name="full_view_image_background">#7000</color>
+        <color name="wizardBackground">#3686c2</color>
+        <color name="wizardBackgroundLight">#73c3ff</color>
         <color name="ColorPrimaryDark">#1B5E20</color>
         <color name="WindowBackground">#fff</color>
         <color name="attraction_primary">#2196F3</color>

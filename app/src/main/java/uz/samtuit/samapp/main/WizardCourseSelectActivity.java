@@ -1,10 +1,13 @@
 package uz.samtuit.samapp.main;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
@@ -84,7 +87,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                     this, android.R.layout.simple_spinner_item, courseArray[i]);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.wizard_spinner_item_layout);
 
             spinnerArray[i].setAdapter(adapter);
             spinnerArray[i].setVisibility(View.INVISIBLE);
@@ -208,39 +211,74 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
     }
 
     public void onDoneBtnClick(View view) {
-        String lang = this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null);
+        DoneTask doneTask = new DoneTask();
+        doneTask.execute();
+    }
+
+    public class DoneTask extends AsyncTask<Void, Void, Void>{
+        String lang = "";
         String path = null;
-        ItineraryList itineraryListInstance = ItineraryList.getInstance();
+        ProgressDialog progressDialog;
+        ItineraryList itineraryListInstance = null;
 
-        if (spinnerArray[0].getSelectedItemPosition() == 0) {
-            Toast.makeText(this, R.string.itinerary_1st_course, Toast.LENGTH_LONG).show();
-            return;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            lang = WizardCourseSelectActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null);
+
+            progressDialog = new ProgressDialog(WizardCourseSelectActivity.this);
+            progressDialog.setMessage("Please wait.");
+            progressDialog.show();
+
+            if (spinnerArray[0].getSelectedItemPosition() == 0) {
+                Toast.makeText(WizardCourseSelectActivity.this, R.string.itinerary_1st_course, Toast.LENGTH_LONG).show();
+                return;
+            }
         }
 
-        itineraryListInstance.clearItineraryFeatureList(); // For new, clear the old itinerary
-        itineraryListInstance.initTourday();
-
-        for (String selectedCourse : selectedCourseList) { // Courses will be merged here
-            if (selectedCourse == null) break;
-
-            float day = ItineraryList.getCourseDayFromHashMap(selectedCourse);
-            path = lang + "_itinerary_" + String.valueOf(day) + "_" + selectedCourse + ".geojson";
-
-            itineraryListInstance.mergeCoursesFromGeoJSONFileToItineraryList(this, path);
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.hide();
         }
 
-        itineraryListInstance.setItinearyFeaturesToGlobal(this);
-        ItineraryList.itineraryWriteToGeoJSONFile(this, lang);
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
 
-        Intent intent = new Intent(this, MainMap.class);
-        intent.putExtra("type", "features");
-        intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
+        @Override
+        protected Void doInBackground(Void... params) {
 
-        if (isFirstLaunch) { // Don't forget, Set first_launch to false
-            sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
+            String path = null;
+
+            itineraryListInstance = ItineraryList.getInstance();
+            itineraryListInstance.clearItineraryFeatureList(); // For new, clear the old itinerary
+            itineraryListInstance.initTourday();
+
+            for (String selectedCourse : selectedCourseList) { // Courses will be merged here
+                if (selectedCourse == null) break;
+
+                float day = ItineraryList.getCourseDayFromHashMap(selectedCourse);
+                path = lang + "_itinerary_" + String.valueOf(day) + "_" + selectedCourse + ".geojson";
+
+                itineraryListInstance.mergeCoursesFromGeoJSONFileToItineraryList(WizardCourseSelectActivity.this, path);
+            }
+
+            itineraryListInstance.setItinearyFeaturesToGlobal(WizardCourseSelectActivity.this);
+            ItineraryList.itineraryWriteToGeoJSONFile(WizardCourseSelectActivity.this, lang);
+
+            Intent intent = new Intent(WizardCourseSelectActivity.this, MainMap.class);
+            intent.putExtra("type", "features");
+            intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            WizardCourseSelectActivity.this.finish();
+
+            if (isFirstLaunch) { // Don't forget, Set first_launch to false
+                sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
+            }
+            return null;
         }
     }
 }
