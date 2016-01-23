@@ -71,6 +71,9 @@
     <string name="itinerary_pick_day">Выберите день маршрута</string>
     <string name="itinerary_already_exist">Это место уже в вашем маршруте</string>
     <string name="itinerary_added_successfully">Успешно добавлено в ваш маршрут</string>
+    <string name="itinerary_item_transfer">"Item transferred to 1 day "</string>
+    <string name="forward">forward</string>
+    <string name="backward">backward</string>
     <string name="prop_addr">Адрес</string>
     <string name="prop_price">Цена</string>
     <string name="prop_open">Открыто</string>

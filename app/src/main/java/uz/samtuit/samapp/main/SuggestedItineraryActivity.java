@@ -2,6 +2,7 @@ package uz.samtuit.samapp.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -36,12 +37,11 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_itinerary);
+
         toolbar = (Toolbar)findViewById(R.id.si_toolbar);
         toolbar.setTitle(R.string.title_suggested_itinerary);
         setSupportActionBar(toolbar);
-        globals = (GlobalsClass)this.getApplicationContext();
         toolbar.setBackgroundColor(getResources().getColor(R.color.itinerary_primary));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -52,30 +52,30 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
             }
         });
 
-
-
         CharSequence Titles[] = new CharSequence[ItineraryList.MAX_ITINERARY_DAYS];
         for (int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++) {
             Titles[i] = "Day " + (i + 1);
         }
 
-
-
+        globals = (GlobalsClass)this.getApplicationContext();
+        initItineraryListArray(globals);
 
         pager = (ViewPager)findViewById(R.id.pager);
-        InitItineraryListArray(globals);
-        vpadapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, ItineraryList.MAX_ITINERARY_DAYS,this);
+        vpadapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, ItineraryList.MAX_ITINERARY_DAYS, this);
         pager.setAdapter(vpadapter);
-        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.e("PAGE","Scrolled" + position);
+                Log.e("PAGE", "Scrolled" + position);
             }
 
             @Override
             public void onPageSelected(int position) {
-                Log.e("PAGE","Selected" + position);
-                pager.getAdapter().notifyDataSetChanged();
+                Log.e("PAGE", "Selected" + position);
+                Fragment fragment = vpadapter.getRegisteredFragment(position);
+                if (fragment != null) {
+                    fragment.onResume();
+                }
             }
 
             @Override
@@ -94,26 +94,23 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
             }
         });
         tabs.setViewPager(pager);
-
-
     }
 
     // Gather each feature in itineraryList by day
-    public void InitItineraryListArray(GlobalsClass globalsClass) {
+    public void initItineraryListArray(GlobalsClass globalsClass) {
         LinkedList<TourFeature> itineraryListFromGlobal = globalsClass.getItineraryFeatures();
 
+        if(itineraryListFromGlobal == null){
+            return;
+        }
+
         itineraryListArray = new ArrayList<LinkedList<TourFeature>>();
-        for(int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++){
+        for (int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++) {
             itineraryItemDay = new LinkedList<TourFeature>();
             itineraryListArray.add(itineraryItemDay);
         }
 
-
-        if(itineraryListFromGlobal==null){
-            return;
-        }
-
-        for(TourFeature v : itineraryListFromGlobal){
+        for (TourFeature v : itineraryListFromGlobal) {
             int index = v.getDay() - 1;
             if(index != -1){
                 itineraryListArray.get(index).add(v);

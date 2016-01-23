@@ -3,12 +3,7 @@ package uz.samtuit.samapp.main;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -30,7 +25,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.LinkedList;
@@ -88,6 +82,13 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
             }
         });
 
+        mInfo = (TextView)findViewById(R.id.tour_feature_info);
+        mAddress = (TextView)findViewById(R.id.tour_feature_address);
+        mPrice = (TextView)findViewById(R.id.tour_feature_price);
+        mOpen = (TextView)findViewById(R.id.tour_feature_open);
+        mAppBarLayout = findViewById(R.id.toolbar_layout);
+
+        // Floating action bar
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,21 +96,11 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
                 AddToMyItinerary(view);
             }
         });
+
+        // Photo
         LoadImageFromExternalStorage loadImageFromExternalStorage = new LoadImageFromExternalStorage();
         loadImageFromExternalStorage.execute(extras.getString("photo"));
-        mInfo = (TextView)findViewById(R.id.tour_feature_info);
-        mAddress = (TextView)findViewById(R.id.tour_feature_address);
-        mPrice = (TextView)findViewById(R.id.tour_feature_price);
-        mOpen = (TextView)findViewById(R.id.tour_feature_open);
-        mAppBarLayout = findViewById(R.id.toolbar_layout);
 
-        index = extras.getInt("index");
-
-        //ActionBar setting
-
-
-
-        //end ActionBar Setting
         // Loc
         featureType = extras.getString("featureType");
 
@@ -184,24 +175,11 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
             });
         }
 
-
         // Description
         mInfo.setText(extras.getString("desc"));
         mAddress.setText(extras.getString("addr"));
         mPrice.setText(extras.getString("price"));
         mOpen.setText(extras.getString("open"));
-
-//        // Addr
-//        TextView address = (TextView)findViewById(R.id.hotel_address);
-//        address.setText(extras.getString("addr"));
-//
-//        // Price
-//        TextView price = (TextView)findViewById(R.id.price);
-//        price.setText(extras.getString("price"));
-//
-//        // Open
-//        TextView open = (TextView)findViewById(R.id.open);
-//        open.setText(extras.getString("open"));
 
         // Index
         index = extras.getInt("index");
@@ -227,15 +205,18 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
     public void AddToMyItinerary(final View view){
         final GlobalsClass globals = (GlobalsClass)getApplicationContext();
         final Dialog d = new Dialog(TourFeatureActivity.this);
-        d.setTitle(getString(R.string.itinerary_pick_day));
-        d.setContentView(R.layout.day_dialog);
-        Button b1 = (Button)d.findViewById(R.id.ok_btn);
-        Button b2 = (Button)d.findViewById(R.id.cancel_btn);
+
         final NumberPicker numberPicker = (NumberPicker)d.findViewById(R.id.num_pckr);
         numberPicker.setMaxValue(5);
         numberPicker.setMinValue(1);
         numberPicker.setWrapSelectorWheel(false);
         numberPicker.setOnValueChangedListener(this);
+
+        d.setTitle(getString(R.string.itinerary_pick_day));
+        d.setContentView(R.layout.day_dialog);
+        Button b1 = (Button)d.findViewById(R.id.ok_btn);
+        Button b2 = (Button)d.findViewById(R.id.cancel_btn);
+
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -243,14 +224,13 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
                 ItineraryList list = ItineraryList.getInstance();
                 TourFeature feature = list.findFeature(getApplicationContext(), extras.getString("name"));
                 LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
-                if(itineraryItems.contains(feature)){
 
+                if (itineraryItems.contains(feature)) {
                     Snackbar.make(view, getString(R.string.itinerary_already_exist), Snackbar.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     feature.setDay(selectedDay);
                     list.addNewFeatureToItineraryList(feature);
-                    list.setNewItinearyFeaturesToGlobal(getApplicationContext(), itineraryItems);
+                    //list.setNewItinearyFeaturesToGlobal(getApplicationContext(), itineraryItems);
                     Log.e("QUERY", TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
                     list.itineraryWriteToGeoJSONFile(getApplicationContext(), TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
                     Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
@@ -296,10 +276,11 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
 
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        if(oldVal==newVal)
-            selectedDay=oldVal;
-        else
-            selectedDay=newVal;
+        if (oldVal == newVal) {
+            selectedDay = oldVal;
+        } else {
+            selectedDay = newVal;
+        }
     }
 
     class LoadImageFromExternalStorage extends AsyncTask<String,String,Void>{

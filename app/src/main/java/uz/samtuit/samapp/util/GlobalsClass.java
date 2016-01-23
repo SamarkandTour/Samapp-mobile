@@ -74,7 +74,7 @@ public class GlobalsClass extends Application {
 
     public LinkedList<TourFeature> getItineraryFeatures()
     {
-        return this.Itinerary;
+        return Itinerary;
     }
 
     public void setFeatures(FeatureType featureType, ArrayList<TourFeature> featureArrayList)
@@ -82,29 +82,33 @@ public class GlobalsClass extends Application {
         switch(featureType)
         {
             case HOTEL:
-                this.Hotels = featureArrayList;
+                Hotels = featureArrayList;
                 break;
 
             case FOODNDRINK:
-                this.FoodAndDrinks = featureArrayList;
+                FoodAndDrinks = featureArrayList;
                 break;
 
             case ATTRACTION:
-                this.Attractions = featureArrayList;
+                Attractions = featureArrayList;
                 break;
 
             case SHOPPING:
-                this.Shops = featureArrayList;
+                Shops = featureArrayList;
                 break;
         }
     }
 
-    public void  setItineraryFeatures(LinkedList featureLinkedList) {
-        this.Itinerary = new LinkedList<TourFeature>();
-        for(int i = 0; i < featureLinkedList.size(); i++){
-            if(!this.Itinerary.contains(featureLinkedList.get(i)))
-                this.Itinerary.add((TourFeature)featureLinkedList.get(i));
-        }
+    public void setItineraryFeatures(LinkedList featureLinkedList) {
+        Itinerary = featureLinkedList;
+        /*
+        Itinerary = new LinkedList<TourFeature>();
 
+        for (int i = 0; i < featureLinkedList.size(); i++) {
+            if (!Itinerary.contains(featureLinkedList.get(i))) {
+                Itinerary.add((TourFeature)featureLinkedList.get(i));
+            }
+        }
+        */
     }
 }

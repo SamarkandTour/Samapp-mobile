@@ -72,6 +72,9 @@
     <string name="itinerary_pick_day">Select your itinerary day</string>
     <string name="itinerary_already_exist">Already in your itinerary</string>
     <string name="itinerary_added_successfully">Successfully added to your itinerary</string>
+    <string name="itinerary_item_transfer">"Item transferred to 1 day "</string>
+    <string name="forward">forward</string>
+    <string name="backward">backward</string>
     <string name="prop_addr">Address</string>
     <string name="prop_price">Price</string>
     <string name="prop_open">Open</string>

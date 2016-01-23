@@ -72,6 +72,9 @@
     <string name="itinerary_pick_day">Sayohat kunini belgilang</string>
     <string name="itinerary_already_exist">Sayohat rejangizda mavjud</string>
     <string name="itinerary_added_successfully">"Sayohat rejangizga muvoffaqiyatli qo'shildi"</string>
+    <string name="itinerary_item_transfer">"Item transferred to 1 day "</string>
+    <string name="forward">forward</string>
+    <string name="backward">backward</string>
     <string name="prop_addr">Manzil</string>
     <string name="prop_price">Narxlar</string>
     <string name="prop_open">Ish vaqti</string>

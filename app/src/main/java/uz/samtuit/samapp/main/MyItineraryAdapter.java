@@ -1,11 +1,8 @@
 package uz.samtuit.samapp.main;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,18 +31,12 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     private int dataSize = 0;
     private int lastPosition = -1;
     private Context context;
-    private float imageSize;
-    public TextView mCarTime;
-    public TextView mWalkTime;
     final private int PREVIOUSDAY_ITEM_ID = 1000;
     final private int NEXTDAY_ITEM_ID = 1001;
     final private int UP_ITEM_ID = 1002;
     final private int DOWN_ITEM_ID = 1003;
     final private int DELETE_ITEM_ID = 1004;
-    public ImageView mItemImage;
-    public TextView mDistance;
     public View mLayoutBetweenItems;
-
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -60,8 +51,10 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         public TextView mDistance;
         public View mLayoutBetweenItems;
         public LinearLayout container;
+
         public ViewHolder(View v) {
             super(v);
+
             mName = (TextView)v.findViewById(R.id.info_text);
             mCarTime = (TextView)v.findViewById(R.id.it_car_time);
             mWalkTime = (TextView)v.findViewById(R.id.it_walk_time);
@@ -76,19 +69,19 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     // Provide a suitable constructor (depends on the kind of dataset)
     public MyItineraryAdapter(int day) {
         mDataset = SuggestedItineraryActivity.itineraryListArray.get(day);
-//        mDataset = myDataset;
-        if(mDataset!=null)
+
+        if(mDataset != null) {
             dataSize = mDataset.size();
+        }
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyItineraryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public MyItineraryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.itinerary_card, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.itinerary_card, parent, false);
         context = parent.getContext();
+
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -99,18 +92,18 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     public void onBindViewHolder(ViewHolder holder, final int position) {
         mLayoutBetweenItems = holder.mLayoutBetweenItems;
 
-        if(position<dataSize-1){
+        if (position < dataSize-1) {
             mLayoutBetweenItems.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             mLayoutBetweenItems.setVisibility(View.GONE);
         }
+
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mName.setText(mDataset.get(position).getString("name"));
         holder.mOrderNum.setText(mDataset.get(position).getString("index"));
-        switch (mDataset.get(position).getString("category")){
+
+        switch (mDataset.get(position).getString("category")) {
             case "hotel":
                 holder.mOrderNum.setBackgroundResource(R.drawable.hotel_round_bg);
                 break;
@@ -124,6 +117,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 holder.mOrderNum.setBackgroundResource(R.drawable.attraction_round_bg);
                 break;
         }
+
         holder.container.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -136,15 +130,19 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 ActionItem _item4 = new ActionItem(DOWN_ITEM_ID,"DOWN",context.getResources().getDrawable(R.drawable.arrow_down));
                 ActionItem _item5 = new ActionItem(NEXTDAY_ITEM_ID,"N.DAY",context.getResources().getDrawable(R.drawable.skip_next));
 
-                if(mDataset.get(position).getDay()!=0)
+                if (mDataset.get(position).getDay() != 0) {
                     quickAction.addActionItem(_item1);
-                if(position!=0)
+                }
+                if (position != 0) {
                     quickAction.addActionItem(_item2);
+                }
                 quickAction.addActionItem(_item3);
-                if(position<mDataset.size()-1)
+                if (position < mDataset.size()-1 ) {
                     quickAction.addActionItem(_item4);
-                if(mDataset.get(position).getDay()< ItineraryList.MAX_ITINERARY_DAYS)
+                }
+                if (mDataset.get(position).getDay() < ItineraryList.MAX_ITINERARY_DAYS) {
                     quickAction.addActionItem(_item5);
+                }
                 _item3.setSticky(true);
 
                 quickAction.show(v);
@@ -153,10 +151,10 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                     public void onItemClick(QuickAction source, int pos, int actionId) {
                         switch (actionId) {
                             case PREVIOUSDAY_ITEM_ID:
-                                changeDay(position,-1);
+                                changeDay(position, -1);
                                 break;
                             case NEXTDAY_ITEM_ID:
-                                changeDay(position,1);
+                                changeDay(position, 1);
                                 break;
                             case DELETE_ITEM_ID:
                                 break;
@@ -175,10 +173,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
-
                 Intent intent = new Intent(context,TourFeatureActivity.class);
                 intent.putExtra("featureType", mDataset.get(position).getString("type"));
                 Log.e("FEATURETYPE", mDataset.get(position).getString("type"));
@@ -208,17 +202,19 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
     }
 
-    private void changeDay(int position, int inc){
+    private void changeDay(int position, int inc) {
         ItineraryList list = ItineraryList.getInstance();
+
         list.sendToAnotherDay(context, mDataset.get(position).getString("name"), inc);
         mDataset.remove(position);
         notifyDataSetChanged();
         dataSize = mDataset.size();
-        Toast.makeText(context, "Item Transfered to 1 day " + ((inc==-1)?" backward":" forward"),Toast.LENGTH_LONG).show();
+        Toast.makeText(context, context.getString(R.string.itinerary_item_transfer) +
+                ((inc == -1) ? context.getString(R.string.backward) : context.getString(R.string.backward)), Toast.LENGTH_LONG).show();
     }
 
-    private void setAnimation(View viewToAnimate, int position){
-        if(position>lastPosition) {
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
@@ -236,37 +232,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         return dataSize;
     }
 
-    private class GetBitmapAsync extends AsyncTask<Void, Void, Void>{
-        private int mPosition;
-        private float mImageSize;
-        private ViewHolder mHolder;
-        private BitmapUtil.RoundedDrawable roundedDrawable;
-
-        public GetBitmapAsync(int position, ViewHolder holder, float imageSize){
-            mPosition = position;
-            mHolder = holder;
-            mImageSize = imageSize;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            String fileName = mDataset.get(mPosition).getPhoto();
-            if (fileName != null) {
-                Log.e("LOGTAG","CHP");
-                String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
-                Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes,mImageSize, mImageSize);
-                roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void params) {
-            mHolder.mItemImage.setImageDrawable(roundedDrawable);
-        }
-    }
-
-    private class CalculateDistanceTimeAsync extends AsyncTask<Void, Void, ItineraryItem>{
+    private class CalculateDistanceTimeAsync extends AsyncTask<Void, Void, ItineraryItem> {
 
         private float distance[] = new float[1];
         private int mPosition;
@@ -274,7 +240,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         private float mImageSize;
         private BitmapUtil.RoundedDrawable roundedDrawable;
 
-        public CalculateDistanceTimeAsync( int position, ViewHolder holder,float imageSize){
+        public CalculateDistanceTimeAsync(int position, ViewHolder holder, float imageSize) {
             mPosition = position;
             mHolder = holder;
             mImageSize = imageSize;
@@ -288,13 +254,14 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         @Override
         protected void onPostExecute(ItineraryItem item) {
             super.onPostExecute(item);
+
             if(!item.isLast()) {
                 mHolder.mDistance.setText(item.getString("distance"));
                 mHolder.mCarTime.setText(item.getString("car_time"));
                 mHolder.mWalkTime.setText(item.getString("walk_time"));
             }
-            mHolder.mItemImage.setImageDrawable(roundedDrawable);
 
+            mHolder.mItemImage.setImageDrawable(roundedDrawable);
         }
 
         @Override
@@ -307,6 +274,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 double f_long = mDataset.get(mPosition).getLongitude();
                 double l_lat = mDataset.get(mPosition + 1).getLatitude();
                 double l_long = mDataset.get(mPosition + 1).getLongitude();
+
                 android.location.Location.distanceBetween(f_lat, f_long, l_lat, l_long, distance);
                 item.setStringHashMap("distance",(distance[0] > 1000)?Math.round(distance[0]/1000 * 10.0) / 10.0 + " km":(int) distance[0] + " m");
                 item.setStringHashMap("car_time",getTimeToNext(distance[0], 5.555));
@@ -314,14 +282,17 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             } else { // And don't draw images regarding distance
                 item.setIsLast(true);
             }
+
             String fileName = mDataset.get(mPosition).getPhoto();
             if (fileName != null) {
                 String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
                 Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes,mImageSize, mImageSize);
                 roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
             }
+
             return item;
         }
+
         private String getTimeToNext(double dist, double speedFactor)
         {
             String s,sf[]={" min"," hr", " day"," week"," year"};
@@ -333,7 +304,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 b++;
             }
 
-            if (a > 24 && b > 0){
+            if (a > 24 && b > 0) {
                 a = (a + 23) / 24;
                 b++;
             }
@@ -347,8 +318,5 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
             return s;
         }
-
     }
-
-
 }
