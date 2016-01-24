@@ -681,13 +681,13 @@ public class MainMap extends ActionBarActivity {
                 }
 
                 for (Object featureObj : features) {
-                    TourFeature tourFeature = (TourFeature) featureObj;
+                    TourFeature tourFeature = (TourFeature)featureObj;
                     publishProgress(new Pair<FeatureType, TourFeature>(featureType, tourFeature));
                 }
             }
 
             return featureType;
-    }
+        }
 
         @Override
         protected void onProgressUpdate(Pair<FeatureType, TourFeature>... values) {
@@ -699,15 +699,14 @@ public class MainMap extends ActionBarActivity {
             String title = tourFeature.getString("name");
 
             if (featureType == FeatureType.ITINERARY) { // Itinerary Feature
-
                 try{
-                    if(tourFeature.getString("index")==null){
-                        tourFeature.setStringHashMap("index",(++index)+"");
+                    if (tourFeature.getString("index") == null) {
+                        tourFeature.setStringHashMap("index", (++index) + "");
                     }
-                    if(tourFeature!=null||tourFeature.getString("index")!=null){
-                        BitmapUtil.BitmapWithText markerimg = new BitmapUtil.BitmapWithText(MainMap.this, tourFeature.getString("index"), R.drawable.poi_bg);
-                        index = Math.max(index,Integer.parseInt(tourFeature.getString("index")));
-                        marker.setMarker(markerimg);
+
+                    if (tourFeature != null || tourFeature.getString("index") != null) {
+                        index = Math.max(index, Integer.parseInt(tourFeature.getString("index")));
+                        marker.setMarker(findItitneryMakerImg(tourFeature.getString("category"), tourFeature.getString("index")));
                         marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, featureType, tourFeature));
                         marker.setTitle(title);
                         itineraryMarkers.add(marker); // For adding as ItemizedIconOverlay
@@ -715,8 +714,6 @@ public class MainMap extends ActionBarActivity {
                 }catch (Exception ex){
                     ex.printStackTrace();
                 }
-
-
             }
             else { // Tour Feature
                 marker.setMarker(markerDrawables.get(featureType.ordinal()));
@@ -751,8 +748,34 @@ public class MainMap extends ActionBarActivity {
 
     }
 
+    private Drawable findItitneryMakerImg(String featureType, String index) {
+        int bitmapId = 0;
+
+        switch (featureType) {
+            case "attraction":
+                bitmapId = R.drawable.attr_marker_bg;
+                break;
+
+            case "foodndrink":
+                bitmapId = R.drawable.food_marker_bg;
+                break;
+
+            case "shopping":
+                bitmapId = R.drawable.shop_marker_bg;
+                break;
+
+            case "hotel":
+                bitmapId = R.drawable.hotel_marker_bg;
+                break;
+        }
+
+        BitmapUtil.BitmapWithText markerImg = new BitmapUtil.BitmapWithText(MainMap.this, index, bitmapId);
+
+        return markerImg;
+    }
+
     // To make custom layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker(unused), 4:TourFeatures, 5:Itinerary, 6:MyLocation
-    void drawOverlay(int overlayIndex, ArrayList<Marker> markersList) {
+    private void drawOverlay(int overlayIndex, ArrayList<Marker> markersList) {
         ItemizedIconOverlay iOverlay = new ItemizedIconOverlay(MainMap.this, markersList, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
             @Override
             public boolean onItemSingleTapUp(int i, Marker marker) {

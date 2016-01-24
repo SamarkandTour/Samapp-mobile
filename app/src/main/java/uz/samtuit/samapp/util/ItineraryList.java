@@ -139,18 +139,18 @@ public class ItineraryList {
             }
         }
 
-        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.SHOPPING);
-        for (TourFeature v:tourFeatures) {
-            if (v.getString("name").equals(name)) {
-                v.setStringHashMap("category", "shopping");
-                return v;
-            }
-        }
-
         tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.FOODNDRINK);
         for (TourFeature v:tourFeatures) {
             if (v.getString("name").equals(name)) {
                 v.setStringHashMap("category", "foodndrink");
+                return v;
+            }
+        }
+
+        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.SHOPPING);
+        for (TourFeature v:tourFeatures) {
+            if (v.getString("name").equals(name)) {
+                v.setStringHashMap("category", "shopping");
                 return v;
             }
         }
@@ -230,7 +230,7 @@ public class ItineraryList {
 
                     if (!found) {
                         itineraryElement.setDay(Math.round(tourDay)); // Round up
-                        itineraryElement.setStringHashMap("index",(++index)+"");
+                        itineraryElement.setStringHashMap("index", (++index) + "");
                         mItineraryList.add(itineraryElement);
                     }
                 }

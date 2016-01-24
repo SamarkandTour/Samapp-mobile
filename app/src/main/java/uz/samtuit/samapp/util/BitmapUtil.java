@@ -35,13 +35,10 @@ public class BitmapUtil {
             ex.printStackTrace();
         }
 
-
-
         return decodedByte;
     }
 
-    public static Bitmap decodeBase64Bitmap(String encodedImage,
-                                                         float reqWidth, float reqHeight) {
+    public static Bitmap decodeBase64Bitmap(String encodedImage, float reqWidth, float reqHeight) {
         try{
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -54,15 +51,16 @@ public class BitmapUtil {
 
             // Decode bitmap with inSampleSize set
             options.inJustDecodeBounds = false;
+
             return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length,options);
         }catch (Exception ex){
             ex.printStackTrace();
         }
+
         return null;
     }
 
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, float reqWidth, float reqHeight) {
+    public static int calculateInSampleSize(BitmapFactory.Options options, float reqWidth, float reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -80,6 +78,7 @@ public class BitmapUtil {
                 inSampleSize *= 2;
             }
         }
+
         return inSampleSize;
     }
 
@@ -103,7 +102,7 @@ public class BitmapUtil {
 
             textPaint = new Paint();
             textPaint.setTypeface(Typeface.create((String) null, Typeface.BOLD));
-            textPaint.setTextSize(18 * density);
+            textPaint.setTextSize(16 * density);
             textPaint.setTypeface(Typeface.DEFAULT);
             textPaint.setAntiAlias(true);
             textPaint.setStyle(Paint.Style.FILL);
@@ -113,23 +112,37 @@ public class BitmapUtil {
         public void draw(Canvas canvas) {
             try{
                 Paint bitmapPaint = new Paint();
-                bitmapPaint.setAlpha(127);
+                bitmapPaint.setAlpha(127); // 50% alpha blending
                 canvas.drawBitmap(bitmap, null, this.getBounds(), bitmapPaint);
 
-                int textWidth = getTextWidth(name) / 2;
                 int centerX = this.getBounds().width() / 2;
-                int centerY = this.getBounds().height() / 2;
-                canvas.drawText(name, centerX - textWidth, centerY, textPaint);
+                int textWidth = getTextWidth(name) / 2;
+                int boundsHeight = this.getBounds().height() / 2;
+                int textHeight = getTextHeight(name) / 2;
+
+                // Added compensation value for better look
+                canvas.drawText(name, centerX - textWidth, boundsHeight + textHeight - 10, textPaint);
             }catch (Exception ex){
                 ex.printStackTrace();
             }
+        }
 
+        private int getTextHeight(String text) {
+            if(text == null){
+                text = "0";
+            }
+
+            Rect result = new Rect();
+            textPaint.getTextBounds(name, 0, name.length(), result);
+
+            return result.height();
         }
 
         private int getTextWidth(String text) {
-            if(text==null){
-                text = "1";
+            if(text == null){
+                text = "0";
             }
+
             int count = text.length();
             float[] widths = new float[count];
             textPaint.getTextWidths(text, widths);
@@ -176,8 +189,6 @@ public class BitmapUtil {
 
             mRoundedRect = roundedRect;
         }
-
-
 
         @Override
         public void draw(Canvas canvas) {
