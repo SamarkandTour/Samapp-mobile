@@ -700,13 +700,8 @@ public class MainMap extends ActionBarActivity {
 
             if (featureType == FeatureType.ITINERARY) { // Itinerary Feature
                 try{
-                    if (tourFeature.getString("index") == null) {
-                        tourFeature.setStringHashMap("index", (++index) + "");
-                    }
-
                     if (tourFeature != null || tourFeature.getString("index") != null) {
-                        index = Math.max(index, Integer.parseInt(tourFeature.getString("index")));
-                        marker.setMarker(findItitneryMakerImg(tourFeature.getString("category"), tourFeature.getString("index")));
+                        marker.setMarker(findItitneryMakerImg(tourFeature.getString("category"), Integer.toString(++index)));
                         marker.setToolTip(new CustomInfoWindow(MainMap.this, mapView, featureType, tourFeature));
                         marker.setTitle(title);
                         itineraryMarkers.add(marker); // For adding as ItemizedIconOverlay

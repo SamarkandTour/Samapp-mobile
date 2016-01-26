@@ -7,13 +7,8 @@ import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -37,7 +32,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.LinkedList;
@@ -71,7 +65,6 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
     // duration is ideal for subtle animations or animations that occur
     // very frequently.
     private int mShortAnimationDuration;
-    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,11 +193,7 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
         mPrice.setText(extras.getString("price"));
         mOpen.setText(extras.getString("open"));
 
-        // Index
-        index = extras.getInt("index");
-
         extras.clear();
-
         sharedPreferences = this.getSharedPreferences("SamTour_Pref",0);
     }
 
@@ -225,16 +214,16 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
         final GlobalsClass globals = (GlobalsClass)getApplicationContext();
         final Dialog d = new Dialog(TourFeatureActivity.this);
 
+        d.setTitle(getString(R.string.itinerary_pick_day));
+        d.setContentView(R.layout.day_dialog);
+        Button b1 = (Button)d.findViewById(R.id.ok_btn);
+        Button b2 = (Button)d.findViewById(R.id.cancel_btn);
+
         final NumberPicker numberPicker = (NumberPicker)d.findViewById(R.id.num_pckr);
         numberPicker.setMaxValue(5);
         numberPicker.setMinValue(1);
         numberPicker.setWrapSelectorWheel(false);
         numberPicker.setOnValueChangedListener(this);
-
-        d.setTitle(getString(R.string.itinerary_pick_day));
-        d.setContentView(R.layout.day_dialog);
-        Button b1 = (Button)d.findViewById(R.id.ok_btn);
-        Button b2 = (Button)d.findViewById(R.id.cancel_btn);
 
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,9 +238,9 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
                 } else {
                     feature.setDay(selectedDay);
                     list.addNewFeatureToItineraryList(feature);
-                    list.setNewItinearyFeaturesToGlobal(getApplicationContext(), itineraryItems);
-                    Log.e("QUERY", TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+                    list.sortItineraryList();
                     list.itineraryWriteToGeoJSONFile(getApplicationContext(), TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+                    Log.e("QUERY", TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
                     Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
                     d.hide();
                 }

@@ -8,11 +8,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.HashMap;
 
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
@@ -20,20 +17,13 @@ import uz.samtuit.samapp.util.TourFeature;
 
 
 public class SuggestedItineraryActivity extends ActionBarActivity {
-    public static ArrayList<LinkedList<TourFeature>> itineraryListArray = new ArrayList<LinkedList<TourFeature>>();
+    public static HashMap<?, ?>[] itineraryByDayArray;
 
     Toolbar toolbar;
     ViewPager pager;
     ViewPagerAdapter vpadapter;
     SlidingTabLayout tabs;
     private GlobalsClass globals;
-
-    private static SuggestedItineraryActivity ourInstance = new SuggestedItineraryActivity();
-    private LinkedList<TourFeature> itineraryItemDay;
-
-    public static SuggestedItineraryActivity getInstance(){
-        return ourInstance;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,12 +44,13 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         });
 
         CharSequence Titles[] = new CharSequence[ItineraryList.MAX_ITINERARY_DAYS];
+        itineraryByDayArray = new HashMap<?, ?>[ItineraryList.MAX_ITINERARY_DAYS];
         for (int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++) {
             Titles[i] = "Day " + (i + 1);
+            itineraryByDayArray[i] = new HashMap<Integer, TourFeature>();
         }
 
         globals = (GlobalsClass)this.getApplicationContext();
-        initItineraryListArray(globals);
 
         pager = (ViewPager)findViewById(R.id.pager);
         vpadapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, ItineraryList.MAX_ITINERARY_DAYS, this);
@@ -96,42 +87,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         });
         tabs.setViewPager(pager);
     }
-
-    // Gather each feature in itineraryList by day
-    public void initItineraryListArray(GlobalsClass globalsClass) {
-        LinkedList<TourFeature> itineraryListFromGlobal = globalsClass.getItineraryFeatures();
-
-        if(itineraryListFromGlobal == null){
-            return;
-        }
-
-        itineraryListArray = new ArrayList<LinkedList<TourFeature>>();
-        for (int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++) {
-            itineraryItemDay = new LinkedList<TourFeature>();
-            itineraryListArray.add(itineraryItemDay);
-        }
-
-        for (TourFeature v : itineraryListFromGlobal) {
-            int index = v.getDay() - 1;
-            if(index != -1){
-                itineraryListArray.get(index).add(v);
-            }
-            else {
-                Toast.makeText(getApplicationContext(), R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
-            }
-        }
-        int index = 0,last;
-        for(int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++){
-            Collections.sort(itineraryListArray.get(i));
-            last = itineraryListArray.get(i).size();
-            for(int j = 0; j < last; j++){
-                itineraryListArray.get(i).get(j).setStringHashMap("index",(++index)+"");
-            }
-        }
-
-    }
-
-
 
     @Override
     public void onBackPressed() {

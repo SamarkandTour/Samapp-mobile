@@ -59,7 +59,7 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
     public void onResume() {
         super.onResume();
         Log.e("SugItineraryFragment", day+"");
-        adapter = new MyItineraryAdapter(day);
+        adapter = new MyItineraryAdapter(getContext(), day);
         mRecyclerView.setAdapter(adapter);
     }
 }

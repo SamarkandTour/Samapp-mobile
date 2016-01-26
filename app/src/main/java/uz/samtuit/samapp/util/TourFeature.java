@@ -6,12 +6,10 @@ import java.util.HashMap;
  * Data type of GeoJSON feature for Tour Information
  */
 public class TourFeature implements Comparable<TourFeature> {
-    //private Bitmap photo;
     private String photo;
     private HashMap<String, String> stringHashMap; //name, desc, type, price, wifi, open, addr, tel, url
     private int rating;
     private int day;
-    private int itineraryId;
     private double longitude;
     private double latitude;
 
@@ -43,10 +41,6 @@ public class TourFeature implements Comparable<TourFeature> {
         return day;
     }
 
-    public void setItineraryId(int id){this.itineraryId = id;}
-
-    public int getItineraryId() { return this.itineraryId; }
-
     public void setStringHashMap(String strKey, String strVal) {
         stringHashMap.put(strKey, strVal);
     }
@@ -63,13 +57,12 @@ public class TourFeature implements Comparable<TourFeature> {
 
     @Override
     public int compareTo(TourFeature tf) {
-        if(Integer.parseInt(getString("index"))>Integer.parseInt(tf.getString("index"))){
+        if (this.getDay() > tf.getDay()) {
             return 1;
-        }
-        else
-        if(Integer.parseInt(getString("index"))<Integer.parseInt(tf.getString("index"))){
+        } else if (this.getDay() < tf.getDay()) {
             return -1;
         }
+
         return 0;
     }
 }

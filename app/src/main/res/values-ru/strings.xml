@@ -31,7 +31,8 @@
     <string name="dialog_check_update">Checking New Update</string>
     <string name="dialog_gps_setting">Чтобы направить вас к месту назначения от вашей тек. положении необходимо включить GPS.\nХотите ли вы включить?</string>
     <string name="dialog_need_map_download">To see map background, first time, you need to download map file from server
-        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
+        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high</string>
+    <string name="dialog_wait">Please wait</string>
     <string name="select_your_language">Пожалуйста выбирайте ваш язык</string>
     <string name="wizard_day_select">Сколько дней вы будете в Самарканде?</string>
     <string name="wizard_course_select">Порядок вашых маршрутов</string>
@@ -74,6 +75,8 @@
     <string name="itinerary_item_transfer">"Item transferred to 1 day "</string>
     <string name="forward">forward</string>
     <string name="backward">backward</string>
+    <string name="move">Moved!</string>
+    <string name="delete">Deleted!</string>
     <string name="prop_addr">Адрес</string>
     <string name="prop_price">Цена</string>
     <string name="prop_open">Открыто</string>

@@ -16,18 +16,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import uz.samtuit.samapp.util.ActionItem;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
+import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryItem;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.QuickAction;
 import uz.samtuit.samapp.util.TourFeature;
 
 public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.ViewHolder> {
-    private LinkedList<TourFeature> mDataset;
+    private ArrayList<TourFeature> mDataset;
     private int dataSize = 0;
     private int lastPosition = -1;
     private Context context;
@@ -36,7 +38,11 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     final private int UP_ITEM_ID = 1002;
     final private int DOWN_ITEM_ID = 1003;
     final private int DELETE_ITEM_ID = 1004;
-    public View mLayoutBetweenItems;
+    private View mLayoutBetweenItems;
+    private ArrayList<TourFeature> itineraryByDay = new ArrayList<TourFeature>();
+    private int selectedArrayDay, selectedRealDay;
+
+    private static int[] dataSizeByDay = new int[ItineraryList.MAX_ITINERARY_DAYS];
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -67,29 +73,63 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyItineraryAdapter(int day) {
-        mDataset = SuggestedItineraryActivity.itineraryListArray.get(day);
+    public MyItineraryAdapter(Context context, int day) {
+        selectedArrayDay = day;
+        selectedRealDay = selectedArrayDay + 1; // Because the day argument is the position of tabs, add 1 to change to real day
+
+        mDataset = getItineraryByDay(context, selectedRealDay);
 
         if(mDataset != null) {
             dataSize = mDataset.size();
+            dataSizeByDay[day] = dataSize;
         }
+    }
+
+    private ArrayList<TourFeature> getItineraryByDay(Context context, int itineraryDay) {
+        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
+        LinkedList<TourFeature> itineraryFeatures = globalsClass.getItineraryFeatures();
+
+        if (itineraryFeatures == null) {
+            return null;
+        }
+
+        itineraryByDay.clear();
+        for (TourFeature v : itineraryFeatures) {
+            if (itineraryDay == v.getDay()) {
+                itineraryByDay.add(v);
+            }
+        }
+
+        return itineraryByDay;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
     public MyItineraryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.itinerary_card, parent, false);
         context = parent.getContext();
+        View v = LayoutInflater.from(context).inflate(R.layout.itinerary_card, parent, false);
 
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
+    private int getStartIndexOfDay() {
+        int startOrderOfDay = 1; // the order in tab starts from 1
+
+        for (int i = 0; i < selectedArrayDay; i++) {
+            startOrderOfDay = startOrderOfDay + dataSizeByDay[i];
+        }
+
+        return startOrderOfDay;
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        int orderNumInTab = getStartIndexOfDay() + position;
+        final int indexInItineraryList = orderNumInTab - 1; // the index in list starts from 0
         mLayoutBetweenItems = holder.mLayoutBetweenItems;
 
         if (position < dataSize-1) {
@@ -101,7 +141,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mName.setText(mDataset.get(position).getString("name"));
-        holder.mOrderNum.setText(mDataset.get(position).getString("index"));
+        holder.mOrderNum.setText(Integer.toString(orderNumInTab));
 
         switch (mDataset.get(position).getString("category")) {
             case "hotel":
@@ -121,7 +161,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         holder.container.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Context context = v.getContext();
+                final Context context = v.getContext();
 
                 QuickAction quickAction = new QuickAction(context);
                 ActionItem _item1 = new ActionItem(PREVIOUSDAY_ITEM_ID,"P.DAY",context.getResources().getDrawable(R.drawable.skip_previous));
@@ -137,7 +177,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                     quickAction.addActionItem(_item2);
                 }
                 quickAction.addActionItem(_item3);
-                if (position < mDataset.size()-1 ) {
+                if (position < mDataset.size()-1) {
                     quickAction.addActionItem(_item4);
                 }
                 if (mDataset.get(position).getDay() < ItineraryList.MAX_ITINERARY_DAYS) {
@@ -151,16 +191,19 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                     public void onItemClick(QuickAction source, int pos, int actionId) {
                         switch (actionId) {
                             case PREVIOUSDAY_ITEM_ID:
-                                changeDay(position, -1);
+                                changeDay(context, indexInItineraryList, -1);
                                 break;
                             case NEXTDAY_ITEM_ID:
-                                changeDay(position, 1);
+                                changeDay(context, indexInItineraryList, 1);
                                 break;
                             case DELETE_ITEM_ID:
+                                changeOrder(context, indexInItineraryList, DELETE_ITEM_ID);
                                 break;
                             case DOWN_ITEM_ID:
+                                changeOrder(context, indexInItineraryList, DOWN_ITEM_ID);
                                 break;
                             case UP_ITEM_ID:
+                                changeOrder(context, indexInItineraryList, UP_ITEM_ID);
                                 break;
                         }
                     }
@@ -196,19 +239,62 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             }
         });
 
-        CalculateDistanceTimeAsync calc = new CalculateDistanceTimeAsync(position,holder,512);
+        CalculateDistanceTimeAsync calc = new CalculateDistanceTimeAsync(position, holder, 512);
         calc.execute();
         setAnimation(holder.container,position);
-
     }
 
-    private void changeDay(int position, int inc) {
-        ItineraryList list = ItineraryList.getInstance();
-        
-        list.sendToAnotherDay(context, mDataset.get(position).getString("name"), mDataset.get(position).getDay(),Integer.parseInt(mDataset.get(position).getString("index")),inc);
-        mDataset.remove(position);
-        notifyDataSetChanged();
+    private void changeOrder(Context context, int index, int cmd) {
+        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
+        LinkedList<TourFeature> itineraryList = globalsClass.getItineraryFeatures();
+        String toastMag = null;
+
+        TourFeature tourFeature = itineraryList.get(index);
+        itineraryList.remove(index);
+
+        switch (cmd) {
+            case DOWN_ITEM_ID:
+                itineraryList.add(index + 1, tourFeature);
+                toastMag = context.getString(R.string.move);
+                break;
+
+            case UP_ITEM_ID:
+                itineraryList.add(index - 1, tourFeature);
+                toastMag = context.getString(R.string.move);
+                break;
+
+            case DELETE_ITEM_ID:
+                toastMag = context.getString(R.string.delete);
+                break;
+        }
+
+        ItineraryList.itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+
+        mDataset = getItineraryByDay(context, selectedRealDay);
         dataSize = mDataset.size();
+        dataSizeByDay[selectedArrayDay] = dataSize;
+        notifyDataSetChanged();
+
+        Toast.makeText(context, toastMag, Toast.LENGTH_LONG).show();
+    }
+
+    private void changeDay(Context context, int index, int inc) {
+        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
+        LinkedList<TourFeature> itineraryList = globalsClass.getItineraryFeatures();
+
+        TourFeature tourFeature = itineraryList.get(index);
+        tourFeature.setDay(selectedRealDay + inc);
+        itineraryList.add(tourFeature);
+        itineraryList.remove(index);
+
+        ItineraryList.sortItineraryList();
+        ItineraryList.itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+
+        mDataset = getItineraryByDay(context, selectedRealDay);
+        dataSize = mDataset.size();
+        dataSizeByDay[selectedArrayDay] = dataSize;
+        notifyDataSetChanged();
+
         Toast.makeText(context, context.getString(R.string.itinerary_item_transfer) +
                 ((inc == -1) ? context.getString(R.string.backward) : context.getString(R.string.forward)), Toast.LENGTH_LONG).show();
     }
@@ -306,7 +392,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 double l_long = mDataset.get(mPosition + 1).getLongitude();
 
                 android.location.Location.distanceBetween(f_lat, f_long, l_lat, l_long, distance);
-                item.setStringHashMap("distance",(distance[0] > 1000)?Math.round(distance[0]/1000 * 10.0) / 10.0 + " km":(int) distance[0] + " m");
+                item.setStringHashMap("distance",(distance[0] > 1000) ? Math.round(distance[0]/1000 * 10.0) / 10.0 + " km" : (int) distance[0] + " m");
                 item.setStringHashMap("car_time",getTimeToNext(distance[0], 5.555));
                 item.setStringHashMap("walk_time",getTimeToNext(distance[0], 0.5));
             } else { // And don't draw images regarding distance
@@ -323,8 +409,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             return item;
         }
 
-        private String getTimeToNext(double dist, double speedFactor)
-        {
+        private String getTimeToNext(double dist, double speedFactor) {
             String s,sf[]={" min"," hr", " day"," week"," year"};
             byte b = 0;
             int a = (int)(dist / speedFactor) / 60;

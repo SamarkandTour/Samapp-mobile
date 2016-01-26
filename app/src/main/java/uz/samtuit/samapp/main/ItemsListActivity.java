@@ -57,18 +57,18 @@ public class ItemsListActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items_list);
 
-    //Include Global Variables
+        //Include Global Variables
         GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
         SharedPreferences sharedPreferences = getPreferences(0);
         Log.e("AppLang",sharedPreferences.getString("AppLang","en"));
 
-    //Configure views and variables
+        //Configure views and variables
         RelLayout = (RelativeLayout)findViewById(R.id.hotelsMain);
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/segoeui.ttf");
         list = (ListView)findViewById(R.id.hotelsListView);
 
-    //Configure Common data
+        //Configure Common data
         Bundle extras = getIntent().getExtras();
         S_ACTIVITY_NAME = FeatureType.valueOf(extras.getString("action"));
 
@@ -77,7 +77,7 @@ public class ItemsListActivity extends ActionBarActivity {
         TITLE = getResources().getString(getTitle(S_ACTIVITY_NAME));
         items = globalVariables.getTourFeatures(S_ACTIVITY_NAME);
 
-    //ActionBar TOOLBAR
+        //ActionBar TOOLBAR
         RelLayout.setBackground(getResources().getDrawable(PRIMARY_COLOR));
         toolbar.setBackgroundColor(getResources().getColor(TOOLBAR_COLOR));
         setSupportActionBar(toolbar);
@@ -95,7 +95,6 @@ public class ItemsListActivity extends ActionBarActivity {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getSupportActionBar().setTitle(s);
         toolbar.setTitle(s);
-    //end Action Bar
 
         adapter = new ItemsListAdapter(this,R.layout.items_list_adapter, items);
         list.setAdapter(adapter);
@@ -211,6 +210,13 @@ public class ItemsListActivity extends ActionBarActivity {
         }
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+
+        Intent intent = new Intent(this, MainMap.class);
+        intent.putExtra("type", "features");
+        intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -257,6 +263,7 @@ public class ItemsListActivity extends ActionBarActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
             list.setAdapter(adapter);
+
             //add the search icon in the action bar
             mActionSearch.setIcon(getResources().getDrawable(R.drawable.ic_search_white_24dp));
 
@@ -264,8 +271,7 @@ public class ItemsListActivity extends ActionBarActivity {
         } else { //open the search entry
             mActionSort.setVisible(false);
             mActionShowOnMap.setVisible(false);
-            action.setDisplayShowCustomEnabled(true); //enable it to display a
-            // custom view in the action bar.
+            action.setDisplayShowCustomEnabled(true); //enable it to display a custom view in the action bar
             action.setCustomView(R.layout.search_bar);//add the custom view
             action.setDisplayShowTitleEnabled(false); //hide the title
             action.setDisplayUseLogoEnabled(false);

@@ -221,7 +221,7 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
             public void onClick(View v) {
                 final Bundle extras = getIntent().getExtras();
                 ItineraryList list = ItineraryList.getInstance();
-                TourFeature feature = list.findFeatureInAttractionNShoppingList(getApplicationContext(), extras.getString("name"));
+                TourFeature feature = list.findFeature(getApplicationContext(), extras.getString("name"));
                 LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
                 if(itineraryItems.contains(feature)){
                     Toast.makeText(ItemActivity.this, getString(R.string.itinerary_already_exist), Toast.LENGTH_SHORT).show();
@@ -229,9 +229,9 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
                 else {
                     feature.setDay(selectedDay);
                     list.addNewFeatureToItineraryList(feature);
-                    list.setNewItinearyFeaturesToGlobal(getApplicationContext(), itineraryItems);
-                    Log.e("QUERY", ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+                    list.sortItineraryList();
                     list.itineraryWriteToGeoJSONFile(getApplicationContext(), ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+                    Log.e("QUERY", ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
                     Toast.makeText(ItemActivity.this, getString(R.string.itinerary_added_successfully), Toast.LENGTH_LONG).show();
                     d.hide();
                 }

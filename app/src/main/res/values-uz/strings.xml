@@ -31,7 +31,8 @@
     <string name="dialog_check_update">Checking New Update</string>
     <string name="dialog_gps_setting">"Siz turgan joydan boradigan manzilingizgacha yo'l-yo'riqni bilmoqchi bo'lsangiz, iltimos GPSni yoqing.\nYoqishni xoxlaysizmi?"</string>
     <string name="dialog_need_map_download">To see map background, first time, you need to download the map from server
-        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
+        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high</string>
+    <string name="dialog_wait">Please wait</string>
     <string name="select_your_language">Iltimos, tilni tanlang</string>
     <string name="wizard_day_select">"Samarqandda necha kun bo'lmoqchisiz?"</string>
     <string name="wizard_course_select">Yoqtirgan kursingiz muddatini belgilang</string>
@@ -75,6 +76,8 @@
     <string name="itinerary_item_transfer">"Item transferred to 1 day "</string>
     <string name="forward">forward</string>
     <string name="backward">backward</string>
+    <string name="move">Moved!</string>
+    <string name="delete">Deleted!</string>
     <string name="prop_addr">Manzil</string>
     <string name="prop_price">Narxlar</string>
     <string name="prop_open">Ish vaqti</string>

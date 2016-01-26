@@ -26,12 +26,13 @@
     <string name="Err_no_connection">There is no Internet connection</string>
     <string name="Err_not_supported">Not supported in this language</string>
     <string name="dialog_update_available">Now recent tour information is available!
-        \nDo you want to update? But if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
+        \nDo you want to update? But if you are not connected to Wi-Fi, the cost of data usage would be high</string>
     <string name="dialog_load_features">Loading Tour Data</string>
     <string name="dialog_check_update">Checking New Update</string>
     <string name="dialog_gps_setting">To guide you to the destination from where your are, please turn on GPS.\nDo you want to turn on?</string>
     <string name="dialog_need_map_download">To see map background, first time, you need to download map file from server
-        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high.</string>
+        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high</string>
+    <string name="dialog_wait">Please wait</string>
     <string name="select_your_language">Please select your language</string>
     <string name="wizard_day_select">How many days are you staying in Samarkand?</string>
     <string name="wizard_course_select">Please decide the priority of your favorite courses</string>
@@ -77,6 +78,8 @@
     <string name="itinerary_item_transfer">"Item transferred to 1 day "</string>
     <string name="forward">forward</string>
     <string name="backward">backward</string>
+    <string name="move">Moved!</string>
+    <string name="delete">Deleted!</string>
     <string name="prop_addr">Address</string>
     <string name="prop_price">Price</string>
     <string name="prop_open">Open</string>

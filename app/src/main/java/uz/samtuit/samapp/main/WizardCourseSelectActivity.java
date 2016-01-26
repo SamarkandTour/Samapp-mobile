@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewOutlineProvider;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
@@ -227,7 +226,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
             lang = WizardCourseSelectActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null);
 
             progressDialog = new ProgressDialog(WizardCourseSelectActivity.this);
-            progressDialog.setMessage("Please wait.");
+            progressDialog.setMessage(getString(R.string.dialog_wait));
             progressDialog.show();
 
             if (spinnerArray[0].getSelectedItemPosition() == 0) {
@@ -249,7 +248,6 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
 
         @Override
         protected Void doInBackground(Void... params) {
-
             String path = null;
 
             itineraryListInstance = ItineraryList.getInstance();
@@ -278,6 +276,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
             if (isFirstLaunch) { // Don't forget, Set first_launch to false
                 sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
             }
+
             return null;
         }
     }

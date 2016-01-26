@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import uz.samtuit.samapp.main.R;
-import uz.samtuit.samapp.main.SuggestedItineraryActivity;
 
 /**
  * Itinerary Class
@@ -45,85 +44,13 @@ public class ItineraryList {
         return ourInstance;
     }
 
-    public ItineraryList(LinkedList<TourFeature> itineraryList) {
-        mItineraryList = itineraryList;
-    }
-
     public void setItinearyFeaturesToGlobal(Context context) {
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         globalsClass.setItineraryFeatures(mItineraryList);
     }
 
-    public void setNewItinearyFeaturesToGlobal(Context context, LinkedList<TourFeature> list) {
-        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
-        globalsClass.setItineraryFeatures(list);
-        mItineraryList.clear();
-        mItineraryList = list;
-    }
-
-    public void sendToAnotherDay(Context context, String ItineraryFeatureName,int day, int index, int inc){
-        int last = mItineraryList.size() - 1;
-        int pos = 0;
-        int lcdpos = 0;
-        int newInd = 0;
-        
-        for (int i = last; i >= 0; i--) {
-            TourFeature item = mItineraryList.get(i);
-            if(item.getDay() == day){
-                lcdpos = Math.max(lcdpos, Integer.parseInt(item.getString("index")));
-                if(Integer.parseInt(item.getString("index"))>index){
-                    mItineraryList.get(i).setStringHashMap("index",(Integer.parseInt(item.getString("index"))-1)+"");
-                }
-            }
-            if(item.getDay() == day + inc){
-                Log.e("INDEX",item.getString("index"));
-                newInd = Math.max(newInd,Integer.parseInt(item.getString("index")));
-            }
-            if (mItineraryList.get(i).getString("name")==ItineraryFeatureName) {
-                pos = i;
-            }
-        }
-        mItineraryList.get(pos).setDay(day+inc);
-        mItineraryList.get(pos).setStringHashMap("index",(Math.max(lcdpos,++newInd))+"");
-
-        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
-        globalsClass.setItineraryFeatures(mItineraryList);
-        SuggestedItineraryActivity suggestedItineraryActivity = SuggestedItineraryActivity.getInstance();
-        suggestedItineraryActivity.initItineraryListArray(globalsClass);
-        itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
-    }
-
-    public LinkedList<TourFeature> sortedItinerary(LinkedList<TourFeature> items){
-        Collections.sort(items);
-        return items;
-    }
-
-    /**
-     * There is no Hotel or Food&Drink in the Itinerary GeoJSON file
-     */
-    public TourFeature findFeatureInAttractionNShoppingList(Context context, String name) {
-        ArrayList<TourFeature> tourFeatures;
-
-        GlobalsClass globalVariables = (GlobalsClass)context.getApplicationContext();
-
-        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.ATTRACTION);
-        for (TourFeature v:tourFeatures) {
-            if (v.getString("name").equals(name)) {
-                v.setStringHashMap("category", "attraction");
-                return v;
-            }
-        }
-
-        tourFeatures = globalVariables.getTourFeatures(GlobalsClass.FeatureType.SHOPPING);
-        for (TourFeature v:tourFeatures) {
-            if (v.getString("name").equals(name)) {
-                v.setStringHashMap("category", "shopping");
-                return v;
-            }
-        }
-
-        return null;
-
+    static public void sortItineraryList() {
+        Collections.sort(mItineraryList);
     }
 
     public TourFeature findFeature(Context context, String name) {
@@ -164,7 +91,6 @@ public class ItineraryList {
         }
 
         return null;
-
     }
 
     public boolean addNewFeatureToItineraryList(TourFeature tourFeature){
@@ -185,13 +111,6 @@ public class ItineraryList {
 
     public LinkedList<TourFeature> mergeCoursesFromGeoJSONFileToItineraryList(Context context, String fileName) {
         String prevAmPm = null, preDay = null;
-        int index = 0;
-        
-        try {
-            index = mItineraryList.size();
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
 
         try {
             FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, fileName);
@@ -230,7 +149,6 @@ public class ItineraryList {
 
                     if (!found) {
                         itineraryElement.setDay(Math.round(tourDay)); // Round up
-                        itineraryElement.setStringHashMap("index", (++index) + "");
                         mItineraryList.add(itineraryElement);
                     }
                 }
@@ -245,7 +163,6 @@ public class ItineraryList {
     }
 
     public LinkedList<TourFeature> getItineraryFeatureListFromGeoJSONFile(Context context, String fileName) {
-        int index = 0;
         try {
             FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, fileName);
             if (featureCollection == null) {
@@ -261,7 +178,6 @@ public class ItineraryList {
                 if (itineraryElement == null) {
                     Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
                 } else {
-                    itineraryElement.setStringHashMap("index",(++index)+"");
                     itineraryElement.setDay(v.getProperties().getInt("day"));
                     mItineraryList.add(itineraryElement);
                 }
