@@ -53,10 +53,8 @@
     <string name="marquee_arrival_noti">Now you are around the target destination</string>
     <string name="marquee_greeting">Welcome to Samarkand!</string>
     <string name="Warn_weak_gps_signal">Weak GPS signal! Move to open space where the sky is seen</string>
-    <string name="touch_to_close">Touch to close</string>
     <string name="notify_download_complete">Download Complete</string>
     <string name="notify_updatable">When restarted, the update will be applied</string>
-    <string name="suggested_itinerary">Suggested Itinerary</string>
     <string name="itinerary_select_day">Select your stay period</string>
     <string name="itinerary_1st_course">Choose 1st Course</string>
     <string name="itinerary_2nd_course">Choose 2nd Course</string>
@@ -111,6 +109,4 @@
         "%4$s\n"
     </string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_my_itinerary">MyItinerary</string>
-    <string name="no_data">No data on this category</string>
 </resources>

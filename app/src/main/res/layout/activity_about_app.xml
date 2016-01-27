@@ -51,11 +51,11 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/setting_about_app"
                 android:textColor="@color/black"
-                android:gravity="start"
                 android:textSize="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textIsSelectable="true" />
+                android:textIsSelectable="false"
+                android:gravity="fill_horizontal" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
