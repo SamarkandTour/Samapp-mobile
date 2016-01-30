@@ -22,7 +22,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -48,6 +47,9 @@
         <activity android:name=".AboutAppActivity" />
         <activity android:name=".SettingsActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".TourFeatureActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
 
         <receiver
             android:name=".DownloadCompleteReceiver"
@@ -60,11 +62,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <activity
-            android:name=".TourFeatureActivity"
-            android:label="@string/title_activity_tour_feature"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>

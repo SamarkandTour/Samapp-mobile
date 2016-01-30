@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
@@ -58,7 +59,7 @@ public class LogoActivity extends ActionBarActivity {
 
         if (isFirstLaunch) {
             SharedPreferences.Editor editor = pref.edit();
-            editor.putString("app_version", "0.5.0"); // Set App version
+            editor.putString("app_version", "0.5.2"); // Set App version
             editor.putLong("last_updated", new Date().getTime()); // Set installed date
             editor.commit();
 
@@ -106,6 +107,7 @@ public class LogoActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e("LogoActivity", "onResume()");
     }
 
     public void loadFeaturesToMemory(Context context, String chosenLang, String path, GlobalsClass.FeatureType featureType) {
@@ -145,7 +147,7 @@ public class LogoActivity extends ActionBarActivity {
                     FileUtil.deleteAllExternalFilesWithExtension(LogoActivity.this, TourFeatureList.photoDirectory, "");
                     TourFeatureList.writeAllPhotosToFiles(LogoActivity.this); // Make all photo data to files
 
-                }else if(Downloader.isDownloadFinished(LogoActivity.this)) {
+                } else if (Downloader.isDownloadFinished(LogoActivity.this)) {
                     publishProgress(new Pair<Integer, String>(UPDATE_START, "new update"));
 
                     downloadRequestCnt = Downloader.countOfDownloadRequest(LogoActivity.this);
@@ -267,6 +269,7 @@ public class LogoActivity extends ActionBarActivity {
         public void handleMessage(Message msg) {
             if(msg.arg1 == 1) {
                 Toast.makeText(LogoActivity.this, R.string.Err_network_state, Toast.LENGTH_LONG).show();
+                Log.e("LogoActivity", "network state warning");
             }
         }
     };

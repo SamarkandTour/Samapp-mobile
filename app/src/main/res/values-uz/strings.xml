@@ -92,13 +92,22 @@
     <string name="pref_summary_notifications">When arrived near target destination, notify it by vibrate</string>
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="pref_header_languages">Languages</string>
-    <string name="setting_about_app">"        This is the cooperation project of universities in Samarkand of which the center is a UNESCO world Heritage Site.
-        We're targeting to provide unknown, hidden and unique all tour information for your visit.
-        We're also suggesting recommend itineraries for your great experience at this city. Of course, you can create your own customized itinerary based on the recommendation.
-        Furthermore, because it's designed for offline usage, even though you don't have any Internet connection on your way, you can utilize all information and it will guide you safely to the destination by GPS."</string>
+    <string name="setting_about_app">
+        " This is the cooperation project of universities in Samarkand of which the center is a UNESCO world Heritage Site.
+        \n We're targeting to provide unknown, hidden and unique all tour information for your visit.
+        \n We suggest recommended itineraries for your great experience at this city. Of course, if you want, you can customize your own day-by-day itinerary based on our recommendation.
+        \n Furthermore, since it's designed for offline usage, you can utilize all information on your way without any data connection. It also has a navigation function by GSP so that it safely guide you to the destination without losing your way.
+        \n This project is Open Source Software by AGPL license. Also all tour information are Open Data which are provided by open data exchange format, GeoJSON.
+        \n We always welcome all kinds of your contribution and cooperation. You can make this project abundant by adding new data or modifying legacy data directly at our Wiki and by leaving your helpful comment for others after visiting tour places.
+        \n When you have any questions or opinions, feel free to contact us by email.
+        \n [Links]
+        \nWiki : http://www.samarkandtour.org
+        \nOpen Source : https://github.com/SamarkandTour
+        \nOpen Data : http://download.samarkandtour.org
+        \nEmail : samarkandtour@gmail.com"
+    </string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_activity_tour_feature">TourFeatureActivity</string>
     <string name="tour_feature_content">
         "%1$s\n\n"
         "Address:\n\n"
@@ -108,5 +117,4 @@
         "Open:\n\n"
         "%4$s\n"
     </string>
-    <string name="action_settings">Settings</string>
 </resources>

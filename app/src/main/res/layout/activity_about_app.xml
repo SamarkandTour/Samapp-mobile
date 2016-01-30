@@ -8,67 +8,79 @@
     tools:context="uz.samtuit.samapp.main.AboutAppActivity">
 
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon_area">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_gravity="center"
+            android:tag="ForLogo"
+            android:src="@drawable/launcher_icon"
+            android:background="@android:color/transparent"
+            android:layout_height="80dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="SamTour"
+            android:textColor="@color/black"
+            android:typeface="monospace"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="Ver. 1.0.0"
+            android:id="@+id/version" />
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:id="@+id/scrollView"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/icon_area"
+        android:layout_alignParentTop="false"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentBottom="false"
         android:scrollbars="none"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="match_parent">
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_gravity="center"
-                android:tag="ForLogo"
-                android:src="@drawable/launcher_icon"
-                android:background="@android:color/transparent"
-                android:layout_height="80dp" />
+
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="SamTour"
-                android:textColor="@color/black"
-                android:typeface="monospace"
-                android:textSize="24sp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:text="Ver. 1.0.0"
-                android:id="@+id/version" />
-            <TextView
-                android:layout_marginTop="15dp"
                 android:text="@string/setting_about_app"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textIsSelectable="false"
-                android:gravity="fill_horizontal" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:gravity="fill_horizontal"
+                android:autoLink="email|web" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="fill_parent"
-                    android:clickable="false"
-                    android:onClick="CheckUsOnSocial"
-                    android:textSize="18sp"
-                    android:gravity="center|left"
-                    android:text="Supporters:" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:clickable="false"
+                android:onClick="CheckUsOnSocial"
+                android:textSize="18sp"
+                android:gravity="center|left"
+                android:text="Supporters:"
+                android:paddingTop="10dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -97,15 +109,15 @@
             </LinearLayout>z
         </LinearLayout>
     </ScrollView>
+
     <TextView
         android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-20dp"
 
         android:text="© 2016 SamarkandTour.org © OpenStreetMap"
-        android:layout_alignParentLeft="false"
-        android:layout_below="@+id/scrollView"
         android:layout_centerHorizontal="true"
-        android:autoLink="web" />
+        android:autoLink="web"
+        android:id="@+id/copyright"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>
