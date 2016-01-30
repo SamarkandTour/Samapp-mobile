@@ -10,13 +10,17 @@ For your great experience in this city, we're also providing Android Mobile Appl
 
 This project is Open Source Software by AGPL license. Also all tour information are Open Data which are provided by open data exchange format, GeoJSON. We always welcome all kinds of your contribution and cooperation. You can make this project abundant by adding new data or modifying legacy data directly at our Wiki and by leaving your helpful comment for others after visiting tour places. When you have any questions or opinions, feel free to contact us by email.
 
-[Links]
-Wiki : http://www.samarkandtour.org
-Open Source : https://github.com/SamarkandTour
-Open Data : http://download.samarkandtour.org
-Email : samarkandtour@gmail.com
-
 This project is sponsored by the NRF(National Research Foundation, http://www.nrf.re.kr).
+
+## Links
+
+Wiki : http://www.samarkandtour.org
+
+Open Source : https://github.com/SamarkandTour
+
+Open Data : http://download.samarkandtour.org
+
+Email : samarkandtour@gmail.com
 
 ## License
 
