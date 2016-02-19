@@ -1,6 +1,7 @@
 package uz.samtuit.samapp.util;
 
 import android.app.Application;
+import android.graphics.Typeface;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

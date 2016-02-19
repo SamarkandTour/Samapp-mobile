@@ -108,7 +108,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
         for (String courseName :  ItineraryList.getCourseHashMap()) {
             float courseDay = ItineraryList.getCourseDayFromHashMap(courseName);
             if ( courseDay <= remainDay && !isAlreadySelected(courseName)) { // Except already selected
-                courseArray.add(i++, ItineraryList.getUiNameFromHashMap(courseName) + " (" + courseDay + getString(R.string.itinerary_day) + ")");
+                courseArray.add(i++, ItineraryList.getUiNameFromHashMap(courseName) + " (" + courseDay+ getString(R.string.itinerary_day) + ")");
             }
         }
 

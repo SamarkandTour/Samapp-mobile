@@ -3,6 +3,7 @@ package uz.samtuit.samapp.main;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +58,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         public TextView mOrderNum;
         public TextView mDistance;
         public View mLayoutBetweenItems;
-        public LinearLayout container;
+        public RelativeLayout container;
 
         public ViewHolder(View v) {
             super(v);
@@ -68,7 +70,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             mItemImage = (ImageView)v.findViewById(R.id.it_image);
             mDistance = (TextView)v.findViewById(R.id.it_distance);
             mLayoutBetweenItems = v.findViewById(R.id.layout_between_items);
-            container = (LinearLayout)v.findViewById(R.id.container);
+            container = (RelativeLayout)v.findViewById(R.id.container);
         }
     }
 
@@ -322,7 +324,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         private int mPosition;
         private float mImageSize;
         private ViewHolder mHolder;
-        private BitmapUtil.RoundedDrawable roundedDrawable;
+        private Drawable roundedDrawable;
 
         public GetBitmapAsync(int position, ViewHolder holder, float imageSize){
             mPosition = position;
@@ -337,7 +339,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 Log.e("LOGTAG","CHP");
                 String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
                 Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes,mImageSize, mImageSize);
-                roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
+                roundedDrawable = BitmapUtil.getRoundedBitmap(decodedBytes,context);
             }
             return null;
         }

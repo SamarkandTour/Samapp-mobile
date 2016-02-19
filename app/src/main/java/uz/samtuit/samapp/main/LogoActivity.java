@@ -3,6 +3,7 @@ package uz.samtuit.samapp.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.samapp.util.TourFeatureList;
+import uz.samtuit.samapp.util.TypefaceHelper;
 import uz.samtuit.samapp.util.ZipFileUtil;
 
 
@@ -49,6 +51,7 @@ public class LogoActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_logo);
         tvInfo = (TextView) findViewById(R.id.tv_info);
+        tvInfo.setTypeface(TypefaceHelper.getTypeface(getApplicationContext(), "segoeui"));
 
         pref = this.getSharedPreferences("SamTour_Pref", 0);
         isFirstLaunch = pref.getBoolean("app_first_launch", true);

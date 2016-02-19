@@ -15,6 +15,8 @@ import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 
@@ -154,6 +156,19 @@ public class BitmapUtil {
 
             return textWidth;
         }
+    }
+
+    public static Drawable getRoundedBitmap(Bitmap src, Context context) {
+        Bitmap dst;
+        if (src.getWidth() >= src.getHeight()) {
+            dst = Bitmap.createBitmap(src, src.getWidth() / 2 - src.getHeight() / 2, 0, src.getHeight(), src.getHeight());
+        } else {
+            dst = Bitmap.createBitmap(src, 0, src.getHeight() / 2 - src.getWidth() / 2, src.getWidth(), src.getWidth());
+        }
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), dst);
+        roundedBitmapDrawable.setCornerRadius(dst.getWidth() / 2);
+        roundedBitmapDrawable.setAntiAlias(true);
+        return roundedBitmapDrawable;
     }
 
     /**

@@ -32,6 +32,7 @@ import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TypefaceHelper;
 
 
 public class ItemActivity extends ActionBarActivity implements NumberPicker.OnValueChangeListener{
@@ -81,10 +82,9 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
         relLayout.setBackground(getResources().getDrawable(extras.getInt("primaryColorId")));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         mAddToMyItinerary = (ImageButton)findViewById(R.id.add_to_my_itinerary);
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/segoeui.ttf");
         name = extras.getString("name");
         SpannableString s = new SpannableString(name);
-        s.setSpan(new CustomTypefaceSpan("", tf), 0, s.length(),
+        s.setSpan(new CustomTypefaceSpan("", TypefaceHelper.getTypeface(getApplicationContext(),"segoeui")), 0, s.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getSupportActionBar().setTitle(s);
         toolbar.setTitle(s);

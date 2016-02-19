@@ -24,8 +24,12 @@ import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -48,6 +52,12 @@ import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
+import com.rey.material.app.BottomSheetDialog;
+import com.rey.material.app.Dialog;
+import com.rey.material.drawable.ThemeDrawable;
+import com.rey.material.util.ViewUtil;
+import com.rey.material.widget.ImageButton;
+import com.rey.material.widget.ProgressView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,6 +74,7 @@ import uz.samtuit.samapp.util.MenuItems;
 import uz.samtuit.samapp.util.SystemBarTintManager;
 import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TypefaceHelper;
 
 import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 import static uz.samtuit.samapp.util.TourFeatureList.findFeatureByName;
@@ -209,6 +220,10 @@ public class MainMap extends ActionBarActivity {
         });
     }
 
+    private void setTypefaces(){
+        marqueeText.setTypeface(TypefaceHelper.getTypeface(getApplicationContext(), "RobotoCondensed-Regular"));
+    }
+
     private void drawBottomMenuIcons() {
         MenuItems item = new MenuItems(0,"Itinerary Wizard","drawable/itinerary_wizard", MenuItems.MainMenu.ITINERARYWIZARD);
         Items.add(item);
@@ -225,16 +240,24 @@ public class MainMap extends ActionBarActivity {
         item = new MenuItems(6,"About This App","drawable/settings", MenuItems.MainMenu.SETTING);
         Items.add(item);
         btn = (ImageView)findViewById(R.id.slideButton);
+
+        Display display= ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int width = display.getWidth();
+        int height = display.getHeight();
+        Log.e("Tag",width + " " + height);
+
         slidingDrawer = (SlidingDrawer)findViewById(R.id.slidingDrawer);
         slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
             @Override
             public void onDrawerOpened() {
+               // btn.setAlpha(Color.GRAY);
                 btn.setImageResource(R.drawable.menu_pick_down);
             }
         });
         slidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
             @Override
             public void onDrawerClosed() {
+               // btn.setAlpha(Color.WHITE);
                 btn.setImageResource(R.drawable.menu_pick_up);
             }
         });
@@ -657,6 +680,7 @@ public class MainMap extends ActionBarActivity {
         ArrayList<Marker> itineraryMarkers;
         ArrayList<Marker> featuresMarkers;
         int index = 0;
+        ProgressView progressView;
 
         @Override
         protected FeatureType doInBackground(Pair<FeatureType, TourFeature>... params) {
@@ -769,14 +793,33 @@ public class MainMap extends ActionBarActivity {
         return markerImg;
     }
 
+    private BottomSheetDialog mBottomSheetDialog;
+
     // To make custom layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker(unused), 4:TourFeatures, 5:Itinerary, 6:MyLocation
     private void drawOverlay(int overlayIndex, ArrayList<Marker> markersList) {
         ItemizedIconOverlay iOverlay = new ItemizedIconOverlay(MainMap.this, markersList, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
             @Override
             public boolean onItemSingleTapUp(int i, Marker marker) {
-                mapView.setRotation(0f);
+
                 pressedMarker = marker;
                 mapView.selectMarker(marker);
+
+
+                BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(MainMap.this, R.style.Material_App_BottomSheetDialog);
+                View v = LayoutInflater.from(MainMap.this).inflate(R.layout.view_bottomsheet, null);
+                ViewUtil.setBackground(v, new ThemeDrawable(R.array.bg_window));
+                ImageView btnImageView = (ImageView)v.findViewById(R.id.bs_image);
+                android.widget.ImageButton btnGuideMe = (android.widget.ImageButton)v.findViewById(R.id.bs_guide_me);
+                TextView mTitle = (TextView)v.findViewById(R.id.bs_title);
+                mTitle.setText(marker.getTitle());
+                btnGuideMe.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainMap.this, "TExt", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                mBottomSheetDialog.show();
                 return true; // Should be true because we handled this event
             }
 

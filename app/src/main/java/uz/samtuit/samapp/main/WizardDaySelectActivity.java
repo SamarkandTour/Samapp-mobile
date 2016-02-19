@@ -7,14 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import com.rey.material.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import uz.samtuit.samapp.util.ItineraryList;
 
-public class WizardDaySelectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class WizardDaySelectActivity extends AppCompatActivity implements com.rey.material.widget.Spinner.OnItemSelectedListener {
     ArrayList<String> items= new ArrayList<String>();
     int selected;
     SharedPreferences sharedPreferences;
@@ -67,15 +67,6 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
         finish();
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        selected = position;
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -92,5 +83,10 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Adapte
         if (isFirstLaunch) { // Don't forget, Set first_launch to false
             sharedPreferences.edit().putBoolean("app_first_launch", false).commit();
         }
+    }
+
+    @Override
+    public void onItemSelected(Spinner parent, View view, int position, long id) {
+        selected = position;
     }
 }

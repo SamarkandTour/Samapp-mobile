@@ -2,8 +2,10 @@ package uz.samtuit.samapp.util;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.renderscript.Type;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -24,6 +26,7 @@ public class CustomDialog extends Dialog {
     private int mMessage;
     private int mLeftBtn;
     private int mRightBtn;
+    private Context mContext;
 
     private View.OnClickListener mLeftClickListener;
     private View.OnClickListener mRightClickListener;
@@ -50,6 +53,7 @@ public class CustomDialog extends Dialog {
 
     public CustomDialog(Context context) {
         super(context);
+        this.mContext = context;
     }
 
     public CustomDialog(Context context , int titleId , int contentId ,
@@ -58,6 +62,7 @@ public class CustomDialog extends Dialog {
         this.mTitle = titleId;
         this.mMessage = contentId;
         this.mLeftClickListener = singleListener;
+        this.mContext = context;
     }
 
     // leftBtnId = 'Yes', rightBtnId = 'No'
@@ -68,6 +73,7 @@ public class CustomDialog extends Dialog {
         this.mMessage = contentId;
         this.mLeftClickListener = leftListener;
         this.mRightClickListener = rightListener;
+        this.mContext = context;
     }
 
     public CustomDialog(Context context , int titleId , int contentId , int leftBtnId, int rightBtnId,
@@ -79,13 +85,19 @@ public class CustomDialog extends Dialog {
         this.mRightBtn = rightBtnId;
         this.mLeftClickListener = leftListener;
         this.mRightClickListener = rightListener;
+        this.mContext = context;
     }
 
     private void setDlgLayout(){
+        Typeface tf = TypefaceHelper.getTypeface(mContext, "segoeui");
         mTitleView = (TextView) findViewById(R.id.tv_title);
         mContentView = (TextView) findViewById(R.id.tv_content);
+        mTitleView.setTypeface(tf);
+        mContentView.setTypeface(tf);
         mLeftButton = (Button) findViewById(R.id.bt_left);
+        mLeftButton.setTypeface(tf);
         mRightButton = (Button) findViewById(R.id.bt_right);
+        mRightButton.setTypeface(tf);
     }
 
     private void setDlgTitle(int titleId){

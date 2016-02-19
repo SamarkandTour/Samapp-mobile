@@ -60,7 +60,6 @@ public class ItemsListActivity extends ActionBarActivity {
         //Include Global Variables
         GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
         SharedPreferences sharedPreferences = getPreferences(0);
-        Log.e("AppLang",sharedPreferences.getString("AppLang","en"));
 
         //Configure views and variables
         RelLayout = (RelativeLayout)findViewById(R.id.hotelsMain);
@@ -96,7 +95,7 @@ public class ItemsListActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(s);
         toolbar.setTitle(s);
 
-        adapter = new ItemsListAdapter(this,R.layout.items_list_adapter, items);
+        adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
         list.setAdapter(adapter);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -181,7 +180,6 @@ public class ItemsListActivity extends ActionBarActivity {
             featureType = TourFeatureList.findFeatureTypeByName(context, feature.getString("name"));
         }
         intent.putExtra("featureType", featureType.toString());
-
         intent.putExtra("photo", feature.getPhoto());
         intent.putExtra("rating", feature.getRating());
         intent.putExtra("name", feature.getString("name"));

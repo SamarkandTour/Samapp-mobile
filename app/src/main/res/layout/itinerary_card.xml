@@ -1,7 +1,7 @@
 
 
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:id="@+id/container"
@@ -15,6 +15,7 @@
      >
 
         <LinearLayout
+            android:id="@+id/card_container"
             android:background="@drawable/layout_bg"
             android:paddingLeft="9dp"
             android:layout_marginLeft="-5dp"
@@ -63,8 +64,28 @@
 
             </LinearLayout>
         </LinearLayout>
+    <ImageButton
+        android:id="@+id/add_new_itinerary_item"
+        android:layout_marginTop="-2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@id/card_container"
+        android:layout_width="30dp"
+        android:src="@drawable/add_property"
+        android:backgroundTint="#f00"
+        android:layout_marginRight="-20dp"
+        android:tint="#fff"
+        android:scaleType="centerCrop"
+        android:backgroundTintMode="src_in"
+        android:padding="10dp"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"
+        android:layout_height="30dp"
+        android:background="@drawable/round_bg_white"/>
+
         <LinearLayout
+            android:layout_below="@id/card_container"
             android:visibility="visible"
+            android:layout_toRightOf="@id/add_new_itinerary_item"
             android:id="@+id/layout_between_items"
             android:layout_width="match_parent"
             android:layout_marginTop="4dp"
@@ -142,4 +163,6 @@
 
 
 
-</LinearLayout>
+
+
+</RelativeLayout>

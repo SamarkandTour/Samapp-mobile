@@ -2,19 +2,29 @@ package uz.samtuit.samapp.main;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.views.InfoWindow;
 import com.mapbox.mapboxsdk.views.MapView;
+import com.rey.material.app.BottomSheetDialog;
+import com.rey.material.drawable.ThemeDrawable;
+import com.rey.material.util.ViewUtil;
+
 
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TypefaceHelper;
 
 import static uz.samtuit.samapp.main.ItemsListActivity.startItemActivity;
 
@@ -25,6 +35,7 @@ public class CustomInfoWindow extends InfoWindow {
     private GlobalsClass.FeatureType featureType;
     private TourFeature mFeature;
     private Context mContext;
+    private Typeface tf;
     private GlobalsClass.FeatureType mFeatureType;
 
     public CustomInfoWindow(Context context, MapView mv, GlobalsClass.FeatureType featureType, TourFeature tourFeature) {
@@ -33,6 +44,7 @@ public class CustomInfoWindow extends InfoWindow {
         mContext = context;
         mFeatureType = featureType;
         mFeature = tourFeature;
+
 
         // Add own OnTouchListener to customize handling InfoWindow touch events
         setOnTouchListener(new View.OnTouchListener() {
@@ -44,7 +56,7 @@ public class CustomInfoWindow extends InfoWindow {
                     close();
                 }
 
-                // Return true as we're done processing this event
+                // Return true as we're done processing this event,,,,,
                 return true;
             }
         });
@@ -56,8 +68,11 @@ public class CustomInfoWindow extends InfoWindow {
      */
     @Override
     public void onOpen(Marker overlayItem) {
+
         String title = overlayItem.getTitle();
+
         ((TextView) mView.findViewById(R.id.customTooltip_title)).setText(title);
+        ((TextView) mView.findViewById(R.id.customTooltip_title)).setTypeface(TypefaceHelper.getTypeface(mContext));
 
         String photoFileName = mFeature.getPhoto();
         if (photoFileName != null) {
@@ -68,6 +83,7 @@ public class CustomInfoWindow extends InfoWindow {
             ImageView mainImage = (ImageView) mView.findViewById(R.id.tooltip_imageView);
             mainImage.setImageDrawable(roundedDrawable);
         }
+
     }
 }
 

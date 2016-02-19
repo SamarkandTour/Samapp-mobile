@@ -17,6 +17,7 @@
     <string name="update_alert">Доступно новое обновление. Хотите обновить?</string>
     <string name="update_nothing">There is no update</string>
     <string name="reviews">Отзв</string>
+    <string name="touch_to_close">Нажмите чтобы закрыть</string>
     <string name="address">Адресс</string>
     <string name="search_hint">Поиск</string>
     <string name="Err_wrong_geojson_file">Ошибка! Malformed JSON in the geojson file. Go to the setting, Try re-download</string>
@@ -36,6 +37,9 @@
     <string name="select_your_language">Пожалуйста выбирайте ваш язык</string>
     <string name="wizard_day_select">Сколько дней вы будете в Самарканде?</string>
     <string name="wizard_course_select">Порядок вашых маршрутов</string>
+    <string name="suggested_itinerary">Suggested Itinerary</string>
+    <string name="title_activity_my_itinerary">MyItinerary</string>
+    <string name="no_data">No data on this category</string>
     <string name="title_dialog_gps_setting">Необходимо геолокация</string>
     <string name="title_dialog_update_available">Новое обновление</string>
     <string name="title_dialog_map_download">Map Download</string>
