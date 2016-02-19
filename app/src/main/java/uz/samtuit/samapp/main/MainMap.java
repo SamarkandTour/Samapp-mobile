@@ -786,7 +786,6 @@ public class MainMap extends ActionBarActivity {
         return markerImg;
     }
 
-    private BottomSheetDialog mBottomSheetDialog;
 
     // To make custom layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker(unused), 4:TourFeatures, 5:Itinerary, 6:MyLocation
     private void drawOverlay(int overlayIndex, ArrayList<Marker> markersList) {
@@ -796,23 +795,6 @@ public class MainMap extends ActionBarActivity {
 
                 pressedMarker = marker;
                 mapView.selectMarker(marker);
-
-
-                BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(MainMap.this, R.style.Material_App_BottomSheetDialog);
-                View v = LayoutInflater.from(MainMap.this).inflate(R.layout.view_bottomsheet, null);
-                ViewUtil.setBackground(v, new ThemeDrawable(R.array.bg_window));
-                ImageView btnImageView = (ImageView)v.findViewById(R.id.bs_image);
-                android.widget.ImageButton btnGuideMe = (android.widget.ImageButton)v.findViewById(R.id.bs_guide_me);
-                TextView mTitle = (TextView)v.findViewById(R.id.bs_title);
-                mTitle.setText(marker.getTitle());
-                btnGuideMe.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(MainMap.this, "TExt", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                mBottomSheetDialog.show();
                 return true; // Should be true because we handled this event
             }
 

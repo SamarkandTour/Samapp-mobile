@@ -18,6 +18,7 @@ import com.mapbox.mapboxsdk.views.MapView;
 import com.rey.material.app.BottomSheetDialog;
 import com.rey.material.drawable.ThemeDrawable;
 import com.rey.material.util.ViewUtil;
+import com.rey.material.widget.Button;
 
 
 import uz.samtuit.samapp.util.BitmapUtil;
@@ -32,10 +33,8 @@ import static uz.samtuit.samapp.main.ItemsListActivity.startItemActivity;
  * Custom Tooltip Window
  */
 public class CustomInfoWindow extends InfoWindow {
-    private GlobalsClass.FeatureType featureType;
     private TourFeature mFeature;
     private Context mContext;
-    private Typeface tf;
     private GlobalsClass.FeatureType mFeatureType;
 
     public CustomInfoWindow(Context context, MapView mv, GlobalsClass.FeatureType featureType, TourFeature tourFeature) {
@@ -73,13 +72,13 @@ public class CustomInfoWindow extends InfoWindow {
 
         ((TextView) mView.findViewById(R.id.customTooltip_title)).setText(title);
         ((TextView) mView.findViewById(R.id.customTooltip_title)).setTypeface(TypefaceHelper.getTypeface(mContext));
+        ((Button)mView.findViewById(R.id.tooltip_button)).setTypeface(TypefaceHelper.getTypeface(mContext));
 
         String photoFileName = mFeature.getPhoto();
         if (photoFileName != null) {
             String encodedBytes = FileUtil.fileReadFromExternalDir(mContext, photoFileName);
             Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
             BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, true);
-
             ImageView mainImage = (ImageView) mView.findViewById(R.id.tooltip_imageView);
             mainImage.setImageDrawable(roundedDrawable);
         }

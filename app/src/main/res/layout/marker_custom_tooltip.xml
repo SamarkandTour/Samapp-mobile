@@ -36,12 +36,21 @@
             android:layout_gravity="center_horizontal" />
 
     </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tooltip_button"
         android:text="@string/btn_guide_me"
+        android:background="@android:color/transparent"
+        android:textColor="@color/black"
         android:layout_gravity="center"
         android:onClick="onTooltipBtnClick" />
 
