@@ -1,7 +1,6 @@
 package uz.samtuit.samapp.util;
 
 import android.content.Context;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -100,8 +99,6 @@ public class TourFeatureList {
             }
 
             List<Feature> featuresList = featureCollection.getFeatures();
-            Log.e("SIZE",featuresList.size()+"");
-
             for (Feature v:featuresList) {
                 TourFeature tourFeature = new TourFeature();
 
@@ -187,6 +184,7 @@ public class TourFeatureList {
             e.printStackTrace();
         }
 
+        Log.e("TourFeatureList SIZE", tourFeatureList.size()+"");
         return tourFeatureList;
     }
 
@@ -264,9 +262,5 @@ public class TourFeatureList {
                 tourFeatureList.setTourFeaturesToGlobal(context, featureType, tourFeatureArrayList);
             }
         }
-    }
-
-    public static void addToMyItineraryList(Context context, int day, int tourFeatureId, int chosenNumber) {
-        String path = null;
     }
 }

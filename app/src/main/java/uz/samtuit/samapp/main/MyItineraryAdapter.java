@@ -172,20 +172,23 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 ActionItem _item4 = new ActionItem(DOWN_ITEM_ID,"DOWN",context.getResources().getDrawable(R.drawable.arrow_down));
                 ActionItem _item5 = new ActionItem(NEXTDAY_ITEM_ID,"N.DAY",context.getResources().getDrawable(R.drawable.skip_next));
 
-                if (mDataset.get(position).getDay() != 0) {
+                if (mDataset.get(position).getDay() != 1) { // Prev
                     quickAction.addActionItem(_item1);
                 }
-                if (position != 0) {
+
+                if (position != 0) { // Up
                     quickAction.addActionItem(_item2);
                 }
-                quickAction.addActionItem(_item3);
-                if (position < mDataset.size()-1) {
+
+                quickAction.addActionItem(_item3); // Delete
+
+                if (position < mDataset.size()-1) { //Down
                     quickAction.addActionItem(_item4);
                 }
-                if (mDataset.get(position).getDay() < ItineraryList.MAX_ITINERARY_DAYS) {
+
+                if (mDataset.get(position).getDay() < ItineraryList.MAX_ITINERARY_DAYS) { // Next
                     quickAction.addActionItem(_item5);
                 }
-                _item3.setSticky(true);
 
                 quickAction.show(v);
                 quickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {

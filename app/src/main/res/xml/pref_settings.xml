@@ -1,0 +1,39 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/pref_header_about">
+        <intent
+            android:targetPackage="uz.samtuit.samapp"
+            android:targetClass="uz.samtuit.samapp.main.AboutAppActivity"/>
+    </Preference>
+
+    <PreferenceScreen
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:summary="@string/pref_summary_notifications"
+        android:title="@string/pref_header_notifications" >
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="target_arrival_vibrate"
+            android:title="@string/pref_title_vibrate" />
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:summary="@string/pref_summary_data_sync"
+        android:title="@string/pref_header_data_sync" >
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="update_check_on_boot"
+            android:title="@string/pref_title_update_on_boot" />
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:icon="@drawable/ic_language"
+        android:title="@string/pref_header_languages">
+        <intent
+            android:targetPackage="uz.samtuit.samapp"
+            android:targetClass="uz.samtuit.samapp.main.LanguageSettingActivity"/>
+    </PreferenceScreen>
+
+</PreferenceScreen>

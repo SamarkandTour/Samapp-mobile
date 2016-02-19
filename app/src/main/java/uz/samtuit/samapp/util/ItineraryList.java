@@ -163,6 +163,8 @@ public class ItineraryList {
     }
 
     public LinkedList<TourFeature> getItineraryFeatureListFromGeoJSONFile(Context context, String fileName) {
+        clearItineraryFeatureList(); // Init memory
+
         try {
             FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, fileName);
             if (featureCollection == null) {
@@ -170,8 +172,6 @@ public class ItineraryList {
             }
 
             List<Feature> featuresList = featureCollection.getFeatures();
-            Log.e("SIZE", featuresList.size() + "");
-
             for (Feature v:featuresList) {
                 TourFeature itineraryElement = findFeature(context, v.getProperties().getString("name"));
 
@@ -188,6 +188,7 @@ public class ItineraryList {
             e.printStackTrace();
         }
 
+        Log.e("ItineraryList SIZE", mItineraryList.size() + "");
         return mItineraryList;
     }
 

@@ -69,7 +69,6 @@ import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.Downloader;
 import uz.samtuit.samapp.util.GlobalsClass;
-import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.MenuItems;
 import uz.samtuit.samapp.util.SystemBarTintManager;
 import uz.samtuit.samapp.util.SystemSetting;
@@ -595,6 +594,8 @@ public class MainMap extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e("MainMapActivity", "onResume(), TourFeatureList size=" + globalVariables.getTourFeatures(FeatureType.HOTEL).size());
+        Log.e("MainMapActivity", "onResume(), ItineraryList size=" + globalVariables.getItineraryFeatures().size());
 
         if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON, Always indicate my location on the map
             myLocationOverlay.enableMyLocation();
@@ -665,14 +666,6 @@ public class MainMap extends ActionBarActivity {
                     break;
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e("OnDestroy", "beep");
-        ItineraryList list = ItineraryList.getInstance();
-        list.clearItineraryFeatureList();
     }
 
     class PopulateMarkers extends AsyncTask<Pair<FeatureType, TourFeature>, Pair<FeatureType, TourFeature>, FeatureType>{
