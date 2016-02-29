@@ -47,6 +47,7 @@
     <string name="toast_select_destination">First select a marker and press the Guide Me button</string>
     <string name="toast_wait_for_gps">Please wait for catching the GPS signal</string>
     <string name="toast_navi_finding">Start to find the distance and direction</string>
+    <string name="toast_no_magnetic_sensor">"You don't have magnetic senor. So the compass of navigation cannot work"</string>
     <string name="marquee_searching_you">Searching your location...</string>
     <string name="marquee_searching_target">"Searching the distance and direction of "</string>
     <string name="marquee_guiding">"Guiding to "</string>

@@ -25,9 +25,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -52,11 +50,6 @@ import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
-import com.rey.material.app.BottomSheetDialog;
-import com.rey.material.app.Dialog;
-import com.rey.material.drawable.ThemeDrawable;
-import com.rey.material.util.ViewUtil;
-import com.rey.material.widget.ImageButton;
 import com.rey.material.widget.ProgressView;
 
 import java.io.File;
@@ -534,6 +527,12 @@ public class MainMap extends ActionBarActivity {
         if(isNavigationEnabled) {
             mNavigationView.setVisibility(View.VISIBLE);
             mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
+
+            // Check if there is a magnetic field sensor
+            List<Sensor> sensor = mSensorManager.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
+            if (sensor.size() == 0 ) {
+                Toast.makeText(MainMap.this, R.string.toast_no_magnetic_sensor, Toast.LENGTH_LONG).show();
+            }
 
             if (mDestinationLoc.getLongitude() == 0 && mDestinationLoc.getLatitude() == 0) {
                 Toast.makeText(MainMap.this, R.string.toast_select_destination, Toast.LENGTH_LONG).show();
