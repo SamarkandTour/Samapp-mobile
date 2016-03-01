@@ -532,6 +532,7 @@ public class MainMap extends ActionBarActivity {
             List<Sensor> sensor = mSensorManager.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
             if (sensor.size() == 0 ) {
                 Toast.makeText(MainMap.this, R.string.toast_no_magnetic_sensor, Toast.LENGTH_LONG).show();
+                return;
             }
 
             if (mDestinationLoc.getLongitude() == 0 && mDestinationLoc.getLatitude() == 0) {
@@ -591,10 +592,20 @@ public class MainMap extends ActionBarActivity {
     };
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e("MainMapActivity", "onRestart()");
+
+        // When Features are out of memory, App should need to restart from the start
+        if (globalVariables.getTourFeatures(FeatureType.HOTEL).size() == 0) {
+            Log.e("MainMapActivity", "onResume(), TourFeatureList size=" + globalVariables.getTourFeatures(FeatureType.HOTEL).size());
+            finish();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        Log.e("MainMapActivity", "onResume(), TourFeatureList size=" + globalVariables.getTourFeatures(FeatureType.HOTEL).size());
-        Log.e("MainMapActivity", "onResume(), ItineraryList size=" + globalVariables.getItineraryFeatures().size());
 
         if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON, Always indicate my location on the map
             myLocationOverlay.enableMyLocation();
