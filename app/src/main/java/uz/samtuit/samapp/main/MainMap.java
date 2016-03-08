@@ -331,10 +331,12 @@ public class MainMap extends ActionBarActivity {
             @Override
             public void onLocationChanged(Location location) {
                 super.onLocationChanged(location);
+                globalVariables.setCurrentLoc(location);
 
                 //Show icon animation until my location is recognized by first GPS signal
                 if (isSearchMyLocEnabled || isNavigationEnabled) {
                     myLocationOverlay.goToMyPosition(true);
+
                     animGPS.stop();
                     animGPS.selectDrawable(0); // Return to first frame
                     cancelGPSSignalTimer();
@@ -606,6 +608,8 @@ public class MainMap extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        globalVariables.clearCurrnetLoc();
 
         if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON, Always indicate my location on the map
             myLocationOverlay.enableMyLocation();

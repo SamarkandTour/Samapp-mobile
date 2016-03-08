@@ -1,7 +1,7 @@
 package uz.samtuit.samapp.util;
 
 import android.app.Application;
-import android.graphics.Typeface;
+import android.location.Location;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -46,6 +46,8 @@ public class GlobalsClass extends Application {
     private ArrayList<TourFeature> Shops;
     private ArrayList<TourFeature> Attractions;
     private LinkedList<TourFeature> Itinerary;
+
+    private Location currentLoc;
 
     public ArrayList<TourFeature> getTourFeatures(FeatureType featureType)
     {
@@ -102,14 +104,19 @@ public class GlobalsClass extends Application {
 
     public void setItineraryFeatures(LinkedList featureLinkedList) {
         Itinerary = featureLinkedList;
-        /*
-        Itinerary = new LinkedList<TourFeature>();
+    }
 
-        for (int i = 0; i < featureLinkedList.size(); i++) {
-            if (!Itinerary.contains(featureLinkedList.get(i))) {
-                Itinerary.add((TourFeature)featureLinkedList.get(i));
-            }
+    public void clearCurrnetLoc() {
+        if (currentLoc != null) {
+            currentLoc.reset();
         }
-        */
+    }
+
+    public void setCurrentLoc(Location loc) {
+        currentLoc = loc;
+    }
+
+    public Location getCurrentLoc() {
+        return currentLoc;
     }
 }

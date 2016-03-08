@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -12,7 +13,6 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +37,9 @@ import uz.samtuit.samapp.util.TourFeatureList;
 
 
 public class ItemsListActivity extends ActionBarActivity {
+    static SortBy sortBy = SortBy.NAME;
+    public enum SortBy {NAME, LOCATION};
+
     private int PRIMARY_COLOR;
     private int TOOLBAR_COLOR;
     private ArrayList<TourFeature> items;
@@ -51,6 +54,8 @@ public class ItemsListActivity extends ActionBarActivity {
     private RelativeLayout RelLayout;
     private String TITLE;
     private android.support.v7.widget.Toolbar toolbar;
+    private Location currentLoc;
+    private GlobalsClass globalVariables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,7 @@ public class ItemsListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_items_list);
 
         //Include Global Variables
-        GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+        globalVariables = (GlobalsClass)getApplicationContext();
         SharedPreferences sharedPreferences = getPreferences(0);
 
         //Configure views and variables
@@ -105,6 +110,12 @@ public class ItemsListActivity extends ActionBarActivity {
             }
         });
         extras.clear();
+
+        if (sortBy.name().equals("NAME")) {
+            sortByName();
+        } else if (sortBy.name().equals("LOCATION")) {
+            sortByLocation();
+        }
     }
 
     private static int getPrimaryColorId(FeatureType type)
@@ -342,12 +353,10 @@ public class ItemsListActivity extends ActionBarActivity {
         switch (id)
         {
             case R.id.action_sort_by_title:
-                Collections.sort(items, new CustomComparator());
-                adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
-                list.setAdapter(adapter);
+                sortByName();
                 break;
             case R.id.action_sort_by_mylocation:
-                Toast.makeText(this, getString(R.string.Err_not_supported), Toast.LENGTH_LONG).show();
+                sortByLocation();
                 break;
             case R.id.action_search:
                 handleMenuSearch();
@@ -356,10 +365,43 @@ public class ItemsListActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void sortByName() {
+        Collections.sort(items, new CustomComparator());
+        adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
+        list.setAdapter(adapter);
+        sortBy = SortBy.NAME;
+    }
+
+    private void sortByLocation() {
+        currentLoc = globalVariables.getCurrentLoc();
+
+        if (currentLoc == null || currentLoc.getLatitude() == 0 || currentLoc.getLongitude() == 0) {
+            Toast.makeText(this, R.string.toast_no_current_position, Toast.LENGTH_LONG).show();
+            return;
+        }
+        Collections.sort(items, new LocationComparator());
+        adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
+        list.setAdapter(adapter);
+        sortBy = SortBy.LOCATION;
+    }
+
     public class CustomComparator implements Comparator<TourFeature> {
         @Override
         public int compare(TourFeature o1, TourFeature o2) {
             return o1.getString("name").compareTo(o2.getString("name"));
+        }
+    }
+
+    public class LocationComparator implements Comparator<TourFeature> {
+        @Override
+        public int compare(TourFeature o1, TourFeature o2) {
+            float[] distance1 = new float[1];
+            float[] distance2 = new float[1];
+
+            android.location.Location.distanceBetween(currentLoc.getLatitude(), currentLoc.getLongitude(), o1.getLatitude(), o1.getLongitude(), distance1);
+            android.location.Location.distanceBetween(currentLoc.getLatitude(), currentLoc.getLongitude(), o2.getLatitude(), o2.getLongitude(), distance2);
+
+            return (int)distance1[0] - (int)distance2[0];
         }
     }
 }

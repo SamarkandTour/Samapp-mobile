@@ -48,6 +48,7 @@
     <string name="toast_wait_for_gps">Please wait for catching the GPS signal</string>
     <string name="toast_navi_finding">Start to find the distance and direction</string>
     <string name="toast_no_magnetic_sensor">"You don't have magnetic senor. So the compass of navigation cannot work"</string>
+    <string name="toast_no_current_position">"Can't get your current position. So can't sort by the nearest place from you"</string>
     <string name="marquee_searching_you">Searching your location...</string>
     <string name="marquee_searching_target">"Searching the distance and direction of "</string>
     <string name="marquee_guiding">"Guiding to "</string>
@@ -83,7 +84,7 @@
     <string name="prop_price">Price</string>
     <string name="prop_open">Open</string>
     <string name="sort_by_title">Sort by Name</string>
-    <string name="sort_by_mylocation">Sort by My Loc</string>
+    <string name="sort_by_mylocation">Sort by My Location</string>
     <string name="pref_header_about">About App</string>
     <string name="pref_header_data_sync">Check new update</string>
     <string name="pref_summary_data_sync">Check if the recent tour data from the server</string>

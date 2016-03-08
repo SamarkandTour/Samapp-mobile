@@ -2,25 +2,21 @@ package uz.samtuit.samapp.main;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.util.Log;
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.logging.FileHandler;
 
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
+import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.TourFeature;
 
 class ItemsListAdapter extends ArrayAdapter<TourFeature> {
@@ -28,14 +24,18 @@ class ItemsListAdapter extends ArrayAdapter<TourFeature> {
     Context context;
     ArrayList<TourFeature> data = null;
     private int layoutResourceId;
+    private GlobalsClass globalVariables;
+    private Location currentLoc;
 
     public ItemsListAdapter(Context context, int layoutResourceId, ArrayList<TourFeature> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
-    }
 
+        globalVariables = (GlobalsClass)context.getApplicationContext();
+        currentLoc = globalVariables.getCurrentLoc();
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -45,9 +45,9 @@ class ItemsListAdapter extends ArrayAdapter<TourFeature> {
             convertView = inflater.inflate(layoutResourceId, parent, false);
         }
 
-        LinearLayout holderLayout = (LinearLayout)convertView.findViewById(R.id.holder_layout);
         TextView name = (TextView) convertView.findViewById(R.id.title);
         TextView revs = (TextView) convertView.findViewById(R.id.reviewsCount);
+        TextView distanceView = (TextView) convertView.findViewById(R.id.distance);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
         ImageView star1 = (ImageView)convertView.findViewById(R.id.star1);
         ImageView star2 = (ImageView)convertView.findViewById(R.id.star2);
@@ -87,12 +87,23 @@ class ItemsListAdapter extends ArrayAdapter<TourFeature> {
             star1.setImageResource(R.drawable.ic_star_rate_white_18dp);
 
         name.setText(item.getString("name"));
+        name.setTag(item.getString("name"));
+
+        // Distance
+        if (currentLoc != null && (currentLoc.getLatitude() != 0 || currentLoc.getLongitude() != 0)
+                && ItemsListActivity.sortBy == ItemsListActivity.SortBy.LOCATION) {
+            float[] distance = new float[1];
+            android.location.Location.distanceBetween(currentLoc.getLatitude(), currentLoc.getLongitude(), item.getLatitude(), item.getLongitude(), distance);
+            distanceView.setVisibility(View.VISIBLE);
+            distanceView.setText((distance[0] > 1000) ? Math.round(distance[0]/1000 * 10.0) / 10.0 + " km" : (int) distance[0] + " m");
+        }
+
+        // Reviews
         StringBuilder sb = new StringBuilder();
         sb.append("");
-        //sb.append(hotel.Reviews);
         revs.setText(sb.toString());
         revs.setTag("revs");
-        name.setTag(item.getString("name"));
+
         name.setTypeface(tf);
         return convertView;
     }
