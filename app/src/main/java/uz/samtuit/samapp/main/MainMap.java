@@ -594,8 +594,6 @@ public class MainMap extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("MainMapActivity", "onResume(), TourFeatureList size=" + globalVariables.getTourFeatures(FeatureType.HOTEL).size());
-        Log.e("MainMapActivity", "onResume(), ItineraryList size=" + globalVariables.getItineraryFeatures().size());
 
         if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON, Always indicate my location on the map
             myLocationOverlay.enableMyLocation();

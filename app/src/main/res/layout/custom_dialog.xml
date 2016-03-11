@@ -12,7 +12,7 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:orientation="vertical" 
-        android:background="@android:color/white"
+        android:background="@drawable/layout_bg"
         android:weightSum="1">
 
         <TextView
@@ -23,24 +23,24 @@
             android:text="Map Download"
             android:layout_margin="4dp"
             android:textSize="20sp" 
-            android:textColor="@android:color/holo_green_dark"
+            android:textColor="@android:color/black"
             android:textStyle="bold" />
-        <uz.samtuit.samapp.util.JustifyTextView
+        <TextView
             android:id="@+id/tv_content"
             android:layout_margin="5dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:gravity="center_vertical"
-            android:text="asdas asd asd asd asd as dasd asd asdj asijd asijd iajs dijas idjais jiasjdiasjdijasidjasid asjdijasd ijsaid"
-            android:textColor="@android:color/holo_green_dark"
+            android:text="Lorem ipsum dolor amet"
+            android:textColor="@android:color/black"
             android:textSize="18sp"
             android:lineSpacingMultiplier="0.9"
             android:layout_weight="1.30" />
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dialog_buttons_height"
             android:gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
@@ -51,22 +51,22 @@
             <Button
                 android:id="@+id/bt_left"
                 android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
-                android:textColor="@android:color/holo_green_dark"
+                android:textColor="@android:color/black"
                 android:text="@string/btn_yes" />
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:background="@color/colorPrimary"/>
+                android:background="@color/black"/>
             <Button
                 android:id="@+id/bt_right"
                 android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
-                android:textColor="@android:color/holo_green_dark"
+                android:textColor="@android:color/black"
                 android:text="@string/btn_no" />
         </LinearLayout>
     </LinearLayout>

@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="uz.samtuit.samapp.main.ItemsListActivity">
     <item
+        android:id="@+id/action_reshape"
+        android:title="As Grid"
+        android:icon="@android:drawable/ic_input_add"
+        android:showAsAction="ifRoom"
+        />
+    <item
         android:id="@+id/action_show_markers"
         android:orderInCategory="100"
         android:title="Location"
@@ -14,7 +20,7 @@
         android:orderInCategory="200"
         android:title="Search"
         android:icon="@drawable/ic_search_white_24dp"
-        app:showAsAction="collapseActionView|ifRoom">
+        app:showAsAction="ifRoom">
     </item>
     <item
         android:id="@+id/action_sort_by_title"

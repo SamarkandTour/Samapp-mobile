@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MyItineraryActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_modify"
         android:orderInCategory="100"
-        android:title="@string/settings"
-        app:showAsAction="never" />
+        android:title="@string/modify"
+        android:icon="@drawable/edit_property"
+        app:showAsAction="always" />
 </menu>

@@ -8,10 +8,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
+import uz.samtuit.samapp.fragments.SuggestedItineraryFragment;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.TourFeature;
@@ -19,7 +22,7 @@ import uz.samtuit.samapp.util.TourFeature;
 
 public class SuggestedItineraryActivity extends ActionBarActivity {
     public static HashMap<?, ?>[] itineraryByDayArray;
-
+    public static boolean modify = false;
     Toolbar toolbar;
     ViewPager pager;
     ViewPagerAdapter vpadapter;
@@ -39,6 +42,8 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(modify)
+                    modify=false;
                 finish();
                 overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
             }
@@ -91,13 +96,42 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_my_itinerary, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.action_modify){
+            Fragment page = vpadapter.getRegisteredFragment(pager.getCurrentItem());
+            if(modify){
+                item.setIcon(R.drawable.edit_property);
+                if (page != null) {
+                    ((SuggestedItineraryFragment)page).modifyMode(false);
+                }
+            } else {
+                item.setIcon(R.drawable.ic_done_white_24dp);
+                if (page != null) {
+                    ((SuggestedItineraryFragment)page).modifyMode(true);
+                }
+            }
+            modify=!modify;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+        if (modify) {
+           modify = false;
+        }
 
         Intent intent = new Intent(this, MainMap.class);
         intent.putExtra("type", "features");

@@ -9,8 +9,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/backgroud"
-        android:src="@drawable/bg_image"
+        android:id="@+id/background"
         android:scaleType="centerCrop"
         />
     <ImageView
@@ -20,14 +19,14 @@
         android:paddingLeft="@dimen/logo_side_margin"
         android:paddingRight="@dimen/logo_side_margin"
         android:paddingTop="60dp"
-        android:src="@drawable/samtour_logo"/>
+       />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/city_logo_side_margin"
         android:paddingRight="@dimen/city_logo_side_margin"
         android:paddingTop="@dimen/city_logo_top_padding"
-        android:src="@drawable/sam_city_logo"/>
+        />
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -36,7 +35,7 @@
         android:paddingTop="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="@dimen/text_background_height"
-        android:src="@drawable/night_samarkand"
+        android:src="@drawable/back"
         />
     <TextView
         android:id="@+id/tv_info"

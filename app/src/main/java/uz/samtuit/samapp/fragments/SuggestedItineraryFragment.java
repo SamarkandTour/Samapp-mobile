@@ -1,4 +1,4 @@
-package uz.samtuit.samapp.main;
+package uz.samtuit.samapp.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import uz.samtuit.samapp.adapters.MyItineraryAdapter;
+import uz.samtuit.samapp.main.R;
+import uz.samtuit.samapp.main.SuggestedItineraryActivity;
 
 public class SuggestedItineraryFragment extends Fragment implements RecyclerView.OnClickListener {
     private final String SI_DAY = "Day";
@@ -50,6 +55,13 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
         return view;
     }
 
+
+    public void modifyMode(boolean state){
+        adapter = new MyItineraryAdapter(getContext(), day, state, true);
+        mRecyclerView.setAdapter(adapter);
+        Toast.makeText(getContext(), state + "",Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -58,8 +70,7 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("SugItineraryFragment", day+"");
-        adapter = new MyItineraryAdapter(getContext(), day);
+        adapter = new MyItineraryAdapter(getContext(), day, SuggestedItineraryActivity.modify, false);
         mRecyclerView.setAdapter(adapter);
     }
 }

@@ -7,6 +7,10 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Spannable;
@@ -30,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import uz.samtuit.samapp.adapters.TourFeatureItemsAdapter;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 import uz.samtuit.samapp.util.TourFeature;
@@ -41,16 +46,20 @@ public class ItemsListActivity extends ActionBarActivity {
     private int TOOLBAR_COLOR;
     private ArrayList<TourFeature> items;
     private FeatureType S_ACTIVITY_NAME;
-    private ListView list;
+    private RecyclerView list;
     private EditText search_text;
     private MenuItem mActionSearch;
     private MenuItem mActionSort;
+    private MenuItem mActionSortML;
     private MenuItem mActionShowOnMap;
-    private ItemsListAdapter adapter;
+    private TourFeatureItemsAdapter adapter;
     private boolean isSearchOpen = false;
     private RelativeLayout RelLayout;
+    private int[] adapterLayouts;
     private String TITLE;
     private android.support.v7.widget.Toolbar toolbar;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private int list_type = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +69,21 @@ public class ItemsListActivity extends ActionBarActivity {
         //Include Global Variables
         GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
         SharedPreferences sharedPreferences = getPreferences(0);
+        adapterLayouts =  new int[] {R.layout.items_list_adapter, R.layout.items_list_adapter_grid_card};
 
         //Configure views and variables
         RelLayout = (RelativeLayout)findViewById(R.id.hotelsMain);
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/segoeui.ttf");
-        list = (ListView)findViewById(R.id.hotelsListView);
+        list = (RecyclerView) findViewById(R.id.itemsRecycler);
+        list.setHasFixedSize(true);
+        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+        itemAnimator.setAddDuration(1000);
+        itemAnimator.setRemoveDuration(1000);
+        list.setItemAnimator(itemAnimator);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        list.setLayoutManager(mLayoutManager);
 
         //Configure Common data
         Bundle extras = getIntent().getExtras();
@@ -95,15 +113,9 @@ public class ItemsListActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(s);
         toolbar.setTitle(s);
 
-        adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
+        adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type]);
+        Log.e("TAG", items.size()+"");
         list.setAdapter(adapter);
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startItemActivity(ItemsListActivity.this, S_ACTIVITY_NAME, items.get(position));
-            }
-        });
         extras.clear();
     }
 
@@ -174,6 +186,7 @@ public class ItemsListActivity extends ActionBarActivity {
     }
 
     public static void startItemActivity(Context context, FeatureType featureType, TourFeature feature) {
+
         Intent intent = new Intent(context, TourFeatureActivity.class);
 
         if (featureType == FeatureType.ITINERARY) {
@@ -219,22 +232,23 @@ public class ItemsListActivity extends ActionBarActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        mActionShowOnMap = menu.findItem(R.id.action_show_markers);
-        mActionShowOnMap.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
-                intent.putExtra("type", "features");
-                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                return false;
-            }
-        });
+//        mActionShowOnMap = menu.findItem(R.id.action_show_markers);
+//        mActionShowOnMap.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
+//                intent.putExtra("type", "features");
+//                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                startActivity(intent);
+//                return false;
+//            }
+//        });
 
         mActionSort = menu.findItem(R.id.action_sort_by_title);
-        mActionSort = menu.findItem(R.id.action_sort_by_mylocation);
+        mActionSortML = menu.findItem(R.id.action_sort_by_mylocation);
         mActionSearch = menu.findItem(R.id.action_search);
+        mActionShowOnMap = menu.findItem(R.id.action_show_markers);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -327,7 +341,7 @@ public class ItemsListActivity extends ActionBarActivity {
                 found_items.add(items.get(i));
             }
         }
-        ItemsListAdapter adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, found_items);
+        TourFeatureItemsAdapter adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, found_items, adapterLayouts[list_type]);
         list.setAdapter(adapter);
     }
 
@@ -343,7 +357,7 @@ public class ItemsListActivity extends ActionBarActivity {
         {
             case R.id.action_sort_by_title:
                 Collections.sort(items, new CustomComparator());
-                adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
+                TourFeatureItemsAdapter adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items,adapterLayouts[list_type]);
                 list.setAdapter(adapter);
                 break;
             case R.id.action_sort_by_mylocation:
@@ -352,6 +366,20 @@ public class ItemsListActivity extends ActionBarActivity {
             case R.id.action_search:
                 handleMenuSearch();
                 break;
+            case R.id.action_reshape:
+
+                if(list_type == 0){
+                    list.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+
+                } else {
+                    list.setLayoutManager(mLayoutManager);
+                }
+                list_type = 1 - list_type;
+                adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type]);
+                list.setAdapter(adapter);
+                Log.e("Tag","PerformClick" + list_type + " " + adapterLayouts[list_type]);
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }

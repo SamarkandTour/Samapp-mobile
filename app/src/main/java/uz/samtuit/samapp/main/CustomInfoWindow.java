@@ -72,7 +72,6 @@ public class CustomInfoWindow extends InfoWindow {
 
         ((TextView) mView.findViewById(R.id.customTooltip_title)).setText(title);
         ((TextView) mView.findViewById(R.id.customTooltip_title)).setTypeface(TypefaceHelper.getTypeface(mContext));
-        ((Button)mView.findViewById(R.id.tooltip_button)).setTypeface(TypefaceHelper.getTypeface(mContext));
 
         String photoFileName = mFeature.getPhoto();
         if (photoFileName != null) {

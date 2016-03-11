@@ -51,6 +51,7 @@ public class LogoActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_logo);
+        overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
         tvInfo = (TextView) findViewById(R.id.tv_info);
         tvInfo.setTypeface(TypefaceHelper.getTypeface(getApplicationContext(), "segoeui"));
 

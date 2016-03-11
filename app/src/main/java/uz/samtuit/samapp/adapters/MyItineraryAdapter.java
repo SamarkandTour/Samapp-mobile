@@ -1,4 +1,4 @@
-package uz.samtuit.samapp.main;
+package uz.samtuit.samapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,21 +6,28 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
+import uz.samtuit.samapp.main.R;
+import uz.samtuit.samapp.main.TourFeatureActivity;
 import uz.samtuit.samapp.util.ActionItem;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
@@ -32,23 +39,29 @@ import uz.samtuit.samapp.util.TourFeature;
 
 public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.ViewHolder> {
     private ArrayList<TourFeature> mDataset;
-    private int dataSize = 0;
-    private int lastPosition = -1;
     private Context context;
+
     final private int PREVIOUSDAY_ITEM_ID = 1000;
     final private int NEXTDAY_ITEM_ID = 1001;
     final private int UP_ITEM_ID = 1002;
     final private int DOWN_ITEM_ID = 1003;
     final private int DELETE_ITEM_ID = 1004;
+
+    private int dataSize = 0;
+    private int lastPosition = -1;
+
     private View mLayoutBetweenItems;
+    int layoutResId = R.layout.itinerary_card;
+
     private ArrayList<TourFeature> itineraryByDay = new ArrayList<TourFeature>();
     private int selectedArrayDay, selectedRealDay;
+    private List<Integer> checkedItems; //checked items in modify mode
+
+    boolean animate = false; //animate items or not
+    boolean isMod = false; //toggle for modify mode
 
     private static int[] dataSizeByDay = new int[ItineraryList.MAX_ITINERARY_DAYS];
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView mName;
@@ -57,8 +70,9 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         public ImageView mItemImage;
         public TextView mOrderNum;
         public TextView mDistance;
+        public ImageButton addNewItem;
         public View mLayoutBetweenItems;
-        public RelativeLayout container;
+        public View container;
 
         public ViewHolder(View v) {
             super(v);
@@ -70,16 +84,23 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             mItemImage = (ImageView)v.findViewById(R.id.it_image);
             mDistance = (TextView)v.findViewById(R.id.it_distance);
             mLayoutBetweenItems = v.findViewById(R.id.layout_between_items);
-            container = (RelativeLayout)v.findViewById(R.id.container);
+            addNewItem = (ImageButton)v.findViewById(R.id.add_new_itinerary_item);
+            container = v.findViewById(R.id.card_container);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyItineraryAdapter(Context context, int day) {
+    public MyItineraryAdapter(Context context, int day, boolean mod, boolean animate) {
         selectedArrayDay = day;
         selectedRealDay = selectedArrayDay + 1; // Because the day argument is the position of tabs, add 1 to change to real day
-
         mDataset = getItineraryByDay(context, selectedRealDay);
+        this.animate = animate;
+        this.isMod = mod;
+        if(isMod)
+        {
+            layoutResId = R.layout.itinerary_card_mod;
+            checkedItems = new ArrayList<Integer>();
+        }
 
         if(mDataset != null) {
             dataSize = mDataset.size();
@@ -110,7 +131,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     public MyItineraryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         context = parent.getContext();
-        View v = LayoutInflater.from(context).inflate(R.layout.itinerary_card, parent, false);
+        View v = LayoutInflater.from(context).inflate(layoutResId, parent, false);
 
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
@@ -129,22 +150,21 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        int orderNumInTab = getStartIndexOfDay() + position;
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final int orderNumInTab = getStartIndexOfDay() + position;
+        final ImageView mItemImage = holder.mItemImage;
         final int indexInItineraryList = orderNumInTab - 1; // the index in list starts from 0
         mLayoutBetweenItems = holder.mLayoutBetweenItems;
-
-        if (position < dataSize-1) {
-            mLayoutBetweenItems.setVisibility(View.VISIBLE);
-        } else {
-            mLayoutBetweenItems.setVisibility(View.GONE);
-        }
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mName.setText(mDataset.get(position).getString("name"));
         holder.mOrderNum.setText(Integer.toString(orderNumInTab));
-
+        if (position < dataSize-1 && !isMod) { //if last and is not modifing show layout between items
+            mLayoutBetweenItems.setVisibility(View.VISIBLE);
+        } else {
+            mLayoutBetweenItems.setVisibility(View.GONE);
+        }
         switch (mDataset.get(position).getString("category")) {
             case "hotel":
                 holder.mOrderNum.setBackgroundResource(R.drawable.hotel_round_bg);
@@ -160,93 +180,126 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 break;
         }
 
-        holder.container.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                final Context context = v.getContext();
+        if (isMod) {
+            holder.addNewItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                QuickAction quickAction = new QuickAction(context);
-                ActionItem _item1 = new ActionItem(PREVIOUSDAY_ITEM_ID,"P.DAY",context.getResources().getDrawable(R.drawable.skip_previous));
-                ActionItem _item2 = new ActionItem(UP_ITEM_ID,"UP",context.getResources().getDrawable(R.drawable.arrow_up));
-                ActionItem _item3 = new ActionItem(DELETE_ITEM_ID,"DELETE",context.getResources().getDrawable(R.drawable.delete));
-                ActionItem _item4 = new ActionItem(DOWN_ITEM_ID,"DOWN",context.getResources().getDrawable(R.drawable.arrow_down));
-                ActionItem _item5 = new ActionItem(NEXTDAY_ITEM_ID,"N.DAY",context.getResources().getDrawable(R.drawable.skip_next));
-
-                if (mDataset.get(position).getDay() != 1) { // Prev
-                    quickAction.addActionItem(_item1);
                 }
-
-                if (position != 0) { // Up
-                    quickAction.addActionItem(_item2);
-                }
-
-                quickAction.addActionItem(_item3); // Delete
-
-                if (position < mDataset.size()-1) { //Down
-                    quickAction.addActionItem(_item4);
-                }
-
-                if (mDataset.get(position).getDay() < ItineraryList.MAX_ITINERARY_DAYS) { // Next
-                    quickAction.addActionItem(_item5);
-                }
-
-                quickAction.show(v);
-                quickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
-                    @Override
-                    public void onItemClick(QuickAction source, int pos, int actionId) {
-                        switch (actionId) {
-                            case PREVIOUSDAY_ITEM_ID:
-                                changeDay(context, indexInItineraryList, -1);
-                                break;
-                            case NEXTDAY_ITEM_ID:
-                                changeDay(context, indexInItineraryList, 1);
-                                break;
-                            case DELETE_ITEM_ID:
-                                changeOrder(context, indexInItineraryList, DELETE_ITEM_ID);
-                                break;
-                            case DOWN_ITEM_ID:
-                                changeOrder(context, indexInItineraryList, DOWN_ITEM_ID);
-                                break;
-                            case UP_ITEM_ID:
-                                changeOrder(context, indexInItineraryList, UP_ITEM_ID);
-                                break;
-                        }
+            });
+            final Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+            final Animation animOut = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
+            holder.container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(checkedItems.contains(position)) {
+                        checkedItems.remove(checkedItems.indexOf(position));
+                        BitmapUtil.setRoundImageFromFileToView(context, mDataset.get(position).getPhoto(), holder.mItemImage,animOut);
+                        holder.mItemImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    } else {
+                        checkedItems.add(position);
+                        Glide.with(context).load(R.drawable.ic_done_white_24dp).animate(animIn).into(holder.mItemImage);
+                        holder.mItemImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                     }
-                });
-                quickAction.setAnimStyle(QuickAction.ANIM_GROW_FROM_LEFT);
-                return false;
-            }
-        });
+                    Log.e("COUNT", checkedItems.size()+"");
+                }
+            });
+        } else {
+            holder.container.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final Context context = v.getContext();
+                    makeQuickAction(context, v, indexInItineraryList, position, mDataset.get(position));
+                    return false;
+                }
+            });
+            holder.container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = getTourFeatureIntent(context, mDataset.get(position));
 
-        holder.container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context,TourFeatureActivity.class);
-                intent.putExtra("featureType", mDataset.get(position).getString("type"));
-                Log.e("FEATURETYPE", mDataset.get(position).getString("type"));
+                    context.startActivity(intent);
+                }
+            });
+        }
 
-                intent.putExtra("photo", mDataset.get(position).getPhoto());
-                intent.putExtra("rating", mDataset.get(position).getRating());
-                intent.putExtra("name", mDataset.get(position).getString("name"));
-                intent.putExtra("desc", mDataset.get(position).getString("desc"));
-                intent.putExtra("type", mDataset.get(position).getString("type"));
-                intent.putExtra("price", mDataset.get(position).getString("price"));
-                intent.putExtra("wifi", mDataset.get(position).getString("wifi"));
-                intent.putExtra("open", mDataset.get(position).getString("open"));
-                intent.putExtra("addr", mDataset.get(position).getString("addr"));
-                intent.putExtra("tel", mDataset.get(position).getString("tel"));
-                intent.putExtra("url", mDataset.get(position).getString("url"));
-                intent.putExtra("long", mDataset.get(position).getLongitude());
-                intent.putExtra("lat", mDataset.get(position).getLatitude());
-                intent.putExtra("primaryColorId", R.color.attraction_primary);
-                intent.putExtra("toolbarColorId", R.color.attraction_primary);
-                context.startActivity(intent);
-            }
-        });
-
-        CalculateDistanceTimeAsync calc = new CalculateDistanceTimeAsync(position, holder, 512);
+        BitmapUtil.setRoundImageFromFileToView(context, mDataset.get(position).getPhoto(), holder.mItemImage);
+        CalculateDistanceTimeAsync calc = new CalculateDistanceTimeAsync(position, holder);
         calc.execute();
         setAnimation(holder.container,position);
+    }
+
+    private Intent getTourFeatureIntent(Context vContext, TourFeature tf) {
+        Intent intent = new Intent(vContext, TourFeatureActivity.class);
+        intent.putExtra("featureType", tf.getString("type"));
+        intent.putExtra("photo", tf.getPhoto());
+        intent.putExtra("rating", tf.getRating());
+        intent.putExtra("name", tf.getString("name"));
+        intent.putExtra("desc", tf.getString("desc"));
+        intent.putExtra("type", tf.getString("type"));
+        intent.putExtra("price", tf.getString("price"));
+        intent.putExtra("wifi", tf.getString("wifi"));
+        intent.putExtra("open", tf.getString("open"));
+        intent.putExtra("addr", tf.getString("addr"));
+        intent.putExtra("tel", tf.getString("tel"));
+        intent.putExtra("url", tf.getString("url"));
+        intent.putExtra("long", tf.getLongitude());
+        intent.putExtra("lat", tf.getLatitude());
+        intent.putExtra("primaryColorId", R.color.attraction_primary);
+        intent.putExtra("toolbarColorId", R.color.attraction_primary);
+        return intent;
+    }
+
+    private void makeQuickAction(Context vContext, View v, final int indexInItineraryList, int position, TourFeature tf) {
+        QuickAction quickAction = new QuickAction(vContext);
+        ActionItem _item1 = new ActionItem(PREVIOUSDAY_ITEM_ID,"P.DAY",context.getResources().getDrawable(R.drawable.skip_previous));
+        ActionItem _item2 = new ActionItem(UP_ITEM_ID,"UP",context.getResources().getDrawable(R.drawable.arrow_up));
+        ActionItem _item3 = new ActionItem(DELETE_ITEM_ID,"DELETE",context.getResources().getDrawable(R.drawable.delete));
+        ActionItem _item4 = new ActionItem(DOWN_ITEM_ID,"DOWN",context.getResources().getDrawable(R.drawable.arrow_down));
+        ActionItem _item5 = new ActionItem(NEXTDAY_ITEM_ID,"N.DAY",context.getResources().getDrawable(R.drawable.skip_next));
+
+        if (tf.getDay() != 1) { // Prev
+            quickAction.addActionItem(_item1);
+        }
+
+        if (position != 0) { // Up
+            quickAction.addActionItem(_item2);
+        }
+
+        quickAction.addActionItem(_item3); // Delete
+
+        if (position < mDataset.size()-1) { //Down
+            quickAction.addActionItem(_item4);
+        }
+
+        if (mDataset.get(position).getDay() < ItineraryList.MAX_ITINERARY_DAYS) { // Next
+            quickAction.addActionItem(_item5);
+        }
+
+        quickAction.show(v);
+        quickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
+            @Override
+            public void onItemClick(QuickAction source, int pos, int actionId) {
+                switch (actionId) {
+                    case PREVIOUSDAY_ITEM_ID:
+                        changeDay(context, indexInItineraryList, -1);
+                        break;
+                    case NEXTDAY_ITEM_ID:
+                        changeDay(context, indexInItineraryList, 1);
+                        break;
+                    case DELETE_ITEM_ID:
+                        changeOrder(context, indexInItineraryList, DELETE_ITEM_ID);
+                        break;
+                    case DOWN_ITEM_ID:
+                        changeOrder(context, indexInItineraryList, DOWN_ITEM_ID);
+                        break;
+                    case UP_ITEM_ID:
+                        changeOrder(context, indexInItineraryList, UP_ITEM_ID);
+                        break;
+                }
+            }
+        });
+        quickAction.setAnimStyle(QuickAction.ANIM_GROW_FROM_LEFT);
     }
 
     private void changeOrder(Context context, int index, int cmd) {
@@ -305,7 +358,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     private void setAnimation(View viewToAnimate, int position) {
-        if (position > lastPosition) {
+        if (position > lastPosition && animate) {
             Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
@@ -323,48 +376,15 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         return dataSize;
     }
 
-    private class GetBitmapAsync extends AsyncTask<Void, Void, Void>{
-        private int mPosition;
-        private float mImageSize;
-        private ViewHolder mHolder;
-        private Drawable roundedDrawable;
-
-        public GetBitmapAsync(int position, ViewHolder holder, float imageSize){
-            mPosition = position;
-            mHolder = holder;
-            mImageSize = imageSize;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            String fileName = mDataset.get(mPosition).getPhoto();
-            if (fileName != null) {
-                Log.e("LOGTAG","CHP");
-                String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
-                Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes,mImageSize, mImageSize);
-                roundedDrawable = BitmapUtil.getRoundedBitmap(decodedBytes,context);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void params) {
-            mHolder.mItemImage.setImageDrawable(roundedDrawable);
-        }
-    }
-
     private class CalculateDistanceTimeAsync extends AsyncTask<Void, Void, ItineraryItem>{
 
         private float distance[] = new float[1];
         private int mPosition;
         private ViewHolder mHolder;
-        private float mImageSize;
-        private BitmapUtil.RoundedDrawable roundedDrawable;
 
-        public CalculateDistanceTimeAsync(int position, ViewHolder holder, float imageSize) {
+        public CalculateDistanceTimeAsync(int position, ViewHolder holder) {
             mPosition = position;
             mHolder = holder;
-            mImageSize = imageSize;
         }
 
         @Override
@@ -381,8 +401,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 mHolder.mCarTime.setText(item.getString("car_time"));
                 mHolder.mWalkTime.setText(item.getString("walk_time"));
             }
-
-            mHolder.mItemImage.setImageDrawable(roundedDrawable);
         }
 
         @Override
@@ -403,14 +421,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             } else { // And don't draw images regarding distance
                 item.setIsLast(true);
             }
-
-            String fileName = mDataset.get(mPosition).getPhoto();
-            if (fileName != null) {
-                String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
-                Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes,mImageSize, mImageSize);
-                roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
-            }
-
             return item;
         }
 

@@ -7,5 +7,5 @@
         android:orderInCategory="300"
         android:title="Location"
         android:icon="@drawable/place_white"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 </menu>

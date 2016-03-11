@@ -12,12 +12,14 @@ import android.view.ViewGroup;
 import java.util.HashMap;
 import java.util.Map;
 
+import uz.samtuit.samapp.fragments.SuggestedItineraryFragment;
+
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
     int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
     private final String SI_DAY = "Day";
     private Context mContext;
-    private static final String TAG = "SuggestedItineraryFragment";
+    private static final String TAG = "DAY_";
     private Map<Integer, String> mFragmentTags;
     private FragmentManager mFragmentManager;
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();

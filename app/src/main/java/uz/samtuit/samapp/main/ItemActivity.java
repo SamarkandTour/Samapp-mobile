@@ -6,13 +6,18 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.view.LayoutInflater;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +30,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.util.LinkedList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
@@ -40,10 +49,7 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
     private MenuItem mActionNavigate;
     private double latitude, longitude;
     private String name;
-    private RelativeLayout relLayout;
-    private ImageView imageView;
-    private ImageView addToMyItineraryBtn;
-    private ImageButton call,link;
+
 
     private ImageButton callBtn, linkBtn;
     private int selectedDay = 1;
@@ -52,6 +58,20 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
     private String url, wifi, telNum;
     private SharedPreferences sharedPreferences;
     private int index;
+    @InjectView(R.id.star1) ImageView star1;
+    @InjectView(R.id.star2) ImageView star2;
+    @InjectView(R.id.star3) ImageView star3;
+    @InjectView(R.id.star4) ImageView star4;
+    @InjectView(R.id.star5)  ImageView star5;
+    @InjectView(R.id.tool_bar) Toolbar toolbar;
+    @InjectView(R.id.itemRelLayout)  RelativeLayout relLayout;
+    @InjectView(R.id.hotel_title_small) TextView titleSmall;
+    @InjectView(R.id.hotel_desc) TextView description;
+    @InjectView(R.id.hotel_address) TextView address;
+    @InjectView(R.id.price) TextView price;
+    @InjectView(R.id.open) TextView open;
+    @InjectView(R.id.fab) FloatingActionButton fab;
+
 
     @Override
     protected void onStop() {
@@ -70,14 +90,14 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
+        ButterKnife.inject(this);
         final Bundle extras = getIntent().getExtras();
 
         index = extras.getInt("index");
 
         //ActionBar setting
-        Toolbar toolbar = (Toolbar) findViewById(R.id.hotel_tool_bar);
-        relLayout = (RelativeLayout) findViewById(R.id.itemRelLayout);
         toolbar.setBackgroundColor(getResources().getColor(extras.getInt("primaryColorId")));
+        fab.setColorFilter(getResources().getColor(extras.getInt("primaryColorId")));
         setSupportActionBar(toolbar);
         relLayout.setBackground(getResources().getDrawable(extras.getInt("primaryColorId")));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -100,7 +120,6 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
 
         // Loc
         featureType = extras.getString("featureType");
-        Log.e("FEATURE TYPE", featureType + " " + GlobalsClass.FeatureType.HOTEL.name());
         if(featureType.equals(GlobalsClass.FeatureType.HOTEL.toString())||featureType.equals(GlobalsClass.FeatureType.FOODNDRINK.toString())){
             mAddToMyItinerary.setVisibility(View.GONE);
         }
@@ -108,19 +127,12 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
         longitude = extras.getDouble("long");
 
         // Photo
-        imageView = (ImageView)findViewById(R.id.hotel_image);
-        LoadImageFromExternalStorage loadImageFromExternalStorage = new LoadImageFromExternalStorage();
-        loadImageFromExternalStorage.execute(extras.getString("photo"));
+
+        BitmapUtil.setImageFromFileToView(this, extras.getString("photo"), (ImageView)findViewById(R.id.hotel_image));
+
 
         // Rating
         int Rating = extras.getInt("rating");
-        Log.e("Rating", Rating + "");
-
-        ImageView star1 = (ImageView)findViewById(R.id.star1);
-        ImageView star2 = (ImageView)findViewById(R.id.star2);
-        ImageView star3 = (ImageView)findViewById(R.id.star3);
-        ImageView star4 = (ImageView)findViewById(R.id.star4);
-        ImageView star5 = (ImageView)findViewById(R.id.star5);
 
         if(Rating>4)
             star5.setImageResource(R.drawable.ic_star_rate_white_18dp);
@@ -176,23 +188,19 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
         }
 
         // Title
-        TextView titleSmall = (TextView)findViewById(R.id.hotel_title_small);
+
         titleSmall.setText(extras.getString("name"));
 
         // Description
-        TextView description = (TextView)findViewById(R.id.hotel_desc);
         description.setText(extras.getString("desc"));
 
         // Addr
-        TextView address = (TextView)findViewById(R.id.hotel_address);
         address.setText(extras.getString("addr"));
 
         // Price
-        TextView price = (TextView)findViewById(R.id.price);
         price.setText(extras.getString("price"));
 
         // Open
-        TextView open = (TextView)findViewById(R.id.open);
         open.setText(extras.getString("open"));
 
         // Index
@@ -280,25 +288,4 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
         else
             selectedDay=newVal;
     }
-
-    class LoadImageFromExternalStorage extends AsyncTask<String,String,Void>{
-
-        @Override
-        protected Void doInBackground(String... params) {
-            if (params[0] != null) {
-                String encodedBytes = FileUtil.fileReadFromExternalDir(ItemActivity.this, params[0]);
-                publishProgress(encodedBytes);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-            Log.e("SCREEN SIZE",imageView.getHeight()+ " "+imageView.getWidth());
-            Drawable dr = new BitmapDrawable(BitmapUtil.decodeBase64Bitmap(values[0],imageView.getWidth(),imageView.getHeight()));
-            imageView.setImageDrawable(dr);
-        }
-    }
-
 }
