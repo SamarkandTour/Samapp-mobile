@@ -387,7 +387,7 @@ public class ItemsListActivity extends ActionBarActivity {
 
     private void sortByName() {
         Collections.sort(items, new CustomComparator());
-        adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
+        adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type]);
         list.setAdapter(adapter);
         sortBy = SortBy.NAME;
     }
@@ -400,7 +400,7 @@ public class ItemsListActivity extends ActionBarActivity {
             return;
         }
         Collections.sort(items, new LocationComparator());
-        adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
+        adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type]);
         list.setAdapter(adapter);
         sortBy = SortBy.LOCATION;
     }

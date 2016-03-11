@@ -1,38 +1,26 @@
 package uz.samtuit.samapp.adapters;
 
-import android.app.PendingIntent;
+
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
-import android.view.textservice.TextInfo;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import uz.samtuit.samapp.main.ItemsListActivity;
-import uz.samtuit.samapp.main.LogoActivity;
+
 import uz.samtuit.samapp.main.R;
 import uz.samtuit.samapp.util.BitmapUtil;
-import uz.samtuit.samapp.util.FileUtil;
+
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.TourFeature;
 
@@ -73,52 +61,16 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
         } else {
             holder.TF_TITLE.setTextSize(13);
         }
-        //Log.e("TEGA","PPEPP");
-
 
         try{
-            String encodedBytes = FileUtil.fileReadFromExternalDir(context, fileName);
-            BitmapUtil.setRoundImageFromFileToView(context, encodedBytes, holder.TF_IMAGE, AnimationUtils.loadAnimation(context, android.R.anim.fade_in));
-//            final ImageView imageView = holder.TF_IMAGE;
-//            if(layoutID==R.layout.items_list_adapter)
-//            {
-//                Glide.with(context).load(Base64.decode(encodedBytes, Base64.DEFAULT)).asBitmap().into(new BitmapImageViewTarget(imageView) {
-//                    @Override
-//                    protected void setResource(Bitmap resource) {
-//                        super.setResource(resource);
-//                        RoundedBitmapDrawable circularBitmapDrawable =
-//                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-//                        circularBitmapDrawable.setCircular(true);
-//                        imageView.setImageDrawable(circularBitmapDrawable);
-//                        imageView.setPadding(6,6,6,6);
-//                    }
-//                });
-//            } else {
-//                Glide.with(context).load(Base64.decode(encodedBytes, Base64.DEFAULT)).asBitmap().placeholder(R.drawable.no_image).into(holder.TF_IMAGE);
-//                holder.TF_IMAGE.getLayoutParams().height = display.getWidth() / 2 - 80;
-//            }
+            BitmapUtil.setRoundImageFromFileToView(context, fileName, holder.TF_IMAGE, AnimationUtils.loadAnimation(context, android.R.anim.fade_in));
+
 
         }catch (Exception ex){
-//            Glide.with(context).load(R.drawable.no_image).into(holder.TF_IMAGE);
-//            if(layoutID == R.layout.items_list_adapter_grid_card)
-//                holder.TF_IMAGE.getLayoutParams().height = display.getWidth() / 2 - 80;
+
             ex.printStackTrace();
         }
 
-
-
-
-
-//        try {
-//            if (fileName != null) {
-//
-//                Bitmap decodedBytes = BitmapUtil.decodeBase64Bitmap(encodedBytes, holder.TF_IMAGE.getLayoutParams().height , holder.TF_IMAGE.getLayoutParams().width);
-//                BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, false);
-//                holder.TF_IMAGE.setImageDrawable(roundedDrawable);
-//            }
-//        }catch (Exception ex){
-//            ex.printStackTrace();
-//        }
         holder.TF_HOLDER.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

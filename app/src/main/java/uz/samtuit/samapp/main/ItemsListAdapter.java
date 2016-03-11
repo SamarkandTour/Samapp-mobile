@@ -2,6 +2,7 @@ package uz.samtuit.samapp.main;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,8 +50,6 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
         this.data = data;
         this.S_ACTIVITY_NAME = S_ACTIVITY_NAME;
         this.layoutId = layoutID;
-    }
-
         globalVariables = (GlobalsClass)context.getApplicationContext();
         currentLoc = globalVariables.getCurrentLoc();
     }
@@ -63,15 +62,7 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
         return vh;
     }
 
-        TextView name = (TextView) convertView.findViewById(R.id.title);
-        TextView revs = (TextView) convertView.findViewById(R.id.reviewsCount);
-        TextView distanceView = (TextView) convertView.findViewById(R.id.distance);
-        Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
-        ImageView star1 = (ImageView)convertView.findViewById(R.id.star1);
-        ImageView star2 = (ImageView)convertView.findViewById(R.id.star2);
-        ImageView star3 = (ImageView)convertView.findViewById(R.id.star3);
-        ImageView star4 = (ImageView)convertView.findViewById(R.id.star4);
-        ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
+
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
@@ -105,26 +96,7 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
     @Override
     public long getItemId(int position) {
         return super.getItemId(position);
-        name.setText(item.getString("name"));
-        name.setTag(item.getString("name"));
 
-        // Distance
-        if (currentLoc != null && (currentLoc.getLatitude() != 0 || currentLoc.getLongitude() != 0)
-                && ItemsListActivity.sortBy == ItemsListActivity.SortBy.LOCATION) {
-            float[] distance = new float[1];
-            android.location.Location.distanceBetween(currentLoc.getLatitude(), currentLoc.getLongitude(), item.getLatitude(), item.getLongitude(), distance);
-            distanceView.setVisibility(View.VISIBLE);
-            distanceView.setText((distance[0] > 1000) ? Math.round(distance[0]/1000 * 10.0) / 10.0 + " km" : (int) distance[0] + " m");
-        }
-
-        // Reviews
-        StringBuilder sb = new StringBuilder();
-        sb.append("");
-        revs.setText(sb.toString());
-        revs.setTag("revs");
-
-        name.setTypeface(tf);
-        return convertView;
     }
 
 }
