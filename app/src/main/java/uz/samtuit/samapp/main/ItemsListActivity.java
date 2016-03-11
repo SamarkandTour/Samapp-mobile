@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -42,6 +43,9 @@ import uz.samtuit.samapp.util.TourFeatureList;
 
 
 public class ItemsListActivity extends ActionBarActivity {
+    static SortBy sortBy = SortBy.NAME;
+    public enum SortBy {NAME, LOCATION};
+
     private int PRIMARY_COLOR;
     private int TOOLBAR_COLOR;
     private ArrayList<TourFeature> items;
@@ -60,6 +64,8 @@ public class ItemsListActivity extends ActionBarActivity {
     private android.support.v7.widget.Toolbar toolbar;
     private RecyclerView.LayoutManager mLayoutManager;
     private int list_type = 0;
+    private Location currentLoc;
+    private GlobalsClass globalVariables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +123,12 @@ public class ItemsListActivity extends ActionBarActivity {
         Log.e("TAG", items.size()+"");
         list.setAdapter(adapter);
         extras.clear();
+
+        if (sortBy.name().equals("NAME")) {
+            sortByName();
+        } else if (sortBy.name().equals("LOCATION")) {
+            sortByLocation();
+        }
     }
 
     private static int getPrimaryColorId(FeatureType type)
@@ -232,18 +244,6 @@ public class ItemsListActivity extends ActionBarActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-//        mActionShowOnMap = menu.findItem(R.id.action_show_markers);
-//        mActionShowOnMap.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
-//                intent.putExtra("type", "features");
-//                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                startActivity(intent);
-//                return false;
-//            }
-//        });
 
         mActionSort = menu.findItem(R.id.action_sort_by_title);
         mActionSortML = menu.findItem(R.id.action_sort_by_mylocation);
@@ -359,9 +359,10 @@ public class ItemsListActivity extends ActionBarActivity {
                 Collections.sort(items, new CustomComparator());
                 TourFeatureItemsAdapter adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items,adapterLayouts[list_type]);
                 list.setAdapter(adapter);
+                sortByName();
                 break;
             case R.id.action_sort_by_mylocation:
-                Toast.makeText(this, getString(R.string.Err_not_supported), Toast.LENGTH_LONG).show();
+                sortByLocation();
                 break;
             case R.id.action_search:
                 handleMenuSearch();
@@ -384,10 +385,43 @@ public class ItemsListActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void sortByName() {
+        Collections.sort(items, new CustomComparator());
+        adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
+        list.setAdapter(adapter);
+        sortBy = SortBy.NAME;
+    }
+
+    private void sortByLocation() {
+        currentLoc = globalVariables.getCurrentLoc();
+
+        if (currentLoc == null || currentLoc.getLatitude() == 0 || currentLoc.getLongitude() == 0) {
+            Toast.makeText(this, R.string.toast_no_current_position, Toast.LENGTH_LONG).show();
+            return;
+        }
+        Collections.sort(items, new LocationComparator());
+        adapter = new ItemsListAdapter(this, R.layout.items_list_adapter, items);
+        list.setAdapter(adapter);
+        sortBy = SortBy.LOCATION;
+    }
+
     public class CustomComparator implements Comparator<TourFeature> {
         @Override
         public int compare(TourFeature o1, TourFeature o2) {
             return o1.getString("name").compareTo(o2.getString("name"));
+        }
+    }
+
+    public class LocationComparator implements Comparator<TourFeature> {
+        @Override
+        public int compare(TourFeature o1, TourFeature o2) {
+            float[] distance1 = new float[1];
+            float[] distance2 = new float[1];
+
+            android.location.Location.distanceBetween(currentLoc.getLatitude(), currentLoc.getLongitude(), o1.getLatitude(), o1.getLongitude(), distance1);
+            android.location.Location.distanceBetween(currentLoc.getLatitude(), currentLoc.getLongitude(), o2.getLatitude(), o2.getLongitude(), distance2);
+
+            return (int)distance1[0] - (int)distance2[0];
         }
     }
 }

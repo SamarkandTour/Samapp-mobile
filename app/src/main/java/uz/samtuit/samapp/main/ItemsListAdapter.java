@@ -22,9 +22,12 @@ import uz.samtuit.samapp.util.TourFeature;
 class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder> {
 
     Context context;
-    ArrayList<TourFeature> data;
     private GlobalsClass.FeatureType S_ACTIVITY_NAME;
     private int layoutId;
+    ArrayList<TourFeature> data = null;
+    private int layoutResourceId;
+    private GlobalsClass globalVariables;
+    private Location currentLoc;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTV;
@@ -48,6 +51,9 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
         this.layoutId = layoutID;
     }
 
+        globalVariables = (GlobalsClass)context.getApplicationContext();
+        currentLoc = globalVariables.getCurrentLoc();
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,6 +62,16 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
+
+        TextView name = (TextView) convertView.findViewById(R.id.title);
+        TextView revs = (TextView) convertView.findViewById(R.id.reviewsCount);
+        TextView distanceView = (TextView) convertView.findViewById(R.id.distance);
+        Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
+        ImageView star1 = (ImageView)convertView.findViewById(R.id.star1);
+        ImageView star2 = (ImageView)convertView.findViewById(R.id.star2);
+        ImageView star3 = (ImageView)convertView.findViewById(R.id.star3);
+        ImageView star4 = (ImageView)convertView.findViewById(R.id.star4);
+        ImageView star5 = (ImageView)convertView.findViewById(R.id.star5);
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
@@ -89,6 +105,26 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
     @Override
     public long getItemId(int position) {
         return super.getItemId(position);
+        name.setText(item.getString("name"));
+        name.setTag(item.getString("name"));
+
+        // Distance
+        if (currentLoc != null && (currentLoc.getLatitude() != 0 || currentLoc.getLongitude() != 0)
+                && ItemsListActivity.sortBy == ItemsListActivity.SortBy.LOCATION) {
+            float[] distance = new float[1];
+            android.location.Location.distanceBetween(currentLoc.getLatitude(), currentLoc.getLongitude(), item.getLatitude(), item.getLongitude(), distance);
+            distanceView.setVisibility(View.VISIBLE);
+            distanceView.setText((distance[0] > 1000) ? Math.round(distance[0]/1000 * 10.0) / 10.0 + " km" : (int) distance[0] + " m");
+        }
+
+        // Reviews
+        StringBuilder sb = new StringBuilder();
+        sb.append("");
+        revs.setText(sb.toString());
+        revs.setTag("revs");
+
+        name.setTypeface(tf);
+        return convertView;
     }
 
 }

@@ -51,6 +51,8 @@
     <string name="toast_select_destination">Выберите маркер и нажмите кнопку Направь сюда</string>
     <string name="toast_wait_for_gps">Подождите пока мы ловим GPS сигнал</string>
     <string name="toast_navi_finding">Началось вычисление дистанции и направления</string>
+    <string name="toast_no_magnetic_sensor">"You don't have magnetic senor. So the compass of navigation cannot work"</string>
+    <string name="toast_no_current_position">"Can't get your current position. So can't sort by the nearest place from you"</string>
     <string name="marquee_searching_you">Ищем ваше местоположение...</string>
     <string name="marquee_searching_target">"Поиск дистанции и направлении до "</string>
     <string name="marquee_guiding">"Направляем к "</string>

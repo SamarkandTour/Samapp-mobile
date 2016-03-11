@@ -338,10 +338,12 @@ public class MainMap extends ActionBarActivity {
             @Override
             public void onLocationChanged(Location location) {
                 super.onLocationChanged(location);
+                globalVariables.setCurrentLoc(location);
 
                 //Show icon animation until my location is recognized by first GPS signal
                 if (isSearchMyLocEnabled || isNavigationEnabled) {
                     myLocationOverlay.goToMyPosition(true);
+
                     animGPS.stop();
                     animGPS.selectDrawable(0); // Return to first frame
                     cancelGPSSignalTimer();
@@ -535,6 +537,13 @@ public class MainMap extends ActionBarActivity {
             mNavigationView.setVisibility(View.VISIBLE);
             mSensorManager.registerListener(mListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
 
+            // Check if there is a magnetic field sensor
+            List<Sensor> sensor = mSensorManager.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
+            if (sensor.size() == 0 ) {
+                Toast.makeText(MainMap.this, R.string.toast_no_magnetic_sensor, Toast.LENGTH_LONG).show();
+                return;
+            }
+
             if (mDestinationLoc.getLongitude() == 0 && mDestinationLoc.getLatitude() == 0) {
                 Toast.makeText(MainMap.this, R.string.toast_select_destination, Toast.LENGTH_LONG).show();
                 marqueeText.setText(R.string.toast_select_destination);
@@ -592,8 +601,22 @@ public class MainMap extends ActionBarActivity {
     };
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e("MainMapActivity", "onRestart()");
+
+        // When Features are out of memory, App should need to restart from the start
+        if (globalVariables.getTourFeatures(FeatureType.HOTEL).size() == 0) {
+            Log.e("MainMapActivity", "onResume(), TourFeatureList size=" + globalVariables.getTourFeatures(FeatureType.HOTEL).size());
+            finish();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+
+        globalVariables.clearCurrnetLoc();
 
         if(SystemSetting.checkGPSStatus(this) != 0) { // If GPS is ON, Always indicate my location on the map
             myLocationOverlay.enableMyLocation();
