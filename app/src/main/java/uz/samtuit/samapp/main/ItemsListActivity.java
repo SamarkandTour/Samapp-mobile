@@ -73,7 +73,7 @@ public class ItemsListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_items_list);
 
         //Include Global Variables
-        GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+        globalVariables = (GlobalsClass)getApplicationContext();
         SharedPreferences sharedPreferences = getPreferences(0);
         adapterLayouts =  new int[] {R.layout.items_list_adapter, R.layout.items_list_adapter_grid_card};
 
