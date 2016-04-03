@@ -3,7 +3,9 @@ package uz.samtuit.samapp.util;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Environment;
+import android.text.LoginFilter;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.cocoahero.android.geojson.FeatureCollection;
 import com.cocoahero.android.geojson.GeoJSON;
@@ -49,8 +51,8 @@ public class FileUtil {
     }
 
     public static boolean createDirectoryInExternalDir(Context context, String dirName) {
-        File dir = new File(context.getExternalFilesDir(null), dirName);
 
+        File dir = new File(context.getExternalFilesDir(null), dirName);
         if (!dir.mkdirs()) { // With including parent directory
             return false;
         }

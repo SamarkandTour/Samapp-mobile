@@ -1,5 +1,6 @@
 package uz.samtuit.samapp.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,14 +15,18 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.ZipFile;
+
+import javax.microedition.khronos.opengles.GL;
 
 import uz.samtuit.samapp.util.CheckUpdateManager;
 import uz.samtuit.samapp.util.CustomDialog;
@@ -36,7 +41,7 @@ import uz.samtuit.samapp.util.TypefaceHelper;
 import uz.samtuit.samapp.util.ZipFileUtil;
 
 
-public class LogoActivity extends ActionBarActivity {
+public class LogoActivity extends Activity {
     private CustomDialog mUpdateAvalDialog;
     private TextView tvInfo;
     private GlobalsClass globals;
@@ -53,7 +58,8 @@ public class LogoActivity extends ActionBarActivity {
         setContentView(R.layout.activity_logo);
         overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
         tvInfo = (TextView) findViewById(R.id.tv_info);
-        tvInfo.setTypeface(TypefaceHelper.getTypeface(getApplicationContext(), "segoeui"));
+        tvInfo.setTypeface(TypefaceHelper.getTypeface(this, "segoeui"));
+        Glide.with(this).load(R.drawable.logo).into((ImageView)findViewById(R.id.back_image));
 
         pref = this.getSharedPreferences("SamTour_Pref", 0);
         isFirstLaunch = pref.getBoolean("app_first_launch", true);

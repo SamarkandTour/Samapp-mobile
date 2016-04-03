@@ -5,10 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".ImageViewingActivity">
 
-    <ImageView
+    <uk.co.senab.photoview.PhotoView
         android:id="@+id/image_holder"
-        android:scaleType="matrix"
-        android:src="@drawable/back"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <include layout="@layout/tool_bar" android:id="@+id/actionbar"/>

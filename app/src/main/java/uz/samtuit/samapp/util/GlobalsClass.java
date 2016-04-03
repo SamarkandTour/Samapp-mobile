@@ -6,6 +6,8 @@ import android.location.Location;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import uz.samtuit.samapp.main.R;
+
 /**
  * Globally shared valuables
  */
@@ -13,6 +15,8 @@ public class GlobalsClass extends Application {
     static final public String featuresDownloadURL = "http://download.samarkandtour.org/tour_database.zip";
     static final public String mapDownloadURL = "http://download.samarkandtour.org/samarkand.mbtiles";
     static final public String mapFileName = "samarkand.mbtiles";
+
+    private boolean itineraryModifyMode = false;
 
     static final public String[] supportedLanguages = {
             "en",
@@ -118,5 +122,53 @@ public class GlobalsClass extends Application {
 
     public Location getCurrentLoc() {
         return currentLoc;
+    }
+
+    public Boolean getModifyModeState() { return itineraryModifyMode; }
+
+    public void setModifyModeState( boolean state ) { itineraryModifyMode = state; }
+
+    public static int getPrimaryColorId(GlobalsClass.FeatureType type)
+    {
+        int id = 0;
+
+        switch (type)
+        {
+            case HOTEL:
+                id = R.color.hotel_primary;
+                break;
+            case FOODNDRINK:
+                id = R.color.foodanddrink_primary;
+                break;
+            case ATTRACTION:
+                id = R.color.attraction_primary;
+                break;
+            case SHOPPING:
+                id = R.color.shop_primary;
+                break;
+        }
+        return id;
+    }
+
+    public static int getToolbarColorId(GlobalsClass.FeatureType type)
+    {
+        int id = 0;
+
+        switch (type)
+        {
+            case HOTEL:
+                id = R.color.hotel_tool;
+                break;
+            case FOODNDRINK:
+                id = R.color.foodanddrink_tool;
+                break;
+            case ATTRACTION:
+                id = R.color.attraction_tool;
+                break;
+            case SHOPPING:
+                id = R.color.shop_tool;
+                break;
+        }
+        return id;
     }
 }

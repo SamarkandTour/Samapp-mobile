@@ -2,11 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uz.samtuit.samapp.main.SugestedItineraryFragment">
+    tools:context="uz.samtuit.samapp.main.SuggestedItineraryFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/it_recycler_view"
         android:layout_width="match_parent"
         android:scrollbars="vertical"
         android:layout_height="match_parent" />
+
+
 </FrameLayout>

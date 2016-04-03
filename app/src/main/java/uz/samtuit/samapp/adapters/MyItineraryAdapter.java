@@ -1,13 +1,17 @@
 package uz.samtuit.samapp.adapters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +20,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,16 +29,16 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import uz.samtuit.samapp.fragments.TourFeaturesDialogFragmentWindow;
+import uz.samtuit.samapp.helpers.ItineraryHelper;
 import uz.samtuit.samapp.main.R;
 import uz.samtuit.samapp.main.TourFeatureActivity;
-import uz.samtuit.samapp.util.ActionItem;
 import uz.samtuit.samapp.util.BitmapUtil;
-import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryItem;
 import uz.samtuit.samapp.util.ItineraryList;
-import uz.samtuit.samapp.util.QuickAction;
 import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TypefaceHelper;
 
 public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.ViewHolder> {
     private ArrayList<TourFeature> mDataset;
@@ -59,6 +62,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
     boolean animate = false; //animate items or not
     boolean isMod = false; //toggle for modify mode
+    private FragmentManager fm;
 
     private static int[] dataSizeByDay = new int[ItineraryList.MAX_ITINERARY_DAYS];
 
@@ -68,11 +72,12 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         public TextView mCarTime;
         public TextView mWalkTime;
         public ImageView mItemImage;
-        public TextView mOrderNum;
+        public ImageButton mActionBtn;
         public TextView mDistance;
         public ImageButton addNewItem;
         public View mLayoutBetweenItems;
         public View container;
+        public TextView mIdTV;
 
         public ViewHolder(View v) {
             super(v);
@@ -80,17 +85,19 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             mName = (TextView)v.findViewById(R.id.info_text);
             mCarTime = (TextView)v.findViewById(R.id.it_car_time);
             mWalkTime = (TextView)v.findViewById(R.id.it_walk_time);
-            mOrderNum = (TextView)v.findViewById(R.id.it_ord_num);
             mItemImage = (ImageView)v.findViewById(R.id.it_image);
+            mActionBtn = (ImageButton) v.findViewById(R.id.action_btn);
             mDistance = (TextView)v.findViewById(R.id.it_distance);
             mLayoutBetweenItems = v.findViewById(R.id.layout_between_items);
-            addNewItem = (ImageButton)v.findViewById(R.id.add_new_itinerary_item);
+            addNewItem = (ImageButton) v.findViewById(R.id.add_new_itinerary_item);
             container = v.findViewById(R.id.card_container);
+            mIdTV = (TextView) v.findViewById(R.id.it_ord_num);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyItineraryAdapter(Context context, int day, boolean mod, boolean animate) {
+
+    public MyItineraryAdapter(Context context, int day, boolean mod, boolean animate, FragmentManager fragmentManager) {
         selectedArrayDay = day;
         selectedRealDay = selectedArrayDay + 1; // Because the day argument is the position of tabs, add 1 to change to real day
         mDataset = getItineraryByDay(context, selectedRealDay);
@@ -106,6 +113,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             dataSize = mDataset.size();
             dataSizeByDay[day] = dataSize;
         }
+        this.fm = fragmentManager;
     }
 
     private ArrayList<TourFeature> getItineraryByDay(Context context, int itineraryDay) {
@@ -152,14 +160,15 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final int orderNumInTab = getStartIndexOfDay() + position;
-        final ImageView mItemImage = holder.mItemImage;
         final int indexInItineraryList = orderNumInTab - 1; // the index in list starts from 0
         mLayoutBetweenItems = holder.mLayoutBetweenItems;
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mName.setText(mDataset.get(position).getString("name"));
-        holder.mOrderNum.setText(Integer.toString(orderNumInTab));
+        String mTitle = mDataset.get(position).getString("name");
+        holder.mName.setText(mTitle);
+        holder.mIdTV.setText(Integer.toString(orderNumInTab));
+//        holder.mOrderNum.setText(Integer.toString(orderNumInTab));
         if (position < dataSize-1 && !isMod) { //if last and is not modifing show layout between items
             mLayoutBetweenItems.setVisibility(View.VISIBLE);
         } else {
@@ -167,34 +176,57 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         }
         switch (mDataset.get(position).getString("category")) {
             case "hotel":
-                holder.mOrderNum.setBackgroundResource(R.drawable.hotel_round_bg);
+                holder.mName.setTextColor(context.getResources().getColor(R.color.hotel_primary));
+                holder.mIdTV.setBackgroundResource(R.drawable.hotel_round_bg);
                 break;
             case "shopping":
-                holder.mOrderNum.setBackgroundResource(R.drawable.shop_round_bg);
+                holder.mName.setTextColor(context.getResources().getColor(R.color.shop_primary));
+                holder.mIdTV.setBackgroundResource(R.drawable.shop_round_bg);
                 break;
             case "foodndrink":
-                holder.mOrderNum.setBackgroundResource(R.drawable.food_round_bg);
+                holder.mName.setTextColor(context.getResources().getColor(R.color.foodanddrink_primary));
+                holder.mIdTV.setBackgroundResource(R.drawable.food_round_bg);
                 break;
             case "attraction":
-                holder.mOrderNum.setBackgroundResource(R.drawable.attraction_round_bg);
+                holder.mName.setTextColor(context.getResources().getColor(R.color.attraction_primary));
+                holder.mIdTV.setBackgroundResource(R.drawable.attraction_round_bg);
                 break;
         }
+//        switch (mDataset.get(position).getString("category")) {
+//            case "hotel":
+//                holder.mOrderNum.setBackgroundResource(R.drawable.hotel_round_bg);
+//                break;
+//            case "shopping":
+//                holder.mOrderNum.setBackgroundResource(R.drawable.shop_round_bg);
+//                break;
+//            case "foodndrink":
+//                holder.mOrderNum.setBackgroundResource(R.drawable.food_round_bg);
+//                break;
+//            case "attraction":
+//                holder.mOrderNum.setBackgroundResource(R.drawable.attraction_round_bg);
+//                break;
+//        }
 
         if (isMod) {
             holder.addNewItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Bundle extras = new Bundle();
+                    extras.putInt("current_day", selectedArrayDay);
+                    extras.putInt("index", orderNumInTab);
+                    DialogFragment tourFeatureDialog = new TourFeaturesDialogFragmentWindow();
+                    tourFeatureDialog.setArguments(extras);
+                    tourFeatureDialog.show(fm, "");
                 }
             });
             final Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
-            final Animation animOut = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
+            //final Animation animOut = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
             holder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(checkedItems.contains(position)) {
                         checkedItems.remove(checkedItems.indexOf(position));
-                        BitmapUtil.setRoundImageFromFileToView(context, mDataset.get(position).getPhoto(), holder.mItemImage,animOut);
+                        BitmapUtil.setRoundImageFromFileToView(context, mDataset.get(position).getPhoto(), holder.mItemImage,animIn);
                         holder.mItemImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     } else {
                         checkedItems.add(position);
@@ -217,16 +249,21 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 @Override
                 public void onClick(View v) {
                     Intent intent = getTourFeatureIntent(context, mDataset.get(position));
-
                     context.startActivity(intent);
                 }
             });
         }
+        holder.mActionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Context context = v.getContext();
+                makeQuickAction(context, v, indexInItineraryList, position, mDataset.get(position));
+            }
+        });
 
         BitmapUtil.setRoundImageFromFileToView(context, mDataset.get(position).getPhoto(), holder.mItemImage);
         CalculateDistanceTimeAsync calc = new CalculateDistanceTimeAsync(position, holder);
         calc.execute();
-        setAnimation(holder.container,position);
     }
 
     private Intent getTourFeatureIntent(Context vContext, TourFeature tf) {
@@ -251,55 +288,99 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     private void makeQuickAction(Context vContext, View v, final int indexInItineraryList, int position, TourFeature tf) {
-        QuickAction quickAction = new QuickAction(vContext);
-        ActionItem _item1 = new ActionItem(PREVIOUSDAY_ITEM_ID,"P.DAY",context.getResources().getDrawable(R.drawable.skip_previous));
-        ActionItem _item2 = new ActionItem(UP_ITEM_ID,"UP",context.getResources().getDrawable(R.drawable.arrow_up));
-        ActionItem _item3 = new ActionItem(DELETE_ITEM_ID,"DELETE",context.getResources().getDrawable(R.drawable.delete));
-        ActionItem _item4 = new ActionItem(DOWN_ITEM_ID,"DOWN",context.getResources().getDrawable(R.drawable.arrow_down));
-        ActionItem _item5 = new ActionItem(NEXTDAY_ITEM_ID,"N.DAY",context.getResources().getDrawable(R.drawable.skip_next));
+
+
+        View view = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.itinerary_bottom_sheet, null);
+        final Dialog mBottomSheet = new Dialog(context, R.style.MaterialDialogSheet);
+        Typeface roboto = TypefaceHelper.getTypeface(context, "Roboto-Regular");
+        mBottomSheet.setContentView(view);
+        mBottomSheet.setCancelable(true);
+        if ( (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
+            mBottomSheet.getWindow().setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        } else {
+            mBottomSheet.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        }
+
+        mBottomSheet.getWindow().setGravity(Gravity.BOTTOM);
+        mBottomSheet.show();
+
+        TextView actionUp = (TextView) view.findViewById(R.id.action_up);
+        TextView actionDayBack = (TextView) view.findViewById(R.id.action_day_backward);
+        TextView actionDelete = (TextView) view.findViewById(R.id.action_delete);
+        TextView actionDayForward = (TextView) view.findViewById(R.id.action_day_forward);
+        TextView actionDown = (TextView) view.findViewById(R.id.action_down);
+        TextView itTitle = (TextView) view.findViewById(R.id.it_title);
+
+        ImageView image = (ImageView) view.findViewById(R.id.image_holder);
+        View holder = view.findViewById(R.id.info_layout_holder);
+        itTitle.setTypeface(roboto);
+        itTitle.setText(mDataset.get(position).getString("name"));
+        BitmapUtil.setRoundImageFromFileToView(context, mDataset.get(position).getPhoto(), image);
+        holder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         if (tf.getDay() != 1) { // Prev
-            quickAction.addActionItem(_item1);
+            actionDayBack.setVisibility(View.VISIBLE);
+            actionDayBack.setTypeface(roboto);
+            actionDayBack.setText(context.getResources().getString(R.string.action_back));
         }
 
         if (position != 0) { // Up
-            quickAction.addActionItem(_item2);
+            actionUp.setVisibility(View.VISIBLE);
+            actionUp.setTypeface(roboto);
+            actionUp.setText(context.getResources().getString(R.string.action_up));
         }
 
-        quickAction.addActionItem(_item3); // Delete
+        actionDelete.setTypeface(roboto);
+        actionDelete.setText(context.getResources().getString(R.string.action_delete));
 
         if (position < mDataset.size()-1) { //Down
-            quickAction.addActionItem(_item4);
+            actionDown.setVisibility(View.VISIBLE);
+            actionDown.setTypeface(roboto);
+            actionDown.setText(context.getResources().getString(R.string.action_down));
         }
 
         if (mDataset.get(position).getDay() < ItineraryList.MAX_ITINERARY_DAYS) { // Next
-            quickAction.addActionItem(_item5);
+            actionDayForward.setVisibility(View.VISIBLE);
+            actionDayForward.setTypeface(roboto);
+            actionDayForward.setText(context.getResources().getString(R.string.action_forward));
         }
 
-        quickAction.show(v);
-        quickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
+        View.OnClickListener actionOnClick = new View.OnClickListener() {
+
             @Override
-            public void onItemClick(QuickAction source, int pos, int actionId) {
-                switch (actionId) {
-                    case PREVIOUSDAY_ITEM_ID:
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.action_day_backward:
                         changeDay(context, indexInItineraryList, -1);
                         break;
-                    case NEXTDAY_ITEM_ID:
-                        changeDay(context, indexInItineraryList, 1);
-                        break;
-                    case DELETE_ITEM_ID:
-                        changeOrder(context, indexInItineraryList, DELETE_ITEM_ID);
-                        break;
-                    case DOWN_ITEM_ID:
-                        changeOrder(context, indexInItineraryList, DOWN_ITEM_ID);
-                        break;
-                    case UP_ITEM_ID:
+                    case R.id.action_up:
                         changeOrder(context, indexInItineraryList, UP_ITEM_ID);
                         break;
+                    case R.id.action_delete:
+                        changeOrder(context, indexInItineraryList, DELETE_ITEM_ID);
+                        break;
+                    case R.id.action_down:
+                        changeOrder(context, indexInItineraryList, DOWN_ITEM_ID);
+                        break;
+                    case R.id.action_day_forward:
+                        changeDay(context, indexInItineraryList, 1);
+                        break;
                 }
+                mBottomSheet.dismiss();
             }
-        });
-        quickAction.setAnimStyle(QuickAction.ANIM_GROW_FROM_LEFT);
+        };
+        actionDayBack.setOnClickListener(actionOnClick);
+        actionDayForward.setOnClickListener(actionOnClick);
+        actionDelete.setOnClickListener(actionOnClick);
+        actionDown.setOnClickListener(actionOnClick);
+        actionUp.setOnClickListener(actionOnClick);
+
+
     }
 
     private void changeOrder(Context context, int index, int cmd) {
@@ -326,7 +407,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 break;
         }
 
-        ItineraryList.itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+        ItineraryList.itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", Context.MODE_PRIVATE).getString("app_lang", null));
 
         mDataset = getItineraryByDay(context, selectedRealDay);
         dataSize = mDataset.size();
@@ -337,16 +418,8 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     private void changeDay(Context context, int index, int inc) {
-        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
-        LinkedList<TourFeature> itineraryList = globalsClass.getItineraryFeatures();
 
-        TourFeature tourFeature = itineraryList.get(index);
-        tourFeature.setDay(selectedRealDay + inc);
-        itineraryList.add(tourFeature);
-        itineraryList.remove(index);
-
-        ItineraryList.sortItineraryList();
-        ItineraryList.itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+        ItineraryHelper.changeDay(context,selectedRealDay,index, inc);
 
         mDataset = getItineraryByDay(context, selectedRealDay);
         dataSize = mDataset.size();
@@ -449,4 +522,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             return s;
         }
     }
+
+
 }

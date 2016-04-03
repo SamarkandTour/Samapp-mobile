@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_window"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|center"
+    android:background="@android:color/white"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/info_layout_holder"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/image_holder"
+            android:layout_width="75dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerCrop"
+            android:layout_marginLeft="5dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/it_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Titleaasdasdaskdjashkfjahsfasjfhakjsfhaksjhf"
+            android:lines="1"
+            android:textSize="20sp"
+            android:layout_toLeftOf="@id/image_holder"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMediumInverse"
+            />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="54dp"
+        android:background="@color/black"/>
+
+
+    <TextView
+        android:id="@+id/action_day_backward"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_navigate_before_black_24dp"
+        android:drawablePadding="32dp"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="@string/action_back"
+        android:textAppearance="?android:attr/textAppearanceMediumInverse" />
+
+    <TextView
+        android:id="@+id/action_up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="32dp"
+        android:drawableLeft="@drawable/ic_arrow_upward_black_24dp"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="@string/action_up"
+        android:textAppearance="?android:attr/textAppearanceMediumInverse" />
+
+    <TextView
+        android:id="@+id/action_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_delete_black_24dp"
+        android:visibility="visible"
+        android:drawablePadding="32dp"
+        android:gravity="center_vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="@string/action_delete"
+        android:textAppearance="?android:attr/textAppearanceMediumInverse" />
+
+    <TextView
+        android:id="@+id/action_down"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="32dp"
+        android:drawableLeft="@drawable/ic_arrow_downward_black_24dp"
+        android:visibility="gone"
+        android:gravity="center_vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="@string/action_down"
+        android:textAppearance="?android:attr/textAppearanceMediumInverse" />
+
+    <TextView
+        android:id="@+id/action_day_forward"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="32dp"
+        android:drawableLeft="@drawable/ic_navigate_next_black_24dp"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="@string/action_forward"
+        android:textAppearance="?android:attr/textAppearanceMediumInverse" />
+
+</LinearLayout>

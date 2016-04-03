@@ -1,21 +1,21 @@
 <resources>
     <string name="app_name">SamTour</string>
-    <string name="settings">Settings</string>
+    <string name="settings">Настройки</string>
     <string name="download">Скачать</string>
     <string name="hotels">Отели</string>
     <string name="attractions">Достопримечательности</string>
     <string name="foodanddrinks">Еда и напитки</string>
     <string name="shopping">Шоппинг</string>
-    <string name="new_update">New update</string>
+    <string name="new_update">Новое обновление</string>
     <string name="btn_yes">Да</string>
     <string name="btn_no">Нет</string>
-    <string name="btn_previous">Previous</string>
-    <string name="btn_next">Next</string>
+    <string name="btn_previous">Предыдущий</string>
+    <string name="btn_next">Следуюший</string>
     <string name="btn_later">Пропустить</string>
-    <string name="btn_done">Done</string>
-    <string name="btn_guide_me">Guide Me Here</string>
+    <string name="btn_done">Сделано</string>
+    <string name="btn_guide_me">Направь меня туда</string>
     <string name="update_alert">Доступно новое обновление. Хотите обновить?</string>
-    <string name="update_nothing">There is no update</string>
+    <string name="update_nothing">Нет обновлений</string>
     <string name="reviews">Отзв</string>
     <string name="touch_to_close">Нажмите чтобы закрыть</string>
     <string name="address">Адресс</string>
@@ -31,18 +31,17 @@
     <string name="dialog_load_features">"Загрузка тур. данных"</string>
     <string name="dialog_check_update">Checking New Update</string>
     <string name="dialog_gps_setting">Чтобы направить вас к месту назначения от вашей тек. положении необходимо включить GPS.\nХотите ли вы включить?</string>
-    <string name="dialog_need_map_download">To see map background, first time, you need to download map file from server
-        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high</string>
-    <string name="dialog_wait">Please wait</string>
+    <string name="dialog_need_map_download">Чтобы использовать карту, в начале вы должны скачать файл карты с сервера. \n Если вы не подключены к сети WiFi, плата за мобильные данные будет высоко.\n Хотите ли вы скачать</string>
+    <string name="dialog_wait">Пожалуйста подождите</string>
     <string name="select_your_language">Пожалуйста выбирайте ваш язык</string>
     <string name="wizard_day_select">Сколько дней вы будете в Самарканде?</string>
     <string name="wizard_course_select">Порядок вашых маршрутов</string>
-    <string name="suggested_itinerary">Suggested Itinerary</string>
-    <string name="title_activity_my_itinerary">MyItinerary</string>
-    <string name="no_data">No data on this category</string>
+    <string name="suggested_itinerary">Предложенный маршрут</string>
+    <string name="title_activity_my_itinerary">Мой маршрут</string>
+    <string name="no_data">Нет данных в этом категории.</string>
     <string name="title_dialog_gps_setting">Необходимо геолокация</string>
     <string name="title_dialog_update_available">Новое обновление</string>
-    <string name="title_dialog_map_download">Map Download</string>
+    <string name="title_dialog_map_download">Скачать карту</string>
     <string name="title_itinerary_wizard">Мастер маршрутов</string>
     <string name="title_about_this_app">О приложении</string>
     <string name="title_check_new_update">Проверить на обновления</string>
@@ -51,8 +50,8 @@
     <string name="toast_select_destination">Выберите маркер и нажмите кнопку Направь сюда</string>
     <string name="toast_wait_for_gps">Подождите пока мы ловим GPS сигнал</string>
     <string name="toast_navi_finding">Началось вычисление дистанции и направления</string>
-    <string name="toast_no_magnetic_sensor">"You don't have magnetic senor. So the compass of navigation cannot work"</string>
-    <string name="toast_no_current_position">"Can't get your current position. So can't sort by the nearest place from you"</string>
+    <string name="toast_no_magnetic_sensor">"Ваще устройство не поддерживает магнетический сенсор. У вас не будет работать компасс во время навигации!"</string>
+    <string name="toast_no_current_position">"Невозможно получить текущее местоположение. Невозможно сортировать по локации ближе к вам!"</string>
     <string name="marquee_searching_you">Ищем ваше местоположение...</string>
     <string name="marquee_searching_target">"Поиск дистанции и направлении до "</string>
     <string name="marquee_guiding">"Направляем к "</string>
@@ -79,9 +78,9 @@
     <string name="itinerary_already_exist">Это место уже в вашем маршруте</string>
     <string name="itinerary_added_successfully">Успешно добавлено в ваш маршрут</string>
     <string name="itinerary_item_transfer">"Item transferred to 1 day "</string>
-    <string name="forward">forward</string>
-    <string name="backward">backward</string>
-    <string name="move">Moved!</string>
+    <string name="forward">вперед</string>
+    <string name="backward">назад</string>
+    <string name="move">Перемешено!</string>
     <string name="delete">Deleted!</string>
     <string name="prop_addr">Адрес</string>
     <string name="prop_price">Цена</string>
@@ -90,10 +89,10 @@
     <string name="sort_by_mylocation">Сортировать по локации</string>
     <string name="pref_header_about">О программы</string>
     <string name="pref_header_data_sync">Проверить наличии обновлений</string>
-    <string name="pref_summary_data_sync">Check if the recent tour data is in the server</string>
-    <string name="pref_title_update_on_boot">Check the update on boot</string>
-    <string name="pref_title_now_update">Now Update</string>
-    <string name="pref_header_notifications">Target arrival notification</string>
+    <string name="pref_summary_data_sync">Проверить на последные тур данные на сервере</string>
+    <string name="pref_title_update_on_boot">Проверка на обновление при запуске</string>
+    <string name="pref_title_now_update">Обновить</string>
+    <string name="pref_header_notifications">Уведомление о прибытии в место назначения</string>
     <string name="pref_summary_notifications">Когда устройство приблизится к целью оно сообщит об этом с помощью выбрации</string>
     <string name="pref_title_vibrate">Выбрация</string>
     <string name="pref_header_languages">Языки</string>
@@ -124,4 +123,10 @@
         "Open:\n\n"
         "%4$s\n"
     </string>
+    <string name="action_back">На день назад</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_down">Вниз</string>
+    <string name="action_forward">На день вперед</string>
+    <string name="action_up">На вверх</string>
+    <string name="modify">Изменить</string>
 </resources>

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import uz.samtuit.samapp.helpers.IntentHelper;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
@@ -27,6 +28,7 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
     private int layoutId;
     ArrayList<TourFeature> data = null;
     private int layoutResourceId;
+    private boolean fromItinerary;
     private GlobalsClass globalVariables;
     private Location currentLoc;
 
@@ -45,13 +47,14 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
         }
     }
 
-    public ItemsListAdapter(Context context, GlobalsClass.FeatureType S_ACTIVITY_NAME, ArrayList<TourFeature> data, int layoutID) {
+    public ItemsListAdapter(Context context, GlobalsClass.FeatureType S_ACTIVITY_NAME, ArrayList<TourFeature> data, int layoutID, boolean fromItinerary) {
         this.context = context;
         this.data = data;
         this.S_ACTIVITY_NAME = S_ACTIVITY_NAME;
         this.layoutId = layoutID;
         globalVariables = (GlobalsClass)context.getApplicationContext();
         currentLoc = globalVariables.getCurrentLoc();
+        this.fromItinerary = fromItinerary;
     }
 
     @Override
@@ -82,7 +85,11 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
         holder.holderLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ItemsListActivity.startItemActivity(context, S_ACTIVITY_NAME, data.get(position));
+//                if (fromItinerary) {
+//                    ItemsListActivity.startItemActivity(context, S_ACTIVITY_NAME, data.get(position), true);
+//                } else {
+//                    IntentHelper.startItemActivity(context, S_ACTIVITY_NAME, data.get(position));
+//                }
             }
         });
     }

@@ -236,7 +236,7 @@ public class ItemActivity extends ActionBarActivity implements NumberPicker.OnVa
                 }
                 else {
                     feature.setDay(selectedDay);
-                    list.addNewFeatureToItineraryList(feature);
+                    list.addNewFeatureToItineraryList(feature,0);
                     list.sortItineraryList();
                     list.itineraryWriteToGeoJSONFile(getApplicationContext(), ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
                     Log.e("QUERY", ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));

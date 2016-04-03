@@ -2,6 +2,7 @@ package uz.samtuit.samapp.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -10,11 +11,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.HashMap;
 
-import uz.samtuit.samapp.fragments.SuggestedItineraryFragment;
+import uz.samtuit.samapp.adapters.ViewPagerAdapter;
+import uz.samtuit.samapp.fragments.TourFeaturesDialogFragmentWindow;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.TourFeature;
@@ -27,6 +28,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
     ViewPager pager;
     ViewPagerAdapter vpadapter;
     SlidingTabLayout tabs;
+    private FloatingActionButton mFab;
     private GlobalsClass globals;
 
     @Override
@@ -49,6 +51,8 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
             }
         });
 
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+
         CharSequence Titles[] = new CharSequence[ItineraryList.MAX_ITINERARY_DAYS];
         itineraryByDayArray = new HashMap<?, ?>[ItineraryList.MAX_ITINERARY_DAYS];
         for (int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++) {
@@ -64,12 +68,13 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.e("PAGE", "Scrolled" + position);
+               // Log.e("PAGE", "Scrolled" + position);
+
             }
 
             @Override
             public void onPageSelected(int position) {
-                Log.e("PAGE", "Selected" + position);
+                //Log.e("PAGE", "Selected" + position);
                 Fragment fragment = vpadapter.getRegisteredFragment(position);
                 if (fragment != null) {
                     fragment.onResume();
@@ -78,7 +83,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -100,8 +104,13 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    public void showItemsFragmentDialog(){
+        new TourFeaturesDialogFragmentWindow().show(this.getSupportFragmentManager(), "");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.e("STATECHECK", "TAB");
         if(item.getItemId()==R.id.action_modify){
             Fragment page = vpadapter.getRegisteredFragment(pager.getCurrentItem());
             if(modify){

@@ -26,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.LinkedList;
 
@@ -55,6 +56,7 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
     private TextView mPrice;
     private TextView mOpen;
     private Animator mCurrentAnimator;
+    boolean fromItinerary = false;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.fab)   FloatingActionButton fab;
     @InjectView(R.id.star1) ImageView star1;
@@ -75,6 +77,7 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
         ButterKnife.inject(this);
 
         final Bundle extras = getIntent().getExtras();
+        fromItinerary = extras.getBoolean("from_itinerary");
         setSupportActionBar(toolbar);
         name = extras.getString("name");
         s = new SpannableString(name);
@@ -208,48 +211,68 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
     }
 
     public void AddToMyItinerary(final View view){
-        final GlobalsClass globals = (GlobalsClass)getApplicationContext();
-        final Dialog d = new Dialog(TourFeatureActivity.this);
+        Toast.makeText(this,fromItinerary + "" , Toast.LENGTH_SHORT).show();
+        if(fromItinerary) {
+            final GlobalsClass globals = (GlobalsClass)getApplicationContext();
+            final Bundle extras = getIntent().getExtras();
+            ItineraryList list = ItineraryList.getInstance();
+            TourFeature feature = list.findFeature(getApplicationContext(), extras.getString("name"));
+            LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
 
-        d.setTitle(getString(R.string.itinerary_pick_day));
-        d.setContentView(R.layout.day_dialog);
-        Button b1 = (Button)d.findViewById(R.id.ok_btn);
-        Button b2 = (Button)d.findViewById(R.id.cancel_btn);
+            if (itineraryItems.contains(feature)) {
+                Snackbar.make(view, getString(R.string.itinerary_already_exist), Snackbar.LENGTH_SHORT).show();
+            } else {
+                int selectedIndex = extras.getInt("index");
+                feature.setDay(extras.getInt("selected_day") + 1);
+                list.addNewFeatureToItineraryList(feature, selectedIndex); //extras.getInt("index"));
+                list.itineraryWriteToGeoJSONFile(getApplicationContext(), TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+                Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
+                finish();
+            }
+            //Toast.makeText(this, "From Itinerary", Toast.LENGTH_SHORT).show();
+        } else {
+            final GlobalsClass globals = (GlobalsClass)getApplicationContext();
+            final Dialog d = new Dialog(TourFeatureActivity.this);
 
-        final NumberPicker numberPicker = (NumberPicker)d.findViewById(R.id.num_pckr);
-        numberPicker.setMaxValue(5);
-        numberPicker.setMinValue(1);
-        numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setOnValueChangedListener(this);
+            d.setTitle(getString(R.string.itinerary_pick_day));
+            d.setContentView(R.layout.day_dialog);
+            Button b1 = (Button)d.findViewById(R.id.ok_btn);
+            Button b2 = (Button)d.findViewById(R.id.cancel_btn);
 
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Bundle extras = getIntent().getExtras();
-                ItineraryList list = ItineraryList.getInstance();
-                TourFeature feature = list.findFeature(getApplicationContext(), extras.getString("name"));
-                LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
+            final NumberPicker numberPicker = (NumberPicker)d.findViewById(R.id.num_pckr);
+            numberPicker.setMaxValue(5);
+            numberPicker.setMinValue(1);
+            numberPicker.setWrapSelectorWheel(false);
+            numberPicker.setOnValueChangedListener(this);
 
-                if (itineraryItems.contains(feature)) {
-                    Snackbar.make(view, getString(R.string.itinerary_already_exist), Snackbar.LENGTH_SHORT).show();
-                } else {
-                    feature.setDay(selectedDay);
-                    list.addNewFeatureToItineraryList(feature);
-                    list.sortItineraryList();
-                    list.itineraryWriteToGeoJSONFile(getApplicationContext(), TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
-                    Log.e("QUERY", TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
-                    Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
+            b1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Bundle extras = getIntent().getExtras();
+                    ItineraryList list = ItineraryList.getInstance();
+                    TourFeature feature = list.findFeature(getApplicationContext(), extras.getString("name"));
+                    LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
+
+                    if (itineraryItems.contains(feature)) {
+                        Snackbar.make(view, getString(R.string.itinerary_already_exist), Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        feature.setDay(selectedDay);
+                        list.addNewFeatureToItineraryList(feature, extras.getInt("index"));
+                        list.itineraryWriteToGeoJSONFile(getApplicationContext(), TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+                        Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
+                        d.hide();
+                    }
+                }
+            });
+            b2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     d.hide();
                 }
-            }
-        });
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.hide();
-            }
-        });
-        d.show();
+            });
+            d.show();
+        }
+
     }
 
     @Override

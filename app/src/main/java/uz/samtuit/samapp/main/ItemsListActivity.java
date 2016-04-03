@@ -22,10 +22,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,7 +53,7 @@ public class ItemsListActivity extends ActionBarActivity {
     private ArrayList<TourFeature> items;
     private FeatureType S_ACTIVITY_NAME;
     private RecyclerView list;
-    private EditText search_text;
+    private EditText mSearchEditText;
     private MenuItem mActionSearch;
     private MenuItem mActionSort;
     private MenuItem mActionSortML;
@@ -65,7 +67,10 @@ public class ItemsListActivity extends ActionBarActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private int list_type = 0;
     private Location currentLoc;
+    private boolean fromItinerary = false;
     private GlobalsClass globalVariables;
+    private int selectedDay = 0;
+    private int indexToAssign = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +78,7 @@ public class ItemsListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_items_list);
 
         //Include Global Variables
-        GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+        globalVariables = (GlobalsClass)getApplicationContext();
         SharedPreferences sharedPreferences = getPreferences(0);
         adapterLayouts =  new int[] {R.layout.items_list_adapter, R.layout.items_list_adapter_grid_card};
 
@@ -94,6 +99,9 @@ public class ItemsListActivity extends ActionBarActivity {
         //Configure Common data
         Bundle extras = getIntent().getExtras();
         S_ACTIVITY_NAME = FeatureType.valueOf(extras.getString("action"));
+        fromItinerary = extras.getBoolean("from_itinerary");
+        selectedDay = extras.getInt("selected_day");
+        indexToAssign = extras.getInt("index");
 
         PRIMARY_COLOR = getPrimaryColorId(S_ACTIVITY_NAME);
         TOOLBAR_COLOR = getToolbarColorId(S_ACTIVITY_NAME);
@@ -119,8 +127,7 @@ public class ItemsListActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(s);
         toolbar.setTitle(s);
 
-        adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type]);
-        Log.e("TAG", items.size()+"");
+        adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
         list.setAdapter(adapter);
         extras.clear();
 
@@ -129,6 +136,14 @@ public class ItemsListActivity extends ActionBarActivity {
         } else if (sortBy.name().equals("LOCATION")) {
             sortByLocation();
         }
+    }
+
+    public void setRegularFunctions() {
+
+    }
+
+    public void setFromItineraryFunctions() {
+
     }
 
     private static int getPrimaryColorId(FeatureType type)
@@ -197,32 +212,7 @@ public class ItemsListActivity extends ActionBarActivity {
         return id;
     }
 
-    public static void startItemActivity(Context context, FeatureType featureType, TourFeature feature) {
 
-        Intent intent = new Intent(context, TourFeatureActivity.class);
-
-        if (featureType == FeatureType.ITINERARY) {
-            featureType = TourFeatureList.findFeatureTypeByName(context, feature.getString("name"));
-        }
-        intent.putExtra("featureType", featureType.toString());
-        intent.putExtra("photo", feature.getPhoto());
-        intent.putExtra("rating", feature.getRating());
-        intent.putExtra("name", feature.getString("name"));
-        intent.putExtra("desc", feature.getString("desc"));
-        intent.putExtra("type", feature.getString("type"));
-        intent.putExtra("price", feature.getString("price"));
-        intent.putExtra("wifi", feature.getString("wifi"));
-        intent.putExtra("open", feature.getString("open"));
-        intent.putExtra("addr", feature.getString("addr"));
-        intent.putExtra("tel", feature.getString("tel"));
-        intent.putExtra("url", feature.getString("url"));
-        intent.putExtra("long", feature.getLongitude());
-        intent.putExtra("lat", feature.getLatitude());
-        intent.putExtra("primaryColorId", getPrimaryColorId(featureType));
-        intent.putExtra("toolbarColorId", getToolbarColorId(featureType));
-
-        context.startActivity(intent);
-    }
 
     @Override
     public void onBackPressed() {
@@ -234,11 +224,13 @@ public class ItemsListActivity extends ActionBarActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
 
-        Intent intent = new Intent(this, MainMap.class);
-        intent.putExtra("type", "features");
-        intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
+        if (!fromItinerary) {
+            Intent intent = new Intent(this, MainMap.class);
+            intent.putExtra("type", "features");
+            intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        }
         finish();
     }
 
@@ -273,7 +265,7 @@ public class ItemsListActivity extends ActionBarActivity {
 
             //hides the keyboard
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
             list.setAdapter(adapter);
 
             //add the search icon in the action bar
@@ -284,12 +276,15 @@ public class ItemsListActivity extends ActionBarActivity {
             mActionSort.setVisible(false);
             mActionShowOnMap.setVisible(false);
             action.setDisplayShowCustomEnabled(true); //enable it to display a custom view in the action bar
+
             action.setCustomView(R.layout.search_bar);//add the custom view
+            action.getCustomView().setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT));
             action.setDisplayShowTitleEnabled(false); //hide the title
             action.setDisplayUseLogoEnabled(false);
 
-            search_text = (EditText)action.getCustomView().findViewById(R.id.edtSearch); //the text editor
-            search_text.addTextChangedListener(new TextWatcher() {
+            mSearchEditText = (EditText)action.getCustomView().findViewById(R.id.edtSearch); //the text editor
+
+            mSearchEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -297,7 +292,7 @@ public class ItemsListActivity extends ActionBarActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    doSearch(search_text.getText().toString());
+                    doSearch(mSearchEditText.getText().toString());
                 }
 
                 @Override
@@ -307,22 +302,22 @@ public class ItemsListActivity extends ActionBarActivity {
             });
 
             //this is a listener to do a search when the user clicks on search button
-            search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        doSearch(search_text.getText().toString());
+                        doSearch(mSearchEditText.getText().toString());
                         return true;
                     }
                     return false;
                 }
             });
 
-            search_text.requestFocus();
+            mSearchEditText.requestFocus();
 
             //open the keyboard focused in the edtSearch
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(search_text, InputMethodManager.SHOW_IMPLICIT);
+            imm.showSoftInput(mSearchEditText, InputMethodManager.SHOW_IMPLICIT);
 
             //add the close icon
             mActionSearch.setIcon(getResources().getDrawable(R.drawable.ic_search_black_24dp));
@@ -341,7 +336,7 @@ public class ItemsListActivity extends ActionBarActivity {
                 found_items.add(items.get(i));
             }
         }
-        TourFeatureItemsAdapter adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, found_items, adapterLayouts[list_type]);
+        TourFeatureItemsAdapter adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, found_items, adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
         list.setAdapter(adapter);
     }
 
@@ -357,7 +352,7 @@ public class ItemsListActivity extends ActionBarActivity {
         {
             case R.id.action_sort_by_title:
                 Collections.sort(items, new CustomComparator());
-                TourFeatureItemsAdapter adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items,adapterLayouts[list_type]);
+                TourFeatureItemsAdapter adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items,adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
                 list.setAdapter(adapter);
                 sortByName();
                 break;
@@ -376,7 +371,7 @@ public class ItemsListActivity extends ActionBarActivity {
                     list.setLayoutManager(mLayoutManager);
                 }
                 list_type = 1 - list_type;
-                adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type]);
+                adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
                 list.setAdapter(adapter);
                 Log.e("Tag","PerformClick" + list_type + " " + adapterLayouts[list_type]);
                 break;
@@ -387,20 +382,23 @@ public class ItemsListActivity extends ActionBarActivity {
 
     private void sortByName() {
         Collections.sort(items, new CustomComparator());
-        adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type]);
+        adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
         list.setAdapter(adapter);
         sortBy = SortBy.NAME;
     }
 
     private void sortByLocation() {
-        currentLoc = globalVariables.getCurrentLoc();
+        if(globalVariables.getCurrentLoc()==null)
+            currentLoc = new Location("service Provider");
+        else
+            currentLoc = globalVariables.getCurrentLoc();
 
         if (currentLoc == null || currentLoc.getLatitude() == 0 || currentLoc.getLongitude() == 0) {
             Toast.makeText(this, R.string.toast_no_current_position, Toast.LENGTH_LONG).show();
             return;
         }
         Collections.sort(items, new LocationComparator());
-        adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type]);
+        adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
         list.setAdapter(adapter);
         sortBy = SortBy.LOCATION;
     }

@@ -81,6 +81,11 @@
     <string name="backward">backward</string>
     <string name="move">Moved!</string>
     <string name="delete">Deleted!</string>
+    <string name="action_back">Day Backward</string>
+    <string name="action_up">To Up</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_down">To Down</string>
+    <string name="action_forward">Day Forward</string>
     <string name="prop_addr">Address</string>
     <string name="prop_price">Price</string>
     <string name="prop_open">Open</string>
@@ -126,4 +131,7 @@
     <string name="title_activity_image_viewing">ImageViewing</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

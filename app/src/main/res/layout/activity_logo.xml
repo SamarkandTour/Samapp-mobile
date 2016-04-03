@@ -3,20 +3,17 @@
     android:layout_height="match_parent"
     tools:context="uz.samtuit.samapp.main.LogoActivity"
     android:padding="0dp"
+
+    android:background="@drawable/logo"
     android:id="@+id/logoMainLayout">
 
-
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/background"
-        android:scaleType="centerCrop"
-        />
-    <ImageView
+        android:id="@+id/back_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitStart"
         android:paddingLeft="@dimen/logo_side_margin"
+        android:visibility="gone"
         android:paddingRight="@dimen/logo_side_margin"
         android:paddingTop="60dp"
        />
@@ -25,22 +22,14 @@
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/city_logo_side_margin"
         android:paddingRight="@dimen/city_logo_side_margin"
+        android:visibility="visible"
+        android:src="@drawable/sam_city_logo"
         android:paddingTop="@dimen/city_logo_top_padding"
-        />
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="fitEnd"
-        android:paddingBottom="0dp"
-        android:paddingTop="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="@dimen/text_background_height"
-        android:src="@drawable/back"
         />
     <TextView
         android:id="@+id/tv_info"
         android:layout_width="match_parent"
-        android:background="@color/ColorPrimary"
+        android:background="@android:color/transparent"
         android:layout_height="@dimen/text_background_height"
         android:layout_gravity="bottom|center"
         android:textSize="@dimen/logo_info_text_size"

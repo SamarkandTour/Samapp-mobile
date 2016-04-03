@@ -15,19 +15,16 @@ import android.widget.Toast;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.views.InfoWindow;
 import com.mapbox.mapboxsdk.views.MapView;
-import com.rey.material.app.BottomSheetDialog;
-import com.rey.material.drawable.ThemeDrawable;
-import com.rey.material.util.ViewUtil;
-import com.rey.material.widget.Button;
 
 
+import uz.samtuit.samapp.helpers.IntentHelper;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.samapp.util.TypefaceHelper;
 
-import static uz.samtuit.samapp.main.ItemsListActivity.startItemActivity;
+import uz.samtuit.samapp.helpers.IntentHelper.*;
 
 /**
  * Custom Tooltip Window
@@ -51,7 +48,7 @@ public class CustomInfoWindow extends InfoWindow {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     // Still close the InfoWindow though
-                    startItemActivity(mContext, mFeatureType, mFeature);
+                    IntentHelper.startItemActivity(mContext, mFeatureType, mFeature);
                     close();
                 }
 

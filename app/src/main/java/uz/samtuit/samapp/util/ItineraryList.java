@@ -51,6 +51,9 @@ public class ItineraryList {
 
     static public void sortItineraryList() {
         Collections.sort(mItineraryList);
+        for(int i = 0; i < mItineraryList.size(); i++) {
+            Log.e("Item: " + mItineraryList.get(i).getString("name") ," day: " + mItineraryList.get(i).getDay());
+        }
     }
 
     public TourFeature findFeature(Context context, String name) {
@@ -93,9 +96,34 @@ public class ItineraryList {
         return null;
     }
 
-    public boolean addNewFeatureToItineraryList(TourFeature tourFeature){
+    public boolean addNewFeatureToItineraryList(TourFeature tourFeature, int index){
         if(tourFeature!=null){
-            mItineraryList.add(tourFeature);
+            Log.e("day & index",  index + "");
+            try {
+                mItineraryList.add(index, tourFeature);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                mItineraryList.add(tourFeature);
+            }
+
+//            boolean added = false;
+//            int counter = 0;
+//            int listSize = mItineraryList.size();
+//            for(int i = 0;  i < listSize; i++) {
+//                if(mItineraryList.get(i).getDay() == tourFeature.getDay()) {
+//                    if(counter==index) { //if counter is in index position add tourfeature
+//                        added = true;
+//                        Log.e("ADDED INDEX" , i + " " );
+//                        mItineraryList.add(i, tourFeature);
+//                        break;
+//                    } else {
+//                        counter++;
+//                    }
+//                }
+//            }
+//            if(!added)
+//                mItineraryList.add(tourFeature);
+////            mItineraryList.add(tourFeature);
             return true;
         }
         return false;

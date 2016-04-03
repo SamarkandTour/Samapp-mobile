@@ -4,8 +4,7 @@
     tools:context=".MyItineraryActivity">
     <item
         android:id="@+id/action_modify"
-        android:orderInCategory="100"
+        android:orderInCategory="105"
         android:title="@string/modify"
-        android:icon="@drawable/edit_property"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 </menu>

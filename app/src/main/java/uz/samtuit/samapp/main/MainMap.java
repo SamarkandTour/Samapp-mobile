@@ -52,18 +52,13 @@ import com.mapbox.mapboxsdk.tileprovider.tilesource.TileLayer;
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.util.OnMapOrientationChangeListener;
-import com.rey.material.app.BottomSheetDialog;
-import com.rey.material.app.Dialog;
-import com.rey.material.drawable.ThemeDrawable;
-import com.rey.material.util.ViewUtil;
-import com.rey.material.widget.ImageButton;
-import com.rey.material.widget.ProgressView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
@@ -243,7 +238,7 @@ public class MainMap extends ActionBarActivity {
         Display display= ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int width = display.getWidth();
         int height = display.getHeight();
-        Log.e("Tag",width + " " + height);
+//        Log.e("Tag",width + " " + height);
 
         slidingDrawer = (SlidingDrawer)findViewById(R.id.slidingDrawer);
         slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
@@ -694,7 +689,6 @@ public class MainMap extends ActionBarActivity {
         ArrayList<Marker> itineraryMarkers;
         ArrayList<Marker> featuresMarkers;
         int index = 0;
-        ProgressView progressView;
 
         @Override
         protected FeatureType doInBackground(Pair<FeatureType, TourFeature>... params) {
