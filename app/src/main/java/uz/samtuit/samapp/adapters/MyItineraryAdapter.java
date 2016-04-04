@@ -221,21 +221,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             });
             final Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
             //final Animation animOut = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
-            holder.container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(checkedItems.contains(position)) {
-                        checkedItems.remove(checkedItems.indexOf(position));
-                        BitmapUtil.setRoundImageFromFileToView(context, mDataset.get(position).getPhoto(), holder.mItemImage,animIn);
-                        holder.mItemImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    } else {
-                        checkedItems.add(position);
-                        Glide.with(context).load(R.drawable.ic_done_white_24dp).animate(animIn).into(holder.mItemImage);
-                        holder.mItemImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                    }
-                    Log.e("COUNT", checkedItems.size()+"");
-                }
-            });
+
         } else {
             holder.container.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
