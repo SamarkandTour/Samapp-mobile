@@ -34,7 +34,7 @@
         android:layout_alignParentTop="false"
         android:layout_alignParentRight="false"
         android:layout_alignWithParentIfMissing="false" />
-    <com.rey.material.widget.Spinner
+    <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/daySpinner1"
