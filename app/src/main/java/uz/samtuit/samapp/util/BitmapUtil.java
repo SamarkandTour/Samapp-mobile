@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -19,7 +20,9 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 
@@ -49,10 +52,16 @@ public class BitmapUtil {
     }
 
     public static void setImageFromFileToView(Context context, String filePath, ImageView imageView) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x / 2;
+        int height = width;
         try
         {
             String encodedBytes = FileUtil.fileReadFromExternalDir(context, filePath);
-            Glide.with(context).load(Base64.decode(encodedBytes,Base64.DEFAULT)).asBitmap().placeholder(R.drawable.no_image).into(imageView);
+            Glide.with(context).load(Base64.decode(encodedBytes,Base64.DEFAULT)).asBitmap().override(width, height).into(imageView);
         } catch (Exception ex) {
             Glide.with(context).load(R.drawable.no_image).into(imageView);
             ex.printStackTrace();

@@ -3,6 +3,7 @@ package uz.samtuit.samapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -67,16 +70,21 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
         holder.TF_TITLE.setText(data.get(position).getString("name"));
         String fileName = data.get(position).getPhoto();
         if(layoutID==R.layout.items_list_adapter){
-
+            try{
+                BitmapUtil.setRoundImageFromFileToView(context, fileName, holder.TF_IMAGE, AnimationUtils.loadAnimation(context, android.R.anim.fade_in));
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         } else {
             holder.TF_TITLE.setTextSize(13);
+            try{
+                BitmapUtil.setImageFromFileToView(context, fileName, holder.TF_IMAGE);
+            } catch (Exception ex) {
+
+            }
         }
 
-        try{
-            BitmapUtil.setRoundImageFromFileToView(context, fileName, holder.TF_IMAGE, AnimationUtils.loadAnimation(context, android.R.anim.fade_in));
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
+
 
         holder.TF_HOLDER.setOnClickListener(new View.OnClickListener() {
             @Override

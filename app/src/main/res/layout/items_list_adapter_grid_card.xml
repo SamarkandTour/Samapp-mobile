@@ -16,7 +16,6 @@
                 android:id="@+id/listViewThumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background = "@android:color/transparent"
                 android:layout_gravity="center_vertical"
                 android:elevation="0dp"
                 android:scaleType="centerCrop"
@@ -24,7 +23,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:background="#a777"
+                android:background="#c777"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="center_vertical"
                 android:elevation="2dp"
