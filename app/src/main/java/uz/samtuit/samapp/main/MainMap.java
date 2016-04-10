@@ -144,7 +144,6 @@ public class MainMap extends ActionBarActivity {
             if (NetworkUtils.isNetworkAvailable(MainMap.this)) {
                 // Start to download at Background
                 URLArrayList.add(GlobalsClass.mapDownloadURL);
-
                 Downloader downloader = new Downloader(URLArrayList);
                 downloader.startDownload(MainMap.this, "Sam Tour", "Map Database");
             } else {
@@ -238,7 +237,6 @@ public class MainMap extends ActionBarActivity {
         Display display= ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int width = display.getWidth();
         int height = display.getHeight();
-//        Log.e("Tag",width + " " + height);
 
         slidingDrawer = (SlidingDrawer)findViewById(R.id.slidingDrawer);
         slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
@@ -664,8 +662,8 @@ public class MainMap extends ActionBarActivity {
             if (pressedMarker != null) { // Close opened tooltip
                 pressedMarker.closeToolTip();
             }
-
-            FeatureType featureType = FeatureType.valueOf(extras.getString("featureType"));
+            Log.e("MESSAGE2", extras.getString("featureType"));
+            FeatureType featureType = FeatureType.valueOf(intent.getStringExtra("featureType"));
             switch (extras.getString("type")){
                 case "features":
                     if (featureType == FeatureType.ITINERARY) {

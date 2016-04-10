@@ -66,7 +66,6 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
         holder.TF_RATING.setRating(data.get(position).getRating());
         holder.TF_TITLE.setText(data.get(position).getString("name"));
         String fileName = data.get(position).getPhoto();
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if(layoutID==R.layout.items_list_adapter){
 
         } else {
@@ -75,18 +74,13 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
 
         try{
             BitmapUtil.setRoundImageFromFileToView(context, fileName, holder.TF_IMAGE, AnimationUtils.loadAnimation(context, android.R.anim.fade_in));
-
-
         }catch (Exception ex){
-
             ex.printStackTrace();
         }
 
         holder.TF_HOLDER.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Intent intent = new Intent(context, TourFeatureActivity.class);
 
                 if (featureType == GlobalsClass.FeatureType.ITINERARY) {
@@ -112,12 +106,6 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
                 intent.putExtra("primaryColorId", GlobalsClass.getPrimaryColorId(featureType));
                 intent.putExtra("toolbarColorId", GlobalsClass.getToolbarColorId(featureType));
                 context.startActivity(intent);
-//                if (fromItinerary) {
-//                    ItemsListActivity.startItemActivity(context, featureType, data.get(position), true);
-//                } else {
-//                    IntentHelper.startItemActivity(context, featureType, data.get(position));
-//                }
-
             }
         });
 

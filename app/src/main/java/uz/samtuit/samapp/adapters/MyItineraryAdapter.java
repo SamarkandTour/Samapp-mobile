@@ -192,20 +192,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 holder.mIdTV.setBackgroundResource(R.drawable.attraction_round_bg);
                 break;
         }
-//        switch (mDataset.get(position).getString("category")) {
-//            case "hotel":
-//                holder.mOrderNum.setBackgroundResource(R.drawable.hotel_round_bg);
-//                break;
-//            case "shopping":
-//                holder.mOrderNum.setBackgroundResource(R.drawable.shop_round_bg);
-//                break;
-//            case "foodndrink":
-//                holder.mOrderNum.setBackgroundResource(R.drawable.food_round_bg);
-//                break;
-//            case "attraction":
-//                holder.mOrderNum.setBackgroundResource(R.drawable.attraction_round_bg);
-//                break;
-//        }
 
         if (isMod) {
             holder.addNewItem.setOnClickListener(new View.OnClickListener() {

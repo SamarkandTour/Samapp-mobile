@@ -308,7 +308,7 @@ public class ItemsListActivity extends ActionBarActivity {
                     if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                         doSearch(mSearchEditText.getText().toString());
                         return true;
-                    }
+                }
                     return false;
                 }
             });
@@ -373,9 +373,15 @@ public class ItemsListActivity extends ActionBarActivity {
                 list_type = 1 - list_type;
                 adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
                 list.setAdapter(adapter);
-                Log.e("Tag","PerformClick" + list_type + " " + adapterLayouts[list_type]);
+                //Log.e("Tag","PerformClick" + list_type + " " + adapterLayouts[list_type]);
                 break;
-
+            case R.id.action_show_markers:
+                Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
+                intent.putExtra("type", "features");
+                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
