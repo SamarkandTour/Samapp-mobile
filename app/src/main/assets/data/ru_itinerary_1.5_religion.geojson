@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Аль-Бухари Мавзолей",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Махдуми Азам Мавзолей",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Мавзолей пророка Даниила",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ансамбль Шахи Зинда",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Хазрат Хызр Мечеть",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Аль-Матруди Мавзолей",
+        "day": 2,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ходжа-Ахрар Мечеть",
+        "day": 2,
+        "ampm": "a"
+      }
+    }
+  ]
+}

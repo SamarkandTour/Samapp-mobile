@@ -1,0 +1,37 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Alisher Navoiy nomidagi istirohat bog'i",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Go‘ri Amir maqbarasi",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Musiqali favvora",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Registon ansambli",
+        "day": 1,
+        "ampm": "p"
+      }
+    }
+  ]
+}

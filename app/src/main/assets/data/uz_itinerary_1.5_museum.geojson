@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "O'zbekiston Madaniyat tarixi muzeyi",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chorsu san’at galereyasi",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Afrosiyob muzeyi",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ulug'bek muzeyi",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "O‘lkashunoslik muzeyi",
+        "day": 2,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "O'zbekiston yahudiy muzeyi",
+        "day": 2,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Samarqand vino zavod muzeyi",
+        "day": 2,
+        "ampm": "a"
+      }
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Государственный музей истории культуры Узбекистана",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Чорсу Художественная галерея",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Афрасиаб музей",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Улугбек музей",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Краеведческий музей",
+        "day": 2,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Узбекский Еврейский музей",
+        "day": 2,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Музей Виноделия при Винзаводе им. Ховренко",
+        "day": 2,
+        "ampm": "a"
+      }
+    }
+  ]
+}
