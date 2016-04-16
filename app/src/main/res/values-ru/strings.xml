@@ -12,29 +12,32 @@
     <string name="btn_previous">Предыдущий</string>
     <string name="btn_next">Следующий</string>
     <string name="btn_later">Пропустить</string>
-    <string name="btn_done">Done</string>
-    <string name="btn_guide_me">Guide Me Here</string>
+    <string name="btn_done">Сделано</string>
+    <string name="btn_guide_me">Направь меня туда</string>
     <string name="update_alert">Доступно новое обновление. Хотите обновить?</string>
     <string name="update_nothing">Нет обновлений</string>
     <string name="reviews">Отзв</string>
+    <string name="touch_to_close">Нажмите чтобы закрыть</string>
     <string name="address">Адресс</string>
     <string name="search_hint">Поиск</string>
-    <string name="Err_wrong_geojson_file">Ошибка! Искаженной JSON в файле GeoJSON. Перейти к настройке, попробуйте повторно загрузить</string>
-    <string name="Err_wrong_itinerary_file">Ошибка! неправильное название объекта в маршруте файла</string>
+    <string name="Err_wrong_geojson_file">Ошибка! Плохой формат JSON в файле GeoJSON. Заходите в пункт настройки, попробуйте повторно загрузить</string>
+    <string name="Err_wrong_itinerary_file">Ошибка! Неправильное название объекта в файле маршрута</string>
     <string name="Err_network_state">Плохое качество связи</string>
     <string name="Err_no_connection">Нет подключения к Интернету</string>
     <string name="Err_not_supported">Не доступно в этом языке</string>
     <string name="Warn_weak_gps_signal">Слабый GPS сигнал! Переместитесь на место там где открытое небо</string>
     <string name="dialog_update_available">Доступны новые тур. данные!\nХотите ли обновит данные?\n Помните если вы не подключены к Wi-Fi стоимость за затраты данных будет высоким.</string>
     <string name="dialog_load_features">"Загрузка тур. данных"</string>
-    <string name="dialog_check_update">Проверка новое обновление</string>
+    <string name="dialog_check_update">Проверка на обновления</string>
     <string name="dialog_gps_setting">Чтобы направить вас к месту назначения от вашей тек. положении необходимо включить GPS.\nХотите ли вы включить?</string>
-    <string name="dialog_need_map_download">Чтобы увидеть карту фон, в первый раз, вам необходимо скачать файл карты с сервера
- \ nВы хотите скачать? Но если вы не подключены к Wi-Fi, стоимость использования данных будет высокой</string>
+    <string name="dialog_need_map_download">Чтобы использовать карту, в начале вы должны скачать файл карты с сервера. \n Если вы не подключены к сети WiFi, плата за мобильные данные будет высоко.\n Хотите ли вы скачать</string>
     <string name="dialog_wait">Пожалуйста, подождите</string>
     <string name="select_your_language">Пожалуйста выбирайте ваш язык</string>
     <string name="wizard_day_select">Сколько дней вы будете в Самарканде?</string>
     <string name="wizard_course_select">Порядок вашых маршрутов</string>
+    <string name="suggested_itinerary">Предложенный маршрут</string>
+    <string name="title_activity_my_itinerary">Мой маршрут</string>
+    <string name="no_data">Нет данных в этом категории.</string>
     <string name="title_dialog_gps_setting">Необходимо геолокация</string>
     <string name="title_dialog_update_available">Новое обновление</string>
     <string name="title_dialog_map_download">Загрузить карту</string>
@@ -46,7 +49,9 @@
     <string name="toast_select_destination">Выберите маркер и нажмите кнопку Направь сюда</string>
     <string name="toast_wait_for_gps">Подождите пока мы ловим GPS сигнал</string>
     <string name="toast_navi_finding">Началось вычисление дистанции и направления</string>
-    <string name="marquee_searching_you">Ищем ваше местоположение #8230</string>
+    <string name="toast_no_magnetic_sensor">"Ваще устройство не поддерживает магнетический сенсор. У вас не будет работать компасс во время навигации!"</string>
+    <string name="toast_no_current_position">"Невозможно получить текущее местоположение. Невозможно сортировать по локации ближе к вам!"</string>
+    <string name="marquee_searching_you">Ищем ваше местоположение...</string>
     <string name="marquee_searching_target">"Поиск дистанции и направлении до "</string>
     <string name="marquee_guiding">"Направляем к "</string>
     <string name="marquee_arrival_noti">Сейчас вы находитесь рядом с местой назначения</string>
@@ -60,36 +65,36 @@
     <string name="itinerary_4th_course">Выберите 4-й курс</string>
     <string name="itinerary_5th_course">Выберите 5-й курс</string>
     <string name="itinerary_6th_course">Выберите 6-й курс</string>
-    <string name="itinerary_day">"-й день"</string>
+    <string name="itinerary_day">" день"</string>
     <string name="itinerary_mixed">Смещанный курс</string>
     <string name="itinerary_nightlifenpark">Ночная жизнь и парк</string>
     <string name="itinerary_shopping">Шоппинг</string>
     <string name="itinerary_traditionalhandmade">Традиционное ремесло</string>
     <string name="itinerary_museum">Музей</string>
     <string name="itinerary_religion">Религия</string>
-    <string name="itinerary_overlap">"! Когда каждый курс слиты в порядке, \ п дублирование будут удалены"</string>
+    <string name="itinerary_overlap">"! Когда каждый курс добавлен в очередь, \ п курс дубликаты будут удалены"</string>
     <string name="itinerary_pick_day">Выберите день маршрута</string>
     <string name="itinerary_already_exist">Это место уже в вашем маршруте</string>
     <string name="itinerary_added_successfully">Успешно добавлено в ваш маршрут</string>
-    <string name="itinerary_item_transfer">"Пункт переносится на 1 день"</string>
+    <string name="itinerary_item_transfer">"Пункт перемещен на 1 день"</string>
     <string name="forward">вперед</string>
     <string name="backward">назад</string>
-    <string name="move">Переехал!</string>
-    <string name="delete">Удаляется!</string>
+    <string name="move">Перемешено!</string>
+    <string name="delete">Удалено!</string>
     <string name="prop_addr">Адрес</string>
     <string name="prop_price">Цена</string>
     <string name="prop_open">Открыто</string>
     <string name="sort_by_title">Сортировать по имени</string>
     <string name="sort_by_mylocation">Сортировать по дистанцию ко мне</string>
-    <string name="pref_header_about">О приложении</string>
-    <string name="pref_header_data_sync">Проверьте новое обновление</string>
-    <string name="pref_summary_data_sync">Проверьте, если последние данные тур на сервере</string>
-    <string name="pref_title_update_on_boot">Check the update on boot</string>
-    <string name="pref_title_now_update">Сечас обновите</string>
-    <string name="pref_header_notifications">Уведомление о прибытии целевая</string>
-    <string name="pref_summary_notifications">Когда прибыли вблизи целевого назначения, уведомить его вибрировать</string>
-    <string name="pref_title_vibrate">Вибрировать</string>
-    <string name="pref_header_languages"> Языки</string>
+    <string name="pref_header_about">О программы</string>
+    <string name="pref_header_data_sync">Проверить наличии обновлений</string>
+    <string name="pref_summary_data_sync">Проверить на последные тур данные на сервере</string>
+    <string name="pref_title_update_on_boot">Проверка на обновления при запуске</string>
+    <string name="pref_title_now_update">Обновить</string>
+    <string name="pref_header_notifications">Уведомление о прибытии в место назначения</string>
+    <string name="pref_summary_notifications">Когда устройство приблизится к целью оно сообщит об этом с помощью выбрации</string>
+    <string name="pref_title_vibrate">Выбрация</string>
+    <string name="pref_header_languages">Языки</string>
     <string name="setting_about_app">
         " This is the cooperation project of universities in Samarkand of which the center is a UNESCO world Heritage Site.
         \n We're targeting to provide unknown, hidden and unique all tour information for your visit.
@@ -115,5 +120,12 @@
         "Открито:\n\n"
         "%4$s\n"
     </string>
-    <string name="Err_file_not_found">Ошибка! Файл не найден. Перейти к настройке, попробуйте повторно загрузить</string>
+    <string name="Err_file_not_found">Ошибка! Файл не найден. Перейдите в пункт \"Настройка\", попробуйте повторно загрузить файл</string>
+    <string name="action_back">На день назад</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_down">Вниз</string>
+    <string name="action_forward">На день вперед</string>
+    <string name="action_up">Вверх</string>
+    <string name="title">Название</string>
+    <string name="modify">Изменить</string>
 </resources>

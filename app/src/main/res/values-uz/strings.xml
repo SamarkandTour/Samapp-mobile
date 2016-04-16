@@ -6,7 +6,7 @@
     <string name="attractions">Ziyoratgohlar</string>
     <string name="foodanddrinks">Ovqatlanish</string>
     <string name="shopping">Haridlar</string>
-    <string name="new_update">Yangi yangilanish</string>
+    <string name="new_update">Yangi ma`lumotlar</string>
     <string name="btn_yes">Ha</string>
     <string name="btn_no">"Yo`q"</string>
     <string name="btn_previous">Oldingi</string>
@@ -44,7 +44,7 @@
     <string name="toast_select_destination">"Birinchi markerni tanlang va Yo\'l ko\'rsat tugmasini bosing"</string>
     <string name="toast_wait_for_gps">Iltimos GPS signalni tutguncha kuting</string>
     <string name="toast_navi_finding">"Manzil va yo'nalishni topishni boshlash"</string>
-    <string name="marquee_searching_you">Sizning manzilingizni izlash #8230</string>
+    <string name="marquee_searching_you">Sizning manzilingizni izlash...</string>
     <string name="marquee_searching_target">"gacha manzil va yo'nalishni izlash"</string>
     <string name="marquee_guiding">"gacha yo'l ko'rsatish"</string>
     <string name="marquee_arrival_noti">Hozir siz beligilangan manzil atrofidasiz</string>
@@ -52,7 +52,7 @@
     <string name="Warn_weak_gps_signal">GPS singlan sust! Quyosh nuri tushadigan ochiqroq joyga chiqing</string>
     <string name="notify_download_complete">Yuklash yakunlandi</string>
     <string name="notify_updatable">Qayta ishga tushirsangiz yangilanish ishlaydi</string>
-    <string name="itinerary_select_day">Turush muddatingizni tanlang</string>
+    <string name="itinerary_select_day">Turish muddatingizni tanlang</string>
     <string name="itinerary_1st_course">Birinchi kursni tanlang</string>
     <string name="itinerary_2nd_course">Ikkinchi kursni tanlang</string>
     <string name="itinerary_3rd_course">Uchinchi kursni tanlang</string>
@@ -70,7 +70,7 @@
     <string name="itinerary_pick_day">Sayohat kunini belgilang</string>
     <string name="itinerary_already_exist">Sayohat rejangizda mavjud</string>
     <string name="itinerary_added_successfully">"Sayohat rejangizga muvoffaqiyatli qo'shildi"</string>
-    <string name="itinerary_item_transfer">"1-kunga ko\'chirildi "</string>
+    <string name="itinerary_item_transfer">"1 kunga ko\'chirildi "</string>
     <string name="move">Yetkazildi!</string>
     <string name="prop_addr">Manzil</string>
     <string name="prop_price">Narxlar</string>
@@ -114,4 +114,14 @@
     <string name="pref_title_update_on_boot">Ishga tushganda yangilanishga tekshirish</string>
     <string name="pref_title_vibrate">Vibiratsiya</string>
     <string name="update_nothing">Yangi ma\'lumotlar mavjud emas</string>
+    <string name="action_back">1 kun orqaga</string>
+    <string name="action_delete">O`chirish</string>
+    <string name="action_down">Pastga</string>
+    <string name="action_forward">1 kun oldinga</string>
+    <string name="action_up">Yuqoriga</string>
+    <string name="dummy_button">Model tugmasi</string>
+    <string name="title">Sarlavha</string>
+    <string name="modify">O`zgartirish</string>
+    <string name="toast_no_current_position">"Joriy joylashuvni olish mumkin emas. Shuning uchun joylashuv bo`yicha tartiblashtirish mumkin emas"</string>
+    <string name="toast_no_magnetic_sensor">"Sizda magnit sensor yo\'q. Shuning uchun Kompas navigatsiyasi ishlamaydi"</string>
 </resources>
