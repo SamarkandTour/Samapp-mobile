@@ -14,6 +14,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
+import uz.samtuit.samapp.main.R;
+
 /**
  * Download Manager
  */
@@ -42,7 +44,7 @@ public class Downloader {
     public boolean startDownload(Context context, String title, String desc) {
         boolean enable = resolveEnable(context);
         if (!enable) {
-            Toast.makeText(context, "DownloadManager is disabled. Please enable it at Applications of Setting Menu", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.toast_downmanager_disabled, Toast.LENGTH_LONG).show();
             return false;
         }
 

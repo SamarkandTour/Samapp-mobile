@@ -25,6 +25,7 @@
     <string name="Err_network_state">Плохое качество связи</string>
     <string name="Err_no_connection">Нет подключения к Интернету</string>
     <string name="Err_not_supported">Не доступно в этом языке</string>
+    <string name="Err_file_not_found">Ошибка! Файл не найден. Перейдите в пункт \"Настройка\", попробуйте повторно загрузить файл</string>
     <string name="Warn_weak_gps_signal">Слабый GPS сигнал! Переместитесь на место там где открытое небо</string>
     <string name="dialog_update_available">Доступны новые тур. данные!\nХотите ли обновит данные?\n Помните если вы не подключены к Wi-Fi стоимость за затраты данных будет высоким.</string>
     <string name="dialog_load_features">"Загрузка тур. данных"</string>
@@ -51,6 +52,7 @@
     <string name="toast_navi_finding">Началось вычисление дистанции и направления</string>
     <string name="toast_no_magnetic_sensor">"Ваще устройство не поддерживает магнетический сенсор. У вас не будет работать компасс во время навигации!"</string>
     <string name="toast_no_current_position">"Невозможно получить текущее местоположение. Невозможно сортировать по локации ближе к вам!"</string>
+    <string name="toast_downmanager_disabled">DownloadManager is disabled. Please enable it at Applications of Setting Menu</string>
     <string name="marquee_searching_you">Ищем ваше местоположение...</string>
     <string name="marquee_searching_target">"Поиск дистанции и направлении до "</string>
     <string name="marquee_guiding">"Направляем к "</string>
@@ -109,8 +111,6 @@
         \nOpen Data : http://download.samarkandtour.org
         \nEmail : samarkandtour@gmail.com"
     </string>
-
-
     <string name="tour_feature_content">
         "%1$s\n\n"
         "Адресс:\n\n"
@@ -120,7 +120,6 @@
         "Открито:\n\n"
         "%4$s\n"
     </string>
-    <string name="Err_file_not_found">Ошибка! Файл не найден. Перейдите в пункт \"Настройка\", попробуйте повторно загрузить файл</string>
     <string name="action_back">На день назад</string>
     <string name="action_delete">Удалить</string>
     <string name="action_down">Вниз</string>
