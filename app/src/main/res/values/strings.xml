@@ -50,6 +50,7 @@
     <string name="toast_navi_finding">Start to find the distance and direction</string>
     <string name="toast_no_magnetic_sensor">"You don't have magnetic senor. So the compass of navigation cannot work"</string>
     <string name="toast_no_current_position">"Can't get your current position. So can't sort by the nearest place from you"</string>
+    <string name="toast_downmanager_disabled">DownloadManager is disabled. Please enable it at Applications of Setting Menu</string>
     <string name="marquee_searching_you">Searching your location...</string>
     <string name="marquee_searching_target">"Searching the distance and direction of "</string>
     <string name="marquee_guiding">"Guiding to "</string>

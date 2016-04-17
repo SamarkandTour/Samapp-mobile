@@ -3,13 +3,18 @@ package uz.samtuit.samapp.util;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+
+import uz.samtuit.samapp.main.R;
 
 /**
  * Download Manager
@@ -19,6 +24,7 @@ public class Downloader {
     private DownloadManager.Request[] downloadRequests;
     private URL[] serverURLs;
     private String[] fileNames;
+    private final String DOWNLOAD_MANAGER_PACKAGE_NAME = "com.android.providers.downloads";
 
     public Downloader(ArrayList<String> urls) {
         try {
@@ -35,7 +41,13 @@ public class Downloader {
         }
     }
 
-    public void startDownload(Context context, String title, String desc) {
+    public boolean startDownload(Context context, String title, String desc) {
+        boolean enable = resolveEnable(context);
+        if (!enable) {
+            Toast.makeText(context, R.string.toast_downmanager_disabled, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         try {
             downloadRequests = new DownloadManager.Request[serverURLs.length];
@@ -59,8 +71,23 @@ public class Downloader {
         }
         editor.putInt("download_request_count", index).commit();
         editor.commit();
+
+        return true;
     }
 
+    private boolean resolveEnable(Context context) {
+        int state = context.getPackageManager()
+                .getApplicationEnabledSetting(DOWNLOAD_MANAGER_PACKAGE_NAME);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return !(state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED ||
+                    state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER
+                    || state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED);
+        } else {
+            return !(state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED ||
+                    state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER);
+        }
+    }
 
     static public void initDownloaderState(Context context) {
         SharedPreferences.Editor editor = context.getSharedPreferences("SamTour_Pref", 0).edit();
