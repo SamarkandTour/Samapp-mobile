@@ -4,6 +4,7 @@ package uz.samtuit.samapp.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -14,9 +15,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -45,6 +49,8 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
     private boolean fromItinerary;
     private int selectedDay;
     private int indexToAssign;
+    private Location currentLoc;
+    private GlobalsClass globalVariables;
 
     public TourFeatureItemsAdapter(Context context, GlobalsClass.FeatureType featureType, ArrayList<TourFeature> data, int LayoutID, boolean fromItinerary, int selectedDay, int indexToAssign){
         this.context = context;
@@ -66,6 +72,8 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
 
     @Override
     public void onBindViewHolder(ViewHolder holder,final int position) {
+        globalVariables = (GlobalsClass)context.getApplicationContext();
+        currentLoc = globalVariables.getCurrentLoc();
         holder.TF_RATING.setRating(data.get(position).getRating());
         holder.TF_TITLE.setText(data.get(position).getString("name"));
         String fileName = data.get(position).getPhoto();
@@ -82,6 +90,17 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
             } catch (Exception ex) {
 
             }
+        }
+
+        Toast.makeText(context, currentLoc.toString()  +" "+ ItemsListActivity.sortBy.toString() +" ",Toast.LENGTH_LONG);
+
+        if (currentLoc != null && (currentLoc.getLatitude() != 0 || currentLoc.getLongitude() != 0)
+                && ItemsListActivity.sortBy == ItemsListActivity.SortBy.LOCATION) {
+            float[] distance = new float[1];
+            Toast.makeText(context, "TEST", Toast.LENGTH_LONG);
+            android.location.Location.distanceBetween(currentLoc.getLatitude(), currentLoc.getLongitude(), data.get(position).getLatitude(), data.get(position).getLongitude(), distance);
+            holder.TF_DISTANCE.setVisibility(View.VISIBLE);
+            holder.TF_DISTANCE.setText((distance[0] > 1000) ? Math.round(distance[0]/1000 * 10.0) / 10.0 + " km" : (int) distance[0] + " m");
         }
 
 
@@ -130,6 +149,7 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
         public ImageView TF_IMAGE;
         public RatingBar TF_RATING;
         public View TF_HOLDER;
+        public TextView TF_DISTANCE;
 
         public ViewHolder(View v) {
             super(v);
@@ -137,6 +157,7 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
             TF_IMAGE = (ImageView)v.findViewById(R.id.listViewThumbnail);
             TF_RATING = (RatingBar)v.findViewById(R.id.ratingBar);
             TF_HOLDER = v.findViewById(R.id.holder_layout);
+            TF_DISTANCE = (TextView)v.findViewById(R.id.distance);
         }
     }
 }

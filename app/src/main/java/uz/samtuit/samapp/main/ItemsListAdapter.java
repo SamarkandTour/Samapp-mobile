@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
         public ImageView mainImage;
         public RatingBar rb;
         public LinearLayout holderLayout;
+        public TextView distanceView;
 
         public ViewHolder(View v){
             super(v);
@@ -44,6 +46,7 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
             mainImage = (ImageView)v.findViewById(R.id.listViewThumbnail);
             rb = (RatingBar)v.findViewById(R.id.ratingBar);
             holderLayout = (LinearLayout)v.findViewById(R.id.holder_layout);
+            distanceView = (TextView)v.findViewById(R.id.distance);
         }
     }
 
@@ -92,6 +95,18 @@ class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder>
 //                }
             }
         });
+
+        Toast.makeText(context, currentLoc.toString()  +" "+ ItemsListActivity.sortBy.toString() +" ",Toast.LENGTH_LONG);
+
+        if (currentLoc != null && (currentLoc.getLatitude() != 0 || currentLoc.getLongitude() != 0)
+                && ItemsListActivity.sortBy == ItemsListActivity.SortBy.LOCATION) {
+            float[] distance = new float[1];
+            Toast.makeText(context, "TEST", Toast.LENGTH_LONG);
+            android.location.Location.distanceBetween(currentLoc.getLatitude(), currentLoc.getLongitude(), data.get(position).getLatitude(), data.get(position).getLongitude(), distance);
+            holder.distanceView.setVisibility(View.VISIBLE);
+            holder.distanceView.setText((distance[0] > 1000) ? Math.round(distance[0]/1000 * 10.0) / 10.0 + " km" : (int) distance[0] + " m");
+        }
+
     }
 
     @Override

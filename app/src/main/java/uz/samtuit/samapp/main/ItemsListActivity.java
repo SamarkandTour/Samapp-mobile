@@ -45,7 +45,7 @@ import uz.samtuit.samapp.util.TourFeatureList;
 
 
 public class ItemsListActivity extends ActionBarActivity {
-    static SortBy sortBy = SortBy.NAME;
+    public static SortBy sortBy = SortBy.NAME;
     public enum SortBy {NAME, LOCATION};
 
     private int PRIMARY_COLOR;
