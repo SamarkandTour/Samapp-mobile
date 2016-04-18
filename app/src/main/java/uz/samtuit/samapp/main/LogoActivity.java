@@ -229,21 +229,21 @@ public class LogoActivity extends Activity {
             super.onProgressUpdate(values);
             switch (values[0].first) {
                 case INIT_START:
-                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_init, values[0].second + "..."));
+                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_init, values[0].second)+ "...");
                     break;
                 case LOAD_START:
-                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_load,values[0].second + "..."));
+                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_load,values[0].second) + "...");
 //                    tvInfo.setText("Loading " + values[0].second + "...");
                     break;
                 case LOAD_DONE:
                     tvInfo.setText(tvInfo.getText() + getResources().getString(R.string.logo_done));
                     break;
                 case CHECK_START:
-                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_check, values[0].second + "..."));
+                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_check, values[0].second) + "...");
 //                    tvInfo.setText("Checking " + values[0].second + "...");
                     break;
                 case UPDATE_START:
-                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_apply, values[0].second + "..."));
+                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_apply, values[0].second) + "...");
 //                    tvInfo.setText("Applying " + values[0].second + "...");
                     break;
             }
