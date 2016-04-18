@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -25,8 +23,6 @@ import com.mapbox.mapboxsdk.util.NetworkUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.ZipFile;
-
-import javax.microedition.khronos.opengles.GL;
 
 import uz.samtuit.samapp.util.CheckUpdateManager;
 import uz.samtuit.samapp.util.CustomDialog;
@@ -144,6 +140,7 @@ public class LogoActivity extends Activity {
             try {
                 // Since language selection has finished, Set features lists
                 String chosenLang = pref.getString("app_lang", null);
+                SystemSetting.setUserLanguage(LogoActivity.this, chosenLang);
                 String path = null;
 
                 // Do below, when first launch or since new update has been downloaded
