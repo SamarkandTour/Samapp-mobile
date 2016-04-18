@@ -211,7 +211,6 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
     }
 
     public void AddToMyItinerary(final View view){
-        Toast.makeText(this,fromItinerary + "" , Toast.LENGTH_SHORT).show();
         if(fromItinerary) {
             final GlobalsClass globals = (GlobalsClass)getApplicationContext();
             final Bundle extras = getIntent().getExtras();

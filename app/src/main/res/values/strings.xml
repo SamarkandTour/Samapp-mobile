@@ -115,6 +115,8 @@
         \nOpen Data : http://download.samarkandtour.org
         \nEmail : samarkandtour@gmail.com"
     </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="tour_feature_content">
         "%1$s\n\n"
         "Address:\n\n"
@@ -126,5 +128,8 @@
     </string>
     <string name="mainimage">mainImage</string>
     <string name="title">Title</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title_activity_image_viewing">ImageViewing</string>
+    <string name="day">"Day %s"</string>
+
 </resources>
