@@ -133,8 +133,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
         if (modify) {
             Fragment page = vpadapter.getRegisteredFragment(pager.getCurrentItem());
             if (page != null) {
@@ -142,6 +140,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
             }
            modify = false;
         } else {
+            super.onBackPressed();
             overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
             Intent intent = new Intent(this, MainMap.class);
             intent.putExtra("type", "features");
