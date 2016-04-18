@@ -135,4 +135,6 @@
     <string name="logo_apply">"Применение %1$s"</string>
     <string name="logo_done">Завершено</string>
     <string name="day">"%1$s-й день"</string>
+    <string name="items_list_as_grid">Клетки</string>
+    <string name="items_list_as_row">Список</string>
 </resources>

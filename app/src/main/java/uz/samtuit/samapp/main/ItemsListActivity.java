@@ -366,10 +366,10 @@ public class ItemsListActivity extends ActionBarActivity {
 
                 if(list_type == 0){
                     list.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-                    item.setTitle("As row");
+                    item.setTitle(getString(R.string.items_list_as_row));
                 } else {
                     list.setLayoutManager(mLayoutManager);
-                    item.setTitle("As grid");
+                    item.setTitle(getString(R.string.items_list_as_grid));
                 }
                 list_type = 1 - list_type;
                 adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
