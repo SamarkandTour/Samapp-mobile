@@ -127,4 +127,6 @@
     <string name="action_up">Вверх</string>
     <string name="title">Название</string>
     <string name="modify">Изменить</string>
+    <string name="ok_btn">Ок</string>
+    <string name="cancel_btn">Отмена</string>
 </resources>

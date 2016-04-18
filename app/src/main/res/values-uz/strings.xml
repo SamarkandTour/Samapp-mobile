@@ -122,4 +122,6 @@
     <string name="action_up">Yuqoriga</string>
     <string name="title">Sarlavha</string>
     <string name="modify">O`zgartirish</string>
+    <string name="ok_btn">Ok</string>
+    <string name="cancel_btn">Bekor qilish</string>
 </resources>

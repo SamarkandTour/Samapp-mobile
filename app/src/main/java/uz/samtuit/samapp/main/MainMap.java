@@ -662,7 +662,6 @@ public class MainMap extends ActionBarActivity {
             if (pressedMarker != null) { // Close opened tooltip
                 pressedMarker.closeToolTip();
             }
-            Log.e("MESSAGE2", extras.getString("featureType"));
             FeatureType featureType = FeatureType.valueOf(intent.getStringExtra("featureType"));
             switch (extras.getString("type")){
                 case "features":
