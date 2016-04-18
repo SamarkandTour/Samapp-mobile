@@ -56,7 +56,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         CharSequence Titles[] = new CharSequence[ItineraryList.MAX_ITINERARY_DAYS];
         itineraryByDayArray = new HashMap<?, ?>[ItineraryList.MAX_ITINERARY_DAYS];
         for (int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++) {
-            Titles[i] = "Day " + (i + 1);
+            Titles[i] = getResources().getString(R.string.day, (i + 1));
             itineraryByDayArray[i] = new HashMap<Integer, TourFeature>();
         }
 

@@ -129,4 +129,5 @@
     <string name="logo_check">"%1$s tekshirilmoqda"</string>
     <string name="logo_apply">"%1$s qo\\'llanmoqda"</string>
     <string name="logo_done">Bajarilmoqda</string>
+    <string name="day">"%1$s-kun"</string>
 </resources>

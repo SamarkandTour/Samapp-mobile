@@ -130,7 +130,7 @@
     <string name="title">Title</string>
 
     <string name="title_activity_image_viewing">ImageViewing</string>
-    <string name="day">"Day %s"</string>
+    <string name="day">"Day %1$s"</string>
     <string name="touch_to_close">Touch to close</string>
     <string name="suggested_itinerary">Suggested itinerary</string>
     <string name="title_activity_my_itinerary">My itinerary</string>
