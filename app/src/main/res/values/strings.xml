@@ -136,5 +136,10 @@
     <string name="title_activity_my_itinerary">My itinerary</string>
     <string name="ok_btn">Ok</string>
     <string name="cancel_btn">Cancel</string>
+    <string name="logo_init">"Initializing %1$s"</string>
+    <string name="logo_load">"Loading %1$s"</string>
+    <string name="logo_check">"Checking %1$s"</string>
+    <string name="logo_apply">"Applying %1$s"</string>
+    <string name="logo_done">DONE</string>
 
 </resources>

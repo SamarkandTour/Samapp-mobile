@@ -129,4 +129,9 @@
     <string name="modify">Изменить</string>
     <string name="ok_btn">Ок</string>
     <string name="cancel_btn">Отмена</string>
+    <string name="logo_init">"Инициализирование %1$s"</string>
+    <string name="logo_load">"Загрузка %1$s"</string>
+    <string name="logo_check">"Проверка %1$s"</string>
+    <string name="logo_apply">"Применение %1$s"</string>
+    <string name="logo_done">Завершено</string>
 </resources>

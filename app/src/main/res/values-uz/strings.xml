@@ -124,4 +124,9 @@
     <string name="modify">O`zgartirish</string>
     <string name="ok_btn">Ok</string>
     <string name="cancel_btn">Bekor qilish</string>
+    <string name="logo_init">"%1$s boshlang\\'ich sozlov"</string>
+    <string name="logo_load">"%1$s yuklanmoqda"</string>
+    <string name="logo_check">"%1$s tekshirilmoqda"</string>
+    <string name="logo_apply">"%1$s qo\\'llanmoqda"</string>
+    <string name="logo_done">Bajarilmoqda</string>
 </resources>
