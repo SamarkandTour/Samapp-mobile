@@ -92,7 +92,7 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
             }
         }
 
-        Toast.makeText(context, currentLoc.toString()  +" "+ ItemsListActivity.sortBy.toString() +" ",Toast.LENGTH_LONG);
+        //Toast.makeText(context, currentLoc.toString()  +" "+ ItemsListActivity.sortBy.toString() +" ",Toast.LENGTH_LONG);
 
         if (currentLoc != null && (currentLoc.getLatitude() != 0 || currentLoc.getLongitude() != 0)
                 && ItemsListActivity.sortBy == ItemsListActivity.SortBy.LOCATION) {
