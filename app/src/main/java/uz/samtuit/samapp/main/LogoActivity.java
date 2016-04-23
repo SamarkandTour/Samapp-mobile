@@ -55,7 +55,6 @@ public class LogoActivity extends Activity {
         overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
         tvInfo = (TextView) findViewById(R.id.tv_info);
         tvInfo.setTypeface(TypefaceHelper.getTypeface(this, "segoeui"));
-        Glide.with(this).load(R.drawable.logo).into((ImageView)findViewById(R.id.back_image));
 
         pref = this.getSharedPreferences("SamTour_Pref", 0);
         isFirstLaunch = pref.getBoolean("app_first_launch", true);

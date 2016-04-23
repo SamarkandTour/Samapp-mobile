@@ -89,11 +89,11 @@
     <string name="sort_by_title">Сортировать по имени</string>
     <string name="sort_by_mylocation">Сортировать по дистанцию ко мне</string>
     <string name="pref_header_about">О программы</string>
-    <string name="pref_header_data_sync">Проверить наличии обновлений</string>
+    <string name="pref_header_data_sync">Проверить обновлений</string>
     <string name="pref_summary_data_sync">Проверить на последные тур данные на сервере</string>
     <string name="pref_title_update_on_boot">Проверка на обновления при запуске</string>
     <string name="pref_title_now_update">Обновить</string>
-    <string name="pref_header_notifications">Уведомление о прибытии в место назначения</string>
+    <string name="pref_header_notifications">Уведомление о прибытии</string>
     <string name="pref_summary_notifications">Когда устройство приблизится к целью оно сообщит об этом с помощью выбрации</string>
     <string name="pref_title_vibrate">Выбрация</string>
     <string name="pref_header_languages">Языки</string>

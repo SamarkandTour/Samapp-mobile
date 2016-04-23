@@ -3,20 +3,9 @@
     android:layout_height="match_parent"
     tools:context="uz.samtuit.samapp.main.LogoActivity"
     android:padding="0dp"
-
     android:background="@drawable/logo"
     android:id="@+id/logoMainLayout">
 
-    <ImageView
-        android:id="@+id/back_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitStart"
-        android:paddingLeft="@dimen/logo_side_margin"
-        android:visibility="gone"
-        android:paddingRight="@dimen/logo_side_margin"
-        android:paddingTop="60dp"
-       />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
