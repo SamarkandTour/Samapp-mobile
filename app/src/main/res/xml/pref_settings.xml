@@ -36,4 +36,12 @@
             android:targetClass="uz.samtuit.samapp.main.LanguageSettingActivity"/>
     </PreferenceScreen>
 
+    <PreferenceScreen
+        android:icon="@drawable/ic_help"
+        android:title="@string/pref_header_tips_faq">
+        <intent
+            android:targetPackage="uz.samtuit.samapp"
+            android:targetClass="uz.samtuit.samapp.main.TravelTipsFaqActivity"/>
+    </PreferenceScreen>
+
 </PreferenceScreen>
