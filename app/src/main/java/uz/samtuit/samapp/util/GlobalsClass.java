@@ -53,41 +53,30 @@ public class GlobalsClass extends Application {
 
     private Location currentLoc;
 
-    public ArrayList<TourFeature> getTourFeatures(FeatureType featureType)
-    {
-        ArrayList<TourFeature> tourFeatures = null;
-        switch(featureType)
-        {
+    public ArrayList<TourFeature> getTourFeatures(FeatureType featureType) {
+        switch(featureType) {
             case HOTEL:
-                tourFeatures = Hotels;
-                break;
+                return Hotels;
 
             case FOODNDRINK:
-                tourFeatures = FoodAndDrinks;
-                break;
+                return FoodAndDrinks;
 
             case ATTRACTION:
-                tourFeatures = Attractions;
-                break;
+                return Attractions;
 
             case SHOPPING:
-                tourFeatures = Shops;
-                break;
+                return Shops;
         }
 
-        return tourFeatures;
-
+        return null;
     }
 
-    public LinkedList<TourFeature> getItineraryFeatures()
-    {
+    public LinkedList<TourFeature> getItineraryFeatures() {
         return Itinerary;
     }
 
-    public void setFeatures(FeatureType featureType, ArrayList<TourFeature> featureArrayList)
-    {
-        switch(featureType)
-        {
+    public void setFeatures(FeatureType featureType, ArrayList<TourFeature> featureArrayList) {
+        switch(featureType) {
             case HOTEL:
                 Hotels = featureArrayList;
                 break;
@@ -124,16 +113,10 @@ public class GlobalsClass extends Application {
         return currentLoc;
     }
 
-    public Boolean getModifyModeState() { return itineraryModifyMode; }
-
-    public void setModifyModeState( boolean state ) { itineraryModifyMode = state; }
-
-    public static int getPrimaryColorId(GlobalsClass.FeatureType type)
-    {
+    public static int getPrimaryColorId(GlobalsClass.FeatureType type) {
         int id = 0;
 
-        switch (type)
-        {
+        switch (type) {
             case HOTEL:
                 id = R.color.hotel_primary;
                 break;
@@ -147,15 +130,14 @@ public class GlobalsClass extends Application {
                 id = R.color.shop_primary;
                 break;
         }
+
         return id;
     }
 
-    public static int getToolbarColorId(GlobalsClass.FeatureType type)
-    {
+    public static int getToolbarColorId(GlobalsClass.FeatureType type) {
         int id = 0;
 
-        switch (type)
-        {
+        switch (type) {
             case HOTEL:
                 id = R.color.hotel_tool;
                 break;
@@ -169,6 +151,7 @@ public class GlobalsClass extends Application {
                 id = R.color.shop_tool;
                 break;
         }
+
         return id;
     }
 }
