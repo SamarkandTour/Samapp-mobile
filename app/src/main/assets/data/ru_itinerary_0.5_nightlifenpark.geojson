@@ -1,0 +1,37 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Парк имени Алишера Навои",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Мавзолей Гур-Эмир",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Музыкальный фонтан",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ансамбль Регистан",
+        "day": 1,
+        "ampm": "p"
+      }
+    }
+  ]
+}

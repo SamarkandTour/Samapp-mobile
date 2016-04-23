@@ -55,7 +55,6 @@ public class LogoActivity extends Activity {
         overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
         tvInfo = (TextView) findViewById(R.id.tv_info);
         tvInfo.setTypeface(TypefaceHelper.getTypeface(this, "segoeui"));
-        Glide.with(this).load(R.drawable.logo).into((ImageView)findViewById(R.id.back_image));
 
         pref = this.getSharedPreferences("SamTour_Pref", 0);
         isFirstLaunch = pref.getBoolean("app_first_launch", true);
@@ -140,6 +139,7 @@ public class LogoActivity extends Activity {
             try {
                 // Since language selection has finished, Set features lists
                 String chosenLang = pref.getString("app_lang", null);
+                SystemSetting.setUserLanguage(LogoActivity.this, chosenLang);
                 String path = null;
 
                 // Do below, when first launch or since new update has been downloaded
@@ -228,19 +228,22 @@ public class LogoActivity extends Activity {
             super.onProgressUpdate(values);
             switch (values[0].first) {
                 case INIT_START:
-                    tvInfo.setText("Initializing " + values[0].second + "...");
+                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_init, values[0].second)+ "...");
                     break;
                 case LOAD_START:
-                    tvInfo.setText("Loading " + values[0].second + "...");
+                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_load,values[0].second) + "...");
+//                    tvInfo.setText("Loading " + values[0].second + "...");
                     break;
                 case LOAD_DONE:
-                    tvInfo.setText(tvInfo.getText() + "DONE");
+                    tvInfo.setText(tvInfo.getText() + getResources().getString(R.string.logo_done));
                     break;
                 case CHECK_START:
-                    tvInfo.setText("Checking " + values[0].second + "...");
+                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_check, values[0].second) + "...");
+//                    tvInfo.setText("Checking " + values[0].second + "...");
                     break;
                 case UPDATE_START:
-                    tvInfo.setText("Applying " + values[0].second + "...");
+                    tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_apply, values[0].second) + "...");
+//                    tvInfo.setText("Applying " + values[0].second + "...");
                     break;
             }
         }

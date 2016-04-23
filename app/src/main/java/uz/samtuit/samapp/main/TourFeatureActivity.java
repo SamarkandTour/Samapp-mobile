@@ -49,7 +49,7 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
     private int selectedDay = 1;
     private String featureType;
     private String url, wifi, telNum;
-    private String photoSrc;
+    private String photoSrc = "";
     private TextView mInfo;
     private TextView mAddress;
     private SpannableString s;
@@ -105,7 +105,12 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
         mOpen = (TextView)findViewById(R.id.tour_feature_open);
         mAppBarLayout = findViewById(R.id.toolbar_layout);
 
-        // Floating action bar
+
+        // Floating action button
+        GlobalsClass globals = (GlobalsClass)getApplicationContext();
+        ItineraryList list = ItineraryList.getInstance();
+        TourFeature feature = list.findFeature(getApplicationContext(), extras.getString("name"));
+        LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +118,21 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
                 AddToMyItinerary(view);
             }
         });
-        photoSrc = extras.getString("photo");
+        if(itineraryItems.contains(feature)) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Snackbar.make(v, getString(R.string.itinerary_already_exist),Snackbar.LENGTH_SHORT).show();
+                }
+            });
+            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_white_24dp));
+        }
+        try{
+            photoSrc = extras.getString("photo");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
 
         // Photo
         LoadImageFromExternalStorage loadImageFromExternalStorage = new LoadImageFromExternalStorage();
@@ -211,14 +230,12 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
     }
 
     public void AddToMyItinerary(final View view){
-        Toast.makeText(this,fromItinerary + "" , Toast.LENGTH_SHORT).show();
+        final GlobalsClass globals = (GlobalsClass)getApplicationContext();
         if(fromItinerary) {
-            final GlobalsClass globals = (GlobalsClass)getApplicationContext();
             final Bundle extras = getIntent().getExtras();
-            ItineraryList list = ItineraryList.getInstance();
-            TourFeature feature = list.findFeature(getApplicationContext(), extras.getString("name"));
+            final ItineraryList list = ItineraryList.getInstance();
+            final TourFeature feature = list.findFeature(getApplicationContext(), extras.getString("name"));
             LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
-
             if (itineraryItems.contains(feature)) {
                 Snackbar.make(view, getString(R.string.itinerary_already_exist), Snackbar.LENGTH_SHORT).show();
             } else {
@@ -231,7 +248,6 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
             }
             //Toast.makeText(this, "From Itinerary", Toast.LENGTH_SHORT).show();
         } else {
-            final GlobalsClass globals = (GlobalsClass)getApplicationContext();
             final Dialog d = new Dialog(TourFeatureActivity.this);
 
             d.setTitle(getString(R.string.itinerary_pick_day));
@@ -251,17 +267,11 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
                     final Bundle extras = getIntent().getExtras();
                     ItineraryList list = ItineraryList.getInstance();
                     TourFeature feature = list.findFeature(getApplicationContext(), extras.getString("name"));
-                    LinkedList<TourFeature> itineraryItems = globals.getItineraryFeatures();
-
-                    if (itineraryItems.contains(feature)) {
-                        Snackbar.make(view, getString(R.string.itinerary_already_exist), Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        feature.setDay(selectedDay);
-                        list.addNewFeatureToItineraryList(feature, extras.getInt("index"));
-                        list.itineraryWriteToGeoJSONFile(getApplicationContext(), TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
-                        Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
-                        d.hide();
-                    }
+                    feature.setDay(selectedDay);
+                    list.addNewFeatureToItineraryList(feature, extras.getInt("index"));
+                    list.itineraryWriteToGeoJSONFile(getApplicationContext(), TourFeatureActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
+                    Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
+                    d.hide();
                 }
             });
             b2.setOnClickListener(new View.OnClickListener() {
@@ -330,10 +340,13 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
             mAppBarLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(TourFeatureActivity.this, ImageViewingActivity.class);
-                    intent.putExtra("photo", photoSrc);
-                    intent.putExtra("name", name);
-                    startActivity(intent);
+                    if (photoSrc == "" || photoSrc == null) {
+                    } else {
+                        Intent intent = new Intent(TourFeatureActivity.this, ImageViewingActivity.class);
+                        intent.putExtra("photo", photoSrc);
+                        intent.putExtra("name", name);
+                        startActivity(intent);
+                    }
                 }
             });
 

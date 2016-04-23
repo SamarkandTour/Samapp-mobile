@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,8 +24,9 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
     private String selectedCourseList[] = new String[ItineraryList.MAX_ITINERARY_COURSES];
     private float selectedTourDay, usedDay, remainDay;
     private ProgressBar progressBar;
-    SharedPreferences sharedPreferences;
-    boolean isFirstLaunch;
+    private SharedPreferences sharedPreferences;
+    private boolean isFirstLaunch;
+    private ProgressDialog progressDialog;
 
     private ArrayList<String>[] courseArray = new ArrayList[ItineraryList.MAX_ITINERARY_COURSES];
     private int[] courseInitNameId = {
@@ -210,14 +212,17 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
     }
 
     public void onDoneBtnClick(View view) {
+        if (spinnerArray[0].getSelectedItemPosition() == 0) {
+            Toast.makeText(WizardCourseSelectActivity.this, R.string.itinerary_1st_course, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         DoneTask doneTask = new DoneTask();
         doneTask.execute();
     }
 
     public class DoneTask extends AsyncTask<Void, Void, Void>{
         String lang = "";
-        String path = null;
-        ProgressDialog progressDialog;
         ItineraryList itineraryListInstance = null;
 
         @Override
@@ -228,17 +233,12 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
             progressDialog = new ProgressDialog(WizardCourseSelectActivity.this);
             progressDialog.setMessage(getString(R.string.dialog_wait));
             progressDialog.show();
-
-            if (spinnerArray[0].getSelectedItemPosition() == 0) {
-                Toast.makeText(WizardCourseSelectActivity.this, R.string.itinerary_1st_course, Toast.LENGTH_LONG).show();
-                return;
-            }
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.hide();
+            progressDialog.dismiss();
         }
 
         @Override
@@ -260,6 +260,7 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
                 float day = ItineraryList.getCourseDayFromHashMap(selectedCourse);
                 path = lang + "_itinerary_" + String.valueOf(day) + "_" + selectedCourse + ".geojson";
 
+                Log.e("WizardCourseSelect", "Selected course filename=" + path);
                 itineraryListInstance.mergeCoursesFromGeoJSONFileToItineraryList(WizardCourseSelectActivity.this, path);
             }
 
@@ -278,6 +279,14 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
             }
 
             return null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
         }
     }
 }

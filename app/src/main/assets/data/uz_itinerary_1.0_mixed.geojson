@@ -1,0 +1,117 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Universitet hiyoboni",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Go‘ri Amir maqbarasi",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ruhobod maqbarasi",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Registon ansambli",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chorsu san’at galereyasi",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hunarmandlar markazi",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bibi-Xonim masjidi",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Siyob bozori",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hazrati Хizr masjidi",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Afrosiyob muzeyi",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Xo‘ja Doniyor maqbarasi",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ulug'bek muzeyi",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ulug'bek rasadxonasi",
+        "day": 1,
+        "ampm": "p"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Shohi Zinda maqbarasi",
+        "day": 1,
+        "ampm": "p"
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chorsu san’at galereyasi",
+        "day": 1,
+        "ampm": "a"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Qog'oz fabrikasi",
+        "day": 1,
+        "ampm": "a"
+      }
+    }
+  ]
+}

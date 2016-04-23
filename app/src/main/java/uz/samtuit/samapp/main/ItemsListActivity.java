@@ -45,7 +45,7 @@ import uz.samtuit.samapp.util.TourFeatureList;
 
 
 public class ItemsListActivity extends ActionBarActivity {
-    static SortBy sortBy = SortBy.NAME;
+    public static SortBy sortBy = SortBy.NAME;
     public enum SortBy {NAME, LOCATION};
 
     private int PRIMARY_COLOR;
@@ -366,9 +366,10 @@ public class ItemsListActivity extends ActionBarActivity {
 
                 if(list_type == 0){
                     list.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-
+                    item.setTitle(getString(R.string.items_list_as_row));
                 } else {
                     list.setLayoutManager(mLayoutManager);
+                    item.setTitle(getString(R.string.items_list_as_grid));
                 }
                 list_type = 1 - list_type;
                 adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);

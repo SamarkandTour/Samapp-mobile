@@ -4,7 +4,7 @@
     tools:context="uz.samtuit.samapp.main.ItemsListActivity">
     <item
         android:id="@+id/action_reshape"
-        android:title="As Grid"
+        android:title="@string/items_list_as_grid"
         android:icon="@android:drawable/ic_input_add"
         app:showAsAction="never"
         />
@@ -13,7 +13,7 @@
         android:orderInCategory="100"
         android:title="Location"
         android:icon="@drawable/place_white"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always">
     </item>
     <item
         android:id="@+id/action_search"

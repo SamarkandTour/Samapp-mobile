@@ -72,11 +72,16 @@ public class CustomInfoWindow extends InfoWindow {
 
         String photoFileName = mFeature.getPhoto();
         if (photoFileName != null) {
-            String encodedBytes = FileUtil.fileReadFromExternalDir(mContext, photoFileName);
-            Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
-            BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, true);
-            ImageView mainImage = (ImageView) mView.findViewById(R.id.tooltip_imageView);
-            mainImage.setImageDrawable(roundedDrawable);
+            try{
+                String encodedBytes = FileUtil.fileReadFromExternalDir(mContext, photoFileName);
+                Bitmap decodedBytes = BitmapUtil.decodeBase64Image(encodedBytes);
+                BitmapUtil.RoundedDrawable roundedDrawable = new BitmapUtil.RoundedDrawable(decodedBytes, true);
+                ImageView mainImage = (ImageView) mView.findViewById(R.id.tooltip_imageView);
+                mainImage.setImageDrawable(roundedDrawable);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
         }
 
     }

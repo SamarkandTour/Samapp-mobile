@@ -56,7 +56,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         CharSequence Titles[] = new CharSequence[ItineraryList.MAX_ITINERARY_DAYS];
         itineraryByDayArray = new HashMap<?, ?>[ItineraryList.MAX_ITINERARY_DAYS];
         for (int i = 0; i < ItineraryList.MAX_ITINERARY_DAYS; i++) {
-            Titles[i] = "Day " + (i + 1);
+            Titles[i] = getResources().getString(R.string.day, (i + 1));
             itineraryByDayArray[i] = new HashMap<Integer, TourFeature>();
         }
 
@@ -110,16 +110,13 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.e("STATECHECK", "TAB");
         if(item.getItemId()==R.id.action_modify){
             Fragment page = vpadapter.getRegisteredFragment(pager.getCurrentItem());
             if(modify){
-                item.setIcon(R.drawable.edit_property);
                 if (page != null) {
                     ((SuggestedItineraryFragment)page).modifyMode(false);
                 }
             } else {
-                item.setIcon(R.drawable.ic_done_white_24dp);
                 if (page != null) {
                     ((SuggestedItineraryFragment)page).modifyMode(true);
                 }
@@ -136,19 +133,22 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
         if (modify) {
+            Fragment page = vpadapter.getRegisteredFragment(pager.getCurrentItem());
+            if (page != null) {
+                ((SuggestedItineraryFragment)page).modifyMode(false);
+            }
            modify = false;
+        } else {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+            Intent intent = new Intent(this, MainMap.class);
+            intent.putExtra("type", "features");
+            intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
         }
-
-        Intent intent = new Intent(this, MainMap.class);
-        intent.putExtra("type", "features");
-        intent.putExtra("featureType", GlobalsClass.FeatureType.ITINERARY.toString());
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
     }
-
 }
 

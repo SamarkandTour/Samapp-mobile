@@ -5,8 +5,8 @@
     <string name="hotels">Mehmonxonalar</string>
     <string name="attractions">Ziyoratgohlar</string>
     <string name="foodanddrinks">Ovqatlanish</string>
-    <string name="shopping">Bozorlar</string>
-    <string name="new_update">Yangilanish mavjud</string>
+    <string name="shopping">Haridlar</string>
+    <string name="new_update">Yangi ma`lumotlar</string>
     <string name="btn_yes">Ha</string>
     <string name="btn_no">"Yo`q"</string>
     <string name="btn_previous">Oldingi</string>
@@ -14,7 +14,7 @@
     <string name="btn_later">Keyinroq</string>
     <string name="btn_done">Bajarildi</string>
     <string name="btn_guide_me">Meni shu yerga olib bor</string>
-    <string name="update_alert">Yangilanish bor! Yuklab olishni xoxlaysizmi?</string>
+    <string name="update_alert">Yangi ma\'lumotlar mavjud! Yuklab olishni xoxlaysizmi?</string>
     <string name="reviews">Izohlar</string>
     <string name="address">Manzil</string>
     <string name="search_hint">Qidiruv</string>
@@ -22,26 +22,22 @@
     <string name="Err_file_not_found">"Xato! Fayl topilmadi. Sozlamalarga o'tib qayta yuklab ko'ring"</string>
     <string name="Err_wrong_itinerary_file">"Xato! Yo'nalishar faylida noto'g'ri xususiyatlar"</string>
     <string name="Err_network_state">Aloqa tezlik yaxshi emas</string>
-    <string name="Err_no_connection">There is no Internet connection</string>
-    <string name="Err_not_supported">Not supported in this language</string>
+    <string name="Err_no_connection">Internet tarmog\'i mavjud emas</string>
+    <string name="Err_not_supported">Bu tilda mavjud emas</string>
     <string name="dialog_update_available">"Hozirda sayohatlar haqidagi oxirgi ma'lumot mavjud!
         \nYangilashni xoxlaysizmi? Agar siz Wi-Fi ga ulanmagan bo'lsangiz,sizning mobil internetingizdan ko'p trafik sarflanadi"</string>
-    <string name="dialog_load_features">"Sayohat ma'lumotlari yuklanmoqda..."</string>
-    <string name="dialog_check_update">Checking New Update</string>
-    <string name="touch_to_close">Yopish uchun bosing</string>
+    <string name="dialog_load_features">Sayohat ma`lumotlari yuklanmoqda</string>
+    <string name="dialog_check_update">Yangilanishga tekshrish</string>
     <string name="dialog_gps_setting">"Siz turgan joydan boradigan manzilingizgacha yo'l-yo'riqni bilmoqchi bo'lsangiz, iltimos GPSni yoqing.\nYoqishni xoxlaysizmi?"</string>
-    <string name="dialog_need_map_download">To see map background, first time, you need to download the map from server
-        \nDo you want to download? But if you are not connected to Wi-Fi, the cost of data usage would be high</string>
+    <string name="dialog_need_map_download">Xaritani ko\'rish uchun uni avval serverdan ko`chirib olishingiz kerak.
+        \nKo\'chirib olishni hoxlaysizmi? Lekin agar sizda Wi-Fi ulanmagan bo\'lsa bu mobil internetdan ko\'p trafik talab qiladi.</string>
     <string name="dialog_wait">Iltimos kuting</string>
     <string name="select_your_language">Iltimos, tilni tanlang</string>
     <string name="wizard_day_select">"Samarqandda necha kun bo'lmoqchisiz?"</string>
-    <string name="suggested_itinerary">Marshrut</string>
-    <string name="title_activity_my_itinerary">Mening Marshrutim</string>
-    <string name="no_data">"Bu ruknda ma\\'lumot mavjud emas"</string>
     <string name="wizard_course_select">Yoqtirgan kursingiz muddatini belgilang</string>
     <string name="title_dialog_gps_setting">Manzilga asoslangan xizmat</string>
     <string name="title_dialog_update_available">Yangilanish mavjud</string>
-    <string name="title_dialog_map_download">Haritani yuklab olish</string>
+    <string name="title_dialog_map_download">Xaritani yuklash</string>
     <string name="title_itinerary_wizard">"Yo'nalishlar ustasi"</string>
     <string name="title_about_this_app">Ilova haqida</string>
     <string name="title_check_new_update">Yangilanishga tekshiring</string>
@@ -49,14 +45,15 @@
     <string name="title_suggested_itinerary">"Tavsiya qilingan yo'nalishlar"</string>
     <string name="toast_select_destination">"Birinchi markerni tanlang va Yo\'l ko\'rsat tugmasini bosing"</string>
     <string name="toast_wait_for_gps">Iltimos GPS signalni tutguncha kuting</string>
-    <string name="toast_navi_finding">"Masofa va yo\'nalishni topishni boshlash"</string>
-    <string name="toast_no_magnetic_sensor">"Sizda magnit sensori mavjud emas. Kompass ishlatish imkoniyati mavjud emas!"</string>
-    <string name="toast_no_current_position">"Manzilni aniqlashni imkoni yo\'q. Joylarni sizga yaqinligi bo\'yicha saralashning imkoni yo\'q!"</string>
+    <string name="toast_navi_finding">"Manzil va yo'nalishni topishni boshlash"</string>
+    <string name="toast_no_current_position">"Joriy joylashuvni olish mumkin emas. Shuning uchun joylashuv bo`yicha tartiblashtirish mumkin emas"</string>
+    <string name="toast_no_magnetic_sensor">"Sizda magnit sensor yo\'q. Shuning uchun Kompas navigatsiyasi ishlamaydi"</string>
+    <string name="toast_downmanager_disabled">DownloadManager is disabled. Please enable it at Applications of Setting Menu</string>
     <string name="marquee_searching_you">Sizning manzilingizni izlash...</string>
     <string name="marquee_searching_target">"gacha manzil va yo'nalishni izlash"</string>
     <string name="marquee_guiding">"gacha yo'l ko'rsatish"</string>
     <string name="marquee_arrival_noti">Hozir siz beligilangan manzil atrofidasiz</string>
-    <string name="marquee_greeting">Samarqandga Xushkelibsiz!</string>
+    <string name="marquee_greeting">Samarqandga Xush kelibsiz!</string>
     <string name="Warn_weak_gps_signal">GPS singlan sust! Quyosh nuri tushadigan ochiqroq joyga chiqing</string>
     <string name="notify_download_complete">Yuklash yakunlandi</string>
     <string name="notify_updatable">Qayta ishga tushirsangiz yangilanish ishlaydi</string>
@@ -69,38 +66,35 @@
     <string name="itinerary_6th_course">Oltinchi kursni tanlang</string>
     <string name="itinerary_day">" Kun"</string>
     <string name="itinerary_mixed">Aralash yo`nalish</string>
-    <string name="itinerary_nightlifenpark">Tungi va Istirohat yo`nalish</string>
+    <string name="itinerary_nightlifenpark">Tungi va park yo`nalish</string>
     <string name="itinerary_shopping">Harid yo`nalishi</string>
     <string name="itinerary_traditionalhandmade">Milliy hunarmandchilik yo`nalishi</string>
     <string name="itinerary_museum">Muzey yo`nalishi</string>
     <string name="itinerary_religion">Diniy yo`nalish</string>
-    <string name="itinerary_overlap">"Agar bitta yo`nalish ikki marta tanlansa,\n nusxasi o`chiriladi"</string>
+    <string name="itinerary_overlap">"! Qachonki bitta yo`nalish ikki marta tanlansa,\n nusxasi o`chiriladi"</string>
     <string name="itinerary_pick_day">Sayohat kunini belgilang</string>
     <string name="itinerary_already_exist">Sayohat rejangizda mavjud</string>
     <string name="itinerary_added_successfully">"Sayohat rejangizga muvoffaqiyatli qo'shildi"</string>
-    <string name="itinerary_item_transfer">"Item transferred to 1 day "</string>
-    <string name="forward">forward</string>
-    <string name="backward">backward</string>
-    <string name="move">"Ko\\'chirildi"</string>
-    <string name="delete">Deleted!</string>
+    <string name="itinerary_item_transfer">"1 kunga ko\'chirildi "</string>
+    <string name="move">Yetkazildi!</string>
     <string name="prop_addr">Manzil</string>
     <string name="prop_price">Narxlar</string>
     <string name="prop_open">Ish vaqti</string>
-    <string name="pref_header_about">Dastur haqida</string>
-    <string name="pref_header_data_sync">Yangilanishni tekshiring</string>
-    <string name="pref_summary_data_sync">"Sayohat uchun yangi ma\\'lumotlarni tekshirish"</string>
-    <string name="pref_title_update_on_boot">Yangilanishlarni </string>
-    <string name="pref_title_now_update">Yangilash</string>
-    <string name="pref_header_notifications">"Mo\\'ljalga yaqinlashganlik haqida habar"</string>
-    <string name="pref_summary_notifications">"Mo\\'ljalga yaqinlashganda vibro habar berish"</string>
-    <string name="pref_title_vibrate">Vibratsiya</string>
+    <string name="sort_by_title">Nomi bo`yicha tartiblash</string>
+    <string name="sort_by_mylocation">Joylashuv bo`yicha tartiblash</string>
+    <string name="pref_header_about">Ilova haqida</string>
+    <string name="pref_header_data_sync">Yangilanishga tekshirish</string>
+    <string name="pref_summary_notifications">Manzilga yaqinlashganda vibratsiya berish</string>
     <string name="pref_header_languages">Tillar</string>
-
-    <string name="setting_about_app">
-        " This is the cooperation project of universities in Samarkand of which the center is a UNESCO world Heritage Site.
-        \n We're targeting to provide unknown, hidden and unique all tour information for your visit.
-        \n We suggest recommended itineraries for your great experience at this city. Of course, if you want, you can customize your own day-by-day itinerary based on our recommendation.
-        \n Furthermore, since it's designed for offline usage, you can utilize all information on your way without any data connection. It also has a navigation function by GSP so that it safely guide you to the destination without losing your way.
+    <string name="pref_header_notifications">Manzilni bildirishni yoqish</string>
+    <string name="pref_summary_data_sync">Serverga yangilanish o\'rnatilsa tekshirish</string>
+    <string name="pref_title_now_update">Hozir yangilash</string>
+    <string name="pref_title_update_on_boot">Ishga tushganda yangilanishga tekshirish</string>
+    <string name="pref_title_vibrate">Vibratsiya</string>
+    <string name="setting_about_app">" Bu loyiha UNESCOning butunjahon meroslar ro\'yxatiga kiritilgan Samarqand shahri uchun TATU Samarqand filiali va NRFning hamkorlikdagi qo\'shma loyiasidir.
+        \n Biz siz uchun eng ishonchli, yagona va qimmatli ma\'lumotlarni taqdim etishni maqsad qilganmiz.
+        \n Biz qimmatli tajribalarimiz asosida sizga Samarqand shahri bo\'ylab yo\'nalishlarni taklif qilamiz.  Albatta siz o\'zingizning hoxishingizga ko\'ra bu yo\'nalishlarni o\'zgartirishingiz mumkin.
+        \n Bundan tashqari bu dastur internet talab qilmaydi. GPS navigatsiyasi sizni yo\'lingizdan chalg\'imaslikka yordam beradi.
         \n This project is Open Source Software by AGPL license. Also all tour information are Open Data which are provided by open data exchange format, GeoJSON.
         \n We always welcome all kinds of your contribution and cooperation. You can make this project abundant by adding new data or modifying legacy data directly at our Wiki and by leaving your helpful comment for others after visiting tour places.
         \n When you have any questions or opinions, feel free to contact us by email.
@@ -108,26 +102,34 @@
         \nWiki : http://www.samarkandtour.org
         \nOpen Source : https://github.com/SamarkandTour
         \nOpen Data : http://download.samarkandtour.org
-        \nEmail : samarkandtour@gmail.com"
-    </string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+        \nEmail : samarkandtour@gmail.com"</string>
     <string name="tour_feature_content">
         "%1$s\n\n"
-        "Address:\n\n"
+        "Manzil:\n\n"
         "%2$s\n\n"
-        "Price:\n\n"
-        "%3$s\n\n"
-        "Open:\n\n"
+        "Narxi:\n\n"
+        "%3$s\n\n" "Ish vaqti:\n\n"
         "%4$s\n"
     </string>
-    <string name="action_back">Bir Kun Ortga</string>
-    <string name="action_delete">"O\\'chirish"</string>
+    <string name="backward">orqaga</string>
+    <string name="delete">O`chrildi</string>
+    <string name="forward">oldinga</string>
+    <string name="update_nothing">Yangi ma\'lumotlar mavjud emas</string>
+    <string name="action_back">1 kun orqaga</string>
+    <string name="action_delete">O`chirish</string>
     <string name="action_down">Pastga</string>
-    <string name="action_forward">Bir Kun Oldinga</string>
-    <string name="action_up">Tepaga</string>
-    <string name="update_nothing">"Yangilanishlar yo\'q"</string>
-    <string name="sort_by_mylocation">"Joylashuv bo\'yicha saralash"</string>
-    <string name="sort_by_title">"Ism bo\'yicha saralash"</string>
-    <string name="modify">"O\'zgartirish"</string>
+    <string name="action_forward">1 kun oldinga</string>
+    <string name="action_up">Yuqoriga</string>
+    <string name="title">Sarlavha</string>
+    <string name="modify">O`zgartirish</string>
+    <string name="ok_btn">Ok</string>
+    <string name="cancel_btn">Bekor qilish</string>
+    <string name="logo_init">"%1$s boshlang\\'ich sozlov"</string>
+    <string name="logo_load">"%1$s yuklanmoqda"</string>
+    <string name="logo_check">"%1$s tekshirilmoqda"</string>
+    <string name="logo_apply">"%1$s qo\\'llanmoqda"</string>
+    <string name="logo_done">Bajarilmoqda</string>
+    <string name="day">"%1$s-kun"</string>
+    <string name="items_list_as_grid">Katakchalar</string>
+    <string name="items_list_as_row">Ro\'yxat</string>
 </resources>

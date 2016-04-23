@@ -50,6 +50,7 @@
     <string name="toast_navi_finding">Start to find the distance and direction</string>
     <string name="toast_no_magnetic_sensor">"You don't have magnetic senor. So the compass of navigation cannot work"</string>
     <string name="toast_no_current_position">"Can't get your current position. So can't sort by the nearest place from you"</string>
+    <string name="toast_downmanager_disabled">DownloadManager is disabled. Please enable it at Applications of Setting Menu</string>
     <string name="marquee_searching_you">Searching your location...</string>
     <string name="marquee_searching_target">"Searching the distance and direction of "</string>
     <string name="marquee_guiding">"Guiding to "</string>
@@ -92,14 +93,15 @@
     <string name="sort_by_title">Sort by Name</string>
     <string name="sort_by_mylocation">Sort by My Location</string>
     <string name="pref_header_about">About App</string>
-    <string name="pref_header_data_sync">Check new update</string>
-    <string name="pref_summary_data_sync">Check if the recent tour data from the server</string>
-    <string name="pref_title_update_on_boot">Check the update on boot</string>
+    <string name="pref_header_data_sync">Check new update on boot</string>
+    <string name="pref_summary_data_sync">Check if new updatable tour data is or not on the server</string>
+    <string name="pref_title_update_on_boot">Check on boot</string>
     <string name="pref_title_now_update">Now Update</string>
     <string name="pref_header_notifications">Target arrival notification</string>
     <string name="pref_summary_notifications">When arrived near target destination, notify it by vibrate</string>
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="pref_header_languages">Languages</string>
+    <string name="pref_header_tips_faq">Travel Tips and FAQ</string>
     <string name="setting_about_app">
         " This is the cooperation project of universities in Samarkand of which the center is a UNESCO world Heritage Site.
         \n We're targeting to provide unknown, hidden and unique all tour information for your visit.
@@ -129,9 +131,18 @@
     <string name="title">Title</string>
 
     <string name="title_activity_image_viewing">ImageViewing</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="day">"Day %1$s"</string>
+    <string name="touch_to_close">Touch to close</string>
+    <string name="suggested_itinerary">Suggested itinerary</string>
+    <string name="title_activity_my_itinerary">My itinerary</string>
+    <string name="ok_btn">Ok</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="logo_init">"Initializing %1$s"</string>
+    <string name="logo_load">"Loading %1$s"</string>
+    <string name="logo_check">"Checking %1$s"</string>
+    <string name="logo_apply">"Applying %1$s"</string>
+    <string name="logo_done">DONE</string>
+    <string name="items_list_as_grid">As grid</string>
+    <string name="items_list_as_row">As list</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

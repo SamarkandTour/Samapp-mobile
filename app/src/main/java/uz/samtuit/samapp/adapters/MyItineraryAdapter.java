@@ -38,6 +38,7 @@ import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryItem;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.samapp.util.TypefaceHelper;
 
 public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.ViewHolder> {
@@ -240,7 +241,8 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
     private Intent getTourFeatureIntent(Context vContext, TourFeature tf) {
         Intent intent = new Intent(vContext, TourFeatureActivity.class);
-        intent.putExtra("featureType", tf.getString("type"));
+        GlobalsClass.FeatureType featureType = TourFeatureList.findFeatureTypeByName(context, tf.getString("name"));
+        intent.putExtra("featureType", featureType.toString());
         intent.putExtra("photo", tf.getPhoto());
         intent.putExtra("rating", tf.getRating());
         intent.putExtra("name", tf.getString("name"));

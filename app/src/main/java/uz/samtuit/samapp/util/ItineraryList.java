@@ -153,7 +153,7 @@ public class ItineraryList {
                 TourFeature itineraryElement = findFeature(context, v.getProperties().getString("name"));
 
                 if (itineraryElement == null) {
-                    Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
+                    Log.e("ItineraryList", "Wrong Feature name=" + v.getProperties().getString("name"));
                 } else {
                     boolean found = false;
                     String curAmPm = v.getProperties().getString("ampm");
