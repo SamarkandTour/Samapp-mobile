@@ -51,9 +51,6 @@ public class ItineraryList {
 
     static public void sortItineraryList() {
         Collections.sort(mItineraryList);
-        for(int i = 0; i < mItineraryList.size(); i++) {
-            Log.e("Item: " + mItineraryList.get(i).getString("name") ," day: " + mItineraryList.get(i).getDay());
-        }
     }
 
     public TourFeature findFeature(Context context, String name) {

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -384,12 +385,21 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         dataSizeByDay[selectedArrayDay] = dataSize;
         notifyDataSetChanged();
 
-        Toast.makeText(context, toastMag, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, toastMag, Toast.LENGTH_SHORT).show();
     }
 
     private void changeDay(Context context, int index, int inc) {
 
-        ItineraryHelper.changeDay(context,selectedRealDay,index, inc);
+        //ItineraryHelper.changeDay(context,selectedRealDay,index, inc);
+        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
+        LinkedList<TourFeature> itineraryList = globalsClass.getItineraryFeatures();
+
+        TourFeature tourFeature = itineraryList.get(index);
+        tourFeature.setDay(selectedRealDay + inc);
+        itineraryList.remove(index);
+        itineraryList.add(tourFeature);
+        ItineraryList.sortItineraryList();
+        ItineraryList.itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", Context.MODE_PRIVATE).getString("app_lang", null));
 
         mDataset = getItineraryByDay(context, selectedRealDay);
         dataSize = mDataset.size();
@@ -397,7 +407,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         notifyDataSetChanged();
 
         Toast.makeText(context, context.getString(R.string.itinerary_item_transfer) +
-                ((inc == -1) ? context.getString(R.string.backward) : context.getString(R.string.forward)), Toast.LENGTH_LONG).show();
+                ((inc == -1) ? context.getString(R.string.backward) : context.getString(R.string.forward)), Toast.LENGTH_SHORT).show();
     }
 
     private void setAnimation(View viewToAnimate, int position) {

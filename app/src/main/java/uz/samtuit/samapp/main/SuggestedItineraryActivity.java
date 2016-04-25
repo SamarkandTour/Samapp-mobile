@@ -41,8 +41,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            Log.e("ItineraryActivity", "onRestore()");
-
             GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
             ArrayList<TourFeature> featureList = globalVariables.getTourFeatures(GlobalsClass.FeatureType.HOTEL);
 
@@ -65,10 +63,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(modify)
-                    modify=false;
-                finish();
-                overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
+                closeActivity();
             }
         });
 
@@ -126,10 +121,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void showItemsFragmentDialog(){
-        new TourFeaturesDialogFragmentWindow().show(this.getSupportFragmentManager(), "");
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.action_modify){
@@ -155,12 +146,16 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
+        closeActivity();
+    }
+
+    private void closeActivity() {
         if (modify) {
             Fragment page = vpadapter.getRegisteredFragment(pager.getCurrentItem());
             if (page != null) {
                 ((SuggestedItineraryFragment)page).modifyMode(false);
             }
-           modify = false;
+            modify = false;
         } else {
             super.onBackPressed();
             overridePendingTransition(R.anim.slide_content, R.anim.slide_in);

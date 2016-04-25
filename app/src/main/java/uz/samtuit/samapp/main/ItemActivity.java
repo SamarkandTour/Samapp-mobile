@@ -135,13 +135,7 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
             }
         });
         if(itineraryItems.contains(feature)) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Snackbar.make(v, getString(R.string.itinerary_already_exist),Snackbar.LENGTH_SHORT).show();
-                }
-            });
-            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_white_24dp));
+            alrearyInItinerary();
         }
         try {
             photoSrc = extras.getString("photo");
@@ -158,8 +152,6 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
 
         // Rating
         int Rating = extras.getInt("rating");
-        Log.e("Rating", Rating + "");
-
 
         if(Rating>4)
             star5.setImageResource(R.drawable.ic_star_rate_white_18dp);
@@ -231,6 +223,16 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
         extras.clear();
     }
 
+    private void alrearyInItinerary() {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, getString(R.string.itinerary_already_exist),Snackbar.LENGTH_SHORT).show();
+            }
+        });
+        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_white_24dp));
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -288,13 +290,14 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
                     list.addNewFeatureToItineraryList(feature, extras.getInt("index"));
                     list.itineraryWriteToGeoJSONFile(getApplicationContext(), ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
                     Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
+                    alrearyInItinerary();
                     d.dismiss();
                 }
             });
             b2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    d.hide();
+                    d.dismiss();
                 }
             });
             d.show();

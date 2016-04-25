@@ -18,9 +18,8 @@ public class ItineraryHelper {
 
         TourFeature tourFeature = itineraryList.get(index);
         tourFeature.setDay(currentDay + inc);
-        itineraryList.add(tourFeature);
         itineraryList.remove(index);
-
+        itineraryList.add(tourFeature);
         ItineraryList.sortItineraryList();
         ItineraryList.itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", Context.MODE_PRIVATE).getString("app_lang", null));
     }
