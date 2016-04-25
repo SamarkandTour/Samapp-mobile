@@ -3,9 +3,7 @@ package uz.samtuit.samapp.helpers;
 import android.content.Context;
 import android.content.Intent;
 
-import uz.samtuit.samapp.main.R;
-import uz.samtuit.samapp.main.TourFeatureActivity;
-import uz.samtuit.samapp.main.ItemsListActivity;
+import uz.samtuit.samapp.main.ItemActivity;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.samapp.util.TourFeatureList;
@@ -15,7 +13,7 @@ import uz.samtuit.samapp.util.TourFeatureList;
 public class IntentHelper {
     public static void startItemActivity(Context context, GlobalsClass.FeatureType featureType, TourFeature feature) {
 
-        Intent intent = new Intent(context, TourFeatureActivity.class);
+        Intent intent = new Intent(context, ItemActivity.class);
 
         if (featureType == GlobalsClass.FeatureType.ITINERARY) {
             featureType = TourFeatureList.findFeatureTypeByName(context, feature.getString("name"));

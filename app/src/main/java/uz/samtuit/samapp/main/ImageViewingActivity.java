@@ -1,9 +1,8 @@
 package uz.samtuit.samapp.main;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,10 +23,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
+import uz.samtuit.samapp.util.GlobalsClass;
+import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TourFeatureList;
 
 public class ImageViewingActivity extends AppCompatActivity {
 
@@ -39,15 +42,28 @@ public class ImageViewingActivity extends AppCompatActivity {
     private Bitmap _bitmap;
     private Boolean isCorrect = false;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_viewing);
-        toolbar = (Toolbar)findViewById(R.id.actionbar);
 
+        if (savedInstanceState != null) {
+            Log.e("ImageViewingActivity", "onRestore()");
+
+            GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+            ArrayList<TourFeature> featureList = globalVariables.getTourFeatures(GlobalsClass.FeatureType.HOTEL);
+
+            // When Features are out of memory, App should need to restart from the start
+            if (featureList == null) {
+                Log.e("ImageViewingActivity", "featureList=null");
+                SharedPreferences pref = globalVariables.getApplicationContext().getSharedPreferences("SamTour_Pref", 0);
+                String currentLang = pref.getString("app_lang", null);
+                TourFeatureList.loadAllFeaturesToMemory(this, currentLang);
+            }
+        }
+
+        setContentView(R.layout.activity_image_viewing);
+
+        toolbar = (Toolbar)findViewById(R.id.actionbar);
         extras = getIntent().getExtras();
         imageView = (ImageView)findViewById(R.id.image_holder);
         ImageTitle = extras.getString("name");

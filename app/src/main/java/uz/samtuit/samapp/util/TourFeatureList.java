@@ -21,10 +21,6 @@ import uz.samtuit.samapp.main.R;
  */
 public class TourFeatureList {
     public static final String photoDirectory = "photo/";
-    private static ArrayList<TourFeature> Hotels;
-    private static ArrayList<TourFeature> FoodnDrinks;
-    private static ArrayList<TourFeature> Attractions;
-    private static ArrayList<TourFeature> Shopping;
 
     private ArrayList<TourFeature> tourFeatureList;
 
@@ -32,63 +28,9 @@ public class TourFeatureList {
         tourFeatureList = new ArrayList<TourFeature>();
     }
 
-    // Do this when first launch or since new update has been downloaded
-    public static boolean writeAllPhotosToFiles(Context context) {
-        Log.e("BBBBB","BEEEP");
-        try {
-            FileUtil.createDirectoryInExternalDir(context, photoDirectory); // If photo directory is not
-
-            for ( String lang : GlobalsClass.supportedLanguages) {
-                for (int i = 0; i < GlobalsClass.featuresGeoJSONFileName.length; i++) {
-                    FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, lang + GlobalsClass.featuresGeoJSONFileName[i]);
-                    if (featureCollection == null) { // If there is no file, skip this file
-                        continue;
-                    }
-
-                    List<Feature> featuresList = featureCollection.getFeatures();
-                    Log.e("SIZE", featuresList.size() + "");
-
-                    for (Feature v : featuresList) {
-                        if (!v.getProperties().isNull("photo")) {
-                            FileUtil.fileWriteToExternalDir(context, photoDirectory + v.getProperties().getString("name"),  v.getProperties().getString("photo"));
-                        }
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            // JSON Format is malformed
-            Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
-
     public void setTourFeaturesToGlobal(Context context, GlobalsClass.FeatureType featureType, ArrayList<TourFeature> tourFeatureList) {
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
-
-        switch (featureType) {
-            case HOTEL:
-                Hotels = tourFeatureList;
-                globalsClass.setFeatures(featureType, Hotels);
-                break;
-
-            case FOODNDRINK:
-                FoodnDrinks = tourFeatureList;
-                globalsClass.setFeatures(featureType, FoodnDrinks);
-                break;
-
-            case ATTRACTION:
-                Attractions = tourFeatureList;
-                globalsClass.setFeatures(featureType, Attractions);
-                break;
-
-        case SHOPPING:
-                Shopping = tourFeatureList;
-                globalsClass.setFeatures(featureType, Shopping);
-                break;
-        }
+        globalsClass.setFeatures(featureType, tourFeatureList);
     }
 
     public ArrayList<TourFeature> getTourFeatureListFromGeoJSONFile(Context context, String fileName) {
@@ -184,11 +126,44 @@ public class TourFeatureList {
             e.printStackTrace();
         }
 
-        Log.e("TourFeatureList SIZE", tourFeatureList.size()+"");
+        Log.e("TourFeatureList SIZE", tourFeatureList.size() + "");
         return tourFeatureList;
     }
 
-    static public GlobalsClass.FeatureType findFeatureTypeByName(Context context, String name) {
+    // Do this when first launch or since new update has been downloaded
+    public static boolean writeAllPhotosToFiles(Context context) {
+        Log.e("BBBBB","BEEEP");
+        try {
+            FileUtil.createDirectoryInExternalDir(context, photoDirectory); // If photo directory is not
+
+            for ( String lang : GlobalsClass.supportedLanguages) {
+                for (int i = 0; i < GlobalsClass.featuresGeoJSONFileName.length; i++) {
+                    FeatureCollection featureCollection = FileUtil.loadFeatureCollectionFromExternalGeoJSONFile(context, lang + GlobalsClass.featuresGeoJSONFileName[i]);
+                    if (featureCollection == null) { // If there is no file, skip this file
+                        continue;
+                    }
+
+                    List<Feature> featuresList = featureCollection.getFeatures();
+                    Log.e("SIZE", featuresList.size() + "");
+
+                    for (Feature v : featuresList) {
+                        if (!v.getProperties().isNull("photo")) {
+                            FileUtil.fileWriteToExternalDir(context, photoDirectory + v.getProperties().getString("name"),  v.getProperties().getString("photo"));
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            // JSON Format is malformed
+            Toast.makeText(context, R.string.Err_wrong_geojson_file, Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public static GlobalsClass.FeatureType findFeatureTypeByName(Context context, String name) {
         ArrayList<TourFeature> tourFeatures;
 
         GlobalsClass globalVariables = (GlobalsClass)context.getApplicationContext();
@@ -206,7 +181,7 @@ public class TourFeatureList {
 
     }
 
-    static public TourFeature findFeatureByName(Context context, String name) {
+    public static TourFeature findFeatureByName(Context context, String name) {
         ArrayList<TourFeature> tourFeatures;
 
         GlobalsClass globalVariables = (GlobalsClass)context.getApplicationContext();

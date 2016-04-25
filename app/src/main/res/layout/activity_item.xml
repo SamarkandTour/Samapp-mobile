@@ -1,239 +1,55 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:padding="0dp"
-    android:id="@+id/itemRelLayout"
-    android:background="@color/hotel_primary"
-    android:orientation="vertical"
-    tools:context="uz.samtuit.samapp.main.FoodActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/AppBarOverlay"
+    android:fitsSystemWindows="true"
+    tools:context=".ItemActivity">
 
-    <ScrollView
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="210dp">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:id="@+id/hotel_image" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/itinerary_primary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom">
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:gravity="right">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:paddingLeft="10dp"
-                                android:background="#3fff"
-                                android:layout_height="match_parent">
-                                <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_star_rate_black_18dp"
-                                    android:id="@+id/star1"
-                                    />
-                                <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_star_rate_black_18dp"
-                                    android:id="@+id/star2"
-                                    />
-                                <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_star_rate_black_18dp"
-                                    android:id="@+id/star3"
-                                    />
-                                <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_star_rate_black_18dp"
-                                    android:id="@+id/star4"
-                                    />
-                                <ImageView
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_star_rate_black_18dp"
-                                    android:id="@+id/star5"
-                                    />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/PopupOverlay" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_tour_feature" />
 
 
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="50dp"
-                                android:layout_gravity="right"
-                                android:orientation="horizontal">
-                                <ImageButton
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:src="@drawable/ic_wifi_white_24dp"
-                                    android:background="@android:color/transparent"
-                                    android:layout_gravity="right"
-                                    android:id="@+id/wifi"
-                                    android:visibility="gone" />
-                                <ImageButton
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:src="@drawable/ic_local_phone_white_24dp"
-                                    android:background="@android:color/transparent"
-                                    android:layout_gravity="right"
-                                    android:id="@+id/call_button"
-                                    android:visibility="gone" />
-                                <ImageButton
-                                    android:background="@android:color/transparent"
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:layout_gravity="center|right"
-                                    android:src="@drawable/ic_link_white_24dp"
-                                    android:id="@+id/hotel_link_btn"
-                                    android:visibility="gone" />
-                            </LinearLayout>
-
-                        </FrameLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </FrameLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginRight="50dp"
-                    android:text="Title"
-                    android:background="@android:color/transparent"
-                    android:textColor="@color/hotel_primary"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:id="@+id/hotel_title_small"
-                    android:textSize="20sp"/>
-                <ImageButton
-                    android:id="@+id/add_to_my_itinerary"
-                    android:onClick="AddToMyItinerary"
-                    android:layout_marginLeft="-50dp"
-                    android:tag="Add to my itinerary"
-                    android:background="@android:color/transparent"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_add_black_24dp"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="@drawable/shadow"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:id="@+id/hotel_desc"
-                android:text="This hotel..."
-                android:textSize="17sp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="@string/prop_addr"
-                android:textColor="@color/hotel_primary"
-                android:background="#fff"
-                android:gravity="center_vertical"
-                android:textSize="20dp"
-                android:padding="10dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="@drawable/shadow"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="address of this "
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="20dp"
-                android:id="@+id/hotel_address"
-                android:paddingBottom="20dp"
-                android:textSize="17sp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="@string/prop_price"
-                android:textColor="@color/hotel_primary"
-                android:background="#fff"
-                android:gravity="center_vertical"
-                android:textSize="20dp"
-                android:padding="10dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="@drawable/shadow"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="$100-$120"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="20dp"
-                android:id="@+id/price"
-                android:paddingBottom="20dp"
-                android:textSize="17sp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="@string/prop_open"
-                android:textColor="@color/hotel_primary"
-                android:background="#fff"
-                android:gravity="center_vertical"
-                android:textSize="20dp"
-                android:padding="10dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="@drawable/shadow"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="9 AM - 5 PM"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="20dp"
-                android:id="@+id/open"
-                android:paddingBottom="20dp"
-                android:textSize="17sp" />
-        </LinearLayout>
-    </ScrollView>
-    <include
-        layout="@layout/transparent_tool_bar"
-        android:id="@+id/hotel_tool_bar"
-        />
-</RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_add_black_24dp"
+        android:backgroundTint="#ddd"
+        app:backgroundTint="#ddd"
+        app:borderWidth="0dp"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end" />
+    <ImageView
+        android:id="@+id/full_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
+</android.support.design.widget.CoordinatorLayout>

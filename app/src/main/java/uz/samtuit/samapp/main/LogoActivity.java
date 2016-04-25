@@ -64,11 +64,11 @@ public class LogoActivity extends Activity {
 
         if (isFirstLaunch) {
             SharedPreferences.Editor editor = pref.edit();
-            editor.putString("app_version", "0.5.2"); // Set App version
+            editor.putString("app_version", "0.5.3"); // Set App version
             editor.putLong("last_updated", new Date().getTime()); // Set installed date
             editor.commit();
 
-            // IF the system locale is same as one of supported languages, set as it
+            // If the system locale is same as one of supported languages, set as it
             String systemLocale = SystemSetting.checkSystemLocale();
             if (systemLocale.equals(GlobalsClass.supportedLanguages[0])
                     || systemLocale.equals(GlobalsClass.supportedLanguages[1])

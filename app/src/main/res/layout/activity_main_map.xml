@@ -16,7 +16,8 @@ android:gravity="bottom"
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         android:background="@android:color/transparent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:id="@+id/upperLL">
         <ImageView
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"

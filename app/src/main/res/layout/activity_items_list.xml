@@ -12,12 +12,13 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:id="@+id/outerLL">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/innerLL">
             <include
                 layout="@layout/tool_bar"
                 android:id="@+id/tool_bar"
@@ -30,9 +31,5 @@
             android:listSelector="@drawable/list_selector"
             android:scrollbars="vertical"
             android:divider="#fff" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text=""/>
     </LinearLayout>
 </RelativeLayout>

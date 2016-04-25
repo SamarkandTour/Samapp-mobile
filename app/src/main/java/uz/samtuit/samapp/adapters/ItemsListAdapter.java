@@ -1,4 +1,4 @@
-package uz.samtuit.samapp.main;
+package uz.samtuit.samapp.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,7 +16,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import uz.samtuit.samapp.helpers.IntentHelper;
+import uz.samtuit.samapp.main.ItemsListActivity;
+import uz.samtuit.samapp.main.R;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
