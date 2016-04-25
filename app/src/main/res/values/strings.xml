@@ -45,12 +45,14 @@
     <string name="title_check_new_update">Check new update</string>
     <string name="title_language_selection">Language Selection</string>
     <string name="title_suggested_itinerary">Suggested Itinerary</string>
+    <string name="title_select_category">Select category to add</string>
     <string name="toast_select_destination">First select a marker and press the Guide Me button</string>
     <string name="toast_wait_for_gps">Please wait for catching the GPS signal</string>
     <string name="toast_navi_finding">Start to find the distance and direction</string>
     <string name="toast_no_magnetic_sensor">"You don't have magnetic senor. So the compass of navigation cannot work"</string>
     <string name="toast_no_current_position">"Can't get your current position. So can't sort by the nearest place from you"</string>
     <string name="toast_downmanager_disabled">DownloadManager is disabled. Please enable it at Applications of Setting Menu</string>
+    <string name="toast_saved_image">Image saved to SamTour folder in Pictures</string>
     <string name="marquee_searching_you">Searching your location...</string>
     <string name="marquee_searching_target">"Searching the distance and direction of "</string>
     <string name="marquee_guiding">"Guiding to "</string>
@@ -127,14 +129,9 @@
         "Open:\n\n"
         "%4$s\n"
     </string>
-    <string name="mainimage">mainImage</string>
-    <string name="title">Title</string>
 
-    <string name="title_activity_image_viewing">ImageViewing</string>
+    <string name="title">Title</string>
     <string name="day">"Day %1$s"</string>
-    <string name="touch_to_close">Touch to close</string>
-    <string name="suggested_itinerary">Suggested itinerary</string>
-    <string name="title_activity_my_itinerary">My itinerary</string>
     <string name="ok_btn">Ok</string>
     <string name="cancel_btn">Cancel</string>
     <string name="logo_init">"Initializing %1$s"</string>

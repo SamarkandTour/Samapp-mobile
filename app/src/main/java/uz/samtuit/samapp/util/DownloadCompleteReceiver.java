@@ -1,4 +1,4 @@
-package uz.samtuit.samapp.main;
+package uz.samtuit.samapp.util;
 
 import android.app.DownloadManager;
 import android.app.Notification;
@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import uz.samtuit.samapp.main.R;
 
 /**
  *  For event of DownloadComplete, Broadcast Receiver

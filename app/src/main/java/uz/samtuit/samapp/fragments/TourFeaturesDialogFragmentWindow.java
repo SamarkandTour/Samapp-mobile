@@ -22,7 +22,6 @@ public class TourFeaturesDialogFragmentWindow extends DialogFragment{
         indexToAssign = extras.getInt("index");
         currentDay = extras.getInt("current_day");
 
-
         View view = inflater.inflate(R.layout.items_fragment_dialog, container);
 
         View.OnClickListener onClick = new View.OnClickListener() {
@@ -62,7 +61,7 @@ public class TourFeaturesDialogFragmentWindow extends DialogFragment{
         ((Button)view.findViewById(R.id.food_picker)).setOnClickListener(onClick);
 
 
-        getDialog().getWindow().setTitle("Select category to show");
+        getDialog().getWindow().setTitle(getString(R.string.title_select_category));
 
         return view;
     }

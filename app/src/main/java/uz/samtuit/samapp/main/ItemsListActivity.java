@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import uz.samtuit.samapp.adapters.TourFeatureItemsAdapter;
+import uz.samtuit.samapp.util.CustomTypefaceSpan;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.GlobalsClass.FeatureType;
 import uz.samtuit.samapp.util.TourFeature;
@@ -150,14 +151,6 @@ public class ItemsListActivity extends ActionBarActivity {
         }
     }
 
-    public void setRegularFunctions() {
-
-    }
-
-    public void setFromItineraryFunctions() {
-
-    }
-
     private static int getPrimaryColorId(FeatureType type)
     {
         int id = 0;
@@ -223,8 +216,6 @@ public class ItemsListActivity extends ActionBarActivity {
         }
         return id;
     }
-
-
 
     @Override
     public void onBackPressed() {
@@ -386,7 +377,6 @@ public class ItemsListActivity extends ActionBarActivity {
                 list_type = 1 - list_type;
                 adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
                 list.setAdapter(adapter);
-                //Log.e("Tag","PerformClick" + list_type + " " + adapterLayouts[list_type]);
                 break;
             case R.id.action_show_markers:
                 Intent intent = new Intent(ItemsListActivity.this, MainMap.class);

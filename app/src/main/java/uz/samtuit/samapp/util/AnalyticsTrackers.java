@@ -1,4 +1,4 @@
-package uz.samtuit.samapp.main;
+package uz.samtuit.samapp.util;
 
 import android.content.Context;
 
@@ -7,6 +7,8 @@ import com.google.android.gms.analytics.Tracker;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import uz.samtuit.samapp.main.R;
 
 /**
  * A collection of Google Analytics trackers. Fetch the tracker you need using

@@ -60,6 +60,7 @@ import java.util.TimerTask;
 
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
+import uz.samtuit.samapp.util.CustomInfoWindow;
 import uz.samtuit.samapp.util.Downloader;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.MenuItems;

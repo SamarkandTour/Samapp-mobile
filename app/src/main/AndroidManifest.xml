@@ -55,7 +55,7 @@
         <activity android:name=".TravelTipsFaqActivity" />
 
         <receiver
-            android:name=".DownloadCompleteReceiver"
+            android:name="uz.samtuit.samapp.util.DownloadCompleteReceiver"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />

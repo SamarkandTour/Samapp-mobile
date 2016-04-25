@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import uz.samtuit.samapp.util.BitmapUtil;
+import uz.samtuit.samapp.util.CustomTypefaceSpan;
 import uz.samtuit.samapp.util.FileUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;

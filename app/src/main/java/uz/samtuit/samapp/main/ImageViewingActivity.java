@@ -129,7 +129,7 @@ public class ImageViewingActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.action_save_image){
             if(isCorrect){
                 try {
-                    Toast.makeText(this, "Image Saved to SamTour folder in Pictures", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.toast_saved_image, Toast.LENGTH_LONG).show();
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     _bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
                     String folderPath = Environment.getExternalStorageDirectory() + File.separator + "Pictures" + File.separator + "SamTour";

@@ -17,7 +17,6 @@
     <string name="update_alert">Доступно новое обновление. Хотите обновить?</string>
     <string name="update_nothing">Нет обновлений</string>
     <string name="reviews">Отзв</string>
-    <string name="touch_to_close">Нажмите чтобы закрыть</string>
     <string name="address">Адресс</string>
     <string name="search_hint">Поиск</string>
     <string name="Err_wrong_geojson_file">Ошибка! Плохой формат JSON в файле GeoJSON. Заходите в пункт настройки, попробуйте повторно загрузить</string>
@@ -36,9 +35,6 @@
     <string name="select_your_language">Пожалуйста выбирайте ваш язык</string>
     <string name="wizard_day_select">Сколько дней вы будете в Самарканде?</string>
     <string name="wizard_course_select">Порядок вашых маршрутов</string>
-    <string name="suggested_itinerary">Предложенный маршрут</string>
-    <string name="title_activity_my_itinerary">Мой маршрут</string>
-    <string name="no_data">Нет данных в этом категории.</string>
     <string name="title_dialog_gps_setting">Необходимо геолокация</string>
     <string name="title_dialog_update_available">Новое обновление</string>
     <string name="title_dialog_map_download">Загрузить карту</string>
@@ -47,12 +43,14 @@
     <string name="title_check_new_update">Проверить на обновления</string>
     <string name="title_language_selection">Выбор языка</string>
     <string name="title_suggested_itinerary">Предложенный маршрут</string>
+    <string name="title_select_category">Select category to add</string>
     <string name="toast_select_destination">Выберите маркер и нажмите кнопку Направь сюда</string>
     <string name="toast_wait_for_gps">Подождите пока мы ловим GPS сигнал</string>
     <string name="toast_navi_finding">Началось вычисление дистанции и направления</string>
     <string name="toast_no_magnetic_sensor">"Ваще устройство не поддерживает магнетический сенсор. У вас не будет работать компасс во время навигации!"</string>
     <string name="toast_no_current_position">"Невозможно получить текущее местоположение. Невозможно сортировать по локации ближе к вам!"</string>
     <string name="toast_downmanager_disabled">DownloadManager is disabled. Please enable it at Applications of Setting Menu</string>
+    <string name="toast_saved_image">Image saved to SamTour folder in Pictures</string>
     <string name="marquee_searching_you">Ищем ваше местоположение...</string>
     <string name="marquee_searching_target">"Поиск дистанции и направлении до "</string>
     <string name="marquee_guiding">"Направляем к "</string>
@@ -97,6 +95,7 @@
     <string name="pref_summary_notifications">Когда устройство приблизится к целью оно сообщит об этом с помощью выбрации</string>
     <string name="pref_title_vibrate">Выбрация</string>
     <string name="pref_header_languages">Языки</string>
+    <string name="pref_header_tips_faq">Travel Tips and FAQ</string>
     <string name="setting_about_app">
         " This is the cooperation project of universities in Samarkand of which the center is a UNESCO world Heritage Site.
         \n We're targeting to provide unknown, hidden and unique all tour information for your visit.

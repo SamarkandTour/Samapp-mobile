@@ -1,4 +1,4 @@
-package uz.samtuit.samapp.main;
+package uz.samtuit.samapp.util;
 
 import android.graphics.Paint;
 import android.graphics.Typeface;
