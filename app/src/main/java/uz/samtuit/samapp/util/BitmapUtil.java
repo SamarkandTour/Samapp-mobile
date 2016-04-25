@@ -69,25 +69,7 @@ public class BitmapUtil {
     }
 
     public static void setRoundImageFromFileToView(final Context context, String filePath, final ImageView imageView) {
-        try{
-            String encodedBytes = FileUtil.fileReadFromExternalDir(context, filePath);
-            final ImageView mImageView = imageView;
-            final Context mContext = context;
-            Glide.with(context).load(Base64.decode(encodedBytes, Base64.DEFAULT)).asBitmap().error(R.drawable.no_image).into(new BitmapImageViewTarget(imageView) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    super.setResource(resource);
-                    //mImageView.setPadding(6,6,6,6);
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                    circularBitmapDrawable.setCircular(true);
-                    circularBitmapDrawable.setGravity(Gravity.CENTER);
-                    mImageView.setImageDrawable(circularBitmapDrawable);
-
-                }
-            });
-        }catch (Exception ex){
-            //Glide.with(context).load(R.drawable.no_image).into(imageView);
+        if(filePath==null||filePath=="") {
             Glide.with(context).load(R.drawable.no_image).asBitmap().into(new BitmapImageViewTarget(imageView) {
                 @Override
                 protected void setResource(Bitmap resource) {
@@ -100,29 +82,46 @@ public class BitmapUtil {
                     //mImageView.setPadding(6,6,6,6);
                 }
             });
-            ex.printStackTrace();
+            return;
+        } else {
+            try{
+                String encodedBytes = FileUtil.fileReadFromExternalDir(context, filePath);
+                final ImageView mImageView = imageView;
+                final Context mContext = context;
+                Glide.with(context).load(Base64.decode(encodedBytes, Base64.DEFAULT)).asBitmap().error(R.drawable.no_image).into(new BitmapImageViewTarget(imageView) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        super.setResource(resource);
+                        //mImageView.setPadding(6,6,6,6);
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        circularBitmapDrawable.setGravity(Gravity.CENTER);
+                        mImageView.setImageDrawable(circularBitmapDrawable);
+
+                    }
+                });
+            }catch (Exception ex){
+                //Glide.with(context).load(R.drawable.no_image).into(imageView);
+                Glide.with(context).load(R.drawable.no_image).asBitmap().into(new BitmapImageViewTarget(imageView) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        super.setResource(resource);
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        circularBitmapDrawable.setGravity(Gravity.CENTER);
+                        imageView.setImageDrawable(circularBitmapDrawable);
+                        //mImageView.setPadding(6,6,6,6);
+                    }
+                });
+                ex.printStackTrace();
+            }
         }
+
     }
     public static void setRoundImageFromFileToView(final Context context, String filePath, final ImageView imageView, Animation anim) {
-        try{
-            String encodedBytes = FileUtil.fileReadFromExternalDir(context, filePath);
-            final ImageView mImageView = imageView;
-            final Context mContext = context;
-            Glide.with(context).load(Base64.decode(encodedBytes, Base64.DEFAULT)).asBitmap().error(R.drawable.no_image).animate(anim).into(new BitmapImageViewTarget(imageView) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    super.setResource(resource);
-                    //mImageView.setPadding(6,6,6,6);
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                    circularBitmapDrawable.setCircular(true);
-                    circularBitmapDrawable.setGravity(Gravity.CENTER);
-                    mImageView.setImageDrawable(circularBitmapDrawable);
-
-                }
-            });
-        }catch (Exception ex){
-            //Glide.with(context).load(R.drawable.no_image).into(imageView);
+        if(filePath==null||filePath=="") {
             Glide.with(context).load(R.drawable.no_image).asBitmap().into(new BitmapImageViewTarget(imageView) {
                 @Override
                 protected void setResource(Bitmap resource) {
@@ -135,8 +134,42 @@ public class BitmapUtil {
                     //mImageView.setPadding(6,6,6,6);
                 }
             });
-            ex.printStackTrace();
+        } else {
+            try{
+                String encodedBytes = FileUtil.fileReadFromExternalDir(context, filePath);
+                final ImageView mImageView = imageView;
+                final Context mContext = context;
+                Glide.with(context).load(Base64.decode(encodedBytes, Base64.DEFAULT)).asBitmap().error(R.drawable.no_image).animate(anim).into(new BitmapImageViewTarget(imageView) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        super.setResource(resource);
+                        //mImageView.setPadding(6,6,6,6);
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        circularBitmapDrawable.setGravity(Gravity.CENTER);
+                        mImageView.setImageDrawable(circularBitmapDrawable);
+
+                    }
+                });
+            }catch (Exception ex){
+                //Glide.with(context).load(R.drawable.no_image).into(imageView);
+                Glide.with(context).load(R.drawable.no_image).asBitmap().into(new BitmapImageViewTarget(imageView) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        super.setResource(resource);
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        circularBitmapDrawable.setGravity(Gravity.CENTER);
+                        imageView.setImageDrawable(circularBitmapDrawable);
+                        //mImageView.setPadding(6,6,6,6);
+                    }
+                });
+                ex.printStackTrace();
+            }
         }
+
     }
 
     public static Bitmap decodeBase64Bitmap(String encodedImage, float reqWidth, float reqHeight) {
