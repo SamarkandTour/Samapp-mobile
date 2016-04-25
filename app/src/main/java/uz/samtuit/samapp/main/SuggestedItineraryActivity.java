@@ -123,16 +123,21 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Fragment page = vpadapter.getRegisteredFragment(pager.getCurrentItem());
         if(item.getItemId()==R.id.action_modify){
-            Fragment page = vpadapter.getRegisteredFragment(pager.getCurrentItem());
+
             if(modify){
                 if (page != null) {
                     ((SuggestedItineraryFragment)page).modifyMode(false);
                 }
+                item.setTitle(R.string.modify);
+                item.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             } else {
                 if (page != null) {
                     ((SuggestedItineraryFragment)page).modifyMode(true);
                 }
+                item.setTitle(R.string.modify);
+                item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             }
             modify=!modify;
         }

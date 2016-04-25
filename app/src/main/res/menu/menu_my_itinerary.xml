@@ -6,13 +6,6 @@
         android:id="@+id/action_modify"
         android:orderInCategory="105"
         android:title="@string/modify"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_done"
-        android:orderInCategory="106"
-        android:title="@string/btn_done"
-        app:showAsAction="always"
-        android:visible="false"
-        android:icon="@drawable/ic_done_white_24dp"
-        />
+        app:showAsAction="never"
+        android:icon="@drawable/ic_done_white_24dp"/>
 </menu>
