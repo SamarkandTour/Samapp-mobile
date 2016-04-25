@@ -3,7 +3,7 @@
   "features": [
     {
       "type": "Feature",
-      "properties":{
+      "properties": {
         "name": "Hunarmandlar markazi",
         "day": 1,
         "ampm": "a"
