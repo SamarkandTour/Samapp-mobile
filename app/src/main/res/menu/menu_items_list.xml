@@ -2,12 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="uz.samtuit.samapp.main.ItemsListActivity">
+    <!-- For first official version release, temporarily blocked this menu
     <item
         android:id="@+id/action_reshape"
         android:title="@string/items_list_as_grid"
         android:icon="@android:drawable/ic_input_add"
         app:showAsAction="never"
         />
+    -->
     <item
         android:id="@+id/action_show_markers"
         android:orderInCategory="100"
