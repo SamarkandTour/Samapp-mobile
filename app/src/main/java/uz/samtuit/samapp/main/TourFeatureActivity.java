@@ -49,7 +49,7 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
     private int selectedDay = 1;
     private String featureType;
     private String url, wifi, telNum;
-    private String photoSrc;
+    private String photoSrc = "";
     private TextView mInfo;
     private TextView mAddress;
     private SpannableString s;
@@ -127,7 +127,12 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
             });
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_white_24dp));
         }
-        photoSrc = extras.getString("photo");
+        try{
+            photoSrc = extras.getString("photo");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
 
         // Photo
         LoadImageFromExternalStorage loadImageFromExternalStorage = new LoadImageFromExternalStorage();
@@ -335,10 +340,13 @@ public class TourFeatureActivity extends AppCompatActivity implements NumberPick
             mAppBarLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(TourFeatureActivity.this, ImageViewingActivity.class);
-                    intent.putExtra("photo", photoSrc);
-                    intent.putExtra("name", name);
-                    startActivity(intent);
+                    if (photoSrc == "" || photoSrc == null) {
+                    } else {
+                        Intent intent = new Intent(TourFeatureActivity.this, ImageViewingActivity.class);
+                        intent.putExtra("photo", photoSrc);
+                        intent.putExtra("name", name);
+                        startActivity(intent);
+                    }
                 }
             });
 
