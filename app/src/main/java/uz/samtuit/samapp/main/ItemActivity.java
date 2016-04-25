@@ -285,7 +285,7 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
                     list.addNewFeatureToItineraryList(feature, extras.getInt("index"));
                     list.itineraryWriteToGeoJSONFile(getApplicationContext(), ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
                     Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
-                    d.hide();
+                    d.dismiss();
                 }
             });
             b2.setOnClickListener(new View.OnClickListener() {

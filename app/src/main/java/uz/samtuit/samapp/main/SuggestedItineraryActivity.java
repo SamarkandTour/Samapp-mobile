@@ -2,6 +2,7 @@ package uz.samtuit.samapp.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -47,7 +48,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
             // When Features are out of memory, App should need to restart from the start
             if (featureList == null) {
-                Log.e("ItineraryActivity", "featureList=null");
                 SharedPreferences pref = globalVariables.getApplicationContext().getSharedPreferences("SamTour_Pref", 0);
                 String currentLang = pref.getString("app_lang", null);
                 TourFeatureList.loadAllFeaturesToMemory(this, currentLang);
@@ -60,6 +60,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         toolbar.setTitle(R.string.title_suggested_itinerary);
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.itinerary_primary));
+        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.itinerary_primary)));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +89,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-               // Log.e("PAGE", "Scrolled" + position);
 
             }
 
@@ -103,11 +103,13 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
             }
         });
 
         tabs = (SlidingTabLayout)findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true);
+        tabs.setBackgroundColor(getResources().getColor(R.color.itinerary_primary));
 
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override

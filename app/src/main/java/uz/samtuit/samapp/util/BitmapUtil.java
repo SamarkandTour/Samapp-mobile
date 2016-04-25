@@ -131,7 +131,6 @@ public class BitmapUtil {
                     circularBitmapDrawable.setCircular(true);
                     circularBitmapDrawable.setGravity(Gravity.CENTER);
                     imageView.setImageDrawable(circularBitmapDrawable);
-                    //mImageView.setPadding(6,6,6,6);
                 }
             });
         } else {
@@ -149,7 +148,6 @@ public class BitmapUtil {
                         circularBitmapDrawable.setCircular(true);
                         circularBitmapDrawable.setGravity(Gravity.CENTER);
                         mImageView.setImageDrawable(circularBitmapDrawable);
-
                     }
                 });
             }catch (Exception ex){

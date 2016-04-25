@@ -367,7 +367,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 itineraryList.add(index + 1, tourFeature);
                 toastMag = context.getString(R.string.move);
                 break;
-
             case UP_ITEM_ID:
                 itineraryList.add(index - 1, tourFeature);
                 toastMag = context.getString(R.string.move);
