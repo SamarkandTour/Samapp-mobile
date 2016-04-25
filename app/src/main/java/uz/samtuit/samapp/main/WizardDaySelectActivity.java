@@ -4,16 +4,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
+import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TourFeatureList;
 
 public class WizardDaySelectActivity extends AppCompatActivity implements Spinner.OnItemSelectedListener {
     ArrayList<String> items= new ArrayList<String>();
@@ -24,6 +27,22 @@ public class WizardDaySelectActivity extends AppCompatActivity implements Spinne
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            Log.e("WizardDaySelectActivity", "onRestore()");
+
+            GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+            ArrayList<TourFeature> featureList = globalVariables.getTourFeatures(GlobalsClass.FeatureType.HOTEL);
+
+            // When Features are out of memory, App should need to restart from the start
+            if (featureList == null) {
+                Log.e("WizardDaySelectActivity", "featureList=null");
+                SharedPreferences pref = globalVariables.getApplicationContext().getSharedPreferences("SamTour_Pref", 0);
+                String currentLang = pref.getString("app_lang", null);
+                TourFeatureList.loadAllFeaturesToMemory(this, currentLang);
+            }
+        }
+
         setContentView(R.layout.activity_wizard_day_select);
 
         Spinner spin = (Spinner) findViewById(R.id.daySpinner1);

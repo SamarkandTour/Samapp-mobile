@@ -1,5 +1,6 @@
 package uz.samtuit.samapp.main;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,9 +26,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -59,15 +58,16 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.CustomDialog;
 import uz.samtuit.samapp.util.Downloader;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.MenuItems;
+import uz.samtuit.samapp.util.NavigationView;
 import uz.samtuit.samapp.util.SystemBarTintManager;
 import uz.samtuit.samapp.util.SystemSetting;
 import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TourFeatureList;
 import uz.samtuit.samapp.util.TypefaceHelper;
 
 import static uz.samtuit.samapp.util.GlobalsClass.FeatureType;
@@ -103,11 +103,26 @@ public class MainMap extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            Log.e("MainMap", "onRestore()");
+
+            GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+            ArrayList<TourFeature> featureList = globalVariables.getTourFeatures(FeatureType.HOTEL);
+
+            // When Features are out of memory, App should need to restart from the start
+            if (featureList == null) {
+                Log.e("MainMap", "featureList=null");
+                SharedPreferences pref = globalVariables.getApplicationContext().getSharedPreferences("SamTour_Pref", 0);
+                String currentLang = pref.getString("app_lang", null);
+                TourFeatureList.loadAllFeaturesToMemory(this, currentLang);
+            }
+        }
+
         setContentView(R.layout.activity_main_map);
+
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setNavigationBarTintEnabled(true);
@@ -818,5 +833,25 @@ public class MainMap extends ActionBarActivity {
 
         iOverlay.setOverlayIndex(overlayIndex);
         mapView.addItemizedOverlay(iOverlay);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.e("ItemsListActivity", "onRestore()");
+
+        globalVariables = (GlobalsClass)getApplicationContext();
+        ArrayList<TourFeature> featureList = globalVariables.getTourFeatures(FeatureType.HOTEL);
+        Log.e("ItemsListActivity", "featureList=" + featureList);
+
+        // When Features are out of memory, App should need to restart from the start
+        if (featureList == null) {
+            SharedPreferences pref = globalVariables.getApplicationContext().getSharedPreferences("SamTour_Pref", 0);
+            String currentLang = pref.getString("app_lang", null);
+            Log.e("ItemsListActivity", "Show ProgressDialog");
+            ProgressDialog progressDialog = ProgressDialog.show(this, "", getString(R.string.dialog_load_features), true, false);
+            TourFeatureList.loadAllFeaturesToMemory(this, currentLang);
+            progressDialog.dismiss();
+        }
     }
 }

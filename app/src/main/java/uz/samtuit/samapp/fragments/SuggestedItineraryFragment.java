@@ -1,4 +1,4 @@
-package uz.samtuit.samapp.main;
+package uz.samtuit.samapp.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

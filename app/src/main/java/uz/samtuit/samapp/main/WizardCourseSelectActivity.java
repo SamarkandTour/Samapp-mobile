@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
+import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TourFeatureList;
 
 public class WizardCourseSelectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private String selectedCourseList[] = new String[ItineraryList.MAX_ITINERARY_COURSES];
@@ -51,6 +53,22 @@ public class WizardCourseSelectActivity extends AppCompatActivity implements Ada
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            Log.e("TravelTtipsFaqActivity", "onRestore()");
+
+            GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+            ArrayList<TourFeature> featureList = globalVariables.getTourFeatures(GlobalsClass.FeatureType.HOTEL);
+
+            // When Features are out of memory, App should need to restart from the start
+            if (featureList == null) {
+                Log.e("TravelTtipsFaqActivity", "featureList=null");
+                SharedPreferences pref = globalVariables.getApplicationContext().getSharedPreferences("SamTour_Pref", 0);
+                String currentLang = pref.getString("app_lang", null);
+                TourFeatureList.loadAllFeaturesToMemory(this, currentLang);
+            }
+        }
+
         setContentView(R.layout.activity_wizard_course_select);
 
         if (ItineraryList.MAX_ITINERARY_COURSES == 0) {

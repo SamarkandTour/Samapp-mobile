@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +29,7 @@ import java.util.List;
 import uz.samtuit.samapp.fragments.TourFeaturesDialogFragmentWindow;
 import uz.samtuit.samapp.helpers.ItineraryHelper;
 import uz.samtuit.samapp.main.R;
-import uz.samtuit.samapp.main.TourFeatureActivity;
+import uz.samtuit.samapp.main.ItemActivity;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryItem;
@@ -240,7 +237,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     private Intent getTourFeatureIntent(Context vContext, TourFeature tf) {
-        Intent intent = new Intent(vContext, TourFeatureActivity.class);
+        Intent intent = new Intent(vContext, ItemActivity.class);
         GlobalsClass.FeatureType featureType = TourFeatureList.findFeatureTypeByName(context, tf.getString("name"));
         intent.putExtra("featureType", featureType.toString());
         intent.putExtra("photo", tf.getPhoto());

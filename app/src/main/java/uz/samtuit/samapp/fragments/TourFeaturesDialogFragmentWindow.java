@@ -1,38 +1,17 @@
 package uz.samtuit.samapp.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.graphics.Palette;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import uz.samtuit.samapp.adapters.ItemsFragmentAdapter;
 import uz.samtuit.samapp.main.ItemsListActivity;
 import uz.samtuit.samapp.main.R;
-import uz.samtuit.samapp.main.SuggestedItineraryActivity;
-import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.MenuItems;
 
-/**
- * Created by Bakha on 12.03.2016.
- */
 public class TourFeaturesDialogFragmentWindow extends DialogFragment{
     private int currentDay;
     private int indexToAssign;

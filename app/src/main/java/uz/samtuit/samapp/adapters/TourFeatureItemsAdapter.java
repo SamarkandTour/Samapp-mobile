@@ -3,14 +3,11 @@ package uz.samtuit.samapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -18,19 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.bumptech.glide.Glide;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-import javax.microedition.khronos.opengles.GL;
-
-import uz.samtuit.samapp.helpers.IntentHelper;
 import uz.samtuit.samapp.main.ItemsListActivity;
 
 import uz.samtuit.samapp.main.R;
-import uz.samtuit.samapp.main.TourFeatureActivity;
+import uz.samtuit.samapp.main.ItemActivity;
 import uz.samtuit.samapp.util.BitmapUtil;
 
 import uz.samtuit.samapp.util.GlobalsClass;
@@ -108,7 +98,7 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
         holder.TF_HOLDER.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, TourFeatureActivity.class);
+                Intent intent = new Intent(context, ItemActivity.class);
 
                 if (featureType == GlobalsClass.FeatureType.ITINERARY) {
                     featureType = TourFeatureList.findFeatureTypeByName(context, data.get(position).getString("name"));

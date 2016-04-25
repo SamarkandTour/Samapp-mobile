@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import java.util.HashMap;
 import java.util.Map;
 
-import uz.samtuit.samapp.main.SuggestedItineraryFragment;
+import uz.samtuit.samapp.fragments.SuggestedItineraryFragment;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created

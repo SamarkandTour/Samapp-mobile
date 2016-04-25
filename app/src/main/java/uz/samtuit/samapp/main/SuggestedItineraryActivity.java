@@ -1,6 +1,7 @@
 package uz.samtuit.samapp.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,13 +13,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import uz.samtuit.samapp.adapters.ViewPagerAdapter;
+import uz.samtuit.samapp.fragments.SuggestedItineraryFragment;
 import uz.samtuit.samapp.fragments.TourFeaturesDialogFragmentWindow;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryList;
 import uz.samtuit.samapp.util.TourFeature;
+import uz.samtuit.samapp.util.TourFeatureList;
 
 
 public class SuggestedItineraryActivity extends ActionBarActivity {
@@ -34,6 +38,22 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            Log.e("ItineraryActivity", "onRestore()");
+
+            GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+            ArrayList<TourFeature> featureList = globalVariables.getTourFeatures(GlobalsClass.FeatureType.HOTEL);
+
+            // When Features are out of memory, App should need to restart from the start
+            if (featureList == null) {
+                Log.e("ItineraryActivity", "featureList=null");
+                SharedPreferences pref = globalVariables.getApplicationContext().getSharedPreferences("SamTour_Pref", 0);
+                String currentLang = pref.getString("app_lang", null);
+                TourFeatureList.loadAllFeaturesToMemory(this, currentLang);
+            }
+        }
+
         setContentView(R.layout.activity_itinerary);
 
         toolbar = (Toolbar)findViewById(R.id.si_toolbar);

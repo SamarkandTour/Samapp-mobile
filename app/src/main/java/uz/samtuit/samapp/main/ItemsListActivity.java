@@ -22,13 +22,9 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +71,22 @@ public class ItemsListActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            Log.e("ItemsListActivity", "onRestore()");
+
+            GlobalsClass globalVariables = (GlobalsClass)getApplicationContext();
+            ArrayList<TourFeature> featureList = globalVariables.getTourFeatures(FeatureType.HOTEL);
+
+            // When Features are out of memory, App should need to restart from the start
+            if (featureList == null) {
+                Log.e("ItemsListActivity", "featureList=null");
+                SharedPreferences pref = globalVariables.getApplicationContext().getSharedPreferences("SamTour_Pref", 0);
+                String currentLang = pref.getString("app_lang", null);
+                TourFeatureList.loadAllFeaturesToMemory(this, currentLang);
+            }
+        }
+
         setContentView(R.layout.activity_items_list);
 
         //Include Global Variables
@@ -85,7 +97,7 @@ public class ItemsListActivity extends ActionBarActivity {
         //Configure views and variables
         RelLayout = (RelativeLayout)findViewById(R.id.hotelsMain);
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/segoeui.ttf");
+        Typeface tf = Typeface.createFromAsset(getAssets(), "font/segoeui.ttf");
         list = (RecyclerView) findViewById(R.id.itemsRecycler);
         list.setHasFixedSize(true);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();

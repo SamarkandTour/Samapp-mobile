@@ -28,11 +28,11 @@ public class TypefaceHelper {
     }
 
     public static Typeface getTypeface(Context context){
-        return Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
+        return Typeface.createFromAsset(context.getAssets(), "font/Roboto-Thin.ttf");
     }
 
     public static Typeface getTypeface(Context context, String TypefaceName){
-        return Typeface.createFromAsset(context.getAssets(), "fonts/"+TypefaceName+".ttf");
+        return Typeface.createFromAsset(context.getAssets(), "font/" +TypefaceName+".ttf");
     }
 }
 
