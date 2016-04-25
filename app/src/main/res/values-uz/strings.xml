@@ -50,7 +50,7 @@
     <string name="toast_no_current_position">"Joriy joylashuvni olish mumkin emas. Shuning uchun joylashuv bo`yicha tartiblashtirish mumkin emas"</string>
     <string name="toast_no_magnetic_sensor">"Sizda magnit sensor yo\'q. Shuning uchun Kompas navigatsiyasi ishlamaydi"</string>
     <string name="toast_downmanager_disabled">DownloadManager is disabled. Please enable it at Applications of Setting Menu</string>
-    <string name="toast_saved_image">Image saved to SamTour folder in Pictures</string>
+    <string name="toast_saved_image">Ushbu rasm  Rasmlaringizning Samtour  papkasiga saqlandi</string>
     <string name="marquee_searching_you">Sizning manzilingizni izlash...</string>
     <string name="marquee_searching_target">"gacha manzil va yo'nalishni izlash"</string>
     <string name="marquee_guiding">"gacha yo'l ko'rsatish"</string>

@@ -50,7 +50,6 @@
     <string name="toast_no_magnetic_sensor">"Ваще устройство не поддерживает магнетический сенсор. У вас не будет работать компасс во время навигации!"</string>
     <string name="toast_no_current_position">"Невозможно получить текущее местоположение. Невозможно сортировать по локации ближе к вам!"</string>
     <string name="toast_downmanager_disabled">DownloadManager is disabled. Please enable it at Applications of Setting Menu</string>
-    <string name="toast_saved_image">Image saved to SamTour folder in Pictures</string>
     <string name="marquee_searching_you">Ищем ваше местоположение...</string>
     <string name="marquee_searching_target">"Поиск дистанции и направлении до "</string>
     <string name="marquee_guiding">"Направляем к "</string>
@@ -136,4 +135,5 @@
     <string name="day">"%1$s-й день"</string>
     <string name="items_list_as_grid">Клетки</string>
     <string name="items_list_as_row">Список</string>
+    <string name="toast_saved_image">Изображения, сохраненные в папке Samtour</string>
 </resources>
