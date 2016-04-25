@@ -27,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -258,8 +259,10 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
                 feature.setDay(extras.getInt("selected_day") + 1);
                 list.addNewFeatureToItineraryList(feature, selectedIndex);
                 list.itineraryWriteToGeoJSONFile(getApplicationContext(), ItemActivity.this.getSharedPreferences("SamTour_Pref", 0).getString("app_lang", null));
-                Snackbar.make(view, getString(R.string.itinerary_added_successfully), Snackbar.LENGTH_LONG).show();
+                Toast.makeText(ItemActivity.this, getString(R.string.itinerary_added_successfully),Toast.LENGTH_SHORT).show();
+
                 finish();
+                overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
             }
         } else {
             final Dialog d = new Dialog(ItemActivity.this);
