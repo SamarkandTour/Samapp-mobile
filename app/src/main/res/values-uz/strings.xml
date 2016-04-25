@@ -132,4 +132,6 @@
     <string name="day">"%1$s-kun"</string>
     <string name="items_list_as_grid">Katakchalar</string>
     <string name="items_list_as_row">Ro\'yxat</string>
+    <string name="add_to_itinerary_select_category">Qaysi turni ko\'rsatishni tanlang</string>
+    <string name="touch_to_close">Yopish</string>
 </resources>

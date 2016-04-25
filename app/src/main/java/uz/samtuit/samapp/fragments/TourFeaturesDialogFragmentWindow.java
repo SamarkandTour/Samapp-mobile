@@ -83,7 +83,7 @@ public class TourFeaturesDialogFragmentWindow extends DialogFragment{
         ((Button)view.findViewById(R.id.food_picker)).setOnClickListener(onClick);
 
 
-        getDialog().getWindow().setTitle("Select category to show");
+        getDialog().getWindow().setTitle(getResources().getString(R.string.add_to_itinerary_select_category));
 
         return view;
     }

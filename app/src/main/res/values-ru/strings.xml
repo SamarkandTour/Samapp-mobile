@@ -137,4 +137,6 @@
     <string name="day">"%1$s-й день"</string>
     <string name="items_list_as_grid">Клетки</string>
     <string name="items_list_as_row">Список</string>
+    <string name="add_to_itinerary_select_category">Выберите категорию для показа</string>
+    <string name="pref_header_tips_faq">ЧаВо</string>
 </resources>
