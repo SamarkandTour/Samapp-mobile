@@ -43,7 +43,7 @@
     <string name="title_check_new_update">Yangilanishga tekshiring</string>
     <string name="title_language_selection">Tilni tanlash</string>
     <string name="title_suggested_itinerary">"Tavsiya qilingan yo'nalishlar"</string>
-    <string name="title_select_category">Select category to add</string>
+    <string name="title_select_category">Qaysi turni ko\'rsatishni tanlang</string>
     <string name="toast_select_destination">"Birinchi markerni tanlang va Yo\'l ko\'rsat tugmasini bosing"</string>
     <string name="toast_wait_for_gps">Iltimos GPS signalni tutguncha kuting</string>
     <string name="toast_navi_finding">"Manzil va yo'nalishni topishni boshlash"</string>
@@ -135,6 +135,4 @@
     <string name="day">"%1$s-kun"</string>
     <string name="items_list_as_grid">Katakchalar</string>
     <string name="items_list_as_row">Ro\'yxat</string>
-    <string name="add_to_itinerary_select_category">Qaysi turni ko\'rsatishni tanlang</string>
-    <string name="touch_to_close">Yopish</string>
 </resources>

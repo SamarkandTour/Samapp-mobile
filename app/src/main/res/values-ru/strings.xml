@@ -43,7 +43,7 @@
     <string name="title_check_new_update">Проверить на обновления</string>
     <string name="title_language_selection">Выбор языка</string>
     <string name="title_suggested_itinerary">Предложенный маршрут</string>
-    <string name="title_select_category">Select category to add</string>
+    <string name="title_select_category">Выберите категорию для показа</string>
     <string name="toast_select_destination">Выберите маркер и нажмите кнопку Направь сюда</string>
     <string name="toast_wait_for_gps">Подождите пока мы ловим GPS сигнал</string>
     <string name="toast_navi_finding">Началось вычисление дистанции и направления</string>
@@ -95,7 +95,7 @@
     <string name="pref_summary_notifications">Когда устройство приблизится к целью оно сообщит об этом с помощью выбрации</string>
     <string name="pref_title_vibrate">Выбрация</string>
     <string name="pref_header_languages">Языки</string>
-    <string name="pref_header_tips_faq">Travel Tips and FAQ</string>
+    <string name="pref_header_tips_faq">ЧаВо</string>
     <string name="setting_about_app">
         " This is the cooperation project of universities in Samarkand of which the center is a UNESCO world Heritage Site.
         \n We're targeting to provide unknown, hidden and unique all tour information for your visit.
@@ -136,6 +136,4 @@
     <string name="day">"%1$s-й день"</string>
     <string name="items_list_as_grid">Клетки</string>
     <string name="items_list_as_row">Список</string>
-    <string name="add_to_itinerary_select_category">Выберите категорию для показа</string>
-    <string name="pref_header_tips_faq">ЧаВо</string>
 </resources>

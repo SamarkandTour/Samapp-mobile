@@ -141,7 +141,5 @@
     <string name="logo_done">DONE</string>
     <string name="items_list_as_grid">As grid</string>
     <string name="items_list_as_row">As list</string>
-    <string name="add_to_itinerary_select_category">Select category to show</string>
-    <string name="no_data">No data in this category</string>
 
 </resources>
