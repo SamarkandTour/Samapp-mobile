@@ -27,11 +27,7 @@ import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.samapp.util.TourFeatureList;
 
-/**
- * Created by Bakha on 25.02.2016.
- */
 public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureItemsAdapter.ViewHolder> {
-
     Context context;
     ArrayList<TourFeature> data;
     private GlobalsClass.FeatureType featureType;
@@ -49,7 +45,7 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
         this.layoutID = LayoutID;
         this.fromItinerary = fromItinerary;
         this.selectedDay = selectedDay;
-        this.indexToAssign = indexToAssign; // if fromitinerary its index to assign feature in itineraries in selected day;
+        this.indexToAssign = indexToAssign; // if from itinerary its index to assign feature in itineraries in selected day;
     }
 
     @Override
@@ -67,7 +63,8 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
         holder.TF_RATING.setRating(data.get(position).getRating());
         holder.TF_TITLE.setText(data.get(position).getString("name"));
         String fileName = data.get(position).getPhoto();
-        if(layoutID==R.layout.items_list_adapter){
+
+        if (layoutID==R.layout.items_list_adapter) {
             try{
                 BitmapUtil.setRoundImageFromFileToView(context, fileName, holder.TF_IMAGE, AnimationUtils.loadAnimation(context, android.R.anim.fade_in));
             }catch (Exception ex){
@@ -82,8 +79,6 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
             }
         }
 
-        //Toast.makeText(context, currentLoc.toString()  +" "+ ItemsListActivity.sortBy.toString() +" ",Toast.LENGTH_LONG);
-
         if (currentLoc != null && (currentLoc.getLatitude() != 0 || currentLoc.getLongitude() != 0)
                 && ItemsListActivity.sortBy == ItemsListActivity.SortBy.LOCATION) {
             float[] distance = new float[1];
@@ -92,8 +87,6 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
             holder.TF_DISTANCE.setVisibility(View.VISIBLE);
             holder.TF_DISTANCE.setText((distance[0] > 1000) ? Math.round(distance[0]/1000 * 10.0) / 10.0 + " km" : (int) distance[0] + " m");
         }
-
-
 
         holder.TF_HOLDER.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +111,7 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
                 intent.putExtra("index", indexToAssign);
                 intent.putExtra("tel", data.get(position).getString("tel"));
                 intent.putExtra("url", data.get(position).getString("url"));
+                intent.putExtra("booking", data.get(position).getString("booking"));
                 intent.putExtra("long", data.get(position).getLongitude());
                 intent.putExtra("lat", data.get(position).getLatitude());
                 intent.putExtra("primaryColorId", GlobalsClass.getPrimaryColorId(featureType));
@@ -125,7 +119,6 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
                 context.startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -133,8 +126,7 @@ public class TourFeatureItemsAdapter extends RecyclerView.Adapter<TourFeatureIte
         return data.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView TF_TITLE;
         public ImageView TF_IMAGE;
         public RatingBar TF_RATING;

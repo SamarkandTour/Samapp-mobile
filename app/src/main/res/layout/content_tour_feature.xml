@@ -86,7 +86,7 @@
                         android:src="@drawable/ic_local_phone_white_24dp"
                         android:background="@android:color/transparent"
                         android:layout_gravity="right"
-                        android:id="@+id/call_button"
+                        android:id="@+id/call_btn"
                         android:visibility="visible" />
                     <ImageButton
                         android:background="@android:color/transparent"
@@ -95,7 +95,17 @@
                         android:clickable="true"
                         android:layout_gravity="center|right"
                         android:src="@drawable/ic_link_white_24dp"
-                        android:id="@+id/hotel_link_btn"
+                        android:id="@+id/url_btn"
+                        android:visibility="visible" />
+
+                    <ImageButton
+                        android:background="@android:color/transparent"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:clickable="true"
+                        android:layout_gravity="center|right"
+                        android:src="@drawable/ic_link_white_24dp"
+                        android:id="@+id/booking_btn"
                         android:visibility="visible" />
                 </LinearLayout>
 
