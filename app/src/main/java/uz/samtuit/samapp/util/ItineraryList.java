@@ -201,7 +201,8 @@ public class ItineraryList {
                 TourFeature itineraryElement = findFeature(context, v.getProperties().getString("name"));
 
                 if (itineraryElement == null) {
-                    Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
+                    // If the feature's name  in the file is not same as new name since Wiki is updated, sync will be broken.
+                    Log.e("ItineraryList", "Wrong feature in itinerary file, feature name=" + v.getProperties().getString("name"));
                 } else {
                     itineraryElement.setDay(v.getProperties().getInt("day"));
                     mItineraryList.add(itineraryElement);
