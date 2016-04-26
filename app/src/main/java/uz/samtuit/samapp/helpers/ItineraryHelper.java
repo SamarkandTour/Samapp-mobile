@@ -23,7 +23,7 @@ public class ItineraryHelper {
         itineraryList.remove(index);
         itineraryList.add(tourFeature);
 
-        Log.e("LAST DAY", itineraryList.get(itineraryList.size()-1).getDay() + " " + itineraryList.get(itineraryList.size()-1).getString("name"));
+        Log.e("LAST DAY", itineraryList.get(0).getDay() + " " + itineraryList.get(itineraryList.size()-1).getString("name"));
 
         ItineraryList.sortItineraryList();
         ItineraryList.itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", Context.MODE_PRIVATE).getString("app_lang", null));
