@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,8 +44,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     private ArrayList<TourFeature> mDataset;
     private Context context;
 
-    final private int PREVIOUSDAY_ITEM_ID = 1000;
-    final private int NEXTDAY_ITEM_ID = 1001;
     final private int UP_ITEM_ID = 1002;
     final private int DOWN_ITEM_ID = 1003;
     final private int DELETE_ITEM_ID = 1004;
@@ -390,16 +389,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
     private void changeDay(Context context, int index, int inc) {
 
-        //ItineraryHelper.changeDay(context,selectedRealDay,index, inc);
-        GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
-        LinkedList<TourFeature> itineraryList = globalsClass.getItineraryFeatures();
-
-        TourFeature tourFeature = itineraryList.get(index);
-        tourFeature.setDay(selectedRealDay + inc);
-        itineraryList.remove(index);
-        itineraryList.add(tourFeature);
-        ItineraryList.sortItineraryList();
-        ItineraryList.itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", Context.MODE_PRIVATE).getString("app_lang", null));
+        ItineraryHelper.changeDay(context,selectedRealDay,index, inc);
 
         mDataset = getItineraryByDay(context, selectedRealDay);
         dataSize = mDataset.size();

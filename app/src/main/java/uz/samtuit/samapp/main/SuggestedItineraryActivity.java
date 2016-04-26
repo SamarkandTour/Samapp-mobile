@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -33,8 +34,7 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
     ViewPager pager;
     ViewPagerAdapter vpadapter;
     SlidingTabLayout tabs;
-    private FloatingActionButton mFab;
-    private GlobalsClass globals;
+    private MenuItem mModifyAction;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
             }
         });
 
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
 
         CharSequence Titles[] = new CharSequence[ItineraryList.MAX_ITINERARY_DAYS];
         itineraryByDayArray = new HashMap<?, ?>[ItineraryList.MAX_ITINERARY_DAYS];
@@ -76,7 +75,6 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
             itineraryByDayArray[i] = new HashMap<Integer, TourFeature>();
         }
 
-        globals = (GlobalsClass)this.getApplicationContext();
 
         pager = (ViewPager)findViewById(R.id.pager);
         vpadapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, ItineraryList.MAX_ITINERARY_DAYS, this);
@@ -117,8 +115,10 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_my_itinerary, menu);
-        return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_my_itinerary, menu);
+        mModifyAction = menu.findItem(R.id.action_modify);
+        return true;
     }
 
     @Override
@@ -136,13 +136,14 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
                 if (page != null) {
                     ((SuggestedItineraryFragment)page).modifyMode(true);
                 }
-                item.setTitle(R.string.modify);
+                item.setTitle(R.string.btn_done);
                 item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             }
             modify=!modify;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -160,6 +161,8 @@ public class SuggestedItineraryActivity extends ActionBarActivity {
             if (page != null) {
                 ((SuggestedItineraryFragment)page).modifyMode(false);
             }
+            mModifyAction.setTitle(getResources().getString(R.string.modify));
+            mModifyAction.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             modify = false;
         } else {
             super.onBackPressed();
