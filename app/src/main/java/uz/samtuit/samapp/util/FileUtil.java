@@ -1,11 +1,13 @@
 package uz.samtuit.samapp.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
-import android.text.LoginFilter;
+import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.cocoahero.android.geojson.FeatureCollection;
 import com.cocoahero.android.geojson.GeoJSON;
@@ -177,6 +179,28 @@ public class FileUtil {
         }
 
         return false;
+    }
+
+    public static String getFilePathFromUri(Context c, Uri uri) {
+        String filePath = null;
+
+        if ("content".equals(uri.getScheme())) {
+            String[] filePathColumn = { MediaStore.MediaColumns.DATA };
+            ContentResolver contentResolver = c.getContentResolver();
+
+            Cursor cursor = contentResolver.query(uri, filePathColumn, null,
+                    null, null);
+
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            filePath = cursor.getString(columnIndex);
+            cursor.close();
+        } else if ("file".equals(uri.getScheme())) {
+            filePath = new File(uri.getPath()).getAbsolutePath();
+        }
+
+        return filePath;
     }
 
 }
