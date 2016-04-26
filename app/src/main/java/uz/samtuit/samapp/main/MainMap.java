@@ -610,18 +610,6 @@ public class MainMap extends ActionBarActivity {
     };
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e("MainMapActivity", "onRestart()");
-
-        // When Features are out of memory, App should need to restart from the start
-        if (globalVariables.getTourFeatures(FeatureType.HOTEL).size() == 0) {
-            Log.e("MainMapActivity", "onResume(), TourFeatureList size=" + globalVariables.getTourFeatures(FeatureType.HOTEL).size());
-            finish();
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
 
@@ -813,8 +801,7 @@ public class MainMap extends ActionBarActivity {
 
         return markerImg;
     }
-
-
+    
     // To make custom layer order, 0:Map(default), 2:Path(default), 2:UserLoc(default), 3:Marker(unused), 4:TourFeatures, 5:Itinerary, 6:MyLocation
     private void drawOverlay(int overlayIndex, ArrayList<Marker> markersList) {
         ItemizedIconOverlay iOverlay = new ItemizedIconOverlay(MainMap.this, markersList, new ItemizedIconOverlay.OnItemGestureListener<Marker>() {

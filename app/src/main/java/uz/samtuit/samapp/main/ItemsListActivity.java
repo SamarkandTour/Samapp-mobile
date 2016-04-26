@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Spannable;
@@ -365,8 +364,15 @@ public class ItemsListActivity extends ActionBarActivity {
             case R.id.action_search:
                 handleMenuSearch();
                 break;
+            case R.id.action_show_markers:
+                Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
+                intent.putExtra("type", "features");
+                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                break;
+            /* For first official version release, temporarily blocked this menu
             case R.id.action_reshape:
-
                 if(list_type == 0){
                     list.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
                     item.setTitle(getString(R.string.items_list_as_row));
@@ -378,13 +384,8 @@ public class ItemsListActivity extends ActionBarActivity {
                 adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items, adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
                 list.setAdapter(adapter);
                 break;
-            case R.id.action_show_markers:
-                Intent intent = new Intent(ItemsListActivity.this, MainMap.class);
-                intent.putExtra("type", "features");
-                intent.putExtra("featureType", S_ACTIVITY_NAME.toString());
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                break;
+            */
+
         }
         return super.onOptionsItemSelected(item);
     }

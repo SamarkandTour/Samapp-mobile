@@ -13,13 +13,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.ZipFile;
@@ -159,7 +158,7 @@ public class LogoActivity extends Activity {
                     downloadRequestCnt = Downloader.countOfDownloadRequest(LogoActivity.this);
                     for (int i = 0; i < downloadRequestCnt; i++) {
                         String uriString = pref.getString("downloaded_uri" + i, "");
-                        String filePath = Uri.parse(uriString).getPath();
+                        String filePath = FileUtil.getFilePathFromUri(LogoActivity.this, Uri.parse(uriString));
 
                         // If the downloaded file is zipped, Unzip it
                         if (uriString.contains("zip")) {
@@ -170,7 +169,9 @@ public class LogoActivity extends Activity {
                             FileUtil.deleteAllExternalFilesWithExtension(LogoActivity.this, TourFeatureList.photoDirectory, "");
                             TourFeatureList.writeAllPhotosToFiles(LogoActivity.this); // Make all photo data to files
                         } else { // Map file
-                            FileUtil.fileMoveToExternalDir(LogoActivity.this, filePath);
+                            if (!FileUtil.fileMoveToExternalDir(LogoActivity.this, filePath)) {
+                                Log.e("LogoActivity", "Failed to move downloaed Map file, filePath=" + filePath);
+                            }
                         }
                     }
 
@@ -207,12 +208,17 @@ public class LogoActivity extends Activity {
                 loadFeaturesToMemory(LogoActivity.this, chosenLang, path, GlobalsClass.FeatureType.ITINERARY);
                 publishProgress(new Pair<Integer, String>(LOAD_DONE, ""));
 
-                if (!Downloader.isAlreadyDownloadRequest(LogoActivity.this) && NetworkUtils.isNetworkAvailable(LogoActivity.this) && isCheckUpdateOnboot) {
+                if (NetworkUtils.isNetworkAvailable(LogoActivity.this) && isCheckUpdateOnboot && !Downloader.isAlreadyDownloadRequest(LogoActivity.this)) {
                     publishProgress(new Pair<Integer, String>(CHECK_START, getString(R.string.new_update)));
                     CheckUpdateManager checkUpdateManager = new CheckUpdateManager();
 
                     isNeedFeaturesDownload = checkUpdateManager.isNewUpdate(LogoActivity.this, handler, globals.featuresDownloadURL);
-                    isNeedMapDownload = checkUpdateManager.isNewUpdate(LogoActivity.this, handler, globals.mapDownloadURL);
+
+                    File mbtiles = new File(LogoActivity.this.getExternalFilesDir(null), GlobalsClass.mapFileName);
+                    if (mbtiles.exists()) {
+                        isNeedMapDownload = checkUpdateManager.isNewUpdate(LogoActivity.this, handler, globals.mapDownloadURL);
+                    }
+
                     if (isNeedFeaturesDownload || isNeedMapDownload) {
                         return true;
                     }
@@ -232,18 +238,15 @@ public class LogoActivity extends Activity {
                     break;
                 case LOAD_START:
                     tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_load,values[0].second) + "...");
-//                    tvInfo.setText("Loading " + values[0].second + "...");
                     break;
                 case LOAD_DONE:
                     tvInfo.setText(tvInfo.getText() + getResources().getString(R.string.logo_done));
                     break;
                 case CHECK_START:
                     tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_check, values[0].second) + "...");
-//                    tvInfo.setText("Checking " + values[0].second + "...");
                     break;
                 case UPDATE_START:
                     tvInfo.setText(getApplicationContext().getResources().getString(R.string.logo_apply, values[0].second) + "...");
-//                    tvInfo.setText("Applying " + values[0].second + "...");
                     break;
             }
         }
