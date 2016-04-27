@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,14 +23,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import uz.samtuit.samapp.fragments.TourFeaturesDialogFragmentWindow;
 import uz.samtuit.samapp.helpers.ItineraryHelper;
-import uz.samtuit.samapp.main.R;
 import uz.samtuit.samapp.main.ItemActivity;
+import uz.samtuit.samapp.main.R;
 import uz.samtuit.samapp.util.BitmapUtil;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.ItineraryItem;
@@ -94,13 +92,13 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-
     public MyItineraryAdapter(Context context, int day, boolean mod, boolean animate, FragmentManager fragmentManager) {
         selectedArrayDay = day;
         selectedRealDay = selectedArrayDay + 1; // Because the day argument is the position of tabs, add 1 to change to real day
         mDataset = getItineraryByDay(context, selectedRealDay);
         this.animate = animate;
         this.isMod = mod;
+
         if(isMod)
         {
             layoutResId = R.layout.itinerary_card_mod;
@@ -166,12 +164,13 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         String mTitle = mDataset.get(position).getString("name");
         holder.mName.setText(mTitle);
         holder.mIdTV.setText(Integer.toString(orderNumInTab));
-//        holder.mOrderNum.setText(Integer.toString(orderNumInTab));
+
         if (position < dataSize-1 && !isMod) { //if last and is not modifing show layout between items
             mLayoutBetweenItems.setVisibility(View.VISIBLE);
         } else {
             mLayoutBetweenItems.setVisibility(View.GONE);
         }
+
         switch (mDataset.get(position).getString("category")) {
             case "hotel":
                 holder.mName.setTextColor(context.getResources().getColor(R.color.hotel_primary));
@@ -205,7 +204,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 }
             });
             final Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
-            //final Animation animOut = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
 
         } else {
             holder.container.setOnLongClickListener(new View.OnLongClickListener() {
@@ -252,6 +250,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         intent.putExtra("addr", tf.getString("addr"));
         intent.putExtra("tel", tf.getString("tel"));
         intent.putExtra("url", tf.getString("url"));
+        intent.putExtra("booking", tf.getString("booking"));
         intent.putExtra("long", tf.getLongitude());
         intent.putExtra("lat", tf.getLatitude());
         intent.putExtra("primaryColorId", R.color.attraction_primary);
@@ -260,13 +259,12 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     private void makeQuickAction(Context vContext, View v, final int indexInItineraryList, int position, TourFeature tf) {
-
-
         View view = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.itinerary_bottom_sheet, null);
         final Dialog mBottomSheet = new Dialog(context, R.style.MaterialDialogSheet);
         Typeface roboto = TypefaceHelper.getTypeface(context, "Roboto-Regular");
         mBottomSheet.setContentView(view);
         mBottomSheet.setCancelable(true);
+
         if ( (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
             mBottomSheet.getWindow().setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         } else {
@@ -323,7 +321,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         }
 
         View.OnClickListener actionOnClick = new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
@@ -346,13 +343,12 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 mBottomSheet.dismiss();
             }
         };
+
         actionDayBack.setOnClickListener(actionOnClick);
         actionDayForward.setOnClickListener(actionOnClick);
         actionDelete.setOnClickListener(actionOnClick);
         actionDown.setOnClickListener(actionOnClick);
         actionUp.setOnClickListener(actionOnClick);
-
-
     }
 
     private void changeOrder(Context context, int index, int cmd) {
@@ -389,7 +385,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     private void changeDay(Context context, int index, int inc) {
-
         ItineraryHelper.changeDay(context,selectedRealDay,index, inc);
 
         mDataset = getItineraryByDay(context, selectedRealDay);
@@ -421,7 +416,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     private class CalculateDistanceTimeAsync extends AsyncTask<Void, Void, ItineraryItem>{
-
         private float distance[] = new float[1];
         private int mPosition;
         private ViewHolder mHolder;
@@ -449,7 +443,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
         @Override
         protected ItineraryItem doInBackground(Void... params) {
-
             ItineraryItem item = new ItineraryItem();
             if (mPosition < (getItemCount() - 1)) { // No need to calculate for last feature
                 item.setIsLast(false);
@@ -493,6 +486,4 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             return s;
         }
     }
-
-
 }

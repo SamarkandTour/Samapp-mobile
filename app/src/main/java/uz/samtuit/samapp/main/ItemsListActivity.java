@@ -150,12 +150,10 @@ public class ItemsListActivity extends ActionBarActivity {
         }
     }
 
-    private static int getPrimaryColorId(FeatureType type)
-    {
+    private static int getPrimaryColorId(FeatureType type) {
         int id = 0;
 
-        switch (type)
-        {
+        switch (type) {
             case HOTEL:
                 id = R.color.hotel_primary;
                 break;
@@ -172,12 +170,10 @@ public class ItemsListActivity extends ActionBarActivity {
         return id;
     }
 
-    private static int getToolbarColorId(FeatureType type)
-    {
+    private static int getToolbarColorId(FeatureType type) {
         int id = 0;
 
-        switch (type)
-        {
+        switch (type) {
             case HOTEL:
                 id = R.color.hotel_tool;
                 break;
@@ -194,12 +190,10 @@ public class ItemsListActivity extends ActionBarActivity {
         return id;
     }
 
-    private int getTitle(FeatureType type)
-    {
+    private int getTitle(FeatureType type) {
         int id = 0;
 
-        switch (type)
-        {
+        switch (type) {
             case HOTEL:
                 id = R.string.hotels;
                 break;
@@ -218,8 +212,7 @@ public class ItemsListActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        if(isSearchOpen)
-        {
+        if (isSearchOpen) {
             handleMenuSearch();
             return;
         }
@@ -238,7 +231,6 @@ public class ItemsListActivity extends ActionBarActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         mActionSort = menu.findItem(R.id.action_sort_by_title);
         mActionSortML = menu.findItem(R.id.action_sort_by_mylocation);
         mActionSearch = menu.findItem(R.id.action_search);
@@ -258,8 +250,7 @@ public class ItemsListActivity extends ActionBarActivity {
     protected void handleMenuSearch(){
         ActionBar action = getSupportActionBar(); //get the actionbar
 
-        if(isSearchOpen){ //test if the search is open
-
+        if (isSearchOpen) { //test if the search is open
             action.setDisplayShowCustomEnabled(false); //disable a custom view inside the actionbar
             action.setDisplayShowTitleEnabled(true); //show the title in the action bar
             mActionShowOnMap.setVisible(true);
@@ -328,13 +319,10 @@ public class ItemsListActivity extends ActionBarActivity {
         }
     }
 
-    private void doSearch(String sequence)
-    {
+    private void doSearch(String sequence) {
         ArrayList<TourFeature> found_items = new ArrayList<TourFeature>();
-        for(int i = 0; i < items.size(); i++)
-        {
-            if(items.get(i).getString("name").toLowerCase().contains(sequence.toLowerCase()))
-            {
+        for (int i = 0; i < items.size(); i++) {
+            if(items.get(i).getString("name").toLowerCase().contains(sequence.toLowerCase())) {
                 found_items.add(items.get(i));
             }
         }
@@ -350,8 +338,7 @@ public class ItemsListActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        switch (id)
-        {
+        switch (id) {
             case R.id.action_sort_by_title:
                 Collections.sort(items, new CustomComparator());
                 TourFeatureItemsAdapter adapter = new TourFeatureItemsAdapter(this, S_ACTIVITY_NAME, items,adapterLayouts[list_type],fromItinerary, selectedDay, indexToAssign);
