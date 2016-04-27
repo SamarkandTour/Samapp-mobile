@@ -104,7 +104,7 @@
                         android:layout_height="50dp"
                         android:clickable="true"
                         android:layout_gravity="center|right"
-                        android:src="@drawable/ic_link_white_24dp"
+                        android:src="@drawable/ic_booking_white_24dp"
                         android:id="@+id/booking_btn"
                         android:visibility="visible" />
                 </LinearLayout>

@@ -120,6 +120,15 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
         mOpen = (TextView)findViewById(R.id.tour_feature_open);
         mAppBarLayout = findViewById(R.id.toolbar_layout);
 
+        ImageView wifiIcon = (ImageView) findViewById(R.id.wifi);
+        callBtn = (ImageButton) findViewById(R.id.call_btn);
+        linkBtn = (ImageButton) findViewById(R.id.url_btn);
+        bookingBtn = (ImageButton) findViewById(R.id.booking_btn);
+        wifiIcon.setColorFilter(Color.BLACK);
+        callBtn.setColorFilter(Color.BLACK);
+        linkBtn.setColorFilter(Color.BLACK);
+        bookingBtn.setColorFilter(Color.BLACK);
+
         // Floating action button
         GlobalsClass globals = (GlobalsClass)getApplicationContext();
         ItineraryList list = ItineraryList.getInstance();
@@ -164,24 +173,12 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
 
         // Wifi
         wifi = extras.getString("wifi");
-
-        ImageView wifiIcon = (ImageView) findViewById(R.id.wifi);
-        callBtn = (ImageButton) findViewById(R.id.call_btn);
-        linkBtn = (ImageButton) findViewById(R.id.url_btn);
-        bookingBtn = (ImageButton) findViewById(R.id.booking_btn);
-        wifiIcon.setColorFilter(Color.BLACK);
-        callBtn.setColorFilter(Color.BLACK);
-        linkBtn.setColorFilter(Color.BLACK);
-        bookingBtn.setColorFilter(Color.BLACK);
-
-        if (wifi.length() != 0 && wifi.equals("Yes")) {
-
+        if (wifi.length() != 0 && wifi.equalsIgnoreCase("Yes")) {
             wifiIcon.clearColorFilter();
         }
 
         // Tel
         if ((telNum = extras.getString("tel")).length() != 0) {
-
             callBtn.clearColorFilter();
             callBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -195,7 +192,6 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
 
         // URL
         if ((url = extras.getString("url")).length() != 0) {
-
             linkBtn.clearColorFilter();
             linkBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -216,7 +212,6 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
 
         // Booking URL
         if ((bookingUrl = extras.getString("booking")).length() != 0) {
-
             bookingBtn.clearColorFilter();
             bookingBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
