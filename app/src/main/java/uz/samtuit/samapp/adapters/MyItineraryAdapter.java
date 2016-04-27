@@ -195,12 +195,13 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             holder.addNewItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bundle extras = new Bundle();
-                    extras.putInt("current_day", selectedArrayDay);
-                    extras.putInt("index", orderNumInTab);
-                    DialogFragment tourFeatureDialog = new TourFeaturesDialogFragmentWindow();
-                    tourFeatureDialog.setArguments(extras);
-                    tourFeatureDialog.show(fm, "");
+                    ItineraryHelper.addNewItemFromItinerary(fm, selectedArrayDay, orderNumInTab);
+//                    Bundle extras = new Bundle();
+//                    extras.putInt("current_day", selectedArrayDay);
+//                    extras.putInt("index", orderNumInTab);
+//                    DialogFragment tourFeatureDialog = new TourFeaturesDialogFragmentWindow();
+//                    tourFeatureDialog.setArguments(extras);
+//                    tourFeatureDialog.show(fm, "");
                 }
             });
             final Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
