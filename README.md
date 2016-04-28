@@ -20,7 +20,7 @@ Open Source : https://github.com/SamarkandTour
 
 Open Data : http://download.samarkandtour.org
 
-Email : samarkandtour@gmail.com
+App Download Link : https://play.google.com/store/apps/details?id=uz.samtuit.samapp
 
 ## License
 
