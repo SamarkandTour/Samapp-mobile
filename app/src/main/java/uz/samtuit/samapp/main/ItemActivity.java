@@ -184,7 +184,7 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:" + telNum));
+                    intent.setData(Uri.parse("tel:" + GlobalsClass.ParseCellPhoneNumber(telNum)));
                     startActivity(intent);
                 }
             });
