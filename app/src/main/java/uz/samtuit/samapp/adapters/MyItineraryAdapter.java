@@ -249,8 +249,8 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         intent.putExtra("booking", tf.getString("booking"));
         intent.putExtra("long", tf.getLongitude());
         intent.putExtra("lat", tf.getLatitude());
-        intent.putExtra("primaryColorId", R.color.attraction_primary);
-        intent.putExtra("toolbarColorId", R.color.attraction_primary);
+        intent.putExtra("primaryColorId", GlobalsClass.getPrimaryColorId(featureType));
+        intent.putExtra("toolbarColorId", GlobalsClass.getToolbarColorId(featureType));
         return intent;
     }
 

@@ -110,12 +110,7 @@ public class SuggestedItineraryFragment extends Fragment {
                 for (int i = 1; i < day; i++)
                     index += getItinerarySizeByDay(getContext(), i) - 1;
                 final int indexToAssign = index;
-                mAddBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ItineraryHelper.addNewItemFromItinerary(getFragmentManager(), day, indexToAssign);
-                    }
-                });
+                ItineraryHelper.addNewItemFromItinerary(getFragmentManager(), day, indexToAssign);
             }
         };
         return listener;
