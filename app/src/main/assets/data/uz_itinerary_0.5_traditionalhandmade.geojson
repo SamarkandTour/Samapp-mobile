@@ -1,10 +1,18 @@
 {
   "type": "FeatureCollection",
   "features": [
+  {
+                 "type": "Feature",
+                 "properties": {
+                   "name": "Handmade Carpet workshop",
+                   "day": 1,
+                   "ampm": "a"
+                 }
+               },
     {
       "type": "Feature",
       "properties": {
-        "name": "Chorsu san’at galereyasi",
+        "name": "Hunarmandlar markazi",
         "day": 1,
         "ampm": "a"
       }

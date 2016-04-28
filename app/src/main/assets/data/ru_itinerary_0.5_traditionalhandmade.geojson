@@ -1,6 +1,14 @@
 {
   "type": "FeatureCollection",
   "features": [
+  {
+                              "type": "Feature",
+                              "properties": {
+                                "name": "Handmade Carpet workshop",
+                                "day": 1,
+                                "ampm": "a"
+                              }
+                            },
     {
       "type": "Feature",
       "properties": {
