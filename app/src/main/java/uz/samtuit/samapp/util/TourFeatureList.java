@@ -60,6 +60,13 @@ public class TourFeatureList {
                     tourFeature.setStringHashMap("name", v.getProperties().getString("name"));
                 }
 
+                if (v.getProperties().isNull("booking")) {
+                    // Leave a blank space, not NULL, because it's possible not to have a booking property in the downloaded file
+                    tourFeature.setStringHashMap("booking", "");
+                } else {
+                    tourFeature.setStringHashMap("booking", v.getProperties().getString("booking"));
+                }
+
                 if (v.getProperties().isNull("desc")) {
                     tourFeature.setStringHashMap("desc", null);
                 } else {

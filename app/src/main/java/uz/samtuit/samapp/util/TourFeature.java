@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public class TourFeature implements Comparable<TourFeature> {
     private String photo;
-    private HashMap<String, String> stringHashMap; //name, desc, type, price, wifi, open, addr, tel, url
+    private HashMap<String, String> stringHashMap; //name, booking, desc, type, price, wifi, open, addr, tel, url
     private int rating;
     private int day;
     private double longitude;

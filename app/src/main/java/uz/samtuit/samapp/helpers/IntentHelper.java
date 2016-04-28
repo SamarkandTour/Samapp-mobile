@@ -7,12 +7,9 @@ import uz.samtuit.samapp.main.ItemActivity;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.TourFeature;
 import uz.samtuit.samapp.util.TourFeatureList;
-/**
- * Created by Bakha on 16.03.2016.
- */
+
 public class IntentHelper {
     public static void startItemActivity(Context context, GlobalsClass.FeatureType featureType, TourFeature feature) {
-
         Intent intent = new Intent(context, ItemActivity.class);
 
         if (featureType == GlobalsClass.FeatureType.ITINERARY) {
@@ -30,6 +27,7 @@ public class IntentHelper {
         intent.putExtra("addr", feature.getString("addr"));
         intent.putExtra("tel", feature.getString("tel"));
         intent.putExtra("url", feature.getString("url"));
+        intent.putExtra("booking", feature.getString("booking"));
         intent.putExtra("long", feature.getLongitude());
         intent.putExtra("lat", feature.getLatitude());
         intent.putExtra("primaryColorId", GlobalsClass.getPrimaryColorId(featureType));
@@ -37,7 +35,4 @@ public class IntentHelper {
 
         context.startActivity(intent);
     }
-
-
-
 }

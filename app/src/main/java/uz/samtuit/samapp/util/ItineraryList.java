@@ -102,25 +102,6 @@ public class ItineraryList {
                 ex.printStackTrace();
                 mItineraryList.add(tourFeature);
             }
-
-//            boolean added = false;
-//            int counter = 0;
-//            int listSize = mItineraryList.size();
-//            for(int i = 0;  i < listSize; i++) {
-//                if(mItineraryList.get(i).getDay() == tourFeature.getDay()) {
-//                    if(counter==index) { //if counter is in index position add tourfeature
-//                        added = true;
-//                        Log.e("ADDED INDEX" , i + " " );
-//                        mItineraryList.add(i, tourFeature);
-//                        break;
-//                    } else {
-//                        counter++;
-//                    }
-//                }
-//            }
-//            if(!added)
-//                mItineraryList.add(tourFeature);
-////            mItineraryList.add(tourFeature);
             return true;
         }
         return false;
@@ -201,7 +182,8 @@ public class ItineraryList {
                 TourFeature itineraryElement = findFeature(context, v.getProperties().getString("name"));
 
                 if (itineraryElement == null) {
-                    Toast.makeText(context, R.string.Err_wrong_itinerary_file, Toast.LENGTH_LONG).show();
+                    // If the feature's name  in the file is not same as new name since Wiki is updated, sync will be broken.
+                    Log.e("ItineraryList", "Wrong feature in itinerary file, feature name=" + v.getProperties().getString("name"));
                 } else {
                     itineraryElement.setDay(v.getProperties().getInt("day"));
                     mItineraryList.add(itineraryElement);

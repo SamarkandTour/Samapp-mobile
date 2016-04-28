@@ -1,6 +1,5 @@
 package uz.samtuit.samapp.main;
 
-import android.animation.Animator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,17 +45,16 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
     private MenuItem mActionNavigate;
     private String name;
     private View mAppBarLayout;
-    private ImageButton callBtn, linkBtn;
+    private ImageButton callBtn, linkBtn, bookingBtn;
     private int selectedDay = 1;
     private String featureType;
-    private String url, wifi, telNum;
+    private String wifi, telNum, url, bookingUrl;
     private String photoSrc = "";
     private TextView mInfo;
     private TextView mAddress;
     private SpannableString s;
     private TextView mPrice;
     private TextView mOpen;
-    private Animator mCurrentAnimator;
     boolean fromItinerary = false;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.fab)   FloatingActionButton fab;
@@ -122,6 +120,15 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
         mOpen = (TextView)findViewById(R.id.tour_feature_open);
         mAppBarLayout = findViewById(R.id.toolbar_layout);
 
+        ImageView wifiIcon = (ImageView) findViewById(R.id.wifi);
+        callBtn = (ImageButton) findViewById(R.id.call_btn);
+        linkBtn = (ImageButton) findViewById(R.id.url_btn);
+        bookingBtn = (ImageButton) findViewById(R.id.booking_btn);
+        wifiIcon.setColorFilter(Color.BLACK);
+        callBtn.setColorFilter(Color.BLACK);
+        linkBtn.setColorFilter(Color.BLACK);
+        bookingBtn.setColorFilter(Color.BLACK);
+
         // Floating action button
         GlobalsClass globals = (GlobalsClass)getApplicationContext();
         ItineraryList list = ItineraryList.getInstance();
@@ -166,22 +173,12 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
 
         // Wifi
         wifi = extras.getString("wifi");
-
-        ImageView wifiIcon = (ImageView) findViewById(R.id.wifi);
-        callBtn = (ImageButton) findViewById(R.id.call_button);
-        linkBtn = (ImageButton) findViewById(R.id.hotel_link_btn);
-        wifiIcon.setColorFilter(Color.BLACK);
-        callBtn.setColorFilter(Color.BLACK);
-        linkBtn.setColorFilter(Color.BLACK);
-
-        if (wifi.length() != 0 && wifi.equals("Yes")) {
-
+        if (wifi.length() != 0 && wifi.equalsIgnoreCase("Yes")) {
             wifiIcon.clearColorFilter();
         }
 
         // Tel
         if ((telNum = extras.getString("tel")).length() != 0) {
-
             callBtn.clearColorFilter();
             callBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -195,7 +192,6 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
 
         // URL
         if ((url = extras.getString("url")).length() != 0) {
-
             linkBtn.clearColorFilter();
             linkBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -209,6 +205,26 @@ public class ItemActivity extends AppCompatActivity implements NumberPicker.OnVa
                     }
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+        }
+
+        // Booking URL
+        if ((bookingUrl = extras.getString("booking")).length() != 0) {
+            bookingBtn.clearColorFilter();
+            bookingBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (!bookingUrl.startsWith("https://") && !bookingUrl.startsWith("http://")) {
+                            bookingUrl = "http://" + bookingUrl;
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(bookingUrl));
                     startActivity(i);
                 }
             });
