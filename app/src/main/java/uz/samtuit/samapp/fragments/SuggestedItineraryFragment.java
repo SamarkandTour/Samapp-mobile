@@ -66,8 +66,8 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
         if(size==0) {
             mAddBtn.setVisibility(View.VISIBLE);
             int index = 0;
-            for(int i = 1; i < day; i++)
-                index += getItinerarySizeByDay(getContext(), i)-1;
+            for (int i = 1; i < day; i++)
+                index += getItinerarySizeByDay(getContext(), i) - 1;
             final int indexToAssign = index;
             mAddBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,7 +76,6 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
                 }
             });
         }
-
         return view;
     }
 
@@ -100,8 +99,16 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
 
 
     public void modifyMode(boolean state){
-        adapter = new MyItineraryAdapter(getContext(), day, state, true, getFragmentManager());
+        adapter = new MyItineraryAdapter(getContext(), day, state, true, getFragmentManager(), this);
         mRecyclerView.setAdapter(adapter);
+    }
+
+    public void showAddButton(boolean state) {
+        if (!state) {
+            mAddBtn.setVisibility(View.GONE);
+        } else {
+            mAddBtn.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -114,8 +121,10 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
         super.onResume();
         if(getItinerarySizeByDay(getContext(), day + 1)!=0) {
             mAddBtn.setVisibility(View.GONE);
+        } else {
+            mAddBtn.setVisibility(View.VISIBLE);
         }
-        adapter = new MyItineraryAdapter(getContext(), day, SuggestedItineraryActivity.modify, false, getFragmentManager());
+        adapter = new MyItineraryAdapter(getContext(), day, SuggestedItineraryActivity.modify, false, getFragmentManager(),this);
         mRecyclerView.setAdapter(adapter);
 
     }

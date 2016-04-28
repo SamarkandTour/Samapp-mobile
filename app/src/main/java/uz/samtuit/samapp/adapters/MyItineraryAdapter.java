@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import uz.samtuit.samapp.fragments.SuggestedItineraryFragment;
 import uz.samtuit.samapp.fragments.TourFeaturesDialogFragmentWindow;
 import uz.samtuit.samapp.helpers.ItineraryHelper;
 import uz.samtuit.samapp.main.ItemActivity;
@@ -59,6 +60,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     boolean animate = false; //animate items or not
     boolean isMod = false; //toggle for modify mode
     private FragmentManager fm;
+    private SuggestedItineraryFragment mFragment;
 
     private static int[] dataSizeByDay = new int[ItineraryList.MAX_ITINERARY_DAYS];
 
@@ -92,7 +94,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyItineraryAdapter(Context context, int day, boolean mod, boolean animate, FragmentManager fragmentManager) {
+    public MyItineraryAdapter(Context context, int day, boolean mod, boolean animate, FragmentManager fragmentManager, SuggestedItineraryFragment fragment) {
         selectedArrayDay = day;
         selectedRealDay = selectedArrayDay + 1; // Because the day argument is the position of tabs, add 1 to change to real day
         mDataset = getItineraryByDay(context, selectedRealDay);
@@ -110,6 +112,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
             dataSizeByDay[day] = dataSize;
         }
         this.fm = fragmentManager;
+        this.mFragment = fragment;
     }
 
     private ArrayList<TourFeature> getItineraryByDay(Context context, int itineraryDay) {
@@ -195,12 +198,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 @Override
                 public void onClick(View v) {
                     ItineraryHelper.addNewItemFromItinerary(fm, selectedArrayDay, orderNumInTab);
-//                    Bundle extras = new Bundle();
-//                    extras.putInt("current_day", selectedArrayDay);
-//                    extras.putInt("index", orderNumInTab);
-//                    DialogFragment tourFeatureDialog = new TourFeaturesDialogFragmentWindow();
-//                    tourFeatureDialog.setArguments(extras);
-//                    tourFeatureDialog.show(fm, "");
                 }
             });
             final Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
@@ -332,6 +329,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                         break;
                     case R.id.action_delete:
                         changeOrder(context, indexInItineraryList, DELETE_ITEM_ID);
+                        mFragment.showAddButton(mDataset.size()==0);
                         break;
                     case R.id.action_down:
                         changeOrder(context, indexInItineraryList, DOWN_ITEM_ID);

@@ -24,5 +24,4 @@
         android:tint="#f00"
         android:layout_height="45dp"
         android:background="@drawable/round_bg_white" />
-
 </FrameLayout>

@@ -27,13 +27,11 @@ public class ItineraryHelper {
         itineraryList.remove(index);
         itineraryList.add(tourFeature);
 
-        Log.e("LAST DAY", itineraryList.get(0).getDay() + " " + itineraryList.get(itineraryList.size()-1).getString("name"));
-
         ItineraryList.sortItineraryList();
         ItineraryList.itineraryWriteToGeoJSONFile(context, context.getSharedPreferences("SamTour_Pref", Context.MODE_PRIVATE).getString("app_lang", null));
     }
 
-    public static void addNewItemFromItinerary( FragmentManager fm, int selectedArrayDay, int orderNumInTab) {
+    public static void addNewItemFromItinerary(FragmentManager fm, int selectedArrayDay, int orderNumInTab) {
         Bundle extras = new Bundle();
         extras.putInt("current_day", selectedArrayDay);
         extras.putInt("index", orderNumInTab);
