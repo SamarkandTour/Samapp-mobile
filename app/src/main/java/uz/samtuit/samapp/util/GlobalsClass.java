@@ -75,6 +75,20 @@ public class GlobalsClass extends Application {
         return Itinerary;
     }
 
+    public static String ParseCellPhoneNumber( String CellPhoneString ) {
+        String result = "+";
+        int counter = 0;
+        for(int i = 0; i < CellPhoneString.length() && counter < 12; i++) {
+            if(Character.isDigit(CellPhoneString.charAt(i))) {
+                result += CellPhoneString.charAt(i);
+                counter++;
+            } else {
+                continue;
+            }
+        }
+        return result;
+    }
+
     public void setFeatures(FeatureType featureType, ArrayList<TourFeature> featureArrayList) {
         switch(featureType) {
             case HOTEL:
