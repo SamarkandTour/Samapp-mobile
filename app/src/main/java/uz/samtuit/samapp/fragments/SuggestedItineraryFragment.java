@@ -23,7 +23,7 @@ import uz.samtuit.samapp.main.SuggestedItineraryActivity;
 import uz.samtuit.samapp.util.GlobalsClass;
 import uz.samtuit.samapp.util.TourFeature;
 
-public class SuggestedItineraryFragment extends Fragment implements RecyclerView.OnClickListener {
+public class SuggestedItineraryFragment extends Fragment {
     private final String SI_DAY = "Day";
     private MyItineraryAdapter adapter;
     private int day = 0;
@@ -60,21 +60,11 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setTag(day);
-        mRecyclerView.setOnClickListener(this);
         mAddBtn = (ImageButton) view.findViewById(R.id.add_new_itinerary_item);
         int size = getItinerarySizeByDay(getContext(), day+1);
         if(size==0) {
             mAddBtn.setVisibility(View.VISIBLE);
-            int index = 0;
-            for (int i = 1; i < day; i++)
-                index += getItinerarySizeByDay(getContext(), i) - 1;
-            final int indexToAssign = index;
-            mAddBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ItineraryHelper.addNewItemFromItinerary(getFragmentManager(), day, indexToAssign);
-                }
-            });
+            mAddBtn.setOnClickListener(addNewItineraryBtnClickListener());
         }
         return view;
     }
@@ -103,17 +93,27 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
         mRecyclerView.setAdapter(adapter);
     }
 
-    public void showAddButton(boolean state) {
+    public void showAddButton(boolean state, final int day, final int indexToAssign) {
         if (!state) {
             mAddBtn.setVisibility(View.GONE);
         } else {
+            mAddBtn.setOnClickListener(addNewItineraryBtnClickListener());
             mAddBtn.setVisibility(View.VISIBLE);
         }
     }
 
-    @Override
-    public void onClick(View v) {
-
+    public View.OnClickListener addNewItineraryBtnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int index = 0;
+                for (int i = 1; i < day; i++)
+                    index += getItinerarySizeByDay(getContext(), i) - 1;
+                final int indexToAssign = index;
+                ItineraryHelper.addNewItemFromItinerary(getFragmentManager(), day, indexToAssign);
+            }
+        };
+        return listener;
     }
 
     @Override
@@ -128,4 +128,5 @@ public class SuggestedItineraryFragment extends Fragment implements RecyclerView
         mRecyclerView.setAdapter(adapter);
 
     }
+
 }

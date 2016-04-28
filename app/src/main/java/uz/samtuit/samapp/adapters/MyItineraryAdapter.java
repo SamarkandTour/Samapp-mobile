@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -200,14 +201,13 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                     ItineraryHelper.addNewItemFromItinerary(fm, selectedArrayDay, orderNumInTab);
                 }
             });
-            final Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
 
         } else {
             holder.container.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     final Context context = v.getContext();
-                    makeQuickAction(context, v, indexInItineraryList, position, mDataset.get(position));
+                    makeQuickAction(indexInItineraryList, position, mDataset.get(position));
                     return false;
                 }
             });
@@ -222,8 +222,7 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         holder.mActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Context context = v.getContext();
-                makeQuickAction(context, v, indexInItineraryList, position, mDataset.get(position));
+                makeQuickAction(indexInItineraryList, position, mDataset.get(position));
             }
         });
 
@@ -250,12 +249,13 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         intent.putExtra("booking", tf.getString("booking"));
         intent.putExtra("long", tf.getLongitude());
         intent.putExtra("lat", tf.getLatitude());
-        intent.putExtra("primaryColorId", R.color.attraction_primary);
-        intent.putExtra("toolbarColorId", R.color.attraction_primary);
+        intent.putExtra("primaryColorId", GlobalsClass.getPrimaryColorId(featureType));
+        intent.putExtra("toolbarColorId", GlobalsClass.getToolbarColorId(featureType));
         return intent;
     }
 
-    private void makeQuickAction(Context vContext, View v, final int indexInItineraryList, int position, TourFeature tf) {
+    private void makeQuickAction(final int indexInItineraryList, int position,final TourFeature tf) {
+        Log.e("indexInItineraryList", indexInItineraryList + " " + position+ " " + tf.getString("name") + " " + tf.getDay());
         View view = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.itinerary_bottom_sheet, null);
         final Dialog mBottomSheet = new Dialog(context, R.style.MaterialDialogSheet);
         Typeface roboto = TypefaceHelper.getTypeface(context, "Roboto-Regular");
@@ -325,19 +325,19 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                         changeDay(context, indexInItineraryList, -1);
                         break;
                     case R.id.action_up:
-                        changeOrder(context, indexInItineraryList, UP_ITEM_ID);
+                        changeOrder(context, indexInItineraryList, tf, UP_ITEM_ID);
                         break;
                     case R.id.action_delete:
-                        changeOrder(context, indexInItineraryList, DELETE_ITEM_ID);
-                        mFragment.showAddButton(mDataset.size()==0);
+                        changeOrder(context, indexInItineraryList, tf, DELETE_ITEM_ID);
                         break;
                     case R.id.action_down:
-                        changeOrder(context, indexInItineraryList, DOWN_ITEM_ID);
+                        changeOrder(context, indexInItineraryList, tf, DOWN_ITEM_ID);
                         break;
                     case R.id.action_day_forward:
                         changeDay(context, indexInItineraryList, 1);
                         break;
                 }
+                mFragment.showAddButton(mDataset.size()==0, selectedArrayDay, getStartIndexOfDay());
                 mBottomSheet.dismiss();
             }
         };
@@ -349,13 +349,14 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
         actionUp.setOnClickListener(actionOnClick);
     }
 
-    private void changeOrder(Context context, int index, int cmd) {
+    private void changeOrder(Context context, int index, TourFeature tf, int cmd) {
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         LinkedList<TourFeature> itineraryList = globalsClass.getItineraryFeatures();
         String toastMag = null;
 
         TourFeature tourFeature = itineraryList.get(index);
-        itineraryList.remove(index);
+        Log.e("Log", tourFeature.getString("name") + " " + tourFeature.getDay() + " " + index);
+        itineraryList.remove(tf);
 
         switch (cmd) {
             case DOWN_ITEM_ID:
@@ -366,7 +367,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
                 itineraryList.add(index - 1, tourFeature);
                 toastMag = context.getString(R.string.move);
                 break;
-
             case DELETE_ITEM_ID:
                 toastMag = context.getString(R.string.delete);
                 break;
@@ -392,14 +392,6 @@ public class MyItineraryAdapter extends RecyclerView.Adapter<MyItineraryAdapter.
 
         Toast.makeText(context, context.getString(R.string.itinerary_item_transfer) +
                 ((inc == -1) ? context.getString(R.string.backward) : context.getString(R.string.forward)), Toast.LENGTH_SHORT).show();
-    }
-
-    private void setAnimation(View viewToAnimate, int position) {
-        if (position > lastPosition && animate) {
-            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
     }
 
     @Override

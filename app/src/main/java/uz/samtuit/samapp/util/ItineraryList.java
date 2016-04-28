@@ -100,8 +100,8 @@ public class ItineraryList {
                 mItineraryList.add(index, tourFeature);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                mItineraryList.add(tourFeature);
             }
+            ItineraryList.sortItineraryList();
             return true;
         }
         return false;

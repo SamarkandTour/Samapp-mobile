@@ -21,8 +21,8 @@ public class ItineraryHelper {
     public static void changeDay(Context context, int currentDay, int index, int inc) {
         GlobalsClass globalsClass = (GlobalsClass)context.getApplicationContext();
         List<TourFeature> itineraryList = globalsClass.getItineraryFeatures();
-
         TourFeature tourFeature = itineraryList.get(index);
+        Log.e("Feature", tourFeature.getString("name") + " " + tourFeature.getDay()+ " " + index);
         tourFeature.setDay(currentDay + inc);
         itineraryList.remove(index);
         itineraryList.add(tourFeature);
