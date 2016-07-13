@@ -1,6 +1,5 @@
 package uz.samtuit.samapp.main;
 
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;

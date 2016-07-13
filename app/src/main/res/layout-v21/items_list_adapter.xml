@@ -37,10 +37,12 @@
                 android:layout_marginLeft="5dp"
                 android:textSize = "20sp"
                 android:layout_weight="1"
+                android:lines="1"
+                android:ellipsize="end"
                 android:textColor="#fff"
                 android:gravity="center_vertical"
                 android:layout_height="wrap_content" android:layout_width="wrap_content"
-                android:text = "@string/title"/>
+                android:text = "Very long long asdat aas asd sa"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="25dp"

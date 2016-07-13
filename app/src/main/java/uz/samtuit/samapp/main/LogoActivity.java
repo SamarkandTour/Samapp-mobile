@@ -13,9 +13,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.mapbox.mapboxsdk.util.NetworkUtils;
 
 import java.io.File;
@@ -49,14 +51,13 @@ public class LogoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_logo);
-        overridePendingTransition(R.anim.slide_content, R.anim.slide_in);
         tvInfo = (TextView) findViewById(R.id.tv_info);
         tvInfo.setTypeface(TypefaceHelper.getTypeface(this, "segoeui"));
 
         pref = this.getSharedPreferences("SamTour_Pref", 0);
         isFirstLaunch = pref.getBoolean("app_first_launch", true);
+        Glide.with(this).load(R.drawable.logo).into((ImageView)findViewById(R.id.background_holder));
 
         SharedPreferences defaultPref = PreferenceManager.getDefaultSharedPreferences(this);
         isCheckUpdateOnboot = defaultPref.getBoolean("update_check_on_boot", true);

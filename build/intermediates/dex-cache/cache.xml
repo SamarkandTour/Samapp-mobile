@@ -1,3 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\design\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.android.support-design-23.1.1_17a9782a38be9ce81a9b3af7ed60004a05264c7e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp-urlconnection\2.4.0\a0c195f14cefc7597e0bebf22c3e7b43920dcf4\okhttp-urlconnection-2.4.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="0a0c195f14cefc7597e0bebf22c3e7b43920dcf4">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\okhttp-urlconnection-2.4.0_0726b10abf5f5804e04bd5f105340a6aae0a902d.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\support-v13\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5ddf5f4817565c9db82613c16093f76640a54e15">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.android.support-support-v13-23.1.1_8059fa72df246f92e752d91cc2418e42d9cabdd2.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\jars\libs\internal_impl-23.2.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="607a3d0b8013b4ccbfeb0b7cb293351994e021fb">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\internal_impl-23.2.1_4368c272426019c77a5d9ce5da064ac305f6e749.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.mapbox.mapboxsdk\mapbox-android-sdk\0.7.4\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="4bd64ebaab7edb0bccbb031dbdb7b1a7239d58f7">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.mapbox.mapboxsdk-mapbox-android-sdk-0.7.4_acdc7b3455c9039908ea12de47910a2162b51e17.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5e412e954a24c5310a459c09870e4e2081aceb03">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.android.support-cardview-v7-23.1.1_4e6b252a1fc3b6e8a124a9923c6b4b3639190da7.jar" />
+    </item>
+    <item
+        jar="C:\sdk\extras\android\m2repository\com\android\support\support-annotations\23.2.1\support-annotations-23.2.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="ccb693bc0774fcb637246f7360de25b4af7df318">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\support-annotations-23.2.1_e74942dff49ed178af2a888902cc57839ac11854.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="29fd6d3794b71491c2789708cd8d03c71feb8954">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-analytics-7.0.0_0cc9160ecec520cb557cdaea3cd27b71b9513f62.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.balysv\material-ripple\1.0.2\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="c733e9d1b065d940a08f2fca0ff920dfc08d94cc">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.balysv-material-ripple-1.0.2_9b073dff6e3433bceca540d713486903cfacdf00.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\.gradle\caches\modules-2\files-2.1\com.jakewharton\disklrucache\2.0.2\93b399470e72c0bc8cb52379943b63c9aa586cd8\disklrucache-2.0.2.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="93b399470e72c0bc8cb52379943b63c9aa586cd8">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\disklrucache-2.0.2_27a34c0384d89bd13a43a0b1366bc1853b73d3a6.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.commit451\PhotoView\1.2.5\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="526e8a982e8d1453c548b8d3a63968ee61667a15">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.commit451-PhotoView-1.2.5_9045fb764210e4d92d44860f69134314e8ff4470.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-23.1.1_7155e4905e16be7c0cc8a4e15924ba1fb437c0e6.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\support-v13\23.1.1\jars\libs\internal_impl-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="f4d7a07120e76988f3a15403838d323c2400db83">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\internal_impl-23.1.1_94e40824716e781de302364f5c092af5a98d47ac.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="3be474b1b21b31cf2fa93fe6bd641ae108d96452">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-23.2.1_b2c004ec7e2053072586a148a028c4bb7f604288.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\.gradle\caches\modules-2\files-2.1\com.vividsolutions\jts\1.13\3ccfb9b60f04d71add996a666ceb8902904fd805\jts-1.13.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="3ccfb9b60f04d71add996a666ceb8902904fd805">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\jts-1.13_283b586525cd1e2dc2dfd28ec7d17d69205c6f79.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="4c93d99d454c975536bbe3b42283eee847f03ea3">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-base-7.0.0_b65f5e652afce17d1cf971d1328970a36bedd34d.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\5.1.2\daf5472b0df6dabaceb6ad755b3812535863965a\butterknife-5.1.2.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="daf5472b0df6dabaceb6ad755b3812535863965a">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\butterknife-5.1.2_23d0cb9c53b9c52f75624ca3a2b9c7bd6527bbb3.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\palette-v7\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="a978650837318cf056bf3383ff02fe7a3b891f20">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.android.support-palette-v7-23.1.1_83b31d81b636e342246fd1aee125757c7b9ba873.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\glide\3.6.1\86b122e640af09b0723e1fa44083c354ba6d9089\glide-3.6.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="86b122e640af09b0723e1fa44083c354ba6d9089">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\glide-3.6.1_7f7619186e4bd38cbd857b87248e6c877d9b73fb.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\library-2.4.0_a5908ce6147c0b44b0e0bb6b1ed77fa2108e8e03.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.1.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-23.1.1_f6f4eadc7f2c8093e248c74c46207ad3359137dd.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp\2.4.0\40340c0748190fe897baf7bffbc1b282734294e5\okhttp-2.4.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\okhttp-2.4.0_2bcf455ad0d0c492dfc805d29f76c6f54ec0d71e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bakha\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.4.0\5b72bf48563ea8410e650de14aa33ff69a3e8c35\okio-1.4.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
+        <dex dex="C:\Users\Bakha\Documents\Samapp-mobile\app\build\intermediates\pre-dexed\debug\okio-1.4.0_857b3196e95319bc06b0a88e0dc72a2bbc322bda.jar" />
+    </item>
+
+</items>

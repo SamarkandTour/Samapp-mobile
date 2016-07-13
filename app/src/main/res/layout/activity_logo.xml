@@ -3,8 +3,13 @@
     android:layout_height="match_parent"
     tools:context="uz.samtuit.samapp.main.LogoActivity"
     android:padding="0dp"
-    android:background="@drawable/logo"
     android:id="@+id/logoMainLayout">
+
+    <ImageView
+        android:id="@+id/background_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
 
     <ImageView
         android:layout_width="match_parent"

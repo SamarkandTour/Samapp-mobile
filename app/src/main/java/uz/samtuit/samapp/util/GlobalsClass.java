@@ -12,8 +12,8 @@ import uz.samtuit.samapp.main.R;
  * Globally shared valuables
  */
 public class GlobalsClass extends Application {
-    static final public String featuresDownloadURL = "http://download.samarkandtour.org/tour_database.zip";
-    static final public String mapDownloadURL = "http://download.samarkandtour.org/samarkand.mbtiles";
+    static final public String featuresDownloadURL = "http://download.samarkandtour.uz/tour_database.zip";
+    static final public String mapDownloadURL = "http://download.samarkandtour.uz/samarkand.mbtiles";
     static final public String mapFileName = "samarkand.mbtiles";
 
     private boolean itineraryModifyMode = false;
