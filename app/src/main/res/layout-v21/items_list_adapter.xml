@@ -42,7 +42,7 @@
                 android:textColor="#fff"
                 android:gravity="center_vertical"
                 android:layout_height="wrap_content" android:layout_width="wrap_content"
-                android:text = "Very long long asdat aas asd sa"/>
+                android:text = "@string/title"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
