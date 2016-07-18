@@ -14,11 +14,11 @@ This project is sponsored by the NRF(National Research Foundation, http://www.nr
 
 ## Links
 
-Wiki : http://www.samarkandtour.org
+Wiki : http://www.samarkandtour.uz
 
 Open Source : https://github.com/SamarkandTour
 
-Open Data : http://download.samarkandtour.org
+Open Data : http://download.samarkandtour.uz
 
 App Download Link : https://play.google.com/store/apps/details?id=uz.samtuit.samapp
 
