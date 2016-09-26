@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import uz.samtuit.samapp.main.R;
 
@@ -32,6 +33,10 @@ public class DownloadCompleteReceiver extends BroadcastReceiver {
         for (int i = 0; i < countOfDownRequest; i++ ) {
             if (pref.getLong("download_request_id" + i, 0) == downloadedId) {
                 // Store at SharedPreferences to upgrade when the App restarts
+                if (downloadManager.getUriForDownloadedFile(downloadedId) == null) { // download failed
+                    Log.e("DownloadCompReceiver", "Failed to download because network is cut off");
+                    return;
+                }
                 editor.putString("downloaded_uri" + downloadUriIndex++, downloadManager.getUriForDownloadedFile(downloadedId).toString());
                 editor.putInt("downloaded_uri_index", downloadUriIndex);
                 editor.commit();
