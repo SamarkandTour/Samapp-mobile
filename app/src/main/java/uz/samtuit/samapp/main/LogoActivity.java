@@ -153,12 +153,12 @@ public class LogoActivity extends Activity {
                     FileUtil.deleteAllExternalFilesWithExtension(LogoActivity.this, TourFeatureList.photoDirectory, "");
                     TourFeatureList.writeAllPhotosToFiles(LogoActivity.this); // Make all photo data to files
 
-                } else if (Downloader.isDownloadFinished(LogoActivity.this)) {
+                } else if (Downloader.isAllDownloadSuccessful(LogoActivity.this)) {
                     publishProgress(new Pair<Integer, String>(UPDATE_START, "new update"));
 
                     downloadRequestCnt = Downloader.countOfDownloadRequest(LogoActivity.this);
                     for (int i = 0; i < downloadRequestCnt; i++) {
-                        String uriString = pref.getString("downloaded_uri" + i, "");
+                        String uriString = pref.getString(Downloader.DOWNLOADED_URI + i, "");
                         String filePath = FileUtil.getFilePathFromUri(LogoActivity.this, Uri.parse(uriString));
 
                         // If the downloaded file is zipped, Unzip it

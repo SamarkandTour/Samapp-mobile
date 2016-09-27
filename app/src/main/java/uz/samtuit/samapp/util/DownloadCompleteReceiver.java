@@ -28,23 +28,25 @@ public class DownloadCompleteReceiver extends BroadcastReceiver {
         SharedPreferences pref = context.getSharedPreferences("SamTour_Pref", 0);
         SharedPreferences.Editor editor = pref.edit();
 
-        int countOfDownRequest = pref.getInt("download_request_count", 0);
-        int downloadUriIndex = pref.getInt("downloaded_uri_index", 0);
-        for (int i = 0; i < countOfDownRequest; i++ ) {
-            if (pref.getLong("download_request_id" + i, 0) == downloadedId) {
+        int downRequestCnt = pref.getInt(Downloader.DOWNLOAD_REQUEST_CNT, 0);
+        int downloadedCnt = pref.getInt(Downloader.DOWNLOADED_CNT, 0);
+        for (int i = 0; i < downRequestCnt; i++ ) {
+            if (pref.getLong(Downloader.DOWNLOAD_REQUEST_ID + i, 0) == downloadedId) {
+                editor.putInt(Downloader.DOWNLOADED_CNT, ++downloadedCnt).commit();
+
                 // Store at SharedPreferences to upgrade when the App restarts
                 if (downloadManager.getUriForDownloadedFile(downloadedId) == null) { // download failed
                     Log.e("DownloadCompReceiver", "Failed to download because network is cut off");
                     return;
+                } else {
+                    Log.d("DownloadCompReceiver", "Download Succeeded, FileUri:" + downloadManager.getUriForDownloadedFile(downloadedId).toString());
+                    editor.putString(Downloader.DOWNLOADED_URI + i, downloadManager.getUriForDownloadedFile(downloadedId).toString()).commit();
                 }
-                editor.putString("downloaded_uri" + downloadUriIndex++, downloadManager.getUriForDownloadedFile(downloadedId).toString());
-                editor.putInt("downloaded_uri_index", downloadUriIndex);
-                editor.commit();
             }
         }
 
         // Notify download is completed and the upgrade will be applied when the App restarts
-        if (downloadUriIndex == countOfDownRequest) {
+        if (downloadedCnt == downRequestCnt) {
             PendingIntent contentIntent = PendingIntent.getActivity(
                    context,
                     0,
